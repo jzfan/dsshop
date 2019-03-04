@@ -1,0 +1,84 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-touch-fullscreen" content="yes" />
+<meta name="format-detection" content="telephone=no"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="msapplication-tap-highlight" content="no" />
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1" />
+<title></title>
+<link rel="stylesheet" type="text/css" href="../css/base.css">
+<link rel="stylesheet" type="text/css" href="../css/dstouch_common.css">
+</head>
+<body>
+<header id="header">
+	<div class="header-wrap">
+		<div class="header-l">
+			<a href="javascript:history.go(-1)">
+				<i class="back iconfont"></i>
+			</a>
+		</div>
+		<div class="header-inp">
+			<i class="icon"></i>
+			<input type="text" class="search-input" value="" oninput="writeClear($(this));" id="keyword" placeholder="请输入搜索关键词" maxlength="50" autocomplete="on" autofocus>
+			<span class="input-del"></span>
+		</div>
+		<div class="header-r">
+			<a id="header-nav" href="javascript:void(0);" class="search-btn"><lang data-id="search"></lang></a>
+		</div>
+	</div>
+</header>
+
+<!-- 全文搜索提示 begin -->
+<div class="dstouch-main-layout mb-20" id="search_tip_list_container" style="display:none"></div>
+<script type="text/html" id="search_tip_list_script">
+<ul class="dstouch-default-list">
+<%for(i = 0; i < list.length; i++){%>
+	<li><a href="<%=$buildUrl('keyword',list[i])%>"><%=list[i]%></a></li>
+<%}%>
+</ul>
+</script>
+<!-- 全文搜索提示 end -->
+
+<div id="store-wrapper">
+  <div class="dstouch-search-layout">
+    <dl class="hot-keyword">
+      <dt><lang data-id="hot_search"></lang></dt>
+      <dd id="hot_list_container"></dd>
+    </dl>
+    <dl>
+      <dt><lang data-id="historical_records"></lang></dt>
+      <dd id="search_his_list_container"></dd>
+    </dl>
+  </div>
+</div>
+<footer id="footer"></footer>
+<script type="text/html" id="hot_list">
+<ul>
+<%for(i = 0; i < list.length; i++){%>
+	<li><a href="<%=$buildUrl('keyword',list[i])%>"><%=list[i]%></a></li>
+<%}%>
+</ul>
+</script>
+<script type="text/html" id="search_his_list">
+<ul>
+<%for(i = 0; i < his_list.length; i++){%>
+	<li><a href="<%=$buildUrl('keyword',his_list[i])%>"><%=his_list[i]%></a></li>
+<%}%>
+</ul><a href="javascript:void(0);" class="clear-history" onclick="$(this).prev().remove();delCookie('hisSearch');"><%=lang('emptying_history')%></a>
+</script>
+<script type="text/javascript" src="../js/zepto.min.js"></script> 
+<script type="text/javascript" src="../js/config.js"></script> 
+<script type="text/javascript" src="../js/template.js"></script> 
+<script type="text/javascript" src="../js/common.js"></script> 
+<script type="text/javascript" src="js/search.js"></script> 
+<script type="text/javascript" src="../js/footer.js"></script>
+<script type="text/javascript" src="lang/search.js"></script>
+<script type="text/javascript" src="../js/lang.js"></script>
+</body>
+</html>

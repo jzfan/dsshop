@@ -1,0 +1,46 @@
+ds_lang={
+    'title':'商品列表',
+    'commodity':'商品',
+    'details':'详情',
+    'evaluate':'评价',
+
+    'home':'首页',
+    'search':'搜索',
+    'classification':'分类',
+    'news':'消息',
+    'cart':'购物车',
+    'my_business_city':'我的商城',
+    'all_evaluation':'全部评价',
+    'praise':'好评',
+    'review':'中评',
+    'negative_comment':'差评',
+    'order_sun_map':'差评',
+    'explain':'解释',
+    'data_reading':'数据读取中',
+    'not_appraised':'该商品未收到任何评价',
+    'purchase_and_comment':'期待您的购买与评论',
+};
+
+ds_lang_en={
+    'title':'List of goods',
+    'commodity':'goods',
+    'details':'details',
+    'evaluate':'evaluation',
+
+    'home':'Home page',
+    'search':'search',
+    'classification':'classification',
+    'news':'The message',
+    'cart':'The shopping cart',
+    'my_business_city':'My mall',
+    'all_evaluation':'All evaluation',
+    'praise':'High praise',
+    'review':'In the evaluation of',
+    'negative_comment':'Bad review',
+    'order_sun_map':'Bad review',
+    'explain':'explain',
+    'data_reading':'Data reading',
+    'not_appraised':'The goods have not received any evaluation',
+    'purchase_and_comment':'Looking forward to your purchase and comments',
+};
+document.title = ds_lang.title;

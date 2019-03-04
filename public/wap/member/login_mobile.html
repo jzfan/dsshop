@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-touch-fullscreen" content="yes" />
+<meta name="format-detection" content="telephone=no"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no"/>
+<meta name="msapplication-tap-highlight" content="no" />
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1" />
+<title></title>
+<link rel="stylesheet" type="text/css" href="../css/base.css">
+<link rel="stylesheet" type="text/css" href="../css/dstouch_member.css">
+</head>
+<body>
+<header id="header">
+  <div class="header-wrap">
+    <div class="header-l"><a href="../index.html"><i class="home iconfont"></i></a></div>
+    <div class="header-title">
+      <h1><lang data-id="dynamic_password_login"></lang></h1>
+    </div>
+    <div class="header-r"> <a id="header-nav" href="register.html" class="text"><lang data-id="register"></lang></a> </div>
+  </div>
+</header>
+<div class="dstouch-main-layout fixed-Width">
+  <div class="dstouch-single-nav mb5 login-tab">
+    <ul>
+      <li><a href="login.html"><lang data-id="common_landings"></lang></a></li>
+      <li class="selected"><a href="javascript: void(0);"><lang data-id="dynamic_password_login"></lang></a></li>
+    </ul>
+  </div>
+    
+  <div class="dstouch-inp-con">
+
+      <form action="" method ="">
+          <ul class="form-box">
+              <li class="form-item">
+                  <h4><lang data-id="phone_number"></lang></h4>
+                  <div class="input-box">
+                      <input type="text" placeholder="已注册的手机号" class="inp" name="usermobile" id="usermobile" oninput="writeClear($(this));"/>
+                      <span class="input-del"></span> </div>
+              </li>
+              <li class="form-item">
+                  <h4><lang data-id="dynamic_password"></lang></h4>
+                  <div class="input-box">
+                      <input type="text" autocomplete="off" placeholder="动态密码" class="inp" name="mobilecode" id="mobilecode" oninput="writeClear($(this));"/>
+                      <span class="input-del code" ></span>
+                      <span class="code-countdown" style=" display: none;">
+                          <p><lang data-id="get_verification_code"></lang></p>
+                          <p>（<lang data-id="wait_for"></lang><em>59</em><lang data-id="second_after_second"></lang>）</p>
+                      </span> 
+                      <span class="code-again"><a href="javascript: void(0);" id="again"><lang data-id="get_verification_code"></lang></a></span>
+                  </div>
+              </li>
+          </ul>
+          <div class="remember-form">
+              <a class="forgot-password" href="find_password.html"><lang data-id="forget_password"></lang>？</a> </div>
+          <div class="form-btn"><a href="javascript:void(0);" class="btn" id="loginbtn"><lang data-id="login"></lang></a></div>
+      </form>
+      
+  </div>
+</div>
+<div class="joint-login">
+    <h2><span><lang data-id="cooperative_account_login"></lang></span></h2>
+    <ul>
+      <li><a class="weibo" href="javascript: void(0);"></a></li>
+      <li><a class="qq" href="javascript: void(0);"></a></li>
+    </ul>
+  </div>
+<footer id="footer"></footer>
+<script type="text/javascript" src="../js/config.js"></script> 
+<script type="text/javascript" src="../js/zepto.min.js"></script> 
+<script type="text/javascript" src="../js/common.js"></script> 
+<script type="text/javascript" src="../js/simple-plugin.js"></script> 
+<script type="text/javascript" src="../js/footer.js"></script> 
+<script type="text/javascript" src="js/login_mobile.js"></script>
+<script type="text/javascript" src="lang/login_mobile.js"></script>
+<script type="text/javascript" src="../js/lang.js"></script>
+</body>
+</html>

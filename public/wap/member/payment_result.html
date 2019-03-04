@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html;charset=utf-8" />
+<title></title>
+</head>
+<body>
+<lang data-id="loading"></lang>…
+<script type="text/javascript">
+window.onload = function() {
+	alert(ds_lang['payment_result_message']);
+	if (/attach\=v$/.test(location.href)) {
+		location.href = 'vr_order_list.html';
+	} else {
+		location.href = 'order_list.html';
+	}
+}
+</script>
+<script type="text/javascript" src="../js/zepto.min.js"></script>
+<script type="text/javascript" src="lang/payment_result.js"></script>
+<script type="text/javascript" src="../js/lang.js"></script>
+</body>
+</html>

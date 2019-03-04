@@ -1,0 +1,163 @@
+<!doctype html> 
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-touch-fullscreen" content="yes" />
+<meta name="format-detection" content="telephone=no"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="msapplication-tap-highlight" content="no" />
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1" />
+<title></title>
+<link rel="stylesheet" type="text/css" href="../css/base.css">
+<link rel="stylesheet" type="text/css" href="../css/dstouch_products_list.css">
+<link rel="stylesheet" type="text/css" href="../css/dstouch_common.css">
+</head>
+<body>
+<header id="header" class="dstouch-product-header fixed">
+  <div class="header-wrap">
+    <div class="header-l"> <a href="javascript:history.go(-1)"> <i class="back iconfont"></i> </a> </div>
+      <div class="header-inp"> <i class="icon"></i> <span class="search-input" id="keyword"><lang data-id="input_keywords"></lang></span> </div>
+    <div class="header-r"> <a href="product_first_categroy.html" class="categroy"><i class="iconfont"></i>
+      </a> <a id="header-nav" href="javascript:void(0);"><i class="more iconfont"></i><sup></sup></a> </div>
+  </div>
+  <div class="dstouch-nav-layout">
+    <div class="dstouch-nav-menu"> <span class="arrow"></span>
+      <ul>
+            <li><a href="../index.html"><i class="iconfont home"></i><lang data-id="home"></lang></a></li>
+            <li><a href="search.html"><i class="iconfont search"></i><lang data-id="search"></lang></a></li>
+            <li><a href="product_first_categroy.html"><i class="iconfont categroy"></i><lang data-id="classification"></lang></a></li>
+            <li><a href="cart_list.html"><i class="iconfont cart"></i><lang data-id="cart"></lang><sup></sup></a></li>
+            <li><a href="../member/member.html"><i class="iconfont member"></i><lang data-id="my_business_city"></lang></a></li>
+      </ul>
+    </div>
+  </div>
+</header>
+<div class="goods-search-list-nav">
+    <ul id="nav_ul">
+      <li><a href="javascript:void(0);" class="current" id="sort_default"><lang data-id="default_sort"></lang><i></i></a></li>
+      <!--<li><a href="javascript:void(0);" class="" onClick="init_get_list('2', 'isable')">我能兑换</a></li>-->
+      <li><a href="javascript:void(0);" id="search_adv"><lang data-id="screen"></lang><i></i></a></li>
+    </ul>
+    <div class="browse-mode"><a href="javascript:void(0);" id="show_style"><span class="browse-list iconfont"></span></a></div>
+  </div>
+    <div id="sort_inner" class="goods-sort-inner hide">
+        <span><a href="javascript:void(0);" class="cur"  onclick="init_get_list('', '')"><lang data-id="default_sort"></lang><i></i></a></span>
+        <span><a href="javascript:void(0);" onClick="init_get_list('pointsdesc', '3')"><lang data-id="points_from_high_to_low"></lang><i></i></a></span>
+        <span><a href="javascript:void(0);" onClick="init_get_list('pointsasc', '3')"><lang data-id="points_from_low_to_high"></lang><i></i></a></span>
+        <span><a href="javascript:void(0);" onClick="init_get_list('stimedesc', '2')"><lang data-id="latest_release"></lang><i></i></a></span>
+    </div>
+<div class="dstouch-main-layout mt40 mb20">
+  <div id="product_list" class="list">
+    <ul class="goods-secrch-list">
+    </ul>
+  </div>
+</div>
+<!--筛选部分-->
+<div class="dstouch-full-mask hide">
+  <div class="dstouch-full-mask-bg"></div>
+  <div class="dstouch-full-mask-block">
+    <div class="header">
+      <div class="header-wrap">
+        <div class="header-l"> <a href="javascript:void(0);"><i class="back iconfont"></i></a></div>
+        <div class="header-title">
+          <h1><lang data-id="screen"></lang></h1>
+        </div>
+        <div class="header-r"><a href="javascript:void(0);" id="reset" class="text"><lang data-id="reset"></lang></a> </div>
+      </div>
+    </div>
+      <div class="dstouch-main-layout-a secreen-layout" id="list-items-scroll" style="top: 2rem;">
+          <div>
+              <dl>
+                  <dt><lang data-id="integral_interval"></lang></dt>
+                  <dd><span class="inp-balck"><input type="text" id="points_min" dstype="price" pattern="[0-9]*" class="inp"  placeholder="最低积分"/></span>
+                      <span class="line"></span><span class="inp-balck"><input dstype="price" type="text" id="points_max" pattern="[0-9]*" class="inp" placeholder="最高积分"/></span>
+                  </dd>
+              </dl>
+              <div class="bottom">
+                  <a href="javascript:void(0);" class="btn-l" id="search_submit2"><lang data-id="screening_exchange"></lang></a>
+              </div>
+          </div>
+          <div></div>
+      </div>
+  </div>
+</div>
+<div class="fix-block-r">
+	
+	<a href="javascript:void(0);" class="gotop-btn gotop hide" id="goTopBtn"><i class="iconfont"></i></a>
+</div>
+<footer id="footer" class="bottom"></footer>
+<script type="text/html" id="search_items">
+    <div>
+        <dl>
+            <dt><%=lang('integral_interval')%></dt>
+            <dd>
+                <span class="inp-balck"><input type="text" id="points_min" dstype="price" pattern="[0-9]*" class="inp" placeholder="最低积分"/></span>
+                <span class="line"></span>
+                <span class="inp-balck"><input dstype="price" type="text" id="points_max" pattern="[0-9]*" class="inp" placeholder="最高积分"/></span>
+            </dd>
+        </dl>
+        <div class="bottom">
+            <a href="javascript:void(0);" class="btn-l" id="search_submit2"><%=lang('screening_exchange')%></a>
+        </div>
+    </div>
+</script> 
+<!--筛选部分-->
+</body>
+<script type="text/html" id="home_body">
+    <% var pintuan_list = result.pintuan_list; %>
+    <% if(pintuan_list.length >0){%>
+    <%for(i=0;i<pintuan_list.length;i++){%>
+        <li class="goods-item" goods_id="<%=pintuan_list[i].pintuan_id;%>">
+            <span class="goods-pic">
+                <a href="product_detail.html?goods_id=<%=pintuan_list[i].pintuan_goods_id;%>">
+                    <img src="<%=pintuan_list[i].pintuan_image;%>"/>
+                </a>
+            </span>
+            <dl class="goods-info">
+                <dt class="goods-name">
+                    <a href="product_detail.html?goods_id=<%=pintuan_list[i].pintuan_goods_id;%>">
+                        <h4><%=pintuan_list[i].pintuan_name;%></h4>							
+                    </a>
+                </dt>
+                <dd class="goods-sale">
+                    <a href="product_detail.html?goods_id=<%=pintuan_list[i].pintuan_goods_id;%>">
+                        <span class="goods-price"><%=lang('enjoy_discounts')%>：<em><%=pintuan_list[i].pintuan_zhe;%></em><%=lang('fracture')%></span>
+                        <span class="sale-type"><%=lang('spelling')%></span>
+                    </a>
+                </dd>
+                <dd class="goods-assist">
+                    <a href="product_detail.html?goods_id=<%=pintuan_list[i].pintuan_goods_id;%>">
+                        <span class="goods-sold"><%=lang('limits_number_people')%>：
+                            <em><%=pintuan_list[i].pintuan_limit_number;%></em>
+                        </span>
+                    </a>
+                </dd>
+            </dl>
+        </li>
+        <%}%>
+        <% if (hasmore) {%>
+        <li class="loading"><div class="spinner"><i></i></div><%=lang('service_data_reading')%>...</li>
+        <% } %>
+        <% }else { %>
+        <div class="dstouch-norecord search">
+            <div class="norecord-ico"><i class="iconfont"></i></div>
+            <dl>
+                <dt><%=lang('no_relevant_information')%></dt>
+                <dd><%=lang('selection_classification')%>...</dd>
+            </dl>
+            <a href="javascript:history.go(-1)" class="btn"><%=lang('re_selection')%></a>
+        </div>
+        <%  } %>
+    </script>
+<script type="text/javascript" src="../js/config.js"></script>
+<script type="text/javascript" src="../js/zepto.min.js"></script>
+<script type="text/javascript" src="../js/template.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript" src="js/pintuan_list.js"></script>
+<script type="text/javascript" src="../js/footer.js"></script>
+<script type="text/javascript" src="lang/pintuan_list.js"></script>
+<script type="text/javascript" src="../js/lang.js"></script>
+</html>

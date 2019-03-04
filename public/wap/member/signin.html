@@ -1,0 +1,158 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-touch-fullscreen" content="yes" />
+<meta name="format-detection" content="telephone=no"/>
+<meta name="apple-mobile-web-app-status-bar-style"
+ content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="msapplication-tap-highlight" content="no" />
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1" />
+<title></title>
+<link rel="stylesheet" type="text/css" href="../css/base.css">
+<link rel="stylesheet" type="text/css" href="../css/dstouch_member.css">
+</head>
+<body>
+<header id="header">
+  <div class="header-wrap">
+    <div class="header-l"><a href="javascript:history.go(-1)"><i class="back iconfont"></i></a></div>
+    <div class="header-title">
+      <h1><lang data-id="attendance_score"></lang></h1>
+    </div>
+    <div class="header-r"><a id="header-nav" href="javascript:void(0);"><i class="more iconfont"></i><sup></sup></a></div>
+  </div>
+  <div class="dstouch-nav-layout">
+    <div class="dstouch-nav-menu"> <span class="arrow"></span>
+      <ul>
+          <li><a href="../index.html"><i class="iconfont home"></i><lang data-id="home"></lang></a></li>
+          <li><a href="../mall/search.html"><i class="iconfont search"></i><lang data-id="search"></lang></a></li>
+          <li><a href="../mall/product_first_categroy.html"><i class="iconfont categroy"></i><lang data-id="classification"></lang></a></li>
+          <li><a href="../mall/cart_list.html"><i class="iconfont cart"></i><lang data-id="cart"></lang><sup></sup></a></li>
+          <li><a href="../member/member.html"><i class="iconfont member"></i><lang data-id="my_business_city"></lang></a></li>
+      </ul>
+    </div>
+  </div>
+</header>
+<div class="member-top">
+  <div class="my-pointnum"> <lang data-id="my_points"></lang><span id="pointnum"></span> </div>
+  <div class="sign-box" id="signdiv" >
+    <div id="signinbtn" class="sign-btn" style="display:none;">
+      <h2><lang data-id="sign_in"></lang></h2>
+      <h6>+<span id="points_signin">5</span> <lang data-id="integral"></lang></h6>
+    </div>
+    <div id="completedbtn" class="sign-btn" style="display:none;">
+      <h2><lang data-id="have_signed"></lang></h2>
+      <h6><lang data-id="stick_to_it"></lang></h6>
+    </div>
+  </div>
+  <div id="description_link" class="signin-help"><lang data-id="activity_description"></lang><i>i</i></div>
+  <div id="description_info" style="display: none;">
+    <h4><lang data-id="activity_description"></lang></h4>
+    <ul>
+      <li><lang data-id="activity_description_one"></lang></li>
+      <li><lang data-id="activity_description_two"></lang></li>
+      <li><lang data-id="activity_description_three"></lang></li>
+      <li><lang data-id="activity_description_four"></lang></li>
+    </ul>
+  </div>
+</div>
+<div class="signin-list">
+  <h3><lang data-id="sign_in_a_log"></lang><a href="pointslog_list.html"><lang data-id="check_my_score"></lang></a></h3>
+  <ul id="loglist" class="dstouch-default-list">
+  </ul>
+</div>
+<footer id="footer"></footer>
+<script type="text/html" id="loglist_tpl">
+    <% if(signin_list.length >0){%>
+    <% for (var k in signin_list) { var v = signin_list[k]; %>
+    <li class="signin-c">
+       <%=lang('integral')%><em>+<%=v.sl_points %></em><span><%=v.sl_addtime_text %><%=lang('day')%>,<%=v.sl_desc %><%=lang('get')%></span>
+    </li>
+    <%}%>
+    <li class="loading"><div class="spinner"><i></i></div><%=lang('data_reading')%></li>
+    <% }else { %>
+    <div class="dstouch-norecord signin" style="top: 70%;">
+        <div class="norecord-ico"><i class="iconfont"></i></div>
+        <dl>
+            <dt><%=lang('pre_deposit_tips_one')%></dt>
+            <dd><%=lang('pre_deposit_tips_two')%></dd>
+        </dl>
+    </div>
+    <% } %>
+</script> 
+<script type="text/javascript" src="../js/config.js"></script>
+<script type="text/javascript" src="../js/zepto.min.js"></script>
+<script type="text/javascript" src="../js/template.js"></script> 
+<script type="text/javascript" src="../js/common.js"></script> 
+<script type="text/javascript" src="../js/simple-plugin.js"></script> 
+<script type="text/javascript" src="../js/ncscroll-load.js"></script>
+<script type="text/javascript" src="lang/signin.js"></script>
+<script type="text/javascript" src="../js/lang.js"></script>
+<script>
+    var key = getCookie('key');
+    if (!key) {
+        window.location.href = WapSiteUrl+'/member/login.html';
+    }
+    function showSignin(){
+        //检验是否能签到
+        $.getJSON(ApiUrl + '/Membersignin/checksignin.html', {'key':key}, function(result){
+            if(result.code == 10000){
+                $("#points_signin").html(result.result.points_signin);
+                $("#signinbtn").show();
+                $("#completedbtn").hide();
+            }else{
+                if (result.state == 'isclose') {//如果关闭了签到功能，则不显示签到按钮
+                    location.href = WapSiteUrl;
+                }else{//如果已经签到完成，则显示已签到
+                    $("#signinbtn").hide();
+                    $("#completedbtn").show();
+                }
+            }
+        });
+    }
+    //加载签到日志
+    var load_class = new ncScrollLoad();
+    function getSigninLog(){
+        load_class.loadInit({
+            'url':ApiUrl + '/Membersignin/signin_list.html',
+            'getparam':{key:key},
+            'tmplid':'loglist_tpl',
+            'containerobj':$("#loglist"),
+            'iIntervalId':true
+        });
+    }
+
+    $(function(){
+        showSignin();
+        //获取会员积分
+        $.getJSON(ApiUrl + '/Member/my_asset.html', {'key':key,'fields':'point'}, function(result){
+            $("#pointnum").html(result.result.point);
+        });
+        getSigninLog();
+        $("#signinbtn").click(function(){
+            if ($("#signinbtn").hasClass('loading')) {
+                return false;
+            }
+            $("#signinbtn").addClass('loading');
+            //获取详情
+            $.getJSON(ApiUrl + '/Membersignin/signin_add.html', {'key':key}, function(result){
+                if(result.code == 10000){
+                    $("#pointnum").html(result.result.point);
+                    $("#completedbtn").show();
+                    $("#signinbtn").hide();
+                    getSigninLog();
+                }
+                $("#signinbtn").removeClass('loading');
+            });
+        });
+        $("#description_link").click(function(){
+            var con = $("#description_info").html();
+            layer.open({content: con,skin: 'msg',time: 2});
+        });
+    });
+</script>
+</body>
+</html>

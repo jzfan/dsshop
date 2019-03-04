@@ -1,0 +1,4 @@
+{foreach name='goods_common_info.mb_body' item='mb_body'}
+{if $mb_body.type=='text'}{$mb_body.value}{/if}
+{if $mb_body.type=='image'}<img src='{$mb_body.value}'>{/if}
+{/foreach}

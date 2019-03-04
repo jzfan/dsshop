@@ -1,0 +1,64 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-touch-fullscreen" content="yes" />
+<meta name="format-detection" content="telephone=no"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="msapplication-tap-highlight" content="no" />
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1" />
+<title></title>
+<link rel="stylesheet" type="text/css" href="../css/base.css">
+<link rel="stylesheet" type="text/css" href="../css/dstouch_member.css">
+</head>
+<body>
+<header id="header">
+  <div class="header-wrap">
+    <div class="header-l"><a href="javascript:history.go(-1)"><i class="back iconfont"></i></a></div>
+    <div class="header-title">
+      <h1><lang data-id="give_details"></lang></h1>
+    </div>
+  </div>
+</header>
+<div class="dstouch-main-layout" id="pdcashinfo"> </div>
+<footer id="footer"></footer>
+<script type="text/html" id="info_model">
+        <ul class="dstouch-default-list">
+            <li><h4><%=lang('application_number')%></h4><span class="num"><%=info.pdc_sn %></span></li>
+            <li><h4><%=lang('amount_cash')%></h4><span class="num"><%=info.pdc_amount %></li>
+            <li><h4><%=lang('cash_bank')%></h4><span class="num"><%=info.pdc_bank_name %></li>
+            <li><h4><%=lang('accounts_receivable_account')%></h4><span class="num"><%=info.pdc_bank_no %></li>
+            <li><h4><%=lang('name_of_account_holder')%></h4><span class="num"><%=info.pdc_bank_user %></li>
+            <li><h4><%=lang('creation_time')%></h4><span class="num"><%=info.pdc_addtime_text %></li>
+            <li><h4><%=lang('present_status')%></h4><span class="num"><%=info.pdc_payment_state_text %></span></li>
+            <% if(info.pdc_payment_time_text){%>
+			<li><h4><%=lang('through_time')%></h4><span class="num"><%=info.pdc_payment_time_text %></span></li>
+			<%}%>
+        </ul>
+</script> 
+<script type="text/javascript" src="../js/config.js"></script> 
+<script type="text/javascript" src="../js/zepto.min.js"></script> 
+<script type="text/javascript" src="../js/template.js"></script> 
+<script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript" src="lang/pdcashinfo.js"></script>
+<script type="text/javascript" src="../js/lang.js"></script>
+<script>
+    $(function(){
+        var key = getCookie('key');
+        if (!key) {
+            window.location.href = WapSiteUrl+'/member/login.html';
+            return;
+        }
+
+        //获取详情
+        $.getJSON(ApiUrl + '/Memberfund/pdcashinfo.html', {'key':key,'pdc_id':getQueryString('pdc_id')}, function(result){
+            var html = template('info_model', result.result);
+            $("#pdcashinfo").html(html);
+        });
+    });
+</script>
+</body>
+</html>

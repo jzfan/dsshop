@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-touch-fullscreen" content="yes" />
+<meta name="format-detection" content="telephone=no"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="msapplication-tap-highlight" content="no" />
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1" />
+<title></title>
+<link rel="stylesheet" type="text/css" href="../css/base.css">
+<link rel="stylesheet" type="text/css" href="../css/dstouch_member.css">
+</head>
+<body>
+<header id="header">
+  <div class="header-wrap">
+    <div class="header-l"> <a href="member.html"> <i class="back iconfont"></i> </a> </div>
+    <div class="header-title">
+      <h1><lang data-id="address_management"></lang></h1>
+    </div>
+    <div class="header-r"> <a id="header-nav" href="address_opera.html"><i class="add iconfont"></i></a> </div>
+  </div>
+</header>
+<div class="dstouch-main-layout mb20">
+  <div class="dstouch-address-list" id="address_list"></div>
+</div>
+<footer id="footer"></footer>
+<script type="text/html" id="saddress_list">
+<%if(address_list.length>0){%>
+	<ul>
+	<%for(var i=0;i<address_list.length;i++){%>
+        <li>
+            <dl>
+                <dt>
+					<span class="name"><%=address_list[i].address_realname %></span>
+					<span class="phone"><%=address_list[i].address_mob_phone %></span>
+				</dt>
+                <dd><%=address_list[i].area_info %>&nbsp;<%=address_list[i].address_detail %></dd>
+            </dl>
+            <div class="handle">
+				<% if (address_list[i].address_is_default == 1) { %>
+				<%=lang('default_address')%>
+				<% } %>
+           		<span>
+					<a href="address_opera_edit.html?address_id=<%=address_list[i].address_id %>"><i class="edit"></i><%=lang('edit')%></a><a href="javascript:;" address_id="<%=address_list[i].address_id %>" class="deladdress"><i class="del"></i><%=lang('delete')%></a>
+				</span>
+            </div>
+        </li>
+	<%}%>
+    </ul>
+	<a class="btn-l mt5" href="address_opera.html"><%=lang('add_new_address')%></a>
+<%}else{%>
+<div class="dstouch-norecord address">
+    <div class="norecord-ico"><i class="iconfont"></i></div>
+    <dl>
+        <dt><%=lang('collect_goods_tips_one')%></dt>
+        <dd><%=lang('collect_goods_tips_two')%></dd>
+    </dl>
+    <a href="address_opera.html" class="btn"><%=lang('add_new_address')%></a>
+</div>
+</div>
+<%}%>
+</script> 
+<script type="text/javascript" src="../js/zepto.min.js"></script> 
+<script type="text/javascript" src="../js/config.js"></script> 
+<script type="text/javascript" src="../js/template.js"></script> 
+<script type="text/javascript" src="../js/common.js"></script> 
+<script type="text/javascript" src="../js/simple-plugin.js"></script> 
+<script type="text/javascript" src="js/address_list.js"></script> 
+<script type="text/javascript" src="../js/footer.js"></script>
+<script type="text/javascript" src="lang/address_list.js"></script>
+<script type="text/javascript" src="../js/lang.js"></script>
+</body>
+</html>

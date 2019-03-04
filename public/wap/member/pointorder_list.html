@@ -1,0 +1,159 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-touch-fullscreen" content="yes" />
+	<meta name="format-detection" content="telephone=no"/>
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="msapplication-tap-highlight" content="no" />
+	<meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1" />
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="../css/base.css">
+	<link rel="stylesheet" type="text/css" href="../css/dstouch_member.css">
+	<link rel="stylesheet" type="text/css" href="../css/dstouch_common.css">
+	<link rel="stylesheet" type="text/css" href="../css/dstouch_cart.css">
+</head>
+<body>
+<header id="header" class="fixed">
+	<div class="header-wrap">
+		<div class="header-l"><a href="member.html"><i class="back iconfont"></i></a></div>
+
+		<div class="header-title">
+			<h1><lang data-id="record_of_exchange"></lang></h1>
+		</div>
+		<div class="header-r"> <a id="header-nav" href="javascript:void(0);"><i class="more iconfont"></i><sup></sup></a> </div>
+	</div>
+	<div class="dstouch-nav-layout">
+		<div class="dstouch-nav-menu"> <span class="arrow"></span>
+			<ul>
+				<li><a href="../index.html"><i class="iconfont home"></i><lang data-id="home"></lang></a></li>
+				<li><a href="../mall/search.html"><i class="iconfont search"></i><lang data-id="search"></lang></a></li>
+				<li><a href="../mall/product_first_categroy.html"><i class="iconfont categroy"></i><lang data-id="classification"></lang></a></li>
+				<li><a href="../mall/cart_list.html"><i class="iconfont cart"></i><lang data-id="cart"></lang><sup></sup></a></li>
+				<li><a href="../member/member.html"><i class="iconfont member"></i><lang data-id="my_business_city"></lang></a></li>
+			</ul>
+		</div>
+	</div>
+</header>
+<div class="dstouch-main-layout">
+	<!--div class="dstouch-order-search">
+      <form>
+        <span><input type="text" autocomplete="on" maxlength="50" placeholder="输入订单号进行搜索" name="order_key" id="order_key" oninput="writeClear($(this));" >
+        <span class="input-del"></span></span>
+        <input type="button" id="search_btn" value="&nbsp;">
+      </form>
+    </div-->
+
+	<div class="dstouch-order-list">
+		<ul id="order-list">
+		</ul>
+	</div>
+
+</div>
+<div class="fix-block-r">
+	<a href="javascript:void(0);" class="gotop-btn gotop hide" id="goTopBtn"><i class="iconfont"></i></a>
+</div>
+<footer id="footer"></footer>
+<script type="text/html" id="order-list-tmpl">
+	<% var order_list = result.order_list; %>
+	<% if (order_list.length > 0){%>
+	<% for(var i = 0;i<order_list.length;i++){
+	var order_goods = order_list[i].prodlist;
+	%>
+	<li class="<%if(order_list[i].point_allpoint){%>green-order-skin<%}else{%>gray-order-skin<%}%> <%if(i>0){%>mt10<%}%>">
+		<% {
+
+		%>
+		<div class="dstouch-order-item">
+			<div class="dstouch-order-item-head">
+
+				<a class="store">
+					<i class="icon iconfont"></i><%=lang('exchange_order_number')%>:<%=order_list[i].point_ordersn%></a>
+
+				<span class="state">
+							<%
+								var stateClass ="ot-finish";
+								var orderstate = order_list[i].point_orderstate;
+								if(orderstate == 20 || orderstate == 30 || orderstate == 40|| orderstate == 50){
+									stateClass = stateClass;
+								}else if(orderstate == 2) {
+									stateClass = "ot-cancel";
+								}else {
+									stateClass = "ot-nofinish";
+								}
+							%>
+							<span class="<%=stateClass%>"><%=order_list[i].state_desc%></span>
+						</span>
+			</div>
+			<div class="dstouch-order-item-con">
+				<%
+				var count = 0;
+				for (k in order_goods){
+				count += parseInt(order_goods[k].pointog_goodsnum);
+				%>
+				<div class="goods-block">
+					<a href="<%=WapSiteUrl%>/member/pointorder_view.html?order_id=<%=order_list[i].point_orderid%>">
+						<div class="goods-pic">
+							<img src="<%=order_goods[k].pointog_goodsimage%>"/>
+						</div>
+						<dl class="goods-info">
+							<dt class="goods-name"><%=order_goods[k].pointog_goodsname%></dt>
+							<dd class="goods-type"></dd>
+						</dl>
+						<div class="goods-subtotal">
+							<span class="goods-price"><em><%=order_goods[k].pointog_goodspoints%></em>余额</span>
+							<span class="goods-num">x<%=order_goods[k].pointog_goodsnum%></span>
+						</div>
+					</a>
+				</div>
+				<%}%>
+
+			</div>
+			<div class="dstouch-order-item-footer">
+				<div class="store-totle">
+					<span><%=lang('common')%><em><%=count%></em><%=lang('commons')%></span><span class="sum"><em><%=order_list[i].point_allpoint%></em><%=lang('integral')%></span>
+				</div>
+				<div class="handle">
+					<%if(order_list[i].point_orderstate =='30' ){%>
+					<a href="javascript:void(0)" order_id="<%=order_list[i].point_orderid%>" class="btn key sure-order">确认收货 </a>
+					<%}%>
+					<%if(order_list[i].point_orderstate =='20'){%>
+					<a href="javascript:void(0)" order_id="<%=order_list[i].point_orderid%>" class="btn cancel-order">取消兑换</a>
+					<%}%>
+					<a href="javascript:void(0)" order_id="<%=order_list[i].point_orderid%>" class="btn view-order">查看详情</a>
+				</div>
+			</div>
+		</div>
+		<%}%>
+
+	</li>
+	<%}%>
+	<% if (hasmore) {%>
+	<li class="loading"><div class="spinner"><i></i></div>顺序数据读取 </li>
+	<% } %>
+	<%}else {%>
+	<div class="dstouch-norecord order">
+		<div class="norecord-ico"><i class="iconfont"></i></div>
+		<dl>
+			<dt><%=lang('order')%></dt>
+			<dd><%=lang('orders')%></dd>
+		</dl>
+		<a href="<%=WapSiteUrl%>/mall/pointspro_list.html" class="btn"><%=lang('look_around')%></a>
+	</div>
+	<%}%>
+</script>
+
+<script type="text/javascript" src="../js/config.js"></script>
+<script type="text/javascript" src="../js/zepto.min.js"></script>
+<script type="text/javascript" src="../js/template.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript" src="../js/zepto.waypoints.js"></script>
+<script type="text/javascript" src="../js/ncscroll-load.js"></script>
+<script type="text/javascript" src="js/pointorder_list.js"></script>
+<script type="text/javascript" src="lang/pointorder_list.js"></script>
+<script type="text/javascript" src="../js/lang.js"></script>
+</body>
+</html>

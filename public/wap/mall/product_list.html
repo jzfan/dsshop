@@ -1,0 +1,194 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-touch-fullscreen" content="yes" />
+<meta name="format-detection" content="telephone=no"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="msapplication-tap-highlight" content="no" />
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1" />
+<title></title>
+<link rel="stylesheet" type="text/css" href="../css/base.css">
+<link rel="stylesheet" type="text/css" href="../css/dstouch_products_list.css">
+<link rel="stylesheet" type="text/css" href="../css/dstouch_common.css">
+</head>
+<body>
+<header id="header" class="dstouch-product-header fixed">
+  <div class="header-wrap">
+    <div class="header-l"> <a href="javascript:history.go(-1)"> <i class="back iconfont"></i> </a> </div>
+    <div class="header-inp"> <i class="icon"></i> <span class="search-input" id="keyword"><lang data-id="input_keywords"></lang></span> </div>
+    <div class="header-r"> <a href="product_first_categroy.html" class="categroy"><i class="iconfont"></i>
+      </a> <a id="header-nav" href="javascript:void(0);"><i class="more iconfont"></i><sup></sup></a> </div>
+  </div>
+  <div class="dstouch-nav-layout">
+    <div class="dstouch-nav-menu"> <span class="arrow"></span>
+      <ul>
+		  <li><a href="../index.html"><i class="iconfont home"></i><lang data-id="home"></lang></a></li>
+		  <li><a href="search.html"><i class="iconfont search"></i><lang data-id="search"></lang></a></li>
+		  <li><a href="product_first_categroy.html"><i class="iconfont categroy"></i><lang data-id="classification"></lang></a></li>
+		  <li><a href="cart_list.html"><i class="iconfont cart"></i><lang data-id="cart"></lang><sup></sup></a></li>
+		  <li><a href="../member/member.html"><i class="iconfont member"></i><lang data-id="my_business_city"></lang></a></li>
+      </ul>
+    </div>
+  </div>
+</header>
+<div class="goods-search-list-nav">
+    <ul id="nav_ul">
+      <li><a href="javascript:void(0);" class="current" id="sort_default"><lang data-id="comprehensive_ranking"></lang><i></i></a></li>
+      <li><a href="javascript:void(0);" class="" onClick="init_get_list('2', '1')"><lang data-id="sales_priority"></lang></a></li>
+      <li><a href="javascript:void(0);" id="search_adv"><lang data-id="screen"></lang><i></i></a></li>
+    </ul>
+    <div class="browse-mode"><a href="javascript:void(0);" id="show_style"><span class="browse-list iconfont"></span></a></div>
+  </div>
+<div id="sort_inner" class="goods-sort-inner hide"> <span><a href="javascript:void(0);" class="cur"  onclick="init_get_list('', '')"><lang data-id="comprehensive_ranking"></lang>i></i></a></span> <span><a href="javascript:void(0);" onClick="init_get_list('2', '3')"><lang data-id="price_from_high_to_low"></lang><i></i></a></span> <span><a href="javascript:void(0);" onClick="init_get_list('1', '3')"><lang data-id="prices_range_from_low_to_high"></lang><i></i></a></span> <span><a href="javascript:void(0);" onClick="init_get_list('2', '2')"><lang data-id="popularity_ranking"></lang><i></i></a></span> </div>
+<div class="dstouch-main-layout mt40 mb20">
+  <div id="product_list" class="list">
+    <ul class="goods-secrch-list">
+    </ul>
+  </div>-
+</div>
+<!--筛选部分-->
+<div class="dstouch-full-mask hide">
+  <div class="dstouch-full-mask-bg"></div>
+  <div class="dstouch-full-mask-block">
+    <div class="header">
+      <div class="header-wrap">
+        <div class="header-l"> <a href="javascript:void(0);"><i class="back iconfont"></i></a></div>
+        <div class="header-title">
+			<h1><lang data-id="commodity_screening"></lang></h1>
+        </div>
+        <div class="header-r"><a href="javascript:void(0);" id="reset" class="text"><lang data-id="reset"></lang></a> </div>
+      </div>
+    </div>
+    <div class="dstouch-main-layout-a secreen-layout" id="list-items-scroll" style="top: 2rem;"><div></div></div>
+  </div>
+</div>
+<div class="fix-block-r">
+    <a href="../member/views_list.html" class="browse-btn"><i class="iconfont"></i></a>
+    <a href="javascript:void(0);" class="gotop-btn gotop hide" id="goTopBtn"><i class="iconfont"></i></a>
+</div>
+<footer id="footer"></footer>
+<script type="text/html" id="search_items">
+<div>
+	<dl>
+		<dt><%=lang('price_range')%></dt>
+		<dd>
+			<span class="inp-balck"><input type="text" id="price_from" dstype="price" pattern="[0-9]*" class="inp" placeholder="最低价"/></span>
+			<span class="line"></span>
+			<span class="inp-balck"><input dstype="price" type="text" id="price_to" pattern="[0-9]*" class="inp" placeholder="最高价"/></span>
+		</dd>
+	</dl>
+	<dl>
+		<dt><%=lang('location_of_commodity')%></dt>
+		<dd><span class="inp-balck add"><select id="area_id">
+					<option value=""><%=lang('unlimited')%></option>
+    				<% for (i = 0; i < area_list.length; i++) { %>
+    				<option value="<%=area_list[i]['area_id']%>"><%=area_list[i]['area_name']%></option>
+    				<% } %>
+    				</select>
+					<i></i>
+			</span>
+		</dd>
+	</dl>
+	<dl>
+		<dt><%=lang('commodity_type')%></dt>
+		<dd>
+			<a href="javascript:void(0);" dstype="items" id="gift" class=""><%=lang('gift')%></a>
+			<a href="javascript:void(0);" dstype="items" id="groupbuy"><%=lang('rush_to_buy')%></a>
+			<a href="javascript:void(0);" dstype="items" id="xianshi"><%=lang('discount')%></a>
+			<a href="javascript:void(0);" dstype="items" id="virtual"><%=lang('fictitious')%></a>
+		</dd>
+	</dl>
+	<dl>
+		<dt><%=lang('shop_type')%></dt>
+		<dd>
+			<a href="javascript:void(0);" dstype="items" id="own_shop" class=""><%=lang('platform_self')%></a>
+		</dd>
+	</dl>
+
+	<div class="bottom">
+	<a href="javascript:void(0);" class="btn-l" id="search_submit"><%=lang('screening_of_goods')%></a>
+	</div>
+</div>
+</script> 
+<!--筛选部分-->
+</body>
+<script type="text/html" id="home_body">
+	<% var goods_list = result.goods_list; %>
+	<% if(goods_list.length >0){%>
+			<%for(i=0;i<goods_list.length;i++){%>
+			<li class="goods-item" goods_id="<%=goods_list[i].goods_id;%>">
+				<span class="goods-pic">
+					<a href="product_detail.html?goods_id=<%=goods_list[i].goods_id;%>">
+						<img src="<%=goods_list[i].goods_image_url;%>"/>
+					</a>
+				</span>
+				<dl class="goods-info">
+					<dt class="goods-name">
+						<a href="product_detail.html?goods_id=<%=goods_list[i].goods_id;%>">
+							<h4><%=goods_list[i].goods_name;%></h4>
+							<h6><%=goods_list[i].goods_advword;%></h6>
+						</a>
+					</dt>
+					<dd class="goods-sale">
+						<a href="product_detail.html?goods_id=<%=goods_list[i].goods_id;%>">
+							<span class="goods-price">￥<em><%=goods_list[i].goods_price;%></em></span>
+							<% if (goods_list[i].is_virtual == '1') { %>
+								<span class="sale-type"><%=lang('fictitious')%></span>
+							<% } else { %>
+								<% if (goods_list[i].is_presell == '1') { %>
+								<span class="sale-type"><%=lang('preconditioning')%></span>
+								<% } %>
+								<% if (goods_list[i].is_goodsfcode == '1') { %>
+								<span class="sale-type">F</span>
+								<% } %>
+							<% } %>
+
+							<% if(goods_list[i].group_flag || goods_list[i].xianshi_flag){ %>
+								<span class="sale-type"><%=lang('drop')%></span>
+							<% } %>
+							<% if(goods_list[i].is_have_gift == '1'){ %>
+								<span class="sale-type"><%=lang('gifts')%></span>
+							<% } %>
+							</a>
+						</dd>
+						<dd class="goods-assist">
+							<a href="product_detail.html?goods_id=<%=goods_list[i].goods_id;%>">
+								<span class="goods-sold"><%=lang('sales_volume')%>
+									<em><%=goods_list[i].goods_salenum;%></em>
+								</span>
+							</a>
+						</dd>
+					</dl>
+			</li>
+			<%}%>
+			<% if (hasmore) {%>
+			<li class="loading"><div class="spinner"><i></i></div><%=lang('commodity_data_reading')%>...</li>
+			<% } %>
+	<%
+	   }else {
+	%>
+        <div class="dstouch-norecord search">
+            <div class="norecord-ico"><i class="iconfont"></i></div>
+            <dl>
+                <dt><%=lang('no_relevant_information')%></dt>
+                <dd><%=lang('selection_classification')%>...</dd>
+            </dl>
+            <a href="javascript:history.go(-1)" class="btn"><%=lang('re_selection')%></a>
+        </div>
+	<%
+	   }
+	%>
+</script>
+<script type="text/javascript" src="../js/config.js"></script>
+<script type="text/javascript" src="../js/zepto.min.js"></script>
+<script type="text/javascript" src="../js/template.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript" src="js/product_list.js"></script>
+<script type="text/javascript" src="../js/footer.js"></script>
+<script type="text/javascript" src="lang/product_list.js"></script>
+<script type="text/javascript" src="../js/lang.js"></script>
+</html>

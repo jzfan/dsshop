@@ -1,0 +1,473 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-touch-fullscreen" content="yes" />
+<meta name="format-detection" content="telephone=no"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="msapplication-tap-highlight" content="no" />
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1" />
+<title></title>
+<link rel="stylesheet" type="text/css" href="../css/base.css">
+<link rel="stylesheet" type="text/css" href="../css/dstouch_common.css">
+<link rel="stylesheet" type="text/css" href="../css/dstouch_products_detail.css">
+</head>
+<body>
+<header id="header" class="transparent">
+  <div class="header-wrap">
+    <div class="header-l"> <a href="javascript:history.go(-1)"> <i class="back iconfont"></i> </a> </div>
+
+    <div class="header-r"> <a id="header-nav" href="javascript:void(0);"><i class="more iconfont"></i><sup></sup></a> </div>
+  </div>
+  <div class="dstouch-nav-layout">
+    <div class="dstouch-nav-menu"> <span class="arrow"></span>
+      <ul>
+		  <li><a href="../index.html"><i class="iconfont home"></i><lang data-id="home"></lang></a></li>
+		  <li><a href="search.html"><i class="iconfont search"></i><lang data-id="search"></lang></a></li>
+		  <li><a href="product_first_categroy.html"><i class="iconfont categroy"></i><lang data-id="classification"></lang></a></li>
+		  <li><a href="cart_list.html"><i class="iconfont cart"></i><lang data-id="cart"></lang><sup></sup></a></li>
+		  <li><a href="../member/member.html"><i class="iconfont member"></i><lang data-id="my_business_city"></lang></a></li>
+      </ul>
+    </div>
+  </div>
+</header>
+<div id="product_detail_html" style="position: relative; z-index: 1;"></div>
+<div id="product_detail_spec_html" class="dstouch-bottom-mask"></div>
+<div id="voucher_html" class="dstouch-bottom-mask"></div>
+<div id="product_detail_foot_html"></div>
+<script type="text/html" id="product_detail">
+<div class="goods-detail-top">
+		<div class="goods-detail-pic" id="mySwipe">
+			<ul>
+				<% for (var i =0;i<goods_image.length;i++){ %>
+				<li><img src="<%=goods_image[i]%>"/></li>
+				<% } %>
+			</ul>
+		</div>
+                <%if(goods_image.length>1){%>
+		<div class="goods-detail-turn">
+			<span class="now_page">1</span>/<span class="total_page"><%=goods_image.length%></span>
+		</div>
+                <%}%>
+		<!--<div class="round pd-share"><i></i></div>-->
+	</div>
+<div class="goods-detail-cnt">
+	<div class="goods-detail-name">
+		<dl> 
+			<dt><%if(goods_info.is_virtual == '1'){%><span><%=lang('fictitious')%></span><%}%><% if (goods_info.is_presell == '1') { %><span><%=lang('pre_sale')%></span><% } %><% if (goods_info.is_goodsfcode == '1') { %><span>F码</span><% } %><%=goods_info.goods_name%></dt>
+			<dd><%=goods_info.goods_advword%></dd>
+		</dl>
+	</div>
+	<div class="goods-detail-price">
+		<% if (goods_info.promotion_type) { %>
+		<dl>
+			<dt>￥<em><%=goods_info.promotion_price%></em>
+			</dt>
+			<dd>￥<%=goods_info.goods_price%></dd>
+		</dl>
+	
+		<% } else { %>
+			<dl>
+				<dt>￥<em><%=goods_info.goods_price%></em></dt>
+			</dl>
+		<% } %>
+                <%if(inviter_amount>0){%>
+				<span class="inviter"><i class='iconfont'></i>￥<%=inviter_amount%></span>
+                <%}%>
+	</div>
+	<% if (goods_info.promotion_type == 'xianshi' || goods_info.promotion_type == 'groupbuy' || (mansong_info != null && mansong_info.rules) || (gift_array && !isEmpty(gift_array))) { %>
+	<div class="goods-detail-item" style="padding-bottom:0">
+		<div class="itme-name"><%=lang('promotion')%></div>
+		<div class="item-con">
+			<% if (goods_info.promotion_type == 'xianshi') { %>
+			<dl class="goods-detail-sale">
+				<dt><i><%=goods_info.title%></i></dt>
+				<dd>
+					<%=lang('direct_descending')%>￥<%=goods_info.down_price%>
+					<% if( goods_info.lower_limit ) { %>
+					<%=lang('minimum')%><%=goods_info.lower_limit%><%=lang('pieceqi')%><%if(goods_info.explain){%>，<%=goods_info.explain%><%  } %>
+						<%  } %>
+				<dd>
+			</dl>
+			<% } %>
+			<% if (goods_info.promotion_type == 'groupbuy') { %>
+			<dl class="goods-detail-sale">
+				<dt><i><%=goods_info.title%></i></dt>
+				<dd>
+				<% if (goods_info.upper_limit) { %>
+				<%=lang('most_limited_purchase')%><%=goods_info.upper_limit%><%=lang('piece')%>
+					<%  } %>
+                                <%if(goods_info.remark){%>        
+				，<%=goods_info.remark%>
+                                <%  } %>
+				<dd>
+			</dl>
+			<% } %>
+			<% if (mansong_info != null && mansong_info.rules) { %>
+			<dl class="goods-detail-sale">
+				<dt>
+					<i><%=lang('full_delivery')%></i>
+				</dt>	
+                                <dd class="mansong-rule">
+				<% if (mansong_info != null && mansong_info.rules) { for (var i =0;i<mansong_info.rules.length;i++){ %>
+				
+						<%=lang('single_order_full')%><em><%=mansong_info.rules[i].mansongrule_price%></em><%=lang('element')%>
+						<% if (mansong_info.rules[i].mansongrule_discount > 0) { %>
+						，<%=lang('erect_subtraction')%><em><%=mansong_info.rules[i].mansongrule_discount%></em><%=lang('element')%>
+						<% } %>
+						<% if (mansong_info.rules[i].goods_image_url) { %>
+						，<%=lang('give_gifts')%>
+						<% } %>
+				<%if(i!=mansong_info.rules.length-1){%><br><%}%>
+				<%}}%>
+                                </dd>
+			</dl>
+			<% } %>
+			<% if (gift_array && !isEmpty(gift_array)) { %>
+			<dl class="goods-detail-sale">
+				<dt>
+					<i><%=lang('gift')%></i>
+				</dt>
+				
+				<dd class="gift-item">
+                                    <% for (var k in gift_array) { var v = gift_array[k]; %>
+                                    <a href="?goods_id=<%= v.gift_goodsid %>"><img src="<%=v.gift_goodsimage_url%>"></a>
+					<em>&#215; <%= v.gift_amount %></em>
+                                    <% } %>	    
+				</dd>
+				
+			</dl>
+			<% } %>
+		</div>
+	</div>
+	<% } %>
+        <% if (goods_info.mgdiscount_type) { %>
+        <div class="goods-detail-mgdiscount" style="padding-bottom:0">
+            <div class="itme-name"><%=lang('membership_discounts')%></div>
+            <div class="item-con">
+            <% for (var k in goods_info.goods_mgdiscount_arr) { var v = goods_info.goods_mgdiscount_arr[k]; %>
+            <span>
+            <em><%= v.level_name %></em><%= v.level_discount %><%=lang('fracture')%>
+            </span>
+            <% } %>
+            </div>
+        </div>
+        <% } %>
+        <div class="item_select_wrap">
+	<% if (voucher) { %>
+        <div class="goods-detail-item">
+		<div class="itme-name"><%=lang('get_voucher')%></div>
+		<div class="item-con">
+			<a href="javascript:void(0);" id="getVoucher" class="mini_voucher_wrap">
+                            <% for (var i=0; i<((voucher.length<3)?(voucher.length):3); i++) { %>
+                            <div class="mini_voucher"><span><%=voucher[i].vouchertemplate_price%><%=lang('element')%></span></div>
+                            <% } %>
+			</a>
+		</div>
+		<div class="item-more iconfont">&#xe632;</div>
+	</div>
+        
+	<%}%>
+	<div class="goods-detail-item">
+		<div class="itme-name"><%=lang('send_to')%></div>
+		<div class="item-con">
+			<a href="javascript:void(0);" id="get_area_selected">
+			<dl class="goods-detail-freight">
+				<dt><span id="get_area_selected_name"><%=goods_hair_info.area_name%></span><strong id="get_area_selected_whether"><%=goods_hair_info.if_deliver_cn%></strong></dt>
+				<dd id="get_area_selected_content" style="display: none"><%=goods_hair_info.content%></dd>
+			</dl>
+			</a>
+		</div>
+		<div class="item-more iconfont">&#xe632;</div>
+	</div>
+	<div class="goods-detail-item" id="goods_spec_selected">
+		<div class="itme-name"><%=lang('selected')%></div>
+		<div class="item-con">
+			<dl class="goods-detail-sel">
+				<dt>
+					<% if (!isEmpty(goods_info.goods_spec)) { %>
+					<% if(goods_map_spec.length>0){%>
+						<% for(var i =0;i<goods_map_spec.length;i++){%>
+							<span>
+							<%=goods_map_spec[i].goods_spec_name%>
+							<%for(var j in goods_map_spec[i].goods_spec_value){%>
+								<%if (goods_info.goods_spec[goods_map_spec[i].goods_spec_value[j].specs_value_id]){%>
+									<em><%=goods_map_spec[i].goods_spec_value[j].specs_value_name%></em>
+								<%}%>
+							<%}%>
+							</span>
+						<%}%>
+					<%}} else { %>
+					<span><%=lang('default')%></span>
+					<% } %>
+				</dt>
+			</dl>
+		</div>
+		<div class="item-more iconfont">&#xe632;</div>
+	</div>
+        </div>
+                
+        <% if (goods_info.pintuan_type) { %>
+        <div class="goods-detail-pintuan">
+            <% if (goods_info.pintuangroup_share_id<=0) { %>
+            <div class="mt"><%=lang('yes')%><%= goods_info.pintuangroup_count %><%=lang('participate')%><div class="item-more iconfont">&#xe632;</div></div>
+            <% } %>
+            <div class="mc">
+                <div class="explain"><%=lang('tips_one')%><%= goods_info.pintuan_limit_quantity %><%=lang('tips_two')%>,<%= goods_info.pintuan_limit_hour %><%=lang('tips_three')%><%= goods_info.pintuan_limit_number %><%=lang('people')%></div>
+                <ul>
+                    <% for (var k in goods_info.pintuangroup_list) { var v = goods_info.pintuangroup_list[k]; %>
+                    <!--通过拼团分享会员ID判断其他组团是否显示-->
+                    <li 
+                        <% if (goods_info.pintuangroup_share_id>0) { %>
+                        <% if (v.pintuangroup_headid == goods_info.pintuangroup_share_id) { %>
+                        <% }else{ %>   
+                        style="display:none"
+                        <% } %>
+                        <% } %>
+                        >
+                        <div class="p_img"><img src="<%= v.pintuangroup_avatar %>" /></div>
+                        <div class="p_name"><%= v.member_name %></div>
+                        <div class="p_info">(<%=lang('still_poor')%><%= v.pintuangroup_surplus %><%=lang('still_poor_lian')%>)</div>
+                        <div class="p_join">
+                            <% if (v.pintuangroup_surplus > 0) { %>
+                            <a herf="javascript:void(0)" class="btn" id="pintuan-now" fieldid="<%= v.pintuangroup_id %>"><%=lang('join_the_group')%></a>
+                            <%} else { %>
+                            <a herf="javascript:void(0)" class="btn disable" ><%=lang('full_of_people')%></a>
+                            <% } %>
+                        </div>
+                    </li>
+                    <% } %>
+                </ul>
+            </div>    
+        </div>
+        <% } %>
+        
+        <% if (goods_eval_list.length > 0) { %>
+	<div class="goods-detail-comment" id="goodsEvaluation1">
+		<div class="title">
+			<a id="goodsEvaluation1" href="javascript:void(0);"><%=lang('commodity_evaluation')%><span class="rate"><%=lang('praise_rate')%><em><%=goods_evaluate_info.good_percent%>%</em></span><span class="rate-num">（<%=goods_info.evaluation_count%><%=lang('human_evaluation')%>）</span></a>
+		</div>
+		<div class="comment-info">
+			
+			<% for (var i=0; i<goods_eval_list.length; i++) { %>
+			<dl>
+				<dt>
+					<div class="goods-raty"><i class="star<%=goods_eval_list[i].geval_scores%>"></i></div>
+					<time><%=goods_eval_list[i].geval_addtime_date%></time>
+					<span class="user-name"><%=goods_eval_list[i].geval_frommembername%></span>
+				</dt>
+				<dd><%=goods_eval_list[i].geval_content%></dd>
+			</dl>
+			<% } %>
+		</div>
+	</div>
+        <% } %>
+        <!-- 商品详情 -->
+        <div class="goods-body">
+        <%for(var i=0;i<mb_body.length;i++){%>
+            <%if(mb_body[i].type=='text'){%>
+            <%=mb_body[i].value%>
+            <%}%>
+            <%if(mb_body[i].type=='image'){%>
+            <img class="lazyload" data-original='<%=mb_body[i].value%>'>
+            <%}%>
+        <%}%>
+        <div class='more wait'><%=lang('view_more')%><span class='iconfont'>&#xe63f;</span></div>
+        </div>
+	
+	<div class="goods-detail-recom">
+		<h4><%=lang('store_recommendation')%></h4>
+		<ul>
+			<%for (var i = 0;i<goods_commend_list.length;i++){%>
+				<li>
+					<a href="product_detail.html?goods_id=<%=goods_commend_list[i].goods_id%>">
+						<div class="pic"><img src="<%=goods_commend_list[i].goods_image_url%>"></div>
+						<dl>
+							<dt><%=goods_commend_list[i].goods_name%></dt>
+							<dd>￥<em><%=goods_commend_list[i].goods_promotion_price%></em></dd>
+						</dl>
+					</a>
+				</li>
+			<%}%>
+		</ul>
+                <div class="v-line l1"></div>
+                <div class="v-line l2"></div>
+                <%if(goods_commend_list.length>3){%>
+                <div class="h-line"></div>
+                <%}%>
+	</div>
+	
+</script> 
+<script type="text/html" id="product_detail_foot">
+<div class="goods-detail-foot">
+		<div class="otreh-handle">
+                        <a href="../mall/cart_list.html" class="cart"><i class="iconfont"></i><p><%=lang('cart')%></p><span id="cart_count"></span></a>
+                        <a href="javascript:void(0)" class="<% if (is_favorate) { %>favorate<% } %> pd-collect"><i class="iconfont"></i><p><%=lang('collect')%></p></a>
+		</div>
+	<div class="buy-handle <%if(!goods_hair_info.if_deliver || goods_info.goods_storage == 0){%>no-buy<%}%>">
+		<% if (goods_info.cart == '1') { %>
+		<a href="javascript:void(0);" class="<%if(goods_hair_info.if_deliver){%>animation-up<%}%> add-cart"><%=lang('add_to_cart')%></a>
+		<% } %>
+		
+                <% if (goods_info.pintuan_type) { %>
+                <a href="javascript:void(0);" class="<%if(goods_hair_info.if_deliver){%>animation-up<%}%> pintuan-now" fieldid="0"><%=lang('immediately_open_regiment')%></a>
+                <%} else {%>
+                <a href="javascript:void(0);" class="<%if(goods_hair_info.if_deliver){%>animation-up<%}%> buy-now"><%=lang('purchase_immediately')%></a>
+                <% } %>
+	</div>
+</div>
+</script>
+<script type="text/html" id="product_detail_sepc">
+    <div class="dstouch-bottom-mask-bg"></div>
+    <div class="dstouch-bottom-mask-block">
+        <div class="dstouch-bottom-mask-top goods-options-info">
+            <div class="goods-pic">
+                <img src="<%=goods_image[0]%>"/>
+            </div>
+            <dl>
+                <dt><%=goods_info.goods_name%></dt>
+                <dd class="goods-price">
+                    <% if (goods_info.promotion_type) {
+                    var promo;
+                    switch (goods_info.promotion_type) {
+                    case 'groupbuy': promo = '抢购'; break;
+                    case 'xianshi': promo = '限时折扣'; break;
+                    case 'sole': promo = '手机专享'; break;}
+                    %>
+                    ￥<em><%=goods_info.promotion_price%></em>
+                    <span class="activity">
+                        <% if (promo) { %>
+                        <%= promo %>
+                        <% } %>
+                    </span>
+                    <% } else { %>
+                    ￥<em><%=goods_info.goods_price%></em>
+                    <% } %>
+                    <span class="goods-storage"><%=lang('stock')%>：<%=goods_info.goods_storage%><%=lang('piece')%></span>
+                </dd>
+                <!--拼团相关单独显示,不和 限时折扣和抢购归为一类-->
+                <% if (goods_info.pintuan_type) { %>
+                <dd class="goods-price">
+                    ￥<%=goods_info.pintuan_price%><span class="activity"><%=lang('collage')%></span>
+                </dd>
+                <% } %>
+            </dl>
+            <a href="javascript:void(0);" class="dstouch-bottom-mask-close"><i></i></a>
+        </div>
+        <div class="dstouch-bottom-mask-rolling" id="product_roll">
+            <div class="goods-options-stock">
+                <% if(goods_map_spec.length>0){%>
+                <% for(var i =0;i<goods_map_spec.length;i++){%>
+                    <dl class="spec">
+                        <dt spec_id="<%=goods_map_spec[i].id%>">
+                            <%=goods_map_spec[i].goods_spec_name%>：
+                        </dt>
+                        <dd>
+                            <%for(var j in goods_map_spec[i].goods_spec_value){%>
+                            <a href="javascript:void(0);" <%if (goods_info.goods_spec[goods_map_spec[i].goods_spec_value[j].specs_value_id]){%> class="current" <%}%>specs_value_id = "<%=goods_map_spec[i].goods_spec_value[j].specs_value_id%>">
+                               <%=goods_map_spec[i].goods_spec_value[j].specs_value_name%>
+                        </a>
+                        <%}%>
+                    </dd>
+                </dl>
+                <%}%>
+                <%}%>
+                <% if (goods_info.is_virtual == '1') { %>
+                <dl class="spec-promotion">
+                    <dt><%=lang('delivery_mode')%>：</dt>
+                    <dd><a href="javascript:void(0);" class="current"><%=lang('electronic_cash_voucher')%></a></dd>
+                </dl>
+                <dl class="spec-promotion">
+                    <dt><%=lang('term_of_validity')%>：</dt>
+                    <dd><a href="javascript:void(0);" class="current"><%=lang('from_now_on')%><%= goods_info.virtual_indate_str %></a>
+                        <% if (goods_info.buyLimitation && goods_info.buyLimitation > 0) { %>
+                        （<%=lang('home_purchase_restrictions')%> <%= goods_info.buyLimitation %> <%=lang('piece')%>）
+                        <% } %>
+                    </dd>
+                </dl>
+                <% } else { %>
+                <% if (goods_info.is_presell == '1') { %>
+                <dl class="spec-promotion">
+                    <dt><%=lang('pre_sale')%>：</dt>
+                    <dd><a href="javascript:void(0);" class="current"><%= goods_info.presell_deliverdate_str %> <%=lang('daily_delivery')%></a></dd>
+                </dl>
+                <% } %>
+                <% if (goods_info.is_goodsfcode == '1') { %>
+                <dl class="spec-promotion">
+                    <dt><%=lang('purchase_type')%>：</dt>
+                    <dd><a href="javascript:void(0);" class="current"><%=lang('preemption')%></a>（<%=lang('preemption_tips')%>）</dd>
+                </dl>
+                <% } %>
+                <% } %>
+        </div>
+    </div>
+    <div class="goods-option-value"><%=lang('purchase_quantity')%>
+        <div class="value-box">
+            <span class="minus">
+                <a href="javascript:void(0);">&nbsp;</a>
+            </span>
+            <span>
+                <input type="text" pattern="[0-9]*" class="buy-num" id="buynum" value="1"/>
+            </span>
+            <span class="add">
+                <a href="javascript:void(0);">&nbsp;</a>
+            </span>
+        </div>
+    </div>
+    
+</script>
+<script type="text/html" id="voucher_script">
+<% if (voucher) { %>
+	<div class="dstouch-bottom-mask-bg"></div>
+	<div class="dstouch-bottom-mask-block">
+
+		<div class="dstouch-bottom-mask-rolling" id="voucher_roll">
+			<div class="dstouch-bottom-mask-con">
+				<ul class="dstouch-voucher-list">
+				<% for (var i=0; i<voucher.length; i++) { %>
+				<li>
+					<dl>
+						<dt class="money"><%=lang('denomination')%><em><%=voucher[i].vouchertemplate_price%></em><%=lang('element')%></dt>
+						<dd class="need"><%=lang('need_to_consume')%><%=voucher[i].vouchertemplate_limit%><%=lang('use')%></dd>
+						<dd class="time"><%=lang('to')%><%=voucher[i].vouchertemplate_enddate%><%=lang('pre_use')%></dd>
+					<dl>
+					<a href="javascript:void(0);" class="btn" data-tid=<%=voucher[i].vouchertemplate_id%>><%=lang('receive')%></a>
+				</li>
+				<% } %>
+				</ul>
+			</div>
+		</div>
+	</div>
+<% } %>
+</script>
+<script type="text/html" id="list-address-script">
+<% for (var i=0;i<addr_list.length;i++) {%>
+<li>
+	<dl>
+		<a href="javascript:void(0)" index_id="<%=i%>">
+			<dt><%=addr_list[i].name_info%><span><i></i><%=lang('consult_a_map')%></span></dt>
+			<dd><%=addr_list[i].address_info%></dd>
+		</a>
+	</dl>
+	<span class="tel"><a href="tel:<%=addr_list[i].phone_info%>"></a></span>
+</li>
+<% } %>
+</script>
+<script type="text/javascript" src="../js/zepto.min.js"></script> 
+<script type="text/javascript" src="../js/config.js"></script> 
+<script type="text/javascript" src="../js/template.js"></script> 
+<script type="text/javascript" src="../js/swipe.js"></script> 
+<script type="text/javascript" src="../js/common.js"></script> 
+<script type="text/javascript" src="../js/iscroll.js"></script> 
+<script type="text/javascript" src="../js/simple-plugin.js"></script> 
+<script type="text/javascript" src="../js/footer.js"></script> 
+<script type="text/javascript" src="../js/fly/requestAnimationFrame.js"></script>
+<script type="text/javascript" src="../js/fly/zepto.fly.min.js"></script>
+<script type="text/javascript" src="js/product_detail.js"></script>
+<script type="text/javascript" src="lang/product_detail.js"></script>
+<script type="text/javascript" src="../js/lang.js"></script>
+</body>
+</html>

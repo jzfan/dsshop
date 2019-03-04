@@ -1,0 +1,19 @@
+ds_lang={
+    'title':'我的代金券',
+    'my_voucher':'我的代金券',
+    'collect_vouchers':'领取代金券',
+    'home':'首页',
+    'search':'搜索',
+    'classification':'分类',
+    'news':'消息',
+    'cart':'购物车',
+    'my_business_city':'我的商城',
+    'period_of_validity_to':'有效期至',
+    'full':'满',
+    'use':'使用',
+    'data_reading':'数据读取中',
+    'cash_coupon_tips_one':'您还没有相关的代金券',
+    'cash_coupon_tips_two':'商城代金券可享受商品折扣',
+    'invalid_ticket':'已失效的券',
+};
+document.title = ds_lang.title;

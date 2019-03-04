@@ -1,0 +1,235 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-touch-fullscreen" content="yes" />
+<meta name="format-detection" content="telephone=no"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="msapplication-tap-highlight" content="no" />
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1" />
+<title></title>
+<link rel="stylesheet" type="text/css" href="../css/base.css">
+<link rel="stylesheet" type="text/css" href="../css/dstouch_member.css">
+<link rel="stylesheet" type="text/css" href="../css/dstouch_common.css">
+<link rel="stylesheet" type="text/css" href="../css/dstouch_cart.css">
+</head>
+<body>
+<header id="header" class="fixed">
+  <div class="header-wrap">
+    <div class="header-l"><a href="member.html"><i class="back iconfont"></i></a></div>
+    <span class="header-tab"><a href="javascript:void(0);" class="cur"><lang data-id="real_order"></lang></a><a href="vr_order_list.html"><lang data-id="virtual_order"></lang></a></span>
+    <div class="header-r"> <a id="header-nav" href="javascript:void(0);"><i class="more iconfont"></i><sup></sup></a> </div>
+  </div>
+  <div class="dstouch-nav-layout">
+    <div class="dstouch-nav-menu"> <span class="arrow"></span>
+      <ul>
+		  <li><a href="../index.html"><i class="iconfont home"></i><lang data-id="home"></lang></a></li>
+		  <li><a href="../mall/search.html"><i class="iconfont search"></i><lang data-id="search"></lang></a></li>
+		  <li><a href="../mall/product_first_categroy.html"><i class="iconfont categroy"></i><lang data-id="classification"></lang></a></li>
+		  <li><a href="../mall/cart_list.html"><i class="iconfont cart"></i><lang data-id="cart"></lang><sup></sup></a></li>
+		  <li><a href="../member/member.html"><i class="iconfont member"></i><lang data-id="my_business_city"></lang></a></li>
+      </ul>
+    </div>
+  </div>
+</header>
+<div class="dstouch-main-layout">
+  <div class="dstouch-order-search">
+    <form>
+      <span><input type="text" autocomplete="on" maxlength="50" placeholder="输入订单号进行搜索" name="order_key" id="order_key" oninput="writeClear($(this));" >
+      <span class="input-del"></span></span>
+      <input type="button" id="search_btn" value="&nbsp;">
+    </form>
+  </div>
+  <div id="fixed_nav" class="dstouch-single-nav">
+    <ul id="filtrate_ul" class="w20h">
+      <li class="selected"><a href="javascript:void(0);" data-state=""><lang data-id="whole"></lang></a></li>
+      <li><a href="javascript:void(0);" data-state="state_new"><lang data-id="pending_payment"></lang></a></li>
+      <li><a href="javascript:void(0);" data-state="state_pay"><lang data-id="pending_delivery"></lang></a></li>
+      <li><a href="javascript:void(0);" data-state="state_send"><lang data-id="goods_to_be_received"></lang></a></li>
+      <li><a href="javascript:void(0);" data-state="state_noeval"><lang data-id="completed"></lang></a></li>
+    </ul>
+  </div>
+  <div class="dstouch-order-list">
+    <ul id="order-list">
+    </ul>
+  </div>
+  <!--底部总金额固定层End-->
+  <div class="dstouch-bottom-mask">
+    <div class="dstouch-bottom-mask-bg"></div>
+    <div class="dstouch-bottom-mask-block">
+      <div class="dstouch-bottom-mask-tip"><i class="iconfont"></i><lang data-id="click_here_to_return"></lang></div>
+      <div class="dstouch-bottom-mask-top">
+        <p class="dstouch-cart-num"><lang data-id="online_payment_required"></lang><em id="onlineTotal">0.00</em><lang data-id="element"></lang></p>
+        <p style="display:none" id="isPayed"></p>
+        <a href="javascript:void(0);" class="dstouch-bottom-mask-close"><i></i></a> </div>
+      <div class="dstouch-inp-con dstouch-inp-cart">
+        <ul class="form-box" id="internalPay">
+          <p class="rpt_error_tip" style="display:none;color:red;"></p>
+          <li class="form-item" id="wrapperUseRCBpay">
+            <div class="input-box pl5">
+              <label>
+                <input type="checkbox" class="checkbox" id="useRCBpay" autocomplete="off" />
+                <lang data-id="recharge_card_payment"></lang> <span class="power"><i></i></span> </label>
+              <p><lang data-id="available_recharge_card_balances"></lang> ￥<em id="availableRcBalance"></em></p>
+            </div>
+          </li>
+          <li class="form-item" id="wrapperUsePDpy">
+            <div class="input-box pl5">
+              <label>
+                <input type="checkbox" class="checkbox" id="usePDpy" autocomplete="off" />
+                <lang data-id="pre_deposit_payment"></lang> <span class="power"><i></i></span> </label>
+              <p><lang data-id="available_deposit_balance"></lang> ￥<em id="availablePredeposit"></em></p>
+            </div>
+          </li>
+          <li class="form-item" id="wrapperPaymentPassword" style="display:none">
+            <div class="input-box"> <span class="txt"><lang data-id="input_payment_password"></lang></span>
+              <input type="password" class="inp" id="paymentPassword" autocomplete="off" />
+              <span class="input-del"></span></div>
+            <a href="../member/member_paypwd_step1.html" class="input-box-help" style="display:none"><i>i</i><lang data-id="not_set"></lang></a> </li>
+        </ul>
+        <div class="dstouch-pay">
+          <div class="spacing-div"><span><lang data-id="online_payment_method"></lang></span></div>
+          <div class="pay-sel" id="pay-sel">
+              <script type="text/html" id="pay-sel-tmpl">
+                  <%if(payment_list.length > 0) {%>
+                  <%for(var p = 0;p < payment_list.length;p++){%>
+                  <label style="display:none">
+                      <input type="radio" name="payment_code" class="checkbox" id="<%=payment_list[p]%>" autocomplete="off" />
+                      <span class="<%=payment_list[p]%>"><%=payment_list[p]%></span></label>
+                  <%}}%>
+              </script>
+              </div>
+        </div>
+        <div class="pay-btn"> <a href="javascript:void(0);" id="toPay" class="btn-l"><lang data-id="confirmation_payment"></lang></a> </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="fix-block-r">
+	<a href="javascript:void(0);" class="gotop-btn gotop hide" id="goTopBtn"><i class="iconfont"></i></a>
+</div>
+<footer id="footer"></footer>
+
+<script type="text/html" id="order-list-tmpl">
+<% var order_group_list = result.order_group_list; %>
+<% if (order_group_list.length > 0){%>
+	<% for(var i = 0;i<order_group_list.length;i++){
+		var orderlist = order_group_list[i].order_list;
+	%>
+		<li class="<%if(order_group_list[i].pay_amount){%>green-order-skin<%}else{%>gray-order-skin<%}%> <%if(i>0){%>mt10<%}%>">
+			<% for(var j = 0;j<orderlist.length;j++){
+				var order_goods = orderlist[j].extend_order_goods;
+			%>
+				<div class="dstouch-order-item">
+					<div class="dstouch-order-item-head">
+						<span class="state">
+							<%
+								var stateClass ="ot-finish";
+								var orderstate = orderlist[j].order_state;
+								if(orderstate == 20 || orderstate == 30 || orderstate == 40){
+									stateClass = stateClass;
+								}else if(orderstate == 0) {
+									stateClass = "ot-cancel";
+								}else {
+									stateClass = "ot-nofinish";
+								}
+							%>
+							<span class="<%=stateClass%>"><%=orderlist[j].state_desc%></span>
+						</span>
+					</div>
+					<div class="dstouch-order-item-con">
+						<%
+							var count = 0;
+							 for (k in order_goods){
+								count += parseInt(order_goods[k].goods_num);
+						%>
+						<div class="goods-block">
+						<a href="<%=WapSiteUrl%>/member/order_detail.html?order_id=<%=orderlist[j].order_id%>">
+							<div class="goods-pic">
+								<img src="<%=order_goods[k].goods_image_url%>"/>
+							</div>
+							<dl class="goods-info">
+								<dt class="goods-name"><%=order_goods[k].goods_name%></dt>
+								<dd class="goods-type"><%=order_goods[k].goods_spec%></dd>
+							</dl>
+							<div class="goods-subtotal">
+								<span class="goods-price">￥<em><%=order_goods[k].goods_price%></em></span>
+								<span class="goods-num">x<%=order_goods[k].goods_num%></span>
+							</div>
+						</a>
+						</div>
+						<%}%>
+						<%if (orderlist[j].zengpin_list.length > 0){%>
+						<div class="goods-gift">
+							<span><em><%=lang('gift')%></em>
+								<%
+									var num = 1;
+									for (k in orderlist[j].zengpin_list){%>
+										<%=num;%>、<%=orderlist[j].zengpin_list[k].goods_name;%><br>
+								<% ++num;}%>
+							</span>
+						</div>
+						<%}%>
+					</div>
+					<div class="dstouch-order-item-footer">
+						<div class="store-totle">
+							<span><%=lang('common')%><em><%=count%></em><%=lang('commons')%></span><span class="sum">￥<em><%=orderlist[j].order_amount%></em></span><span class="freight">(<%=lang('freight_charges')%>￥<%=orderlist[j].shipping_fee%>)</span>
+						</div>    
+						<div class="handle">
+							<%if(orderlist[j].if_delete){%>
+							<a href="javascript:void(0)" order_id="<%=orderlist[j].order_id%>" class="del delete-order"><i></i><%=lang('remove')%></a>
+							<%}%>
+							<%if(orderlist[j].if_lock){%>
+							<p><%=lang('refund')%></p>
+							<%}%>
+							<%if(orderlist[j].if_cancel){%>
+							<a href="javascript:void(0)" order_id="<%=orderlist[j].order_id%>" class="btn cancel-order"><%=lang('cancellation_of_order')%></a>
+							<%}%>
+							<%if(orderlist[j].if_deliver){%>
+							<a href="javascript:void(0)" order_id="<%=orderlist[j].order_id%>" class="btn viewdelivery-order"><%=lang('look_at_the_logistics')%></a>
+							<%}%>
+							<%if(orderlist[j].if_receive){%>
+							<a href="javascript:void(0)" order_id="<%=orderlist[j].order_id%>" class="btn key sure-order"><%=lang('confirmation_receipt')%></a>
+							<%}%>
+							<%if(orderlist[j].if_evaluation && orderlist[j].refund_state==0){%>
+							<a href="javascript:void(0)" order_id="<%=orderlist[j].order_id%>" class="btn key evaluation-order"><%=lang('evaluation_order')%></a>
+							<%}%>
+						</div>
+					</div>
+				</div>
+			<%}%>
+			<%if(order_group_list[i].pay_amount && order_group_list[i].pay_amount>0){%>
+				<a href="javascript:;" data-paySn="<%=order_group_list[i].pay_sn%>" class="btn-l check-payment"><%=lang('order_payment')%><em>（￥<%= p2f(order_group_list[i].pay_amount) %>）</em></a>
+			<%}%>
+		</li>
+	<%}%>
+	<% if (hasmore) {%>
+	<li class="loading"><div class="spinner"><i></i></div><%=lang('order_data_read')%></li>
+	<% } %>
+<%}else {%>
+<div class="dstouch-norecord order">
+    <div class="norecord-ico"><i class="iconfont"></i></div>
+    <dl>
+        <dt><%=lang('order_prompt')%></dt>
+        <dd><%=lang('order_prompts')%></dd>
+    </dl>
+    <a href="<%=WapSiteUrl%>" class="btn"><%=lang('look_around')%></a>
+</div>
+<%}%>
+</script> 
+<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.3.2.js"></script> 
+<script type="text/javascript" src="../js/zepto.min.js"></script> 
+<script type="text/javascript" src="../js/template.js"></script>
+<script type="text/javascript" src="../js/config.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript" src="../js/simple-plugin.js"></script>
+<script type="text/javascript" src="../js/zepto.waypoints.js"></script>
+<script type="text/javascript" src="../js/order_payment_common.js"></script>
+<script type="text/javascript" src="js/order_list.js"></script>
+<script type="text/javascript" src="lang/order_list.js"></script>
+<script type="text/javascript" src="../js/lang.js"></script>
+</body>
+</html>

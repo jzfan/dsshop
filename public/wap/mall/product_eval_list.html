@@ -1,0 +1,155 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-touch-fullscreen" content="yes" />
+<meta name="format-detection" content="telephone=no"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="msapplication-tap-highlight" content="no" />
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1" />
+<title></title>
+<link rel="stylesheet" type="text/css" href="../css/base.css">
+<link rel="stylesheet" type="text/css" href="../css/dstouch_products_detail.css">
+<link rel="stylesheet" type="text/css" href="../css/dstouch_common.css">
+</head>
+<body>
+<header id="header" class="posf">
+  <div class="header-wrap">
+    <div class="header-l"> <a href="javascript:history.go(-1)"> <i class="back iconfont"></i> </a> </div>
+    <ul class="header-nav">
+      <li><a href="javascript:void(0);" id="goodsDetail"><lang data-id="commodity"></lang></a></li>
+      <li><a href="javascript:void(0);" id="goodsBody"><lang data-id="details"></lang></a></li>
+      <li class="cur"><a href="javascript:void(0);" id="goodsEvaluation"><lang data-id="evaluate"></lang></a></li>
+    </ul>
+    <div class="header-r"><a id="header-nav" href="javascript:void(0);"><i class="more iconfont"></i><sup></sup></a> </div>
+  </div>
+  <div class="dstouch-nav-layout">
+    <div class="dstouch-nav-menu"> <span class="arrow"></span>
+      <ul>
+		  <li><a href="../index.html"><i class="iconfont home"></i><lang data-id="home"></lang></a></li>
+		  <li><a href="search.html"><i class="iconfont search"></i><lang data-id="search"></lang></a></li>
+		  <li><a href="product_first_categroy.html"><i class="iconfont categroy"></i><lang data-id="classification"></lang></a></li>
+		  <li><a href="cart_list.html"><i class="iconfont cart"></i><lang data-id="cart"></lang><sup></sup></a></li>
+		  <li><a href="../member/member.html"><i class="iconfont member"></i><lang data-id="my_business_city"></lang></a></li>
+      </ul>
+    </div>
+  </div>
+</header>
+<div class="dstouch-main-layout">
+  <div class="dstouch-tag-nav">
+    <ul>
+      <li class="selected"><a href="javascript:void(0);" data-state=""><lang data-id="all_evaluation"></lang></a></li>
+      <li><a href="javascript:void(0);" data-state="1"><lang data-id="praise"></lang></a></li>
+      <li><a href="javascript:void(0);" data-state="2"><lang data-id="review"></lang></a></li>
+      <li><a href="javascript:void(0);" data-state="3"><lang data-id="negative_comment"></lang></a></li>
+      <li><a href="javascript:void(0);" data-state="4"><lang data-id="order_sun_map"></lang></a></li>
+    </ul>
+  </div>
+  <div id="product_evaluation_html" class="product-eval-list"></div>
+</div>
+<footer id="footer"></footer>
+</body>
+<script type="text/html" id="product_ecaluation_script">
+		<% if (goods_eval_list.length > 0) { %>
+		<ul>
+			<% for (var i=0; i<goods_eval_list.length; i++) { %>
+        	<li>
+				<div class="eval-user">
+					<div class="user-avatar"><img src="<%=goods_eval_list[i].member_avatar%>" /></div>
+					<span class="user-name"><%=goods_eval_list[i].geval_frommembername%></span>
+					<time><%=goods_eval_list[i].geval_addtime_date%></time>
+				</div>
+				<div class="goods-raty"><i class="star<%=goods_eval_list[i].geval_scores%>"></i></div>
+				<dl class="eval-con">
+					<dt><%=goods_eval_list[i].geval_content%></dt>
+					<%if(goods_eval_list[i].geval_image) {%>
+					<dd class="goods_geval">
+						<%for (var j=0; j<goods_eval_list[i].geval_image.length; j++) {%>
+							<a href="javascript:void(0);"><img src="<%=goods_eval_list[i].geval_image[j]%>" /></a>
+						<%}%>
+						<div class="dstouch-bigimg-layout hide">
+							<div class="close"></div>
+							<div class="pic-box">
+								<ul>
+								<%for (var j=0; j<goods_eval_list[i].geval_image.length; j++) {%>
+									<li style="background-image: url(<%=goods_eval_list[i].geval_image[j]%>)"></li>
+								<%}%>
+								</ul>
+							</div>
+							<div class="dstouch-bigimg-turn">
+								<ul>
+								<%for (var j=0; j<goods_eval_list[i].geval_image.length; j++) {%>
+									<li class="<% if(j == 0) { %>cur<%}%>"></li>
+								<%}%>
+								</ul>
+							</div>
+						</div>
+					</dd>
+					<%}%>
+				</dl>
+				<%if(goods_eval_list[i].geval_explain && goods_eval_list[i].geval_explain != '') {%>
+				<div class="eval-explain">
+				<%=lang('explain')%>：<%=goods_eval_list[i].geval_explain%>
+				</div>
+				<%}%>
+				<% if (goods_eval_list[i].geval_content_again != '') {%>
+				<dl class="eval-con">
+					<dt><%=goods_eval_list[i].geval_content_again%></dt>
+					<%if(goods_eval_list[i].geval_image_again_240) {%>
+					<dd class="goods_geval">
+						<%for (var j=0; j<goods_eval_list[i].geval_image_again_240.length; j++) {%>
+							<a href="javascript:void(0);"><img src="<%=goods_eval_list[i].geval_image_again_240[j]%>" /></a>
+						<%}%>
+						<div class="dstouch-bigimg-layout hide">
+							<div class="close"></div>
+							<div class="pic-box">
+								<ul>
+								<%for (var j=0; j<goods_eval_list[i].geval_image_again_240.length; j++) {%>
+									<li style="background-image: url(<%=goods_eval_list[i].geval_image_again_1024[j]%>)" ></li>
+								<%}%>
+								</ul>
+							</div>
+							<div class="dstouch-bigimg-turn">
+								<ul>
+								<%for (var j=0; j<goods_eval_list[i].geval_image_again_240.length; j++) {%>
+									<li class="<% if(j == 0) { %>cur<%}%>"></li>
+								<%}%>
+								</ul>
+							</div>
+						</div>
+					</dd>
+					<%}%>
+				</dl>
+				<%if(goods_eval_list[i].geval_explain_again && goods_eval_list[i].geval_explain_again != '') {%>
+					<div class="eval-explain"><%=lang('explain')%>：<%=goods_eval_list[i].geval_explain_again%></div>
+					<%}%>
+				<% } %>
+        	</li>
+			<% } %>
+			<li class="loading"><div class="spinner"><i></i></div><%=lang('data_reading')%></li>
+		</ul>
+        <%}else {%>
+        <div class="dstouch-norecord eval">
+            <div class="norecord-ico"><i class="iconfont"></i></div>
+            <dl>
+                <dt><%=lang('not_appraised')%></dt>
+                <dd><%=lang('purchase_and_comment')%>！</dd>
+            </dl>
+        </div>
+        <%}%>
+	</div>
+</div>
+</script>
+<script type="text/javascript" src="../js/config.js"></script>
+<script type="text/javascript" src="../js/zepto.min.js"></script>
+<script type="text/javascript" src="../js/template.js"></script>
+<script type="text/javascript" src="../js/swipe.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript" src="../js/ncscroll-load.js"></script>
+<script type="text/javascript" src="js/product_eval_list.js"></script>
+<script type="text/javascript" src="lang/product_eval_list.js"></script>
+<script type="text/javascript" src="../js/lang.js"></script>
+</html>
