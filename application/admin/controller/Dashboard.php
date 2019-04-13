@@ -20,17 +20,7 @@ class Dashboard extends AdminControl {
      */
 
     function version() {
-        //当前版本
-        $curent_version = file_get_contents(APP_PATH . 'version.php');
-        //获取最新版本信息
-        $vaules = array(
-            'domain'=>$_SERVER['HTTP_HOST'], 
-            'version'=>$curent_version, 
-        );
-        $service_url = "http://service.csdeshang.com/index.php/Home/Version/checkDsshop.html?".http_build_query($vaules);
-        $service_info = @file_get_contents($service_url);
-        $version_message = json_decode($service_info);
-        $this->assign('version_message', $version_message);
+        $this->assign('version_message', "");
     }
 
     function welcome() {
