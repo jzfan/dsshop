@@ -1364,4 +1364,20 @@ class Goods extends Model {
         return $common_info;
     }
 
+    /**
+     * 商品SKU列表
+     * @access public
+     * @author csdeshang
+     * @param type $type 0: 91go, 1: secKill
+     * @param type $field 字段
+     * @param type $group 分组
+     * @param type $order 排序
+     * @param type $limit 限制
+     * @return array
+     */
+    public function listByType($type, $order = '', $limit = 0)
+    {
+        return db('goods')->field(['goods_id', 'goods_name', 'goods_image', 'goods_price', 'mi', 'type'])->where('type', $type)->order($order)->limit($limit)->select();
+    }
+
 }

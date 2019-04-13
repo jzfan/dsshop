@@ -3,6 +3,7 @@
 namespace app\mobile\controller;
 
 use think\Controller;
+use think\exception\ValidateException;
 
 /*
  * 基类
@@ -31,6 +32,24 @@ class MobileHome extends Controller
         /*加入配置信息*/
         $config_list = rkcache('config', true);
         config($config_list);
+    }
+
+
+    protected function validateInput($rules, $input=null)
+    {
+        $input = $input ?? input();
+        
+        $v = \think\Loader::validate();
+        $v->rule($rules);
+
+        if (!$v->check($input)) {
+            throw new \app\common\JsonException($v->getError(), 422);
+        }
+        $keys = array_map(function ($row) {
+            return explode('|', $row)[0];
+        }, array_keys($rules));
+        return request()->only($keys);
+
     }
     
 }

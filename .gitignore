@@ -1,2 +1,5 @@
 .idea
 *.log
+public/install/
+runtime/
+application/database.php

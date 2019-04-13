@@ -31,7 +31,10 @@
     "autoload": {
         "psr-4": {
             "app\\": "application"
-        }
+        },
+        "files": [
+            "application/helper.php"
+        ]
     },
     "extra": {
         "think-path": "thinkphp"

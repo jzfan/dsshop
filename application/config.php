@@ -157,7 +157,13 @@ return [
     // 显示错误信息
     'show_error_msg'         => false,
     // 异常处理handle类 留空使用 \think\exception\Handle
-    'exception_handle'       => '',
+    // 'exception_handle'       => '',
+    'exception_handle'  =>  function (Exception $e) {
+        // 请求异常
+        if ($e instanceof \app\common\JsonException) {
+            return response(json_encode(['error' => $e->getMessage()]), $e->getCode());
+        }
+    },
 
     // +----------------------------------------------------------------------
     // | 日志设置
