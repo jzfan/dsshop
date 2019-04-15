@@ -430,6 +430,16 @@ class AdminControl extends Controller {
                         'text' => lang('ds_order'),
                         'args' => 'index,Order,trade',
                     ),
+                    'spike' => array(
+                        'ico'=>'&#xe631;',
+                        'text' => lang('ds_order_spike'),
+                        'args' => 'spike,Order,trade',
+                    ),
+                    'hangsale' => array(
+                        'ico'=>'&#xe631;',
+                        'text' => lang('ds_order_hangsale'),
+                        'args' => 'hangsale,Order,trade',
+                    ),
                     'vrorder' => array(
                         'ico'=>'&#xe654;',
                         'text' => lang('ds_vrorder'),

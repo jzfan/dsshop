@@ -42,7 +42,9 @@ $lang['ds_album'] = '空间管理';
 
 //交易
 $lang['ds_trade'] = '交易';
-$lang['ds_order'] = '实物订单';
+$lang['ds_order'] = '91购订单';
+$lang['ds_order_spike'] = '秒杀订单';
+$lang['ds_order_hangsale'] = '挂售订单';
 $lang['ds_deliver'] = '发货管理';
 $lang['ds_vrorder'] = '虚拟订单';
 $lang['ds_refund'] = '退款管理';
