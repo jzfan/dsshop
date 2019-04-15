@@ -558,5 +558,162 @@ class Predeposit extends Model {
     public function delPdcash($condition) {
         return db('pdcash')->where($condition)->delete();
     }
+    /**
+     * 增加秒米记录
+     * @access public
+     * @author csdeshang
+     * @param type $condition 条件
+     * @return type
+     */
+
+
+    public function changeMd($change_type, $data = array()) {
+        $data_log = array();
+        $data_pd = array();
+        $data_msg = array();
+
+        $data_log['lg_member_id'] = $data['member_id'];
+        $data_log['lg_member_name'] = $data['member_name'];
+        $data_log['lg_addtime'] = TIMESTAMP;
+        $data_log['lg_type'] = $change_type;
+
+        $data_msg['time'] = date('Y-m-d H:i:s');
+        $data_msg['pd_url'] = url('home/Predeposit/pd_log_list');
+        $data_log = array();
+        $data_pd = array();
+        $data_msg = array();
+
+        $data_log['lg_member_id'] = $data['member_id'];
+        $data_log['lg_member_name'] = $data['member_name'];
+        $data_log['lg_addtime'] = TIMESTAMP;
+        $data_log['lg_type'] = $change_type;
+
+        $data_msg['time'] = date('Y-m-d H:i:s');
+        $data_msg['pd_url'] = url('home/Predeposit/pd_log_list');
+        switch ($change_type) {
+            case 'order_pay':
+                $data_log['lg_av_amount'] = -$data['amount'];
+                $data_log['lg_desc'] = '下单，支付秒米，订单号: ' . $data['order_sn'];
+                $data_pd['available_predeposit'] = Db::raw('available_predeposit-'.$data['amount']);
+
+                $data_msg['av_amount'] = -$data['amount'];
+                $data_msg['freeze_amount'] = 0;
+                $data_msg['desc'] = $data_log['lg_desc'];
+                break;
+            case 'order_freeze':
+                $data_log['lg_av_amount'] = -$data['amount'];
+                $data_log['lg_freeze_amount'] = $data['amount'];
+                $data_log['lg_desc'] = '下单，冻结秒米，订单号: ' . $data['order_sn'];
+                $data_pd['meter_second'] = Db::raw('meter_second-'.$data['amount']);
+
+                $data_msg['av_amount'] = -$data['amount'];
+                $data_msg['freeze_amount'] = $data['amount'];
+                $data_msg['desc'] = $data_log['lg_desc'];
+                break;
+            case 'order_cancel':
+                $data_log['lg_av_amount'] = $data['amount'];
+                $data_log['lg_freeze_amount'] = -$data['amount'];
+                $data_log['lg_desc'] = '取消订单，解冻秒米，订单号: ' . $data['order_sn'];
+                $data_pd['meter_second'] = Db::raw('meter_second+'.$data['amount']);
+                $data_msg['av_amount'] = $data['amount'];
+                $data_msg['freeze_amount'] = -$data['amount'];
+                $data_msg['desc'] = $data_log['lg_desc'];
+                break;
+            case 'recharge':
+                $data_log['lg_av_amount'] = $data['amount'];
+                $data_log['lg_desc'] = '充值，充值单号: ' . $data['pdr_sn'];
+                $data_log['lg_admin_name'] = isset($data['admin_name']) ? $data['admin_name'] : '会员' . $data['member_name'] . '在线充值';
+                $data_pd['meter_second'] = Db::raw('meter_second+'.$data['amount']);
+                $data_msg['av_amount'] = $data['amount'];
+                $data_msg['freeze_amount'] = 0;
+                $data_msg['desc'] = $data_log['lg_desc'];
+                break;
+
+            case 'refund':
+                $data_log['lg_av_amount'] = $data['amount'];
+                $data_log['lg_desc'] = '确认退款，订单号: ' . $data['order_sn'];
+                $data_pd['meter_second'] = Db::raw('meter_second+'.$data['amount']);
+
+                $data_msg['av_amount'] = $data['amount'];
+                $data_msg['freeze_amount'] = 0;
+                $data_msg['desc'] = $data_log['lg_desc'];
+                break;
+            case 'sys_add_money':
+                $data_log['lg_av_amount'] = $data['amount'];
+                $data_log['lg_desc'] = '管理员调节秒米【增加】，充值单号: ' . $data['pdr_sn'].',备注：'.$data['lg_desc'];
+                $data_log['lg_admin_name'] = $data['admin_name'];
+                $data_pd['meter_second'] = Db::raw('meter_second+'.$data['amount']);
+
+                $data_msg['av_amount'] = $data['amount'];
+                $data_msg['freeze_amount'] = 0;
+                $data_msg['desc'] = $data_log['lg_desc'];
+                break;
+            case 'sys_del_money':
+                $data_log['lg_av_amount'] = -$data['amount'];
+                $data_log['lg_desc'] = '管理员调节秒米【减少】，充值单号: ' . $data['pdr_sn'].',备注：'.$data['lg_desc'];
+                $data_log['lg_admin_name'] = $data['admin_name'];
+                $data_pd['meter_second'] = Db::raw('meter_second-'.$data['amount']);
+
+                $data_msg['av_amount'] = -$data['amount'];
+                $data_msg['freeze_amount'] = 0;
+                $data_msg['desc'] = $data_log['lg_desc'];
+                break;
+            case 'sys_freeze_money':
+                $data_log['lg_av_amount'] = -$data['amount'];
+                $data_log['lg_freeze_amount'] = $data['amount'];
+                $data_log['lg_desc'] = '管理员调节秒米【冻结】，充值单号: ' . $data['pdr_sn'].',备注：'.$data['lg_desc'];
+                $data_log['lg_admin_name'] = $data['admin_name'];
+                $data_pd['meter_second'] = Db::raw('meter_second-'.$data['amount']);
+                $data_msg['av_amount'] = -$data['amount'];
+                $data_msg['freeze_amount'] = $data['amount'];
+                $data_msg['desc'] = $data_log['lg_desc'];
+                break;
+            case 'sys_unfreeze_money':
+                $data_log['lg_av_amount'] = $data['amount'];
+                $data_log['lg_freeze_amount'] = -$data['amount'];
+                $data_log['lg_desc'] = '管理员调节秒米【解冻】，充值单号: ' . $data['pdr_sn'].',备注：'.$data['lg_desc'];
+                $data_log['lg_admin_name'] = $data['admin_name'];
+                $data_pd['meter_second'] = Db::raw('meter_second+'.$data['amount']);
+                $data_msg['av_amount'] = $data['amount'];
+                $data_msg['freeze_amount'] = -$data['amount'];
+                $data_msg['desc'] = $data_log['lg_desc'];
+                break;
+            case 'order_inviter':
+                $data_log['lg_av_amount'] = $data['amount'];
+                $data_log['lg_desc'] = $data['lg_desc'];
+                $data_pd['meter_second'] = Db::raw('meter_second+'.$data['amount']);
+
+                $data_msg['av_amount'] = $data['amount'];
+                $data_msg['freeze_amount'] = 0;
+                $data_msg['desc'] = $data_log['lg_desc'];
+                break;
+
+            //end
+
+            default:
+                exception('参数错误');
+                break;
+        }
+
+        $update = model('member')->where(array('member_id' => $data['member_id']))->update($data_pd);
+
+        if (!$update) {
+            exception('操作失败');
+        }
+        $insert = db('meter_log')->insertGetId($data_log);
+        if (!$insert) {
+            exception('操作失败');
+        }
+
+        // 支付成功发送买家消息
+        $message = array();
+        $message['code'] = '秒米改变';
+        $message['member_id'] = $data['member_id'];
+        $data_msg['av_amount'] = ds_price_format($data_msg['av_amount']);
+        $data_msg['freeze_amount'] = ds_price_format($data_msg['freeze_amount']);
+        $message['param'] = $data_msg;
+        \mall\queue\QueueClient::push('sendMemberMsg', $message);
+        return $insert;
+    }
 
 }

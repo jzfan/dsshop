@@ -21,7 +21,7 @@
                     <tr class="noborder" id="tr_memberinfo">
                         <td colspan="2" class="required" id="td_memberinfo">
                             {notempty name="member_info"}
-                            {$member_info.member_name}, 当前可用金额为{$member_info.available_predeposit}, 当前冻结金额数为{$member_info.freeze_predeposit}
+                            {$member_info.member_name}, 当前可用秒米为{$member_info.meter_second}
                             {/notempty}
                         </td>
                     </tr>
@@ -37,7 +37,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="required w120">金额</td>
+                        <td class="required w120">秒米</td>
                         <td class="vatop rowform"><input type="text" class="form-control" name="amount" id="amount" value="" /></td>
                     </tr>
                     <tr>
@@ -68,7 +68,7 @@
                                 if (data.id)
                                 {
                                     $("#tr_memberinfo").show();
-                                    var msg = " " + data.name + ", 当前预存款数为" + data.available_predeposit + ", 当前预存款冻结金额数为" + data.freeze_predeposit;
+                                    var msg = " " + data.name + ", 当前秒米" + data.available_predeposit;
                                     $("#member_name").val(data.name);
                                     $("#member_id").val(data.id);
                                     $("#td_memberinfo").text(msg);
@@ -108,7 +108,7 @@
             },
             messages: {
                 amount :{
-                   required: '金额不能为空',
+                   required: '秒米不能为空',
                    digits: '请输入数字',
                    min: '请输入大于0的数'
                 },    

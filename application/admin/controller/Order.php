@@ -24,6 +24,10 @@ class Order extends AdminControl
         if ($order_sn) {
             $condition['order_sn'] = $order_sn;
         }
+        $id=session('admin_id');
+        if ($id!='1'){
+            $condition['supplier']=$id;
+        }
         $order_state = input('param.order_state');
         if (in_array($order_state, array('0', '10', '20', '30', '40'))) {
             $condition['order_state'] = $order_state;
@@ -469,6 +473,126 @@ class Order extends AdminControl
         $excel_obj->addArray($excel_data);
         $excel_obj->addWorksheet($excel_obj->charset(lang('ds_orders'), CHARSET));
         $excel_obj->generateXML($excel_obj->charset(lang('ds_orders'), CHARSET) . input('param.curpage') . '-' . date('Y-m-d-H', time()));
+    }
+
+    public function spike()
+    {
+        $order_model = model('order');
+        $condition = array();
+
+        $order_sn = input('param.order_sn');
+        if ($order_sn) {
+            $condition['order_sn'] = $order_sn;
+        }
+        $id=session('admin_id');
+        if ($id!='1'){
+            $condition['supplier']=$id;
+        }
+        $order_state = input('param.order_state');
+        if (in_array($order_state, array('0', '10', '20', '30', '40'))) {
+            $condition['order_state'] = $order_state;
+        }
+        $payment_code = input('param.payment_code');
+        if ($payment_code) {
+            $condition['payment_code'] = $payment_code;
+        }
+        $buyer_name = input('param.buyer_name');
+        if ($buyer_name) {
+            $condition['buyer_name'] = $buyer_name;
+        }
+        $query_start_time = input('param.query_start_time');
+        $query_end_time = input('param.query_end_time');
+        $if_start_time = preg_match('/^20\d{2}-\d{2}-\d{2}$/', $query_start_time);
+        $if_end_time = preg_match('/^20\d{2}-\d{2}-\d{2}$/', $query_end_time);
+        $start_unixtime = $if_start_time ? strtotime($query_start_time) : null;
+        $end_unixtime = $if_end_time ? strtotime($query_end_time) : null;
+        if ($start_unixtime || $end_unixtime) {
+            $condition['add_time'] = array('between', array($start_unixtime, $end_unixtime));
+        }
+        $condition['order_state']='2';
+        $order_list = $order_model->getOrderList($condition, 10);
+        $this->assign('show_page', $order_model->page_info->render());
+
+        foreach ($order_list as $order_id => $order_info) {
+            //显示取消订单
+            $order_list[$order_id]['if_cancel'] = $order_model->getOrderOperateState('system_cancel', $order_info);
+            //显示调整运费
+            $order_list[$order_id]['if_modify_price'] = $order_model->getOrderOperateState('modify_price', $order_info);
+            //显示收到货款
+            $order_list[$order_id]['if_system_receive_pay'] = $order_model->getOrderOperateState('system_receive_pay', $order_info);
+            //显示调整价格
+            $order_list[$order_id]['if_spay_price'] = $order_model->getOrderOperateState('spay_price', $order_info);
+            //显示发货状态
+            $order_list[$order_id]['if_send'] = $order_model->getOrderOperateState('send', $order_info);
+        }
+        //显示支付接口列表(搜索)
+        $payment_list = model('payment')->getPaymentOpenList();
+        $this->assign('payment_list', $payment_list);
+        $this->assign('order_list', $order_list);
+
+        $this->assign('filtered', $condition ? 1 : 0); //是否有查询条件
+        $this->setAdminCurItem('add');
+        return $this->fetch('index');
+    }
+
+    public function hangsale()
+    {
+        $order_model = model('order');
+        $condition = array();
+
+        $order_sn = input('param.order_sn');
+        if ($order_sn) {
+            $condition['order_sn'] = $order_sn;
+        }
+        $id=session('admin_id');
+        if ($id!='1'){
+            $condition['supplier']=$id;
+        }
+        $order_state = input('param.order_state');
+        if (in_array($order_state, array('0', '10', '20', '30', '40'))) {
+            $condition['order_state'] = $order_state;
+        }
+        $payment_code = input('param.payment_code');
+        if ($payment_code) {
+            $condition['payment_code'] = $payment_code;
+        }
+        $buyer_name = input('param.buyer_name');
+        if ($buyer_name) {
+            $condition['buyer_name'] = $buyer_name;
+        }
+        $query_start_time = input('param.query_start_time');
+        $query_end_time = input('param.query_end_time');
+        $if_start_time = preg_match('/^20\d{2}-\d{2}-\d{2}$/', $query_start_time);
+        $if_end_time = preg_match('/^20\d{2}-\d{2}-\d{2}$/', $query_end_time);
+        $start_unixtime = $if_start_time ? strtotime($query_start_time) : null;
+        $end_unixtime = $if_end_time ? strtotime($query_end_time) : null;
+        if ($start_unixtime || $end_unixtime) {
+            $condition['add_time'] = array('between', array($start_unixtime, $end_unixtime));
+        }
+        $condition['order_state']='3';
+        $order_list = $order_model->getOrderList($condition, 10);
+        $this->assign('show_page', $order_model->page_info->render());
+
+        foreach ($order_list as $order_id => $order_info) {
+            //显示取消订单
+            $order_list[$order_id]['if_cancel'] = $order_model->getOrderOperateState('system_cancel', $order_info);
+            //显示调整运费
+            $order_list[$order_id]['if_modify_price'] = $order_model->getOrderOperateState('modify_price', $order_info);
+            //显示收到货款
+            $order_list[$order_id]['if_system_receive_pay'] = $order_model->getOrderOperateState('system_receive_pay', $order_info);
+            //显示调整价格
+            $order_list[$order_id]['if_spay_price'] = $order_model->getOrderOperateState('spay_price', $order_info);
+            //显示发货状态
+            $order_list[$order_id]['if_send'] = $order_model->getOrderOperateState('send', $order_info);
+        }
+        //显示支付接口列表(搜索)
+        $payment_list = model('payment')->getPaymentOpenList();
+        $this->assign('payment_list', $payment_list);
+        $this->assign('order_list', $order_list);
+
+        $this->assign('filtered', $condition ? 1 : 0); //是否有查询条件
+        $this->setAdminCurItem('add');
+        return $this->fetch('index');
     }
 
 }

@@ -3,7 +3,7 @@
 namespace app\mobile\controller;
 
 
-class Article extends MobileMall
+class Article extends MobileMember
 {
     public function _initialize()
     {
@@ -63,11 +63,32 @@ class Article extends MobileMall
             if (empty($article)) {
                 ds_json_encode(10001, '文章不存在');
             } else {
+                $this->add_points($article_id);
                 ds_json_encode(10000, '', $article);
             }
         } else {
             ds_json_encode(10001, '缺少参数:文章编号');
         }
+    }
+
+
+    protected function add_points($article_id)
+    {
+        //检测是否已经赠送过
+        //member_id,article_id,created_at member_read_log
+        $readLog = model("member_read_log")->get(array("member_id"=>$this->member_info['member_id'],"article_id"=>$article_id));
+
+        if (is_null($readLog)) {
+            $data = array('pl_memberid'=>$this->member_info['member_id'],'pl_membername'=>$this->member_info['member_name']);
+            //阅读赠送积分
+            model("Points")->savePointslog("read",$data);
+            model("member_read_log")->create(array(
+                "member_id"     =>  $this->member_info['member_id'],
+                "article_id"    =>  $article_id,
+                "created_at"    =>  date('Y-m-d H:i:s')
+            ));
+        }
+
     }
 
 }

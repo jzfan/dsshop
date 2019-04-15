@@ -36,6 +36,7 @@ public function _initialize()
             $update_array['points_signin'] = intval(input('post.points_signin'));
             $update_array['points_invite'] = intval(input('post.points_invite'));
             $update_array['points_rebate'] = intval(input('post.points_rebate'));
+            $update_array['points_read'] = intval(input('post.points_read'));
 
             $result = $config_model->editConfig($update_array);
             if ($result === true) {

@@ -35,6 +35,12 @@ class Points extends Model {
                 }
                 $insertarr['pl_points'] = intval(config('points_reg'));
                 break;
+            case 'read':
+                if (!isset($insertarr['pl_desc'])) {
+                    $insertarr['pl_desc'] = '阅读文章';
+                }
+                $insertarr['pl_points'] = intval(config('points_read'));
+                break;
             case 'login':
                 if (!isset($insertarr['pl_desc'])) {
                     $insertarr['pl_desc'] = '会员登录';
