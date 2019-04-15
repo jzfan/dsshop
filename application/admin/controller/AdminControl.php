@@ -658,6 +658,33 @@ class AdminControl extends Controller {
                     ),
                 ),
             ),
+
+            'seckill' => [
+                'name' => 'seckill',
+                'text' => '秒米',
+                'children' => [
+                    'seckill_goods' => [
+                        'ico'=>'&#xe65a;',
+                        'text' => '商品列表',
+                        'args' => 'index,SeckillGoods,seckill',
+                    ],
+                    'seckill_goods_create' => [
+                        'ico'=>'&#xe65a;',
+                        'text' => '商品新增',
+                        'args' => 'create,SeckillGoods,seckill',
+                    ],
+                    'seckill_index' => [
+                        'ico'=>'&#xe65a;',
+                        'text' => '查看',
+                        'args' => 'index,Seckill,seckill',
+                    ],
+                    'seckill_create' => [
+                        'ico' => '&#xf055;',
+                        'text' => '新建',
+                        'args' => 'create,Seckill,seckill',
+                    ],
+                ],
+            ],
         );
     }
 

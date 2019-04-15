@@ -1,0 +1,86 @@
+{include file="public/header" /}
+
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>商品列表</h3>
+                <h5></h5>
+            </div>
+        </div>
+    </div>
+
+
+        <table class="ds-default-table">
+            <thead>
+            <tr class="thead">
+                <th class="align-center">ID</th>
+                <th class="align-center">商品名</th>
+                <th class="align-center">价格</th>
+                <th class="align-center">库存</th>
+                <th class="align-center">状态</th>
+                <th class="align-center">推荐</th>
+            </tr>
+            </thead>
+            <tbody id="treet1">
+            {notempty name="goods"}
+            {foreach name="goods" item="good"}
+            <tr class="hover">
+                <th>
+                    {$good.id}
+                </th>
+                <td class="group">
+                    {$good.name}
+                </td>
+                <td class="align-center nowarp">{$good.price} + M{$good.mi}</td>
+                <td class="align-center nowarp">{$good.qty}</td>
+                <td class="align-center">{$good.status}</td>
+                <td class="align-center">{$good.commond}</td>
+            </tr>
+            {/foreach}
+            {else /}
+            <tr class="no_data">
+                <td colspan="16">{$Think.lang.ds_no_record}</td>
+            </tr>
+            {/notempty}
+            </tbody>
+        </table>
+        {notempty name="seckill_list"}
+        {/notempty}
+    <!-- </form> -->
+
+</div>
+<!-- <form id="op_form" action="" method="POST">
+    <input type="hidden" id="groupbuy_id" name="groupbuy_id">
+</form> -->
+<script type="text/javascript" src="{$Think.ADMIN_SITE_ROOT}/js/jquery.edit.js" charset="utf-8"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        // $('[dstype="btn_cancel"]').on('click', function () {
+        //     layer.confirm('确认取消该抢购活动？', {
+        //         btn: ['确定', '取消'],
+        //         title: false,
+        //     }, function () {
+        //             var action = "{:url('Groupbuy/groupbuy_cancel')}";
+        //             var groupbuy_id = $(this).attr('data-groupbuy-id');
+        //             $('#op_form').attr('action', action);
+        //             $('#groupbuy_id').val(groupbuy_id);
+        //             $('#op_form').submit();
+        //     });
+        // });
+
+        // $('[dstype="btn_del"]').on('click', function () {
+        //     layer.confirm('确认删除该抢购活动？', {
+        //         btn: ['确定', '取消'],
+        //         title: false,
+        //     }, function () {
+        //         var action = "{:url('Groupbuy/groupbuy_del')}";
+        //         var groupbuy_id = $(this).attr('data-groupbuy-id');
+        //         $('#op_form').attr('action', action);
+        //         $('#groupbuy_id').val(groupbuy_id);
+        //         $('#op_form').submit();
+        //     });
+        // });
+    });
+</script>

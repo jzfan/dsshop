@@ -1,0 +1,98 @@
+  {include file="public/header" /}
+
+
+
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>秒米商品</h3>
+                <h5></h5>
+            </div>
+        </div>
+    </div>
+
+
+        <table class="ds-default-table">
+            <thead>
+            <tr class="thead">
+                <th class="align-center">ID</th>
+                <th class="align-center">商品名</th>
+                <th class="align-center">缩略图</th>
+                <th class="align-center"></th>
+                <th class="align-center" width="80">商品数量</th>
+                <th class="align-center" width="120">状态</th>
+                <th class="align-center" width="150">订单操作</th>
+            </tr>
+            </thead>
+            <tbody id="treet1">
+            {notempty name="seckill_list"}
+            {foreach name="seckill_list" item="val"}
+            <tr class="hover">
+                <th>
+                    {$val.id}
+                </th>
+                <td class="group">
+                    {$val.name}
+                </td>
+                <td class="align-center nowarp">{$val.start}</td>
+                <td class="align-center nowarp">{$val.end}</td>
+                <td class="align-center">{$val.qty}</td>
+                <td class="align-center">{$val.status}</td>
+                <td class="yes-onoff align-center">
+                    <button id='test1'>查看</button>
+                    <button>编辑</button>
+                </td>
+            </tr>
+            {/foreach}
+            {else /}
+            <tr class="no_data">
+                <td colspan="16">{$Think.lang.ds_no_record}</td>
+            </tr>
+            {/notempty}
+            </tbody>
+        </table>
+        {notempty name="seckill_list"}
+        {/notempty}
+    <!-- </form> -->
+
+</div>
+<!-- <form id="op_form" action="" method="POST">
+    <input type="hidden" id="groupbuy_id" name="groupbuy_id">
+</form> -->
+<script type="text/javascript" src="{$Think.ADMIN_SITE_ROOT}/js/jquery.edit.js" charset="utf-8"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        // $('[dstype="btn_cancel"]').on('click', function () {
+        //     layer.confirm('确认取消该抢购活动？', {
+        //         btn: ['确定', '取消'],
+        //         title: false,
+        //     }, function () {
+        //             var action = "{:url('Groupbuy/groupbuy_cancel')}";
+        //             var groupbuy_id = $(this).attr('data-groupbuy-id');
+        //             $('#op_form').attr('action', action);
+        //             $('#groupbuy_id').val(groupbuy_id);
+        //             $('#op_form').submit();
+        //     });
+        // });
+
+        // $('[dstype="btn_del"]').on('click', function () {
+        //     layer.confirm('确认删除该抢购活动？', {
+        //         btn: ['确定', '取消'],
+        //         title: false,
+        //     }, function () {
+        //         var action = "{:url('Groupbuy/groupbuy_del')}";
+        //         var groupbuy_id = $(this).attr('data-groupbuy-id');
+        //         $('#op_form').attr('action', action);
+        //         $('#groupbuy_id').val(groupbuy_id);
+        //         $('#op_form').submit();
+        //     });
+        // });
+    });
+
+
+  $('#test1').on('click', function(){
+    layer.msg('hello');
+  });
+</script>
