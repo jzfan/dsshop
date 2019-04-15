@@ -19,6 +19,7 @@ function ds_upload_pic($upload_path,$file_name,$save_name='')
     }
 }
 
+
 /*
  * 公共生成缩略图
  * @param string $upload_path 上传文件路径
