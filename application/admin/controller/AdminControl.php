@@ -665,23 +665,13 @@ class AdminControl extends Controller {
                 'children' => [
                     'seckill_goods' => [
                         'ico'=>'&#xe65a;',
-                        'text' => '商品列表',
+                        'text' => '商品',
                         'args' => 'index,SeckillGoods,seckill',
                     ],
-                    'seckill_goods_create' => [
+                    'seckill_jobs' => [
                         'ico'=>'&#xe65a;',
-                        'text' => '商品新增',
-                        'args' => 'create,SeckillGoods,seckill',
-                    ],
-                    'seckill_index' => [
-                        'ico'=>'&#xe65a;',
-                        'text' => '查看',
-                        'args' => 'index,Seckill,seckill',
-                    ],
-                    'seckill_create' => [
-                        'ico' => '&#xf055;',
-                        'text' => '新建',
-                        'args' => 'create,Seckill,seckill',
+                        'text' => '活动',
+                        'args' => 'index,SeckillJobs,seckill',
                     ],
                 ],
             ],
