@@ -604,8 +604,7 @@ class Predeposit extends Model {
                 $data_log['lg_av_amount'] = -$data['amount'];
                 $data_log['lg_freeze_amount'] = $data['amount'];
                 $data_log['lg_desc'] = '下单，冻结秒米，订单号: ' . $data['order_sn'];
-                $data_pd['freeze_predeposit'] = Db::raw('freeze_predeposit+'.$data['amount']);
-                $data_pd['available_predeposit'] = Db::raw('available_predeposit-'.$data['amount']);
+                $data_pd['meter_second'] = Db::raw('meter_second-'.$data['amount']);
 
                 $data_msg['av_amount'] = -$data['amount'];
                 $data_msg['freeze_amount'] = $data['amount'];
@@ -615,28 +614,16 @@ class Predeposit extends Model {
                 $data_log['lg_av_amount'] = $data['amount'];
                 $data_log['lg_freeze_amount'] = -$data['amount'];
                 $data_log['lg_desc'] = '取消订单，解冻秒米，订单号: ' . $data['order_sn'];
-                $data_pd['freeze_predeposit'] = Db::raw('freeze_predeposit-'.$data['amount']);
-                $data_pd['available_predeposit'] = Db::raw('available_predeposit+'.$data['amount']);
-
+                $data_pd['meter_second'] = Db::raw('meter_second+'.$data['amount']);
                 $data_msg['av_amount'] = $data['amount'];
                 $data_msg['freeze_amount'] = -$data['amount'];
-                $data_msg['desc'] = $data_log['lg_desc'];
-                break;
-            case 'order_comb_pay':
-                $data_log['lg_freeze_amount'] = -$data['amount'];
-                $data_log['lg_desc'] = '下单，支付被冻结的秒米，订单号: ' . $data['order_sn'];
-                $data_pd['freeze_predeposit'] = Db::raw('freeze_predeposit-'.$data['amount']);
-
-                $data_msg['av_amount'] = 0;
-                $data_msg['freeze_amount'] = $data['amount'];
                 $data_msg['desc'] = $data_log['lg_desc'];
                 break;
             case 'recharge':
                 $data_log['lg_av_amount'] = $data['amount'];
                 $data_log['lg_desc'] = '充值，充值单号: ' . $data['pdr_sn'];
                 $data_log['lg_admin_name'] = isset($data['admin_name']) ? $data['admin_name'] : '会员' . $data['member_name'] . '在线充值';
-                $data_pd['available_predeposit'] = Db::raw('available_predeposit+'.$data['amount']);
-
+                $data_pd['meter_second'] = Db::raw('meter_second+'.$data['amount']);
                 $data_msg['av_amount'] = $data['amount'];
                 $data_msg['freeze_amount'] = 0;
                 $data_msg['desc'] = $data_log['lg_desc'];
@@ -645,27 +632,17 @@ class Predeposit extends Model {
             case 'refund':
                 $data_log['lg_av_amount'] = $data['amount'];
                 $data_log['lg_desc'] = '确认退款，订单号: ' . $data['order_sn'];
-                $data_pd['available_predeposit'] = Db::raw('available_predeposit+'.$data['amount']);
+                $data_pd['meter_second'] = Db::raw('meter_second+'.$data['amount']);
 
                 $data_msg['av_amount'] = $data['amount'];
                 $data_msg['freeze_amount'] = 0;
                 $data_msg['desc'] = $data_log['lg_desc'];
                 break;
-            case 'vr_refund':
-                $data_log['lg_av_amount'] = $data['amount'];
-                $data_log['lg_desc'] = '虚拟兑码退款成功，订单号: ' . $data['order_sn'];
-                $data_pd['available_predeposit'] = Db::raw('available_predeposit+'.$data['amount']);
-
-                $data_msg['av_amount'] = $data['amount'];
-                $data_msg['freeze_amount'] = 0;
-                $data_msg['desc'] = $data_log['lg_desc'];
-                break;
-
             case 'sys_add_money':
                 $data_log['lg_av_amount'] = $data['amount'];
                 $data_log['lg_desc'] = '管理员调节秒米【增加】，充值单号: ' . $data['pdr_sn'].',备注：'.$data['lg_desc'];
                 $data_log['lg_admin_name'] = $data['admin_name'];
-                $data_pd['available_predeposit'] = Db::raw('available_predeposit+'.$data['amount']);
+                $data_pd['meter_second'] = Db::raw('meter_second+'.$data['amount']);
 
                 $data_msg['av_amount'] = $data['amount'];
                 $data_msg['freeze_amount'] = 0;
@@ -675,7 +652,7 @@ class Predeposit extends Model {
                 $data_log['lg_av_amount'] = -$data['amount'];
                 $data_log['lg_desc'] = '管理员调节秒米【减少】，充值单号: ' . $data['pdr_sn'].',备注：'.$data['lg_desc'];
                 $data_log['lg_admin_name'] = $data['admin_name'];
-                $data_pd['available_predeposit'] = Db::raw('available_predeposit-'.$data['amount']);
+                $data_pd['meter_second'] = Db::raw('meter_second-'.$data['amount']);
 
                 $data_msg['av_amount'] = -$data['amount'];
                 $data_msg['freeze_amount'] = 0;
@@ -686,9 +663,7 @@ class Predeposit extends Model {
                 $data_log['lg_freeze_amount'] = $data['amount'];
                 $data_log['lg_desc'] = '管理员调节秒米【冻结】，充值单号: ' . $data['pdr_sn'].',备注：'.$data['lg_desc'];
                 $data_log['lg_admin_name'] = $data['admin_name'];
-                $data_pd['available_predeposit'] = Db::raw('available_predeposit-'.$data['amount']);
-                $data_pd['freeze_predeposit'] = Db::raw('freeze_predeposit+'.$data['amount']);
-
+                $data_pd['meter_second'] = Db::raw('meter_second-'.$data['amount']);
                 $data_msg['av_amount'] = -$data['amount'];
                 $data_msg['freeze_amount'] = $data['amount'];
                 $data_msg['desc'] = $data_log['lg_desc'];
@@ -698,9 +673,7 @@ class Predeposit extends Model {
                 $data_log['lg_freeze_amount'] = -$data['amount'];
                 $data_log['lg_desc'] = '管理员调节秒米【解冻】，充值单号: ' . $data['pdr_sn'].',备注：'.$data['lg_desc'];
                 $data_log['lg_admin_name'] = $data['admin_name'];
-                $data_pd['available_predeposit'] = Db::raw('available_predeposit+'.$data['amount']);
-                $data_pd['freeze_predeposit'] = Db::raw('freeze_predeposit-'.$data['amount']);
-
+                $data_pd['meter_second'] = Db::raw('meter_second+'.$data['amount']);
                 $data_msg['av_amount'] = $data['amount'];
                 $data_msg['freeze_amount'] = -$data['amount'];
                 $data_msg['desc'] = $data_log['lg_desc'];
@@ -708,7 +681,7 @@ class Predeposit extends Model {
             case 'order_inviter':
                 $data_log['lg_av_amount'] = $data['amount'];
                 $data_log['lg_desc'] = $data['lg_desc'];
-                $data_pd['available_predeposit'] = Db::raw('available_predeposit+'.$data['amount']);
+                $data_pd['meter_second'] = Db::raw('meter_second+'.$data['amount']);
 
                 $data_msg['av_amount'] = $data['amount'];
                 $data_msg['freeze_amount'] = 0;
@@ -722,7 +695,7 @@ class Predeposit extends Model {
                 break;
         }
 
-        $update = model('member')->editMember(array('member_id' => $data['member_id']), $data_pd);
+        $update = model('member')->where(array('member_id' => $data['member_id']))->update($data_pd);
 
         if (!$update) {
             exception('操作失败');
