@@ -27,7 +27,6 @@ class Message extends Model
         return $message;
     }
 
-
     /**
      * 站内信总数
      * @access public

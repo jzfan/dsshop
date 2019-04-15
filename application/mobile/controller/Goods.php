@@ -545,37 +545,4 @@ class Goods extends MobileMall {
         }
     }
 
-
-    public function new()
-    {
-        return $this->listBy('goods_id desc');
-    }
-
-    public function sales()
-    {
-        return $this->listBy('goods_salenum desc');
-    }
-
-    public function price_asc()
-    {
-        return $this->listBy('goods_price asc');
-        
-    }
-
-    public function price_desc()
-    {
-        return $this->listBy('goods_price desc');
-    }
-
-    protected function listBy($order)
-    {
-        $input = $this->validateInput([
-            'type' => 'require|in:0,1',
-            'limit' => 'require|number'
-        ]);
-
-        $data = model('goods')->listByType($input['type'], $order, $input['limit']);
-        return ds_json_encode(10000, '',$data);
-    }
-
 }

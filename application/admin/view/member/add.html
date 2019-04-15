@@ -12,7 +12,7 @@
     </div>
 
 
-    <form id="user_form" enctype="multipart/form-data" method="post">
+    <form id="user_form" enctype="multipart/form-data" method="post" >
         <table class="ds-default-table">
             <tbody>
                 <tr class="noborder">
@@ -34,6 +34,26 @@
                     <td class="required"><label for="member_truename">{$Think.lang.member_index_true_name}:</label></td>
                     <td class="vatop rowform"><input type="text" value="" id="member_truename" name="member_truename" class="txt"></td>
                     <td class="vatop tips"></td>
+                </tr>
+                <tr class="noborder">
+                    <td class="required"><label for="member_truename">身份证正面</label></td>
+                    <td class="vatop rowform">
+                    <div class="dsm-upload-btn">
+                        <a href="javascript:void(0);"><span>
+            <input type="file" hidefocus="true" size="1" class="input-file" name="face_card" id="face_card_pic" f/>
+            </span><input id="face_card" style="display:none" type="button" value="&nbsp;" onClick="submit_form($(this))" />
+                    </a>
+                    </div>
+                </tr>
+                <tr class="noborder">
+                    <td class="required"><label for="member_truename">身份证反面</label></td>
+                    <td class="vatop rowform">
+                        <div class="dsm-upload-btn">
+                            <a href="javascript:void(0);"><span>
+            <input type="file" hidefocus="true" size="1" class="input-file" name="back_card" id="back_card_pic" />
+            </span><input id="back_card" style="display:none" type="button" value="&nbsp;" onClick="submit_form($(this))" />
+                            </a>
+                        </div>
                 </tr>
                 <tr class="noborder">
                     <td class="required"><label> {$Think.lang.member_edit_sex}:</label></td>
@@ -60,10 +80,15 @@
                     <td class="vatop rowform"><input type="text" value="" id="member_ww" name="member_ww" class="txt"></td>
                     <td class="vatop tips"></td>
                 </tr>
+                <tr class="noborder">
+                    <td class="required"><label class="member_ww">推荐人</label></td>
+                    <td class="vatop rowform"><input type="text" value="" id="inviter_id" name="inviter_id" class="txt"></td>
+                    <td class="vatop tips"></td>
+                </tr>
             </tbody>
             <tfoot>
                 <tr class="tfoot">
-                    <td colspan="15"><input class="btn" type="submit" value="{$Think.lang.ds_submit}"/></td>
+                    <td colspan="15"><input  id='sub' class="btn" type="submit" value="{$Think.lang.ds_submit}"/></td>
                 </tr>
             </tfoot>
         </table>
@@ -72,7 +97,7 @@
 <script type="text/javascript">
     $(function() {
         //按钮先执行验证再提交表单
-        $("#submitBtn").click(function() {
+        $("#sub").click(function() {
             if ($("#user_form").valid()) {
                 $("#user_form").submit();
             }

@@ -28,7 +28,7 @@ $lang['ds_notice'] = '会员通知';
 $lang['ds_points'] = '积分管理';
 $lang['ds_predeposit'] = '预存款';
 $lang['ds_chatlog'] = '聊天记录';
-$lang['points_unit'] = '积分';
+$lang['ds_meter'] = '秒米';
 
 //商品
 $lang['ds_goods'] = '商品';

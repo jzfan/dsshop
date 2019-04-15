@@ -323,6 +323,12 @@ class Member extends Model
             if (isset($data['member_sinainfo'])) {
                 $member_info['member_sinainfo'] = $data['member_sinainfo'];
             }
+            if (!empty($data['face_card'])){
+                $member_info['face_card'] = $data['face_card'];
+            }
+            if (!empty($data['back_card'])){
+                $member_info['back_card'] = $data['back_card'];
+            }
             //添加邀请人(推荐人)会员积分
             if (isset($data['inviter_id'])) {
                 $member_info['inviter_id'] = $data['inviter_id'];
@@ -623,5 +629,7 @@ class Member extends Model
             return null;
         }
     }
+
+
 
 }

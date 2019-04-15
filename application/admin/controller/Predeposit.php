@@ -492,6 +492,103 @@ class Predeposit extends AdminControl {
         );
         return $menu_array;
     }
+    /*
+     * 秒米
+     */
+    public function miao_add() {
+        if (!(request()->isPost())) {
+            $member_id = intval(input('get.member_id'));
+            if($member_id>0){
+                $condition['member_id'] = $member_id;
+                $member = model('member')->getMemberInfo($condition);
+                if(!empty($member)){
+                    $this->assign('member_info',$member);
+                }
+            }
+            return $this->fetch();
+        } else {
+            $data = array(
+                'member_id' => input('post.member_id'),
+                'amount' => input('post.amount'),
+                'operatetype' => input('post.operatetype'),
+                'lg_desc' => input('post.lg_desc'),
+            );
+
+            $money = abs(floatval(input('post.amount')));
+            $memo = trim(input('post.lg_desc'));
+            if ($money <= 0) {
+                $this->error('输入的秒米必需大于0');
+            }
+            //查询会员信息
+            $member_mod = model('member');
+            $member_id = intval(input('post.member_id'));
+            $operatetype = input('post.operatetype');
+            $member_info = $member_mod->getMemberInfo(array('member_id' => $member_id));
+
+            if (!is_array($member_info) || count($member_info) <= 0) {
+                $this->error('用户不存在', 'Predeposit/pd_add');
+            }
+            $available_predeposit = floatval($member_info['available_predeposit']);
+            $freeze_predeposit = floatval($member_info['freeze_predeposit']);
+            if ($operatetype == 2 && $money > $available_predeposit) {
+                $this->error(('秒米不足，会员当前秒米') . $available_predeposit, 'Predeposit/pd_add');
+            }
+            if ($operatetype == 3 && $money > $available_predeposit) {
+                $this->error(('可冻结秒米，会员当前秒米') . $available_predeposit, 'Predeposit/pd_add');
+            }
+            if ($operatetype == 4 && $money > $freeze_predeposit) {
+                $this->error(('可恢复冻结秒米，会员当前冻结秒米') . $freeze_predeposit, 'Predeposit/pd_add');
+            }
+            $predeposit_model = model('predeposit');
+            #生成对应订单号
+            $order_sn = makePaySn($member_id);
+            $admininfo = $this->getAdminInfo();
+            $log_msg = "管理员【" . $admininfo['admin_name'] . "】操作会员【" . $member_info['member_name'] . "】秒米，数量为" . $money . ",编号为" . $order_sn;
+            $admin_act = "sys_add_money";
+            switch ($operatetype) {
+                case 1:
+                    $admin_act = "sys_add_money";
+                    $log_msg = "管理员【" . $admininfo['admin_name'] . "】操作会员【" . $member_info['member_name'] . "】秒米【增加】，数量为" . $money . ",编号为" . $order_sn;
+                    break;
+                case 2:
+                    $admin_act = "sys_del_money";
+                    $log_msg = "管理员【" . $admininfo['admin_name'] . "】操作会员【" . $member_info['member_name'] . "】秒米【减少】，数量为" . $money . ",编号为" . $order_sn;
+                    break;
+                case 3:
+                    $admin_act = "sys_freeze_money";
+                    $log_msg = "管理员【" . $admininfo['admin_name'] . "】操作会员【" . $member_info['member_name'] . "】秒米【冻结】，数量为" . $money . ",编号为" . $order_sn;
+                    break;
+                case 4:
+                    $admin_act = "sys_unfreeze_money";
+                    $log_msg = "管理员【" . $admininfo['admin_name'] . "】操作会员【" . $member_info['member_name'] . "】秒米【解冻】，数量为" . $money . ",编号为" . $order_sn;
+                    break;
+                default:
+                    $this->error(lang('ds_common_op_fail'), 'Predeposit/pdlog_list');
+                    break;
+            }
+            try {
+                $predeposit_model->startTrans();
+                //扣除冻结的预存款
+                $data = array();
+                $data['member_id'] = $member_info['member_id'];
+                $data['member_name'] = $member_info['member_name'];
+                $data['amount'] = $money;
+                $data['order_sn'] = $order_sn;
+                $data['admin_name'] = $admininfo['admin_name'];
+                $data['pdr_sn'] = $order_sn;
+                $data['lg_desc'] = $memo;
+                $predeposit_model->changeMd($admin_act, $data);
+                $predeposit_model->commit();
+                $this->log($log_msg, 1);
+                dsLayerOpenSuccess(lang('ds_common_op_succ'));
+//                $this->success(lang('ds_common_op_succ'), 'Predeposit/pdlog_list');
+            } catch (Exception $e) {
+                $predeposit_model->rollback();
+                $this->log($log_msg, 0);
+                $this->error($e->getMessage(), 'Member/index');
+            }
+        }
+    }
 }
 
 ?>
