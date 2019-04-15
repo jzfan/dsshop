@@ -51,5 +51,21 @@ class Meter extends AdminControl
         return $this->fetch();
     }
 
+    protected function getAdminItemList() {
+        $menu_array = array(
+            array(
+                'name' => 'index',
+                'text' => '秒米明细',
+                'url' => url('Meter/pdrecharge_list')
+            ),
+            array(
+                'name' => 'miao_add',
+                'text' => '秒米调整',
+                'url' => "javascript:dsLayerOpen('".url('Predeposit/miao_add')."','秒米调整')"
+            )
+        );
+        return $menu_array;
+    }
+
 
 }
