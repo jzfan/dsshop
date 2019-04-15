@@ -712,6 +712,8 @@ class AdminControl extends Controller {
                 )),
             array('name' => lang('ds_trade'), 'child' => array(
                     array('name' => lang('ds_order'), 'action' => null, 'controller' => 'Order'),
+                    array('name' => lang('ds_order_spike'), 'action' => null, 'controller' => 'Order'),
+                    array('name' => lang('ds_order_hangsale'), 'action' => null, 'controller' => 'Order'),
                     array('name' => lang('ds_vrorder'), 'action' => null, 'controller' => 'Vrorder'),
                     array('name' => lang('ds_refund'), 'action' => null, 'controller' => 'Refund'),
                     array('name' => lang('ds_return'), 'action' => null, 'controller' => 'Returnmanage'),
