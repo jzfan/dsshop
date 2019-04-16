@@ -41,7 +41,7 @@ class Member extends MobileMember
 
     public function my_asset()
     {
-        $fields_arr = array('point', 'predepoit', 'available_rc_balance', 'voucher');
+        $fields_arr = array('miaomi','point', 'predepoit', 'available_rc_balance', 'voucher');
         $fields_str = trim(input('fields'));
         if ($fields_str) {
             $fields_arr = explode(',', $fields_str);
@@ -49,6 +49,9 @@ class Member extends MobileMember
         $member_info = array();
         if (in_array('point', $fields_arr)) {
             $member_info['point'] = $this->member_info['member_points'];
+        }
+        if (in_array('miaomi', $fields_arr)) {
+            $member_info['point'] = $this->member_info['meter_second'];
         }
         if (in_array('predepoit', $fields_arr)) {
             $member_info['predepoit'] = $this->member_info['available_predeposit'];
@@ -130,9 +133,12 @@ class Member extends MobileMember
      * 秒米明细
      * */
     public function get_member_miao() {
-        $condition['lg_member_id'] = $this->member_info['member_id'];
+        $condition['lg_member_id'] = 8;
         $meter_log=model('meterlog');
         $list_log = $meter_log->getLogList($condition, 10);
+        foreach ($list_log as $k=>$v ){
+            $list_log[$k]['lg_addtime']=date('Y-m-d H:i:s',$v['lg_addtime']);
+        }
         $result= array_merge(array('log' => $list_log), mobile_page(is_object($meter_log->page_info)?$meter_log->page_info:''));
         ds_json_encode(10000, '获取成功',$result);
     }
