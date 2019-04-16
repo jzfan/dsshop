@@ -22,6 +22,13 @@ class Deliverset extends AdminControl
     {
         $daddress_model = model('daddress');
         $condition = array();
+        $admin_id=session('admin_id');
+       if ($admin_id==1){
+           $condition['is_platform'] = 0;
+       }else{
+           $condition['is_platform'] = 1;
+           $condition['supplier'] = $admin_id;
+       }
         $address_list = $daddress_model->getAddressList($condition, '*', '', 20);
         $this->assign('address_list', $address_list);
         $this->setAdminCurItem('list');
@@ -32,6 +39,7 @@ class Deliverset extends AdminControl
      * 新增/编辑发货地址
      */
     public function daddress_add() {
+        $admin_id=session('admin_id');
         $address_id = intval(input('param.address_id'));
         if ($address_id > 0) {
             $daddress_mod = model('daddress');
@@ -49,6 +57,7 @@ class Deliverset extends AdminControl
                     'daddress_detail' => input('post.daddress_detail'),
                     'daddress_telphone' => input('post.daddress_telphone'),
                     'daddress_company' => input('post.daddress_company'),
+                    'supplier' => $admin_id,
                 );
                 //验证数据  BEGIN
                 $deliverset_validate = validate('deliverset');
@@ -81,6 +90,8 @@ class Deliverset extends AdminControl
                     'daddress_detail' => input('post.daddress_detail'),
                     'daddress_telphone' => input('post.daddress_telphone'),
                     'daddress_company' => input('post.daddress_company'),
+                    'is_platform' => 1,
+                    'supplier' => $admin_id,
                 );
                 //验证数据  BEGIN
                 $deliverset_validate = validate('deliverset');

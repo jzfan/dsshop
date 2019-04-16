@@ -368,6 +368,11 @@ class AdminControl extends Controller {
                         'text' => lang('ds_predeposit'),
                         'args' => 'pdrecharge_list,Predeposit,member',
                     ),
+                    'meter' => array(
+                        'ico'=>'&#xe671;',
+                        'text' => lang('ds_meter'),
+                        'args' => 'pdrecharge_list,meter,member',
+                    ),
                 ),
             ),
             'goods' => array(
@@ -424,6 +429,16 @@ class AdminControl extends Controller {
                         'ico'=>'&#xe631;',
                         'text' => lang('ds_order'),
                         'args' => 'index,Order,trade',
+                    ),
+                    'spike' => array(
+                        'ico'=>'&#xe631;',
+                        'text' => lang('ds_order_spike'),
+                        'args' => 'spike,Order,trade',
+                    ),
+                    'hangsale' => array(
+                        'ico'=>'&#xe631;',
+                        'text' => lang('ds_order_hangsale'),
+                        'args' => 'hangsale,Order,trade',
                     ),
                     'vrorder' => array(
                         'ico'=>'&#xe654;',
@@ -714,6 +729,8 @@ class AdminControl extends Controller {
                 )),
             array('name' => lang('ds_trade'), 'child' => array(
                     array('name' => lang('ds_order'), 'action' => null, 'controller' => 'Order'),
+                    array('name' => lang('ds_order_spike'), 'action' => 'spike', 'controller' => 'Order'),
+                    array('name' => lang('ds_order_hangsale'), 'action' => 'hangsale', 'controller' => 'Order'),
                     array('name' => lang('ds_vrorder'), 'action' => null, 'controller' => 'Vrorder'),
                     array('name' => lang('ds_refund'), 'action' => null, 'controller' => 'Refund'),
                     array('name' => lang('ds_return'), 'action' => null, 'controller' => 'Returnmanage'),
