@@ -394,6 +394,11 @@ class AdminControl extends Controller {
                         'text' => lang('ds_goods_manage'),
                         'args' => 'index,Goods,goods',
                     ),
+                    'Goodsadd' => array(
+                        'ico'=>'&#xe661;',
+                        'text' => lang('ds_goods_add'),
+                        'args' => 'index,Goodsadd,goods',
+                    ),
                     'Type' => array(
                         'ico'=>'&#xe659;',
                         'text' => lang('ds_type'),
@@ -713,6 +718,7 @@ class AdminControl extends Controller {
                 )),
             array('name' => lang('ds_goods'), 'child' => array(
                     array('name' => lang('ds_goods_manage'), 'action' => null, 'controller' => 'Goods'),
+                    array('name' => lang('ds_goods_add'), 'action' => null, 'controller' => 'Goodsadd'),
                     array('name' => lang('ds_goodsclass'), 'action' => null, 'controller' => 'Goodsclass'),
                     array('name' => lang('ds_brand'), 'action' => null, 'controller' => 'Brand'),
                     array('name' => lang('ds_type'), 'action' => null, 'controller' => 'Type'),

@@ -147,6 +147,7 @@ class Memberfund extends MobileMember {
         ds_json_encode(10000, '',array('point' => $point));
     }
 
+
     protected function getMemberAndGradeInfo($is_return = false) {
         $member_info = array();
         //会员详情及会员级别处理

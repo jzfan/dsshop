@@ -43,7 +43,6 @@ class Login extends Controller {
             $condition['admin_password'] = md5($admin_password);
             $admin_mod=model('admin');
             $admin_info = $admin_mod->getOneAdmin($condition);
-
             if (is_array($admin_info) and !empty($admin_info)) {
                 //更新 admin 最新信息
                 $update_info = array(
@@ -56,6 +55,7 @@ class Login extends Controller {
                 session('admin_id', $admin_info['admin_id']);
                 session('admin_name', $admin_info['admin_name']);
                 session('admin_gid', $admin_info['admin_gid']);
+                session('admin_is_super', $admin_info['admin_is_super']);
                 session('is_shop', $admin_info['is_shop']);
                 ds_json_encode(10000,'登录成功');
             } else {

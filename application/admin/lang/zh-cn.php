@@ -35,6 +35,7 @@ $lang['ds_goods'] = '商品';
 $lang['ds_goodsclass'] = '商品分类';
 $lang['ds_brand'] = '品牌管理';
 $lang['ds_goods_manage'] = '商品管理';
+$lang['ds_goods_add'] = '商品添加';
 $lang['ds_type'] = '类型管理';
 $lang['ds_spec'] = '规格管理';
 $lang['ds_transport'] = '地区管理';

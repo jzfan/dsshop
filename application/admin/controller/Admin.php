@@ -19,7 +19,9 @@ class Admin extends AdminControl {
         if (!request()->isPost()) {
             $condition = array(); 
             $admin_list = $admin_mod->getAdminList($condition,10);
+            $arr=['1'=>'管理员','2'=>'供应商'];
             $this->assign('admin_list', $admin_list);
+            $this->assign('arr',$arr );
             $this->assign('show_page', $admin_mod->page_info->render());
             $this->setAdminCurItem('admin');
             return $this->fetch('admin');
@@ -68,13 +70,16 @@ class Admin extends AdminControl {
         if (!request()->isPost()) {
             //得到权限组
             $gadmin = $admin_model->getGadminList('gname,gid');
+            $arr=['0'=>['name'=>'管理员', 'id'=>1], '1'=>['name'=>'供应商', 'id'=>2]];
             $this->assign('gadmin', $gadmin);
+            $this->assign('is_shop', $arr);
             return $this->fetch('admin_add');
         } else {
             $data['admin_name'] = input('post.admin_name');
             $data['admin_gid'] = input('post.gid');
             $data['admin_password'] = md5(input('post.admin_password'));
-            
+            $data['is_shop'] = md5(input('post.is_shop'));
+
             //验证数据  BEGIN
 
             $admin_validate = validate('admin');
@@ -136,6 +141,7 @@ class Admin extends AdminControl {
                 $data['admin_password'] = md5(input('post.new_pw'));
             }
             $data['admin_gid'] = intval(input('post.gid'));
+            $data['is_shop'] = intval(input('post.is_shop'));
             //查询管理员信息
             $admin_model = model('admin');
             $result = $admin_model->editAdmin($data,$admin_id);
@@ -146,6 +152,7 @@ class Admin extends AdminControl {
                 $this->error(lang('admin_edit_fail'));
             }
         } else {
+            $arr=['0'=>['name'=>'管理员', 'id'=>1], '1'=>['name'=>'供应商', 'id'=>2]];
             //查询用户信息
             $admin_model = model('admin');
             $admin = $admin_model->getOneAdmin(array('admin_id'=>$admin_id));
@@ -153,7 +160,8 @@ class Admin extends AdminControl {
                 $this->error(lang('admin_edit_admin_error'), url('Admin/admin'));
             }
             $this->assign('admin', $admin);
-            
+            $this->assign('is_shop', $arr);
+
             //得到权限组
             $gadmin = $admin_model->getGadminList('gname,gid');
             $this->assign('gadmin', $gadmin);

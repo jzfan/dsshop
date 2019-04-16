@@ -166,12 +166,6 @@ class Goodsadd extends AdminControl {
             // 保存数据
             $common_id = $goods_model->addGoodsCommon($common_array);
             if ($common_id) {
-                //识别当前用户是否是供应商
-                $admin_id=session('is_shop');
-                if ($admin_id!=1){
-
-                }
-
                 // 生成的商品id（SKU）
                 $goodsid_array = array();
                 // 商品规格
@@ -212,8 +206,6 @@ class Goodsadd extends AdminControl {
                         $goods['is_goodsfcode'] = $common_array['is_goodsfcode'];
                         $goods['is_appoint'] = $common_array['is_appoint'];
                         $goods['is_presell'] = $common_array['is_presell'];
-                        $goods['supplier'] = $common_array['is_presell'];
-                        $goods['is_platform'] = $common_array['is_presell'];
                         $goods_id = $goods_model->addGoods($goods);
                         $type_model->addGoodsType($goods_id, $common_id, array(
                             'cate_id' => $_POST['cate_id'], 'type_id' => $_POST['type_id'], 'attr' => $_POST['attr']
@@ -392,7 +384,6 @@ class Goodsadd extends AdminControl {
         $commonid = input('param.commonid');
         // 单条商品信息
         $goods_info = model('goods')->getGoodsInfo(array('goods_commonid' => $commonid));
-
         // 自动发布动态
         $data_array = array();
         $data_array['goods_id'] = $goods_info['goods_id'];
@@ -407,7 +398,18 @@ class Goodsadd extends AdminControl {
         $this->assign('allow_gift', model('goods')->checkGoodsIfAllowGift($goods_info));
         $this->assign('allow_combo', model('goods')->checkGoodsIfAllowCombo($goods_info));
         $this->assign('goods_id', $goods_info['goods_id']);
-
+        //识别当前用户是否是供应商
+        $is_shop=session('is_shop');
+        $admin_id=session('admin_id');
+        if ($is_shop==1){
+            //平台
+            $arr['supplier']=0;
+            $arr['is_platform']=0;
+        }else{
+            $arr['supplier']=$admin_id;
+            $arr['is_platform']=1;
+        }
+        db('goods')->where('goods_id',$data_array['goods_id'])->update($arr);
         $this->setAdminCurItem();
         return $this->fetch($this->template_dir . 'goods_add_step4');
     }
