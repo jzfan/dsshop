@@ -8,7 +8,7 @@
     <div class="fixed-bar">
         <div class="item-title">
             <div class="subject">
-                <h3>实物订单</h3>
+                <h3>订单详情</h3>
                 <h5></h5>
             </div>
             {include file="public/admin_items" /}
@@ -27,8 +27,12 @@
                         <option value="">{$Think.lang.ds_please_choose}</option>
                         <option value="10" {if condition="$Request.param.order_state eq '10'"}selected{/if}>{$Think.lang.order_state_new}</option>
                         <option value="20" {if condition="$Request.param.order_state eq '20'"}selected{/if}>{$Think.lang.order_state_pay}</option>
+                        <option value="25" {if condition="$Request.param.order_state eq '25'"}selected{/if}>待确认</option>
                         <option value="30" {if condition="$Request.param.order_state eq '30'"}selected{/if}>{$Think.lang.order_state_send}</option>
+                        <option value="35" {if condition="$Request.param.order_state eq '35'"}selected{/if}>部分发货</option>
                         <option value="40" {if condition="$Request.param.order_state eq '40'"}selected{/if}>{$Think.lang.order_state_success}</option>
+                        <option value="50" {if condition="$Request.param.order_state eq '50'"}selected{/if}>无效</option>
+                        <option value="45" {if condition="$Request.param.order_state eq '45'"}selected{/if}>退货</option>
                         <option value="0" {if condition="$Request.param.order_state eq '0'"}selected{/if}>{$Think.lang.order_state_cancel}</option>
                     </select>
                 </dd>
@@ -41,20 +45,20 @@
                         <input id="query_end_time" class="txt date" type="text" name="query_end_time" value="{$Request.param.query_end_time}">
                 </dd>
             </dl>
-            <dl>
-                <dt>{$Think.lang.buyer_name}</dt>
-                <dd>
-                    <input type="text" class="text w80" name="buyer_name" value="{$Request.param.buyer_name}">
-                </dd>
-                <dd>
-                    <select name="payment_code">
-                        <option value="">{$Think.lang.ds_please_choose}</option>
-                        {foreach $payment_list as $val}
-                        <option {if condition="$Request.param.payment_code eq $val.payment_code"}selected{/if} value="{$val.payment_code}">{$val.payment_name}</option>
-                        {/foreach}
-                    </select>
-                </dd>
-            </dl>
+            <!--<dl>-->
+                <!--<dt>{$Think.lang.buyer_name}</dt>-->
+                <!--<dd>-->
+                    <!--<input type="text" class="text w80" name="buyer_name" value="{$Request.param.buyer_name}">-->
+                <!--</dd>-->
+                <!--<dd>-->
+                    <!--<select name="payment_code">-->
+                        <!--<option value="">{$Think.lang.ds_please_choose}</option>-->
+                        <!--{foreach $payment_list as $val}-->
+                        <!--<option {if condition="$Request.param.payment_code eq $val.payment_code"}selected{/if} value="{$val.payment_code}">{$val.payment_name}</option>-->
+                        <!--{/foreach}-->
+                    <!--</select>-->
+                <!--</dd>-->
+            <!--</dl>-->
             <div class="btn_group">
                 <input type="submit" class="btn" value="搜索">
                 {if $filtered}
@@ -73,6 +77,7 @@
                 <th>{$Think.lang.order_total_price}</th>
                 <th>{$Think.lang.payment}</th>
                 <th>{$Think.lang.order_state}</th>
+                <th>订单来源</th>
                 <th>{$Think.lang.ds_handle}</th>
             </tr>
         </thead>
@@ -91,6 +96,7 @@
                 <td>{$order.add_time|date="Y-m-d H:i:s",###}</td>
                 <td>{$order.order_amount}</td>
                 <td>{:get_order_payment_name($order['payment_code'])}</td>
+                <td>{:get_order_from_name($order['order_from'])}</td>
                 <td>{:get_order_state($order)}</td>
                 <td>
                     <a href="javascript:dsLayerOpen('{:url('Order/show_order',['order_id'=>$order.order_id])}','查看实物订单-{$order.order_sn}')" class="dsui-btn-view"><i class="fa"></i>{$Think.lang.ds_view}</a>

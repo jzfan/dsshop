@@ -365,6 +365,21 @@ class Member extends AdminControl
         }
     }
 
+    public function index(){
+        $member_id = input('param.member_id');
+        $condition['member_id'] = $member_id;
+        $member_model = model('member');
+        $member_array = $member_model->getMemberInfo($condition);
+        if ($member_array['inviter_id']==''){
+            $member_array['inviter_name']='';
+        }else{
+            $inviter=$member_model->getMemberInfo($member_array['inviter_id']);
+            $member_array['inviter_name']=$inviter['member_name'];
+        }
+        $this->assign('member_array', $member_array);
+        return $this->fetch();
+    }
+
 }
 
 ?>
