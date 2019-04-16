@@ -51,7 +51,7 @@ class Member extends MobileMember
             $member_info['point'] = $this->member_info['member_points'];
         }
         if (in_array('miaomi', $fields_arr)) {
-            $member_info['point'] = $this->member_info['meter_second'];
+            $member_info['miaomi'] = $this->member_info['meter_second'];
         }
         if (in_array('predepoit', $fields_arr)) {
             $member_info['predepoit'] = $this->member_info['available_predeposit'];
