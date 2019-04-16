@@ -535,19 +535,19 @@ class Predeposit extends AdminControl {
             $admin_act = "sys_add_money";
             switch ($operatetype) {
                 case 1:
-                    $admin_act = "sys_add_money";
+                    $admin_act = "sys_add_meter_second";
                     $log_msg = "管理员【" . $admininfo['admin_name'] . "】操作会员【" . $member_info['member_name'] . "】秒米【增加】，数量为" . $money . ",编号为" . $order_sn;
                     break;
                 case 2:
-                    $admin_act = "sys_del_money";
+                    $admin_act = "sys_del_meter_second";
                     $log_msg = "管理员【" . $admininfo['admin_name'] . "】操作会员【" . $member_info['member_name'] . "】秒米【减少】，数量为" . $money . ",编号为" . $order_sn;
                     break;
                 case 3:
-                    $admin_act = "sys_freeze_money";
+                    $admin_act = "sys_freeze_meter_second";
                     $log_msg = "管理员【" . $admininfo['admin_name'] . "】操作会员【" . $member_info['member_name'] . "】秒米【冻结】，数量为" . $money . ",编号为" . $order_sn;
                     break;
                 case 4:
-                    $admin_act = "sys_unfreeze_money";
+                    $admin_act = "sys_unfreeze_meter_second";
                     $log_msg = "管理员【" . $admininfo['admin_name'] . "】操作会员【" . $member_info['member_name'] . "】秒米【解冻】，数量为" . $money . ",编号为" . $order_sn;
                     break;
                 default:

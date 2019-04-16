@@ -90,10 +90,8 @@ class Goodsadd extends AdminControl {
         if (request()->isPost()) {
             $goods_model = model('goods');
             $type_model = model('type');
-
             // 分类信息
             $goods_class = model('goodsclass')->getGoodsclassLineForTag(intval(input('post.cate_id')));
-
             $common_array = array();
             $common_array['goods_name'] = input('post.g_name');
             $common_array['goods_advword'] = input('post.g_jingle');
@@ -168,6 +166,12 @@ class Goodsadd extends AdminControl {
             // 保存数据
             $common_id = $goods_model->addGoodsCommon($common_array);
             if ($common_id) {
+                //识别当前用户是否是供应商
+                $admin_id=session('is_shop');
+                if ($admin_id!=1){
+
+                }
+
                 // 生成的商品id（SKU）
                 $goodsid_array = array();
                 // 商品规格
@@ -208,6 +212,8 @@ class Goodsadd extends AdminControl {
                         $goods['is_goodsfcode'] = $common_array['is_goodsfcode'];
                         $goods['is_appoint'] = $common_array['is_appoint'];
                         $goods['is_presell'] = $common_array['is_presell'];
+                        $goods['supplier'] = $common_array['is_presell'];
+                        $goods['is_platform'] = $common_array['is_presell'];
                         $goods_id = $goods_model->addGoods($goods);
                         $type_model->addGoodsType($goods_id, $common_id, array(
                             'cate_id' => $_POST['cate_id'], 'type_id' => $_POST['type_id'], 'attr' => $_POST['attr']

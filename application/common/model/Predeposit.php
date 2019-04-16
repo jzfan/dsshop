@@ -700,7 +700,7 @@ class Predeposit extends Model {
         if (!$update) {
             exception('操作失败');
         }
-        $insert = db('meter_log')->insertGetId($data_log);
+        $insert = db('meterlog')->insertGetId($data_log);
         if (!$insert) {
             exception('操作失败');
         }

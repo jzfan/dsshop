@@ -14,12 +14,13 @@ use think\Lang;
 
 class Meter extends AdminControl
 {
+    public $page_info;
     public function _initialize()
     {
+
         parent::_initialize();
         Lang::load(APP_PATH . 'admin/lang/' . config('default_lang') . '/predeposit.lang.php');
     }
-
 
     public function pdrecharge_list() {
         $condition = array();
@@ -40,7 +41,7 @@ class Meter extends AdminControl
         if (!empty($aname)) {
             $condition['lg_admin_name'] = $aname;
         }
-        $predeposit_model = model('meter_log');
+        $predeposit_model = model('meterlog');
         $list_log = $predeposit_model->getPdLogList($condition, 10, '*', 'lg_id desc');
         $this->assign('show_page', $predeposit_model->page_info->render());
         $this->assign('list_log', $list_log);

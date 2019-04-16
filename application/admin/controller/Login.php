@@ -56,7 +56,7 @@ class Login extends Controller {
                 session('admin_id', $admin_info['admin_id']);
                 session('admin_name', $admin_info['admin_name']);
                 session('admin_gid', $admin_info['admin_gid']);
-                session('admin_is_super', $admin_info['admin_is_super']);
+                session('is_shop', $admin_info['is_shop']);
                 ds_json_encode(10000,'登录成功');
             } else {
                 ds_json_encode(10001,'帐号密码错误');

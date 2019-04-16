@@ -17,12 +17,24 @@ class Meterlog extends Model{
 
     public function getPdLogList($condition = array(), $pagesize = '', $fields = '*', $order = '', $limit = '') {
         if ($pagesize) {
-            $pdlog_list_paginate = db('meter_log')->where($condition)->field($fields)->order($order)->paginate($pagesize, false, ['query' => request()->param()]);
+            $pdlog_list_paginate = db('meterlog')->where($condition)->field($fields)->order($order)->paginate($pagesize, false, ['query' => request()->param()]);
             $this->page_info = $pdlog_list_paginate;
             return $pdlog_list_paginate->items();
         } else {
-            $pdlog_list_paginate = db('meter_log')->where($condition)->field($fields)->order($order)->limit($limit)->select();
+            $pdlog_list_paginate = db('meterlog')->where($condition)->field($fields)->order($order)->limit($limit)->select();
             return $pdlog_list_paginate;
         }
     }
+
+    public function getLogList($condition,$page ) {
+        if ($page) {
+            $result = db('meterlog')->where($condition)->paginate($page,false,['query' => request()->param()]);
+            $this->page_info = $result;
+            return $result->items();
+        } else {
+            $result = db('meterlog')->where($condition)->select();
+            return $result;
+        }
+    }
+
 }
