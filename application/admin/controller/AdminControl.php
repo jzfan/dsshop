@@ -589,6 +589,11 @@ class AdminControl extends Controller {
                         'text' => lang('ds_rechargecard'),
                         'args' => 'index,Rechargecard,operation',
                     ),
+                    'Pointgoods' => array(
+                        'ico'=>'&#xe643;',
+                        'text' => lang('积分商品'),
+                        'args' => 'index,Pointgoods,operation',
+                    ),
                 ),
             ),
             'stat' => array(
@@ -767,6 +772,7 @@ class AdminControl extends Controller {
                     array('name' => lang('ds_activity_manage'), 'action' => null, 'controller' => 'Vrbill'),
                     array('name' => lang('ds_shop_consult'), 'action' => null, 'controller' => 'Mallconsult'),
                     array('name' => lang('ds_rechargecard'), 'action' => null, 'controller' => 'Rechargecard'),
+                    array('name' => lang('积分商品'), 'action' => null, 'controller' => 'Pointgoods'),
                 )),
             array('name' => lang('ds_stat'), 'child' => array(
                     array('name' => lang('ds_statgeneral'), 'action' => null, 'controller' => 'Statgeneral'),
