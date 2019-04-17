@@ -62,67 +62,31 @@
                 error.appendTo(element.parent().parent().find('td:last'));
             },
             rules: {
-                member_name: {
+                goods_price: {
                     required: true,
-                    minlength: 5,
-                    maxlength: 20,
-                    remote: {
-                        url: "{:url('Member/ajax',['branch'=>'check_user_name'])}",
-                        type: 'get',
-                        data: {
-                            user_name: function() {
-                                return $('#member_name').val();
-                            },
-                            member_id:'{$member_array.member_id|default=0}'
-                        }
-                    }
                 },
-                member_password: {
+                goods_point: {
                     required: true,
-                    maxlength: 20,
-                    minlength: 6
                 },
-                member_email: {
+                goods_storage: {
                     required: true,
-                    email: true,
-                    remote: {
-                        url: "{:url('Member/ajax',['branch'=>'check_email'])}",
-                        type: 'get',
-                        data: {
-                            user_name: function() {
-                                return $('#member_email').val();
-                            },
-                            member_id: '{$member_array.member_id|default=0}'
-                        }
-                    }
                 },
-                member_qq: {
-                    digits: true,
-                    minlength: 5,
-                    maxlength: 11
-                }
+                goods_state: {
+                    required: true,
+                },
             },
             messages: {
-                member_name: {
-                    required: '{$Think.lang.member_add_name_null}',
-                    maxlength: '{$Think.lang.member_add_name_length}',
-                    minlength: '{$Think.lang.member_add_name_length}',
-                    remote: '{$Think.lang.member_add_name_exists}'
+                goods_price: {
+                    required: '商品价格不能为空',
                 },
-                member_password: {
+                goods_point: {
                     required: '密码不能为空',
-                    maxlength: '{$Think.lang.member_edit_password_tip}',
-                    minlength: '{$Think.lang.member_edit_password_tip}'
                 },
-                member_email: {
-                    required: '{$Think.lang.member_edit_email_null}',
-                    email: '{$Think.lang.member_edit_valid_email}',
-                    remote: '{$Think.lang.member_edit_email_exists}'
+                goods_storage: {
+                    required: '商品库存不能为空',
                 },
-                member_qq: {
-                    digits: '{$Think.lang.member_edit_qq_wrong}',
-                    minlength: '{$Think.lang.member_edit_qq_wrong}',
-                    maxlength: '{$Think.lang.member_edit_qq_wrong}'
+                goods_state: {
+                    digits: '请选择商品状态',
                 }
             }
         });

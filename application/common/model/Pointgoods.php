@@ -65,9 +65,4 @@ class Pointgoods extends Model
         return self::create($data);
     }
 
-
-    public function updateGoodsSpecValue($common_id)
-    {
-        
-    }
 }

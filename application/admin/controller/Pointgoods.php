@@ -132,6 +132,7 @@ class Pointgoods extends AdminControl
         $goods = $goods_model->getGoodsInfo(array("goods_id"=>$goods_id,"goods_state"=>1));
         if (!$goods) {
             //商品不存在或已下架
+            $this->error("商品不存在或以下架");
         }
 
         if(request()->isPost()) {
@@ -140,20 +141,18 @@ class Pointgoods extends AdminControl
             $params = input("param.");
 
             if (!$pointgoods_validate->scene("add_pointgoods")->check($params)) {
-
+                $this->error($pointgoods_validate->getError());
             }
-            \think\Db::startTrans();
-            try {
-                //添加积分商品
-                $pointgoods_model->add_pointgoods($params);
-                //更新积分商品规格
-                $pointgoods_model->updateGoodsSpecValue($goods_id);
-                \think\Db::commit();
-
-            } catch (\Exception $exception) {
-                \think\Db::rollback();
+            $is_exist = $pointgoods_model->get(array('goods_id'=>$goods_id));
+            if ($is_exist) {
+                $this->error("重复添加");
             }
-
+            //添加积分商品
+            $result = $pointgoods_model->add_pointgoods($params);
+            if ($result) {
+                dsLayerOpenSuccess("添加成功");
+            }
+            $this->error("添加失败");
         }
         $this->assign("goods",$goods);
         return $this->fetch();
