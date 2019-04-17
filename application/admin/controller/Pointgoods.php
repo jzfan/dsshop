@@ -126,9 +126,36 @@ class Pointgoods extends AdminControl
 
     public function add_pointgoods()
     {
+        $goods_id = input("param.goods_id");
+        //检测商品
+        $goods_model = model("Goods");
+        $goods = $goods_model->getGoodsInfo(array("goods_id"=>$goods_id,"goods_state"=>1));
+        if (!$goods) {
+            //商品不存在或已下架
+        }
+
         if(request()->isPost()) {
+            $pointgoods_model = model("Pointgoods");
+            $pointgoods_validate = validate('Pointgoods');
+            $params = input("param.");
+
+            if (!$pointgoods_validate->scene("add_pointgoods")->check($params)) {
+
+            }
+            \think\Db::startTrans();
+            try {
+                //添加积分商品
+                $pointgoods_model->add_pointgoods($params);
+                //更新积分商品规格
+                $pointgoods_model->updateGoodsSpecValue($goods_id);
+                \think\Db::commit();
+
+            } catch (\Exception $exception) {
+                \think\Db::rollback();
+            }
 
         }
+        $this->assign("goods",$goods);
         return $this->fetch();
     }
 

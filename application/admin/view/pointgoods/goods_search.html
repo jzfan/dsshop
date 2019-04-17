@@ -196,10 +196,18 @@ $(function(){
                         if (date != 'false') {
                             var _ul = $('<ul class="dssc-goods-sku-list"></ul>');
                                     var res = eval('(' + date + ')');
+                                    console.log(res);
                                     for (var i = 0; i < res.length; i++)
                                     {
-
-                                        $('<li><div class="goods-thumb" title="商家货号：' + res[i].goods_serial + '"><a href="' + res[i].url + '" target="_blank"><image src="' + res[i].goods_image + '" ></a></div>' + res[i].goods_spec + '<div class="goods-price">价格：<em title="￥' + res[i].goods_price + '">￥' + res[i].goods_price + '</em></div><div class="goods-storage">库存：<em title="' + res[i].goods_storage + '">' + res[i].goods_storage + '</em></div><a onclick="dsLayerOpen(1,2)" target="_blank" class="dssc-btn-mini">查看商品详情</a></li>').appendTo(_ul);
+                                        $('<li><div class="goods-thumb" title="商家货号：' + res[i].goods_serial + '">' +
+                                            '<a href="' + res[i].url + '" target="_blank"><image src="' + res[i].goods_image + '" ></a>' +
+                                            '</div>' + res[i].goods_spec + '' +
+                                            '<div class="goods-price">价格：<em title="￥' + res[i].goods_price + '">￥' + res[i].goods_price + '</em>' +
+                                            '</div>' +
+                                            '<div class="goods-storage">库存：<em title="' + res[i].goods_storage + '">' + res[i].goods_storage + '</em>' +
+                                            '</div>' +
+                                            '<a onclick="layerOpen(' + res[i].goods_id + ')" target="_blank" class="dssc-btn-mini">设为积分商品</a>' +
+                                            '</li>').appendTo(_ul);
                                         _ul.appendTo(_div);
                                         _parenttr.next().show();
                                     }
@@ -237,6 +245,11 @@ function getId() {
     }
     str = str.substr(0, (str.length - 1));
     return str;
+}
+
+function layerOpen(goods_id) {
+    var _url = "{:url('Pointgoods/add_pointgoods')}" + "?goods_id=" + goods_id;
+    dsLayerOpen(_url,"添加积分商品");
 }
 
     

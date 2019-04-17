@@ -1,0 +1,130 @@
+{include file="public/header" /}
+
+<div class="page">
+    <div class="explanation" id="explanation">
+        <div class="title" id="checkZoom">
+            <h4 title="{$Think.lang.ds_explanation_tip}">{$Think.lang.ds_explanation}</h4>
+            <span id="explanationZoom" title="{$Think.lang.ds_explanation_close}" class="arrow"></span>
+        </div>
+        <ul>
+            <li>系统平台全局设置,包括基础设置、购物、短信、邮件、水印和分销等相关模块。</li>
+        </ul>
+    </div>
+
+
+    <form id="user_form" enctype="multipart/form-data" method="post" >
+        <table class="ds-default-table">
+            <tbody>
+            <input type="hidden" value="{:$goods.goods_id}" name="goods_id" id="goods_id" class="txt">
+            <tr class="noborder">
+                <td class="required w120"><label>商品名称:</label></td>
+                <td class="vatop rowform">{$goods.goods_name}</td>
+                <td class="vatop tips"></td>
+            </tr>
+            <tr class="noborder">
+                <td class="required w120"><label class="validation" for="goods_price">销售价格:</label></td>
+                <td class="vatop rowform"><input type="text" value="" name="goods_price" id="goods_price" class="txt"></td>
+                <td class="vatop tips"></td>
+            </tr>
+            <tr class="noborder">
+                <td class="required w120"><label class="validation" for="goods_point">所需积分:</label></td>
+                <td class="vatop rowform"><input type="text" value="" name="goods_point" id="goods_point" class="txt"></td>
+                <td class="vatop tips"></td>
+            </tr>
+            <tr class="noborder">
+                <td class="required w120"><label class="validation" for="goods_storage">商品库存:</label></td>
+                <td class="vatop rowform"><input type="text" value="" name="goods_storage" id="goods_storage" class="txt"></td>
+                <td class="vatop tips"></td>
+            </tr>
+            <tr class="noborder">
+                <td class="required w120"><label class="validation" for="goods_state">商品状态:</label></td>
+                <td class="vatop rowform"><input type="text" value="" name="goods_state" id="goods_state" class="txt"></td>
+                <td class="vatop tips"></td>
+            </tr>
+            <tfoot>
+                <tr class="tfoot">
+                    <td colspan="15"><input  id='sub' class="btn" type="submit" value="{$Think.lang.ds_submit}"/></td>
+                </tr>
+            </tfoot>
+        </table>
+    </form>
+</div>
+<script type="text/javascript">
+    $(function() {
+        //按钮先执行验证再提交表单
+        $("#sub").click(function() {
+            if ($("#user_form").valid()) {
+                $("#user_form").submit();
+            }
+        });
+        $('#user_form').validate({
+            errorPlacement: function(error, element) {
+                error.appendTo(element.parent().parent().find('td:last'));
+            },
+            rules: {
+                member_name: {
+                    required: true,
+                    minlength: 5,
+                    maxlength: 20,
+                    remote: {
+                        url: "{:url('Member/ajax',['branch'=>'check_user_name'])}",
+                        type: 'get',
+                        data: {
+                            user_name: function() {
+                                return $('#member_name').val();
+                            },
+                            member_id:'{$member_array.member_id|default=0}'
+                        }
+                    }
+                },
+                member_password: {
+                    required: true,
+                    maxlength: 20,
+                    minlength: 6
+                },
+                member_email: {
+                    required: true,
+                    email: true,
+                    remote: {
+                        url: "{:url('Member/ajax',['branch'=>'check_email'])}",
+                        type: 'get',
+                        data: {
+                            user_name: function() {
+                                return $('#member_email').val();
+                            },
+                            member_id: '{$member_array.member_id|default=0}'
+                        }
+                    }
+                },
+                member_qq: {
+                    digits: true,
+                    minlength: 5,
+                    maxlength: 11
+                }
+            },
+            messages: {
+                member_name: {
+                    required: '{$Think.lang.member_add_name_null}',
+                    maxlength: '{$Think.lang.member_add_name_length}',
+                    minlength: '{$Think.lang.member_add_name_length}',
+                    remote: '{$Think.lang.member_add_name_exists}'
+                },
+                member_password: {
+                    required: '密码不能为空',
+                    maxlength: '{$Think.lang.member_edit_password_tip}',
+                    minlength: '{$Think.lang.member_edit_password_tip}'
+                },
+                member_email: {
+                    required: '{$Think.lang.member_edit_email_null}',
+                    email: '{$Think.lang.member_edit_valid_email}',
+                    remote: '{$Think.lang.member_edit_email_exists}'
+                },
+                member_qq: {
+                    digits: '{$Think.lang.member_edit_qq_wrong}',
+                    minlength: '{$Think.lang.member_edit_qq_wrong}',
+                    maxlength: '{$Think.lang.member_edit_qq_wrong}'
+                }
+            }
+        });
+    });
+</script>
