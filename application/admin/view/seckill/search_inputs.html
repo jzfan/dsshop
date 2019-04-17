@@ -1,13 +1,19 @@
-<form action="/admin/seckilljobs/searchgoods" method="post">
-    <input type="hidden" name='job_id' value="{$job_id}">
-    <div class="form-row align-items-center">
-        <div class="col-sm-3 my-1">
-            <input type="text" class="form-control" id="id-input" placeholder="平台货号" name='goods_commonid'>
-        </div>
-        <div class="col-sm-3 my-1">
-            <input type="text" class="form-control" id="name-input" placeholder="商品名" name='goods_name'>
-        </div>
-        <div class="col-auto my-1">
+<form action="/admin/seckilljobs/goods" method="post">
+    <input type="hidden" name='job_id' value="{:session('job_id')}">
+    <div class="ds-search-form">
+        <dl>
+            <dt>平台货号</dt>
+            <dd>
+                <input type="text" class="txt" id="id-input" name='goods_commonid'>
+            </dd>
+        </dl>
+        <dl>
+            <dt>商品名</dt>
+            <dd>
+                <input type="text" class="txt" id="name-input" name='goods_name'>
+            </dd>
+        </dl>
+        <div class="btn_group">
             <button type="submit" class="btn btn-primary">搜索</button>
         </div>
     </div>

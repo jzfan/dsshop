@@ -1,68 +1,76 @@
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="/admin/seckillgoods/add" id='modal-form'>
-                    <input type="hidden" value="" name='goods_id' id='goods-id-input'>
-                    <input type="hidden" value="{$job_id}" name='job_id'>
-                    <div class="form-group">
-                        <label class="col-form-label">数量:</label>
-                        <input type="number" class="form-control" id='number-input' name='qty' value="0">
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label">价格(元):</label>
-                        <input type="number" class="form-control" id='price-input' name='price' value="0">
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label">秒米(M):</label>
-                        <input type="number" class="form-control" id='mi-input' name='mi' value="0">
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label">排序:</label>
-                        <input type="number" class="form-control" id='commend-input' name='commend' value="0" min=0 max=200>
-                        <small class="form-text text-muted">0-200，数字越大越靠前</small>
-                    </div>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary" id='modal-submit-btn'>提交</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
-            </div>
-            </form>
-        </div>
-    </div>
+<div class="page" id='modal-page' style="display: none;">
+    <form method="post" id="modal-form">
+        <input type="hidden" value="" name='goods_id' id='goods-id-input'>
+        <input type="hidden" value="{:session('job_id')}" name='job_id'>
+        <table class="ds-default-table">
+            <tbody>
+                <tr class="noborder" style="background: rgb(255, 255, 255);">
+                    <td class="required w120" aria-required="true"><label>数量：</label></td>
+                    <td class="vatop rowform">
+                        <input type="number" class="w300 text" id='number-input' name='qty' value="0" min:0>
+                    </td>
+                </tr>
+                <tr class="noborder" style="background: rgb(255, 255, 255);">
+                    <td class="required w120" aria-required="true"><label>价格(元):</label></td>
+                    <td class="vatop rowform">
+                        <input type="number" class="w300 text" id='price-input' name='price' value="0" min:0>
+                    </td>
+                </tr>
+                <tr class="noborder" style="background: rgb(255, 255, 255);">
+                    <td class="required w120" aria-required="true"><label>秒米(M):</label></td>
+                    <td class="vatop rowform">
+                        <input type="number" class="w300 text" id='mi-input' name='mi' value="0" min:0>
+                    </td>
+                </tr>
+                <tr class="noborder" style="background: rgb(255, 255, 255);">
+                    <td class="required w120" aria-required="true"><label>排序:</label></td>
+                    <td class="vatop rowform">
+                        <input type="number" class="w300 text" id='commend-input' name='commend' value="0" min:0>
+                        <p>
+                            <small class="form-text text-muted">0-200，数字越大越靠前</small>
+                        </p>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr class="tfoot">
+                    <td colspan="15"><input class="btn" type="submit" onclick='submitGoodForm(event)' value="提交"></td>
+                </tr>
+            </tfoot>
+        </table>
+    </form>
 </div>
 <script>
-function showModal(obj) {
-    $('.modal').modal('show')
-    $('.modal-title').html(obj.name)
-    $('#goods-id-input').val(obj.id)
-    setInputVal(obj.id)
-}
+// function showModal(obj) {
+//     $('.modal').modal('show')
+//     $('.modal-title').html(obj.name)
+//     $('#goods-id-input').val(obj.id)
+//     setInputVal(obj.id)
+// }
 
 function setInputVal(gid) {
+    $('#goods-id-input').val(gid)
     $.get(`/api/seckillgoods?goods_id=${gid}`, function(res) {
-        $('#number-input').val(res.qty)
-        $('#price-input').val(res.price)
-        $('#mi-input').val(res.mi)
-        $('#commend-input').val(res.commend)
+        if (res != '') {
+            $('#number-input').val(res.qty)
+            $('#price-input').val(res.price)
+            $('#mi-input').val(res.mi)
+            $('#commend-input').val(res.commend)
+        }
     })
 }
-$('.modal').on('hide.bs.modal', function(e) {
-    unActiveTr($('#goods-id-input').val())
-})
-$('#modal-submit-btn').click(function(e) {
+
+// $('.modal').on('hide.bs.modal', function(e) {
+//     unActiveTr($('#goods-id-input').val())
+// })
+function submitGoodForm(e) {
     e.preventDefault()
-    $.post('/admin/seckillgoods/add', $('#modal-form').serialize(), function(res) {
-        if (res === 'ok') {
-            $('.modal').modal('hide')
+    $.post('/admin/seckillgoods/store', $('#modal-form').serialize(), function(res) {
+        if (res > 0) {
+            // $('.modal').modal('hide')
+            window.location.reload()
         }
     })
     return false
-})
+}
 </script>

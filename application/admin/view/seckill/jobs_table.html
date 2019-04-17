@@ -1,32 +1,46 @@
-<table class="table">
+<table class="ds-default-table">
     <thead>
         <tr class="thead">
             <th class="align-center">ID</th>
             <th class="align-center">活动名称</th>
-            <th class="align-center" width="120">{$Think.lang.start_time}</th>
-            <th class="align-center" width="120">{$Think.lang.end_time}</th>
-            <th class="align-center" width="80">商品数量</th>
-            <th class="align-center" width="120">状态</th>
-            <th class="align-center" width="150">订单操作</th>
+            <th class="align-center">{$Think.lang.start_time}</th>
+            <th class="align-center">{$Think.lang.end_time}</th>
+            <!-- <th class="align-center" width="80">商品数量</th> -->
+            <th class="align-center">状态</th>
+            <th class="align-center">操作</th>
         </tr>
     </thead>
     <tbody id="treet1">
         {notempty name="jobs"}
         {foreach name="jobs" item="job"}
         <tr class="hover">
-            <th>
+            <td>
                 {$job.id}
-            </th>
+            </td>
             <td class="group">
                 {$job.name}
             </td>
             <td class="align-center nowarp">{$job.start}</td>
             <td class="align-center nowarp">{$job.end}</td>
-            <td class="align-center">{$job.qty}</td>
-            <td class="align-center">{$job.status}</td>
+            <!--             <td class="align-center">
+                <?php 
+                   echo array_sum(array_map(function($goods) {
+                        return $goods->qty;
+                }, $job['goods']));
+                ?>
+            </td> -->
+            <td class="align-center">
+                <?php
+                echo [
+                0 => '等待开始',
+                1 => '秒杀中',
+                2 => '结束',
+                3 => '过期'
+                ][$job->status];
+                ?>
+            </td>
             <td class="yes-onoff align-center">
                 <button class="btn btn-primary">查看</button>
-                <button class="btn btn-info">编辑</button>
             </td>
         </tr>
         {/foreach}
