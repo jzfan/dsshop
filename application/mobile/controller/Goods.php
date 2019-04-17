@@ -116,7 +116,7 @@ class Goods extends MobileMall {
                 $condition['is_virtual'] = 1;
             }
 
-            $goods_list = $goods_model->getGoodsListByColorDistinct($condition, $fieldstr, $order, $this->pagesize);
+            $goods_list = model("pointgoods")->getPointGoodsList($condition, $fieldstr, $this->pagesize, $order);
         }
         //处理商品列表(抢购、限时折扣、商品图片)
         $goods_list = $this->_goods_list_extend($goods_list);

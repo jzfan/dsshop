@@ -3,7 +3,7 @@
     <div class="fixed-bar">
         <div class="item-title">
             <div class="subject">
-                <h3>积分商品管理</h3>
+                <h3>商品管理</h3>
                 <h5></h5>
             </div>
             {include file="public/admin_items" /}
@@ -98,7 +98,76 @@
   </form>
 
 
-
+  <form method='post' id="form_goods" action="{:url('Goods/goods_del')}">
+    <table class="ds-default-table">
+      <thead>
+        <tr class="thead">
+          <th class="w24"></th>
+          <th class="w24"></th>
+          <th class="w60 align-center">平台货号</th>
+          <th colspan="2">{$Think.lang.ds_goods_name}</th>
+          <th>品牌&{$Think.lang.ds_class}</th>
+          <th class="w72 align-center">价格(元)</th>
+          <th class="w72 align-center">库存</th>
+          <th class="w72 align-center">商品状态</th>
+          <th class="w200 align-center" >{$Think.lang.ds_handle}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {notempty name="goods_list"}
+        {foreach name="goods_list" item="v"}
+        <tr class="hover edit">
+          <td><input type="checkbox" name="id[]" value="{$v.goods_commonid}" class="checkitem"></td>
+          <td><i class="fa fa-plus-square" status="open"  style="cursor: pointer;" dstype="ajaxGoodsList" data-comminid="{$v.goods_commonid}" title="点击展开查看此商品全部规格；规格值过多时请横向拖动区域内的滚动条进行浏览。"></i></td>
+          <td class="align-center">{$v.goods_commonid}</td>
+          <td class="w60 picture"><div class="size-56x56"><span class="thumb size-56x56"><i></i><img src="{:goods_thumb($v, 240)}" onload="javascript:ResizeImage(this,56,56);"/></span></div></td>
+          <td>
+          <dl class="goods-info"><dt class="goods-name">{$v.goods_name}</dt>
+          <dd class="goods-type">
+              {if $v.is_virtual eq 1}<span class="virtual" title="虚拟兑换商品">虚拟</span>{/if}
+              {if $v.is_goodsfcode eq 1}<span class="fcode" title="F码优先购买商品">F码</span>{/if}
+              {if $v.is_presell eq 1}<span class="presell" title="预先发售商品">预售</span>{/if}
+              {if $v.is_appoint eq 1}<span class="appoint" title="预约销售提示商品">预约</span>{/if}
+              <i class="fa fa-tablet {if $v.mobile_body neq ''}open{/if}" title="手机端商品详情"></i>
+            </dd>
+            <dd class="goods-store"></dd>
+          </dl>
+            </td>
+          <td>
+            <p>{$v.gc_name}</p>
+            <p class="goods-brand">品牌：{$v.brand_name}</p>
+            </td>
+          <td class="align-center">{$v.goods_price}</td>
+          <td class="align-center">{$storage_array[$v['goods_commonid']]['sum']}</td>
+          <td class="align-center">{$state[$v['goods_state']]}</td>
+          <td class="align-center">
+              <a href="{:url('/home/goods/index',['goods_id' =>$storage_array[$v['goods_commonid']]['goods_id']])}" target="_blank" class="dsui-btn-view"><i class="fa"></i>{$Think.lang.ds_view}</a>
+              <a href="{:url('Goods/edit_goods',['commonid' =>$v.goods_commonid])}" class="dsui-btn-edit"><i class="fa"></i>{$Think.lang.ds_edit}</a>
+              <a href="{:url('Goods/goods_del',['common_id'=>$v['goods_commonid']])}" class="dsui-btn-del"><i class="fa"></i>{$Think.lang.ds_del}</a>
+          </td>
+        </tr>
+        <tr style="display:none;">
+          <td colspan="20"><div class="dssc-goods-sku ps-container"></div></td>
+        </tr>
+        {/foreach}
+        {else /}
+        <tr class="no_data">
+          <td colspan="15">{$Think.lang.ds_no_record}</td>
+        </tr>
+        {/notempty}
+      </tbody>
+      <tfoot>
+        <tr class="tfoot">
+            &nbsp;&nbsp;
+            <td><input type="checkbox" class="checkall" id="checkallBottom"></td>
+            <td colspan="16"><label for="checkallBottom">{$Think.lang.ds_select_all}</label>
+            <a href="JavaScript:void(0);" class="btn btn-small" ><span>存入仓库</span></a>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+    {$show_page}
+  </form>
 </div>
 <script type="text/javascript" src="{$Think.PLUGINS_SITE_ROOT}/js/dialog/dialog.js" id="dialog_js" charset="utf-8"></script>
 <script type="text/javascript" src="{$Think.PLUGINS_SITE_ROOT}/jquery.mousewheel.js"></script>

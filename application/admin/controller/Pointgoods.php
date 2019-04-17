@@ -14,7 +14,7 @@ class Pointgoods extends AdminControl
 
     public function index()
     {
-        $goods_model = model('goods');
+        $pointgoods_model = model('Pointgoods');
         /**
          * 处理商品分类
          */
@@ -47,14 +47,13 @@ class Pointgoods extends AdminControl
             $where['goods_state'] = $goods_state;
         }
 
-        $goods_list = $goods_model->getGoodsCommonList($where);
+        $goods_list = $pointgoods_model->getCommonPointGoodsList($where);
 
         $this->assign('goods_list', $goods_list);
-        $this->assign('show_page', $goods_model->page_info->render());
+        $this->assign('show_page', $pointgoods_model->page_info->render());
 
-        $storage_array = $goods_model->calculateStorage($goods_list);
+        $storage_array = $pointgoods_model->calculateStorage($goods_list);
         $this->assign('storage_array', $storage_array);
-
         // 品牌
         $brand_list = model('brand')->getBrandPassedList(array());
 
