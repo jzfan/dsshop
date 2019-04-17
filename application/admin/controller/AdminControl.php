@@ -645,6 +645,10 @@ class AdminControl extends Controller {
                         'text' => lang('appadv'),
                         'args' => 'index,Appadv,mobile',
                     ),
+                    'mb_config' => array(
+                        'text' => lang('shopconfig'),
+                        'args' => 'index,Shopconfig,mobile',
+                    ),
                 ),
             ),
             'wechat' => array(
@@ -681,13 +685,13 @@ class AdminControl extends Controller {
 
             'seckill' => [
                 'name' => 'seckill',
-                'text' => '秒米',
+                'text' => '秒杀',
                 'children' => [
-                    'seckill_goods' => [
-                        'ico'=>'&#xe65a;',
-                        'text' => '商品',
-                        'args' => 'index,SeckillGoods,seckill',
-                    ],
+                    // 'seckill_goods' => [
+                    //     'ico'=>'&#xe65a;',
+                    //     'text' => '商品',
+                    //     'args' => 'index,SeckillGoods,seckill',
+                    // ],
                     'seckill_jobs' => [
                         'ico'=>'&#xe65a;',
                         'text' => '活动',
@@ -767,6 +771,7 @@ class AdminControl extends Controller {
                     array('name' => lang('ds_activity_manage'), 'action' => null, 'controller' => 'Vrbill'),
                     array('name' => lang('ds_shop_consult'), 'action' => null, 'controller' => 'Mallconsult'),
                     array('name' => lang('ds_rechargecard'), 'action' => null, 'controller' => 'Rechargecard'),
+                    array('name' => lang('积分商品'), 'action' => null, 'controller' => 'Pointgoods'),
                 )),
             array('name' => lang('ds_stat'), 'child' => array(
                     array('name' => lang('ds_statgeneral'), 'action' => null, 'controller' => 'Statgeneral'),
