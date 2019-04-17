@@ -3,7 +3,7 @@
 <div class="container mt-4">
     <div class="card">
         <div class="card-header">
-            创建秒米商品
+            创建秒杀商品
         </div>
         <div class="card-body">
             <div class="row">
@@ -61,6 +61,7 @@
         </div>
     </div>
 </div>
+{include file='seckill/add_good_modal'/}
 <script type="text/javascript">
 $(document).ready(function() {
     $('#gc-1').change(function() {
@@ -97,9 +98,7 @@ function searchByGc() {
     let cid = $('#gc-3').val() || $('#gc-2').val() || $('#gc-1').val()
     if (0 != cid) {
         $.get(`/api/goods?cid=${cid}`, function(res) {
-            console.log(res)
             resetTable(res)
-
         })
     }
 }
@@ -114,9 +113,17 @@ function resetTable(data) {
                         <div class="size-56x56"><span class="thumb size-56x56"><i></i><img src="${item.thumb}" onload="javascript:ResizeImage(this,56,56);" /></span></div>
                     </td>
                     <td>${item.goods_name}</td>
-                    <td><button class='btn btn-primary'>加入</button></td>
+                    <td>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-goods_id="${item.goods_id}" onclick='selectTr(event)'>加入</button>
+
+                    </td>
                 </tr>
             `)
     }
+}
+
+function selectTr(e) {
+    $(e.target).parents('tr').addClass('table-success')
+    $('#goods_id_input').val($(e.target).data('goods_id'))
 }
 </script>

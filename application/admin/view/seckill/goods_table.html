@@ -1,0 +1,53 @@
+<table class="table table-hover mt-2">
+    <thead>
+        <tr>
+            <th class="align-center">平台货号</th>
+            <th class="align-center" colspan="2">商品名</th>
+            <th class="align-center">价格</th>
+            <th class="align-center">库存{$job_id}</th>
+        </tr>
+    </thead>
+    <tbody id="goods-table">
+        {notempty name="goods"}
+        {foreach name="goods" item="good"}
+        <tr data-id='{$good.goods_id}' data-name='{$good.goods_name}'>
+            <td>
+                {$good.goods_commonid}
+            </td>
+            <td class="w60 picture">
+                <div class="size-56x56"><span class="thumb size-56x56"><i></i><img src="{:goods_thumb($good, 240)}" onload="javascript:ResizeImage(this,56,56);" /></span></div>
+            </td>
+            <td class="group">
+                {$good.goods_name}
+            </td>
+            <td class="align-center nowarp">￥{$good.goods_price}</td>
+            <td class="align-center nowarp">{$good.goods_storage}</td>
+        </tr>
+        {/foreach}
+        {else /}
+        <tr class="no_data">
+            <td colspan="16">没有数据</td>
+        </tr>
+        {/notempty}
+    </tbody>
+</table>
+{notempty name="goods"}
+{/notempty}
+<script>
+function activeTr(tr) {
+    $(tr).addClass('bg-danger').find('td').addClass('text-white')
+
+}
+
+function unActiveTr(id) {
+    $(`tr[data-id=${id}]`).removeClass('bg-danger').find('td').removeClass('text-white')
+}
+
+$('#goods-table tr').click(function() {
+    activeTr(this)
+    showModal({
+        id: $(this).data('id'),
+        name: $(this).data('name')
+    })
+})
+</script>

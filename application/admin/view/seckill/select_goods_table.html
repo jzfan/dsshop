@@ -1,0 +1,56 @@
+<table class="ds-default-table" id='select-goods-table'>
+    <thead>
+        <tr class="thead">
+            <th>ID</th>
+            <th>数量</th>
+            <th colspan="2">商品名</th>
+            <th>价格</th>
+            <th>库存</th>
+            <th>推荐</th>
+        </tr>
+    </thead>
+    <tbody id="treet1">
+        {notempty name="goods"}
+        {foreach name="goods" item="good"}
+        <tr class="hover">
+            <td>
+                {$good.id}
+            </td>
+            <td></td>
+            <td class="w60 picture">
+                <div class="size-56x56"><span class="thumb size-56x56"><i></i><img src="{:goods_thumb($good.info, 240)}" onload="javascript:ResizeImage(this,56,56);" /></span></div>
+            </td>
+            <td class="group">
+                {$good.sku.goods_name}
+            </td>
+            <td class="align-center nowarp">￥{$good.price} + M {$good.mi}</td>
+            <td class="align-center nowarp">{$good.qty}</td>
+            <td class="align-center">{$good.commend}</td>
+        </tr>
+        {/foreach}
+        {else /}
+        <tr class="no_data">
+            <td colspan="16">{$Think.lang.ds_no_record}</td>
+        </tr>
+        {/notempty}
+    </tbody>
+</table>
+{notempty name="goods"}
+{/notempty}
+{include file='seckill/select_goods_modal' /}
+<script>
+$('#select-goods-table tbody tr').click(function() {
+    // console.log($(this)[0])
+    $(this).toggleClass('bg-danger')
+    $(this).find('td').toggleClass('text-white')
+    if ($(this).hasClass('bg-danger')) {
+        $('.modal').modal('show')
+    }
+})
+$('#modal-submit-btn').click(function() {
+    console.log($('#number-input').val())
+    console.log($('#commend-input').val())
+
+    $('.modal').modal('hide')
+})
+</script>

@@ -2,10 +2,13 @@
 
 namespace app\api\controller;
 
-use think\Controller;
-
-class Goods extends Controller
+class Goods extends BaseController
 {
+	public function getModel()
+	{
+		return model('goods');
+	}
+
 	public function categories()
 	{
 		$categories = model('goodsclass')->getGoodsclassListByParentId(input('pid'));

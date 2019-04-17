@@ -2,10 +2,12 @@
 
 namespace app\common\model;
 
-use think\Model;
 use think\Db;
+use think\Model;
+use app\common\ModelTrait;
 
 class Goods extends Model {
+    use ModelTrait;
 
     const STATE1 = 1;       // 出售中
     const STATE0 = 0;       // 下架

@@ -12,6 +12,7 @@ class AdminControl extends Controller {
     protected $admin_info;
 
     protected $permission;
+    protected $model;
     public function _initialize() {
         $this->admin_info = $this->systemLogin();
         $config_list = rkcache('config', true);
@@ -33,6 +34,10 @@ class AdminControl extends Controller {
             $this->checkPermission();
         }
         $this->setMenuList();
+
+        if (method_exists($this, 'getModel')) {
+            $this->model = $this->getModel();
+        }
     }
 
     /**
@@ -661,13 +666,13 @@ class AdminControl extends Controller {
 
             'seckill' => [
                 'name' => 'seckill',
-                'text' => '秒米',
+                'text' => '秒杀',
                 'children' => [
-                    'seckill_goods' => [
-                        'ico'=>'&#xe65a;',
-                        'text' => '商品',
-                        'args' => 'index,SeckillGoods,seckill',
-                    ],
+                    // 'seckill_goods' => [
+                    //     'ico'=>'&#xe65a;',
+                    //     'text' => '商品',
+                    //     'args' => 'index,SeckillGoods,seckill',
+                    // ],
                     'seckill_jobs' => [
                         'ico'=>'&#xe65a;',
                         'text' => '活动',
