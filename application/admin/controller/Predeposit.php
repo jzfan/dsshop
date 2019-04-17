@@ -458,7 +458,7 @@ class Predeposit extends AdminControl {
         $obj_member = model('member');
         $member_info = $obj_member->getMemberInfo(array('member_name' => $name));
         if (is_array($member_info) && count($member_info) > 0) {
-            exit(json_encode(array('id' => $member_info['member_id'], 'name' => $member_info['member_name'], 'available_predeposit' => $member_info['available_predeposit'], 'freeze_predeposit' => $member_info['freeze_predeposit'])));
+            exit(json_encode(array('id' => $member_info['member_id'], 'name' => $member_info['member_name'], 'available_predeposit' => $member_info['available_predeposit'], 'meter_second' => $member_info['meter_second'])));
         } else {
             exit(json_encode(array('id' => 0)));
         }
@@ -497,18 +497,10 @@ class Predeposit extends AdminControl {
      */
     public function miao_add() {
         if (!(request()->isPost())) {
-            $member_id = intval(input('get.member_id'));
-            if($member_id>0){
-                $condition['member_id'] = $member_id;
-                $member = model('member')->getMemberInfo($condition);
-                if(!empty($member)){
-                    $this->assign('member_info',$member);
-                }
-            }
             return $this->fetch();
         } else {
             $data = array(
-                'member_id' => input('post.member_id'),
+                'member_name' => input('post.member_name'),
                 'amount' => input('post.amount'),
                 'operatetype' => input('post.operatetype'),
                 'lg_desc' => input('post.lg_desc'),
@@ -521,45 +513,41 @@ class Predeposit extends AdminControl {
             }
             //查询会员信息
             $member_mod = model('member');
-            $member_id = intval(input('post.member_id'));
+            $member_id = input('post.member_name');
             $operatetype = input('post.operatetype');
-            $member_info = $member_mod->getMemberInfo(array('member_id' => $member_id));
+            $member_info = $member_mod->getMemberInfo(array('member_name' => $member_id));
 
             if (!is_array($member_info) || count($member_info) <= 0) {
                 $this->error('用户不存在', 'Predeposit/pd_add');
             }
-            $available_predeposit = floatval($member_info['available_predeposit']);
-            $freeze_predeposit = floatval($member_info['freeze_predeposit']);
+            $available_predeposit = floatval($member_info['meter_second']);
             if ($operatetype == 2 && $money > $available_predeposit) {
                 $this->error(('秒米不足，会员当前秒米') . $available_predeposit, 'Predeposit/pd_add');
             }
             if ($operatetype == 3 && $money > $available_predeposit) {
                 $this->error(('可冻结秒米，会员当前秒米') . $available_predeposit, 'Predeposit/pd_add');
             }
-            if ($operatetype == 4 && $money > $freeze_predeposit) {
-                $this->error(('可恢复冻结秒米，会员当前冻结秒米') . $freeze_predeposit, 'Predeposit/pd_add');
-            }
             $predeposit_model = model('predeposit');
             #生成对应订单号
-            $order_sn = makePaySn($member_id);
+            $order_sn = makePaySn($member_info['member_id']);
             $admininfo = $this->getAdminInfo();
             $log_msg = "管理员【" . $admininfo['admin_name'] . "】操作会员【" . $member_info['member_name'] . "】秒米，数量为" . $money . ",编号为" . $order_sn;
             $admin_act = "sys_add_money";
             switch ($operatetype) {
                 case 1:
-                    $admin_act = "sys_add_money";
+                    $admin_act = "sys_add_meter_second";
                     $log_msg = "管理员【" . $admininfo['admin_name'] . "】操作会员【" . $member_info['member_name'] . "】秒米【增加】，数量为" . $money . ",编号为" . $order_sn;
                     break;
                 case 2:
-                    $admin_act = "sys_del_money";
+                    $admin_act = "sys_del_meter_second";
                     $log_msg = "管理员【" . $admininfo['admin_name'] . "】操作会员【" . $member_info['member_name'] . "】秒米【减少】，数量为" . $money . ",编号为" . $order_sn;
                     break;
                 case 3:
-                    $admin_act = "sys_freeze_money";
+                    $admin_act = "sys_freeze_meter_second";
                     $log_msg = "管理员【" . $admininfo['admin_name'] . "】操作会员【" . $member_info['member_name'] . "】秒米【冻结】，数量为" . $money . ",编号为" . $order_sn;
                     break;
                 case 4:
-                    $admin_act = "sys_unfreeze_money";
+                    $admin_act = "sys_unfreeze_meter_second";
                     $log_msg = "管理员【" . $admininfo['admin_name'] . "】操作会员【" . $member_info['member_name'] . "】秒米【解冻】，数量为" . $money . ",编号为" . $order_sn;
                     break;
                 default:

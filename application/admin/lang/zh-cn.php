@@ -35,6 +35,7 @@ $lang['ds_goods'] = '商品';
 $lang['ds_goodsclass'] = '商品分类';
 $lang['ds_brand'] = '品牌管理';
 $lang['ds_goods_manage'] = '商品管理';
+$lang['ds_goods_add'] = '商品添加';
 $lang['ds_type'] = '类型管理';
 $lang['ds_spec'] = '规格管理';
 $lang['ds_transport'] = '地区管理';
@@ -42,9 +43,9 @@ $lang['ds_album'] = '空间管理';
 
 //交易
 $lang['ds_trade'] = '交易';
-$lang['ds_order'] = '91购订单';
+$lang['ds_order'] = '普通订单';
 $lang['ds_order_spike'] = '秒杀订单';
-$lang['ds_order_hangsale'] = '挂售订单';
+$lang['ds_order_hangsale'] = '91购订单';
 $lang['ds_deliver'] = '发货管理';
 $lang['ds_vrorder'] = '虚拟订单';
 $lang['ds_refund'] = '退款管理';

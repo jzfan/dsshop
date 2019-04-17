@@ -373,6 +373,11 @@ class AdminControl extends Controller {
                         'text' => lang('ds_predeposit'),
                         'args' => 'pdrecharge_list,Predeposit,member',
                     ),
+                    'meter' => array(
+                        'ico'=>'&#xe671;',
+                        'text' => lang('ds_meter'),
+                        'args' => 'pdrecharge_list,meter,member',
+                    ),
                 ),
             ),
             'goods' => array(
@@ -393,6 +398,11 @@ class AdminControl extends Controller {
                         'ico'=>'&#xe661;',
                         'text' => lang('ds_goods_manage'),
                         'args' => 'index,Goods,goods',
+                    ),
+                    'Goodsadd' => array(
+                        'ico'=>'&#xe661;',
+                        'text' => lang('ds_goods_add'),
+                        'args' => 'index,Goodsadd,goods',
                     ),
                     'Type' => array(
                         'ico'=>'&#xe659;',
@@ -429,6 +439,16 @@ class AdminControl extends Controller {
                         'ico'=>'&#xe631;',
                         'text' => lang('ds_order'),
                         'args' => 'index,Order,trade',
+                    ),
+                    'spike' => array(
+                        'ico'=>'&#xe631;',
+                        'text' => lang('ds_order_spike'),
+                        'args' => 'spike,Order,trade',
+                    ),
+                    'hangsale' => array(
+                        'ico'=>'&#xe631;',
+                        'text' => lang('ds_order_hangsale'),
+                        'args' => 'hangsale,Order,trade',
                     ),
                     'vrorder' => array(
                         'ico'=>'&#xe654;',
@@ -574,6 +594,11 @@ class AdminControl extends Controller {
                         'text' => lang('ds_rechargecard'),
                         'args' => 'index,Rechargecard,operation',
                     ),
+                    'Pointgoods' => array(
+                        'ico'=>'&#xe643;',
+                        'text' => lang('积分商品'),
+                        'args' => 'index,Pointgoods,operation',
+                    ),
                 ),
             ),
             'stat' => array(
@@ -703,6 +728,7 @@ class AdminControl extends Controller {
                 )),
             array('name' => lang('ds_goods'), 'child' => array(
                     array('name' => lang('ds_goods_manage'), 'action' => null, 'controller' => 'Goods'),
+                    array('name' => lang('ds_goods_add'), 'action' => null, 'controller' => 'Goodsadd'),
                     array('name' => lang('ds_goodsclass'), 'action' => null, 'controller' => 'Goodsclass'),
                     array('name' => lang('ds_brand'), 'action' => null, 'controller' => 'Brand'),
                     array('name' => lang('ds_type'), 'action' => null, 'controller' => 'Type'),
@@ -719,6 +745,8 @@ class AdminControl extends Controller {
                 )),
             array('name' => lang('ds_trade'), 'child' => array(
                     array('name' => lang('ds_order'), 'action' => null, 'controller' => 'Order'),
+                    array('name' => lang('ds_order_spike'), 'action' => 'spike', 'controller' => 'Order'),
+                    array('name' => lang('ds_order_hangsale'), 'action' => 'hangsale', 'controller' => 'Order'),
                     array('name' => lang('ds_vrorder'), 'action' => null, 'controller' => 'Vrorder'),
                     array('name' => lang('ds_refund'), 'action' => null, 'controller' => 'Refund'),
                     array('name' => lang('ds_return'), 'action' => null, 'controller' => 'Returnmanage'),
@@ -749,6 +777,7 @@ class AdminControl extends Controller {
                     array('name' => lang('ds_activity_manage'), 'action' => null, 'controller' => 'Vrbill'),
                     array('name' => lang('ds_shop_consult'), 'action' => null, 'controller' => 'Mallconsult'),
                     array('name' => lang('ds_rechargecard'), 'action' => null, 'controller' => 'Rechargecard'),
+                    array('name' => lang('积分商品'), 'action' => null, 'controller' => 'Pointgoods'),
                 )),
             array('name' => lang('ds_stat'), 'child' => array(
                     array('name' => lang('ds_statgeneral'), 'action' => null, 'controller' => 'Statgeneral'),

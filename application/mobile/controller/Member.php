@@ -5,25 +5,28 @@ namespace app\mobile\controller;
 use think\Lang;
 use think\Validate;
 
-class Member extends MobileMember {
+class Member extends MobileMember
+{
 
-    public function _initialize() {
+    public function _initialize()
+    {
         parent::_initialize();
         Lang::load(APP_PATH . 'mobile/lang/' . config('default_lang') . '/member.lang.php');
     }
 
-    public function index() {
+    public function index()
+    {
         $member_model = model('member');
-            $member_info = $member_model->getMemberInfoByID($this->member_info['member_id']);
-            if ($member_info) {
-                $member_gradeinfo = $member_model->getOneMemberGrade(intval($member_info['member_exppoints']));
-                $member_info = array_merge($member_info, $member_gradeinfo);
-                //代金券数量
-                $member_info['voucher_count'] = model('voucher')->getCurrentAvailableVoucherCount(session('member_id'));
-                $member_info['member_avatar'] = get_member_avatar_for_id($this->member_info['member_id']);
-            }
+        $member_info = $member_model->getMemberInfoByID($this->member_info['member_id']);
+        if ($member_info) {
+            $member_gradeinfo = $member_model->getOneMemberGrade(intval($member_info['member_exppoints']));
+            $member_info = array_merge($member_info, $member_gradeinfo);
+            //代金券数量
+            $member_info['voucher_count'] = model('voucher')->getCurrentAvailableVoucherCount(session('member_id'));
+            $member_info['member_avatar'] = get_member_avatar_for_id($this->member_info['member_id']);
+        }
 
-        
+
         // 交易提醒
         $order_model = model('order');
         $refundreturn_model = model('refundreturn');
@@ -31,13 +34,14 @@ class Member extends MobileMember {
         $member_info['order_noreceipt_count'] = $order_model->getOrderCountByID($this->member_info['member_id'], 'SendCount');
         $member_info['order_noeval_count'] = $order_model->getOrderCountByID($this->member_info['member_id'], 'EvalCount');
         $member_info['order_noship_count'] = $order_model->getOrderCountByID($this->member_info['member_id'], 'PayCount');
-        $member_info['order_refund_count'] = $refundreturn_model->getRefundreturnCount(array('buyer_id'=>$this->member_info['member_id'],'refund_state'=>array('<>',3)));
+        $member_info['order_refund_count'] = $refundreturn_model->getRefundreturnCount(array('buyer_id' => $this->member_info['member_id'], 'refund_state' => array('<>', 3)));
 
-        ds_json_encode(10000,'',array('member_info' => $member_info, 'inviter_open' => config('inviter_open')));
+        ds_json_encode(10000, '', array('member_info' => $member_info, 'inviter_open' => config('inviter_open')));
     }
 
-    public function my_asset() {
-        $fields_arr = array('point', 'predepoit', 'available_rc_balance', 'voucher');
+    public function my_asset()
+    {
+        $fields_arr = array('miaomi','point', 'predepoit', 'available_rc_balance', 'voucher');
         $fields_str = trim(input('fields'));
         if ($fields_str) {
             $fields_arr = explode(',', $fields_str);
@@ -45,6 +49,9 @@ class Member extends MobileMember {
         $member_info = array();
         if (in_array('point', $fields_arr)) {
             $member_info['point'] = $this->member_info['member_points'];
+        }
+        if (in_array('miaomi', $fields_arr)) {
+            $member_info['miaomi'] = $this->member_info['meter_second'];
         }
         if (in_array('predepoit', $fields_arr)) {
             $member_info['predepoit'] = $this->member_info['available_predeposit'];
@@ -55,13 +62,14 @@ class Member extends MobileMember {
         if (in_array('voucher', $fields_arr)) {
             $member_info['voucher'] = model('voucher')->getCurrentAvailableVoucherCount($this->member_info['member_id']);
         }
-        ds_json_encode(10000,'',$member_info);
+        ds_json_encode(10000, '', $member_info);
     }
 
     /**
      * 用户首页基本信息显示
      */
-    public function information() {
+    public function information()
+    {
         $member_model = model('member');
         $condition['member_id'] = $this->member_info['member_id'];
         $member_info = $member_model->getMemberInfo($condition);
@@ -72,7 +80,8 @@ class Member extends MobileMember {
     /**
      * 用户基本信息修改
      */
-    public function edit_information() {
+    public function edit_information()
+    {
         $data = array(
             'member_truename' => input('param.member_truename'),
             'member_sex' => input('param.member_sex'),
@@ -82,7 +91,7 @@ class Member extends MobileMember {
 
         //验证数据  BEGIN
         $rule = [
-                ['member_nickname', 'max:10', '真实姓名不应超过10'],
+            ['member_nickname', 'max:10', '真实姓名不应超过10'],
         ];
         $validate = new Validate();
         $validate_result = $validate->check($data, $rule);
@@ -104,7 +113,8 @@ class Member extends MobileMember {
     /**
      * 更新用户头像
      */
-    public function edit_memberavatar() {
+    public function edit_memberavatar()
+    {
         $file = request()->file('memberavatar');
         $upload_file = BASE_UPLOAD_PATH . DS . ATTACH_AVATAR . DS;
         $avatar_name = 'avatar_' . $this->member_info['member_id'] . '.jpg';
@@ -119,6 +129,21 @@ class Member extends MobileMember {
             ds_json_encode(10001, $file->getError());
         }
     }
+    /*
+     * 秒米明细
+     * */
+    public function get_member_miao() {
+        $condition['lg_member_id'] = 8;
+        $meter_log=model('meterlog');
+        $list_log = $meter_log->getLogList($condition, 10);
+        foreach ($list_log as $k=>$v ){
+            $list_log[$k]['lg_addtime']=date('Y-m-d H:i:s',$v['lg_addtime']);
+        }
+        $result= array_merge(array('log' => $list_log), mobile_page(is_object($meter_log->page_info)?$meter_log->page_info:''));
+        ds_json_encode(10000, '获取成功',$result);
+    }
+
+
 }
 
 ?>

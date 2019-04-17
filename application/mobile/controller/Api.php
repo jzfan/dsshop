@@ -26,4 +26,22 @@ class Api extends MobileMall
             include PLUGINS_PATH.'/login/sina_h5/index.php';
         }
     }
+
+
+    /**
+     *  获取商户配置
+     */
+    public function getconfig(){
+        $host = trim(input('host'));
+        if (empty($host)){
+            $arr=['miaomi'=>'秒米', 'good_type'=>'待售'];
+            ds_json_encode(10000, '', $arr);
+        }else{
+            $list=db('hostconfig')->where('host',$host)->select();
+            foreach ($list as $kk=>$v){
+                $arr[$v['key']]=$v['value'];
+            }
+            ds_json_encode(10000, '', $arr);
+        }
+    }
 }

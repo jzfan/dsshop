@@ -31,6 +31,17 @@
                     </td>
                     <td class="vatop tips">{$Think.lang.admin_add_gid_tip}</td>
                 </tr>
+                <tr class="noborder">
+                    <td class="required w120">角色类型</td>
+                    <td class="vatop rowform">
+                        <select name="is_shop">
+                            {foreach name="is_shop" item="v"}
+                            <option value="{$v.id}">{$v.name}</option>
+                            {/foreach}
+                        </select>
+                    </td>
+                    <td class="vatop tips">{$Think.lang.admin_add_gid_tip}</td>
+                </tr>
             </tbody>
             <tfoot>
                 <tr class="tfoot">

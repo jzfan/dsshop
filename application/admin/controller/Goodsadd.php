@@ -90,10 +90,8 @@ class Goodsadd extends AdminControl {
         if (request()->isPost()) {
             $goods_model = model('goods');
             $type_model = model('type');
-
             // 分类信息
             $goods_class = model('goodsclass')->getGoodsclassLineForTag(intval(input('post.cate_id')));
-
             $common_array = array();
             $common_array['goods_name'] = input('post.g_name');
             $common_array['goods_advword'] = input('post.g_jingle');
@@ -386,7 +384,6 @@ class Goodsadd extends AdminControl {
         $commonid = input('param.commonid');
         // 单条商品信息
         $goods_info = model('goods')->getGoodsInfo(array('goods_commonid' => $commonid));
-
         // 自动发布动态
         $data_array = array();
         $data_array['goods_id'] = $goods_info['goods_id'];
@@ -401,7 +398,18 @@ class Goodsadd extends AdminControl {
         $this->assign('allow_gift', model('goods')->checkGoodsIfAllowGift($goods_info));
         $this->assign('allow_combo', model('goods')->checkGoodsIfAllowCombo($goods_info));
         $this->assign('goods_id', $goods_info['goods_id']);
-
+        //识别当前用户是否是供应商
+        $is_shop=session('is_shop');
+        $admin_id=session('admin_id');
+        if ($is_shop==1){
+            //平台
+            $arr['supplier']=0;
+            $arr['is_platform']=0;
+        }else{
+            $arr['supplier']=$admin_id;
+            $arr['is_platform']=1;
+        }
+        db('goods')->where('goods_id',$data_array['goods_id'])->update($arr);
         $this->setAdminCurItem();
         return $this->fetch($this->template_dir . 'goods_add_step4');
     }
