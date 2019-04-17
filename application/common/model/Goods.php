@@ -2,10 +2,12 @@
 
 namespace app\common\model;
 
-use think\Model;
 use think\Db;
+use think\Model;
+use app\common\ModelTrait;
 
 class Goods extends Model {
+    use ModelTrait;
 
     const STATE1 = 1;       // 出售中
     const STATE0 = 0;       // 下架
@@ -901,6 +903,13 @@ class Goods extends Model {
         return $condition;
     }
 
+
+    public function __getRecursiveClass($condition)
+    {
+        return $this->_getRecursiveClass($condition);
+    }
+
+
     /**
      * 由ID取得在售单个虚拟商品信息
      * @access public
@@ -1179,12 +1188,12 @@ class Goods extends Model {
         }
         $result2 = $this->getGoodeCommonInfoByID($result1['goods_commonid']);
         $goods_info = array_merge($result2, $result1);
-
+//        var_dump($result1,$result2);
         $goods_info['spec_value'] = unserialize($goods_info['spec_value']);
         $goods_info['spec_name'] = unserialize($goods_info['spec_name']);
         $goods_info['goods_spec'] = unserialize($goods_info['goods_spec']);
         $goods_info['goods_attr'] = unserialize($goods_info['goods_attr']);
-
+//        var_dump($goods_info['spec_name']);die;
         // 手机商品描述
         if ($goods_info['mobile_body'] != '') {
             $mobile_body_array = unserialize($goods_info['mobile_body']);
@@ -1363,5 +1372,6 @@ class Goods extends Model {
         }
         return $common_info;
     }
+
 
 }

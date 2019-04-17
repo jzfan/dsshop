@@ -12,6 +12,7 @@ class AdminControl extends Controller {
     protected $admin_info;
 
     protected $permission;
+    protected $model;
     public function _initialize() {
         $this->admin_info = $this->systemLogin();
         $config_list = rkcache('config', true);
@@ -33,6 +34,10 @@ class AdminControl extends Controller {
             $this->checkPermission();
         }
         $this->setMenuList();
+
+        if (method_exists($this, 'getModel')) {
+            $this->model = $this->getModel();
+        }
     }
 
     /**
@@ -588,6 +593,11 @@ class AdminControl extends Controller {
                         'ico'=>'&#xe643;',
                         'text' => lang('ds_rechargecard'),
                         'args' => 'index,Rechargecard,operation',
+                    ),
+                    'Pointgoods' => array(
+                        'ico'=>'&#xe643;',
+                        'text' => lang('积分商品'),
+                        'args' => 'index,Pointgoods,operation',
                     ),
                 ),
             ),

@@ -1,0 +1,37 @@
+<table class="ds-default-table">
+    <thead>
+        <tr class="thead">
+            <th class="align-center">ID</th>
+            <th class="align-center" colspan="2">商品名</th>
+            <th class="align-center">价格</th>
+            <th class="align-center">库存</th>
+            <th class="align-center">推荐</th>
+        </tr>
+    </thead>
+    <tbody id="treet1">
+        {notempty name="goods"}
+        {foreach name="goods" item="good"}
+        <tr class="hover">
+            <th>
+                {$good.id}
+            </th>
+            <td class="w60 picture">
+                <div class="size-56x56"><span class="thumb size-56x56"><i></i><img src="{:goods_thumb($good.info, 240)}" onload="javascript:ResizeImage(this,56,56);" /></span></div>
+            </td>
+            <td class="group">
+                {$good.sku.goods_name}
+            </td>
+            <td class="align-center nowarp">￥{$good.price} + M {$good.mi}</td>
+            <td class="align-center nowarp">{$good.qty}</td>
+            <td class="align-center">{$good.commend}</td>
+        </tr>
+        {/foreach}
+        {else /}
+        <tr class="no_data">
+            <td colspan="16">{$Think.lang.ds_no_record}</td>
+        </tr>
+        {/notempty}
+    </tbody>
+</table>
+{notempty name="goods"}
+{/notempty}
