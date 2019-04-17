@@ -1,0 +1,23 @@
+{include file="public/header" /}
+<div class="page">
+
+    <table class="ds-default-table">
+        <thead>
+        <tr>
+            <th>域名</th>
+            <th>参数键值	</th>
+            <th>参数值</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach name="list" item="type"}
+        <tr>
+            <td>{$type.host}</td>
+            <td>{$type.key}</td>
+            <td>{$type.value}</td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {$show_page}
+</div>
