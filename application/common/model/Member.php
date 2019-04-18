@@ -252,7 +252,7 @@ class Member extends Model
     public function addMemberAfter($member_id,$member_info){
         //添加会员积分
         if (config('points_isuse')) {
-            model('points')->savePointslog('regist', array('pl_memberid' => $member_id, 'pl_membername' => $member_info['member_name']), false);
+            //model('points')->savePointslog('regist', array('pl_memberid' => $member_id, 'pl_membername' => $member_info['member_name']), false);
             if (isset($member_info['inviter_id'])) {
                 //向上查询3级更新分销成员数
                 db('inviter')->where('inviter_id='.$member_info['inviter_id'])->setInc('inviter_1_quantity');
@@ -354,11 +354,11 @@ class Member extends Model
             }
 
             //添加会员积分
-            if (config('points_isuse')) {
-                model('points')->savePointslog('regist', array(
-                    'pl_memberid' => $insert_id, 'pl_membername' => $data['member_name']
-                ), false);
-            }
+//            if (config('points_isuse')) {
+//                model('points')->savePointslog('regist', array(
+//                    'pl_memberid' => $insert_id, 'pl_membername' => $data['member_name']
+//                ), false);
+//            }
             $this->commit();
             return $insert_id;
         } catch (Exception $e) {
@@ -628,6 +628,29 @@ class Member extends Model
         } else {
             return null;
         }
+    }
+
+    public static function getNameById($id){
+        if (is_numeric($id)){
+            $lsit=self::where('member_id',$id)->find();
+            return $lsit['member_name'];
+        }else{
+            if ($id=='all'){
+                $name='所有会员';
+                return $name;
+            }else{
+                $arr=explode(',',$id);
+                $lsit=Db::name('member')->whereIn('member_id',$arr)->select();
+                foreach ($lsit as $k=>$value){
+                    $res[]=$value['member_name'];
+                }
+                $name=implode(',',$res);
+                $name = strlen($name) > 20 ? substr($name,0,20)."..." : $name;
+                return $name;
+            }
+
+        }
+
     }
 
 

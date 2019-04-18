@@ -6,49 +6,56 @@ class Seckilljobs extends AdminControl
 {
     public function index()
     {
-        $jobs = model('SeckillJobs')->order('id desc')->select();
+        $jobs = model('SeckillJobs')->with('goods')->order('id desc')->select();
+        // dd($jobs[0]->toArray());
         $this->assign('jobs', $jobs);
         return $this->fetch('seckill/jobs');
     }
 
-    public function add()
+    public function form()
     {
         $this->assign('goods', model('SeckillGoods')->with('info')->order('id desc')->select());
-        return $this->fetch('seckill/add_job');
+        return $this->fetch('seckill/job_form');
     }
 
     public function store()
     {
-        $data = checkInput([
-            'start' => 'require|date|after:' . date('Y-m-d'),
-            'end' => 'require|date|after:' . date('Y-m-d H:i:s'),
-            'name' => 'require'
-        ]);
-
-        $job = model('SeckillJobs')->create($data);
-        $this->assign('job_id', $job->id);
+        if (request()->isPost()) {
+            $data = checkInput([
+                'start' => 'require|date|after:' . date('Y-m-d'),
+                'end' => 'require|date|after:' . date('Y-m-d H:i:s'),
+                'name' => 'require'
+            ]);
+            $job = model('SeckillJobs')->create($data);
+            session('job_id', $job->id);
+            session('job_name', $job->name);
+        }
+        $this->assignGoods();
+        // $this->redirect('/admin/seckilljobs/goods');
 
         return $this->fetch('seckill/add_job_goods');
     }
 
-    public function searchGoods()
+    public function goods()
     {
-        if ($goods = $this->getGoodsByInput()) {
-            $this->assign('goods', $goods);
-        }
-        $this->assign('job_id', input('job_id'));
-
+        $this->assignGoods();
         return $this->fetch('seckill/add_job_goods');
         
+    }
+
+    protected function assignGoods()
+    {
+           $this->assign('goods', $this->getGoodsByInput());
     }
 
     protected function getGoodsByInput()
     {
         if ($id = input('goods_commonid')) {
-            return db('goods')->where('goods_commonid', $id)->select();
+            return db('goods')->where('goods_commonid', $id)->paginate();
         }
         if ($name = input('goods_name')) {
-            return db('goods')->where('goods_name', 'like', "%{$name}%")->select();
+            return db('goods')->where('goods_name', 'like', "%{$name}%")->paginate();
         }
+        return db('goods')->paginate();
     }
 }

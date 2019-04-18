@@ -1,12 +1,13 @@
 {include file="public/header" /}
-{include file="public/b4" /}
-<div class="container mt-4">
-    <div class="card">
-        <h5 class="card-header">添加参加这个秒杀活动的商品</h5>
-        <div class="card-body">
-            {include file='seckill/search_inputs'/}
-            {include file='seckill/goods_table'/}
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>{:session('job_name')} 添加商品</h3>
+            </div>
         </div>
     </div>
+    {include file='seckill/search_inputs'/}
+    {include file='seckill/goods_table'/}
 </div>
 {include file='seckill/select_goods_modal'/}

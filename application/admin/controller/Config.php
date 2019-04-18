@@ -122,7 +122,6 @@ class Config extends AdminControl {
         }
     }
 
-
     /*
      * 设置自动收货时间
      */
@@ -181,8 +180,12 @@ class Config extends AdminControl {
                 'text' => lang('automatic_execution_time_setting'),
                 'url' => url('Config/auto')
             ),
+
         );
+
         return $menu_array;
     }
+
+
 
 }

@@ -1,0 +1,51 @@
+{include file="public/header" /}
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>创建秒杀活动</h3>
+            </div>
+        </div>
+    </div>
+    <form action="/admin/seckilljobs/store" method="POST">
+        <div class="ncap-form-default">
+            <dl>
+                <dt>活动名</dt>
+                <dd>
+                    <input type="text" name='name' value="test" class="input-txt">
+                </dd>
+            </dl>
+            <dl>
+                <dt>开始时间</dt>
+                <dd>
+                    <input type="text" name='start' value="2019-10-1" class="input-txt" id='start'>
+                </dd>
+            </dl>
+            <dl>
+                <dt>结束时间</dt>
+                <dd>
+                    <input type="text" name='end' value="2019-10-2" class="input-txt" id='end'>
+                    <button class="btn btn-blue" onclick='setEnd(event)'>20分钟</button>
+                </dd>
+            </dl>
+            <dl>
+                <dt></dt>
+                <dd>
+                    <button type="submit" class="btn btn-primary">下一步</button>
+                </dd>
+            </dl>
+        </div>
+    </form>
+</div>
+{include file='public/datetimepick_js'/}
+<script>
+$('#start').datetimepicker(option);
+$('#end').datetimepicker(option);
+
+function setEnd(e) {
+    e.preventDefault()
+    let end = Date.parse($('#start').val()) + 20 * 60 * 1000
+    $('#end').datetimepicker('setDate', new Date(end))
+    return false
+}
+</script>

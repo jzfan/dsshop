@@ -31,16 +31,17 @@ class Seckillgoods extends AdminControl
     //     return $this->fetch('seckill/add_good', compact('categories'));
     // }
 
-    public function add()
+    public function store()
     {
         $data = checkInput([
             'goods_id' => 'require|number',
+            'job_id' => 'require|number',
             'qty' => 'require|number',
             'price' => 'require|number',
             'mi' => 'require|number',
             'commend' => 'require|number',
         ]);
-        Db::transaction(function () use ($data){
+        return Db::transaction(function () use ($data){
             $skuGood = model('goods')->where('goods_id', $data['goods_id'])->lock(true)->find();
             if (empty($skuGood)) {
                 throw new JsonException("商品ID错误", 422);
@@ -52,27 +53,27 @@ class Seckillgoods extends AdminControl
 
             $skuGood->save();
             $this->model->updateOrCreate(['goods_id' => $data['goods_id']], $data);
+            return $skuGood->goods_storage;
         });
-        return 'ok';
     }
 
-    public function store()
-    {
-        $data = checkInput([
-            'goods_id' => 'require|number',
-            'qty' => 'require|number',
-            'mi' => 'require|number',
-            'price' => 'require|number',
-        ]);
-        $item = db('seckill_goods')->where('goods_id', $data['goods_id'])->find();
-        if (!empty($item)) {
-            db('seckill_goods')->where('goods_id', $data['goods_id'])
-                            ->update($data);
-            return redirect()->back();
-        }
-        db('seckill_goods')->insert($data);
-        return $this->success('success');
-    }
+    // public function store()
+    // {
+    //     $data = checkInput([
+    //         'goods_id' => 'require|number',
+    //         'qty' => 'require|number',
+    //         'mi' => 'require|number',
+    //         'price' => 'require|number',
+    //     ]);
+    //     $item = db('seckill_goods')->where('goods_id', $data['goods_id'])->find();
+    //     if (!empty($item)) {
+    //         db('seckill_goods')->where('goods_id', $data['goods_id'])
+    //                         ->update($data);
+    //         return redirect()->back();
+    //     }
+    //     db('seckill_goods')->insert($data);
+    //     return $this->success('success');
+    // }
 
     protected function checkStorage($skuGood, $seckillGood, $qty)
     {

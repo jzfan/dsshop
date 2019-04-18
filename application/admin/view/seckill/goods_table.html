@@ -1,10 +1,10 @@
-<table class="table table-hover mt-2">
+<table class="ds-default-table">
     <thead>
-        <tr>
+        <tr class="thead">
             <th class="align-center">平台货号</th>
             <th class="align-center" colspan="2">商品名</th>
             <th class="align-center">价格</th>
-            <th class="align-center">库存{$job_id}</th>
+            <th class="align-center">库存</th>
         </tr>
     </thead>
     <tbody id="goods-table">
@@ -31,23 +31,18 @@
         {/notempty}
     </tbody>
 </table>
+{$goods->render()}
 {notempty name="goods"}
 {/notempty}
 <script>
-function activeTr(tr) {
-    $(tr).addClass('bg-danger').find('td').addClass('text-white')
-
-}
-
-function unActiveTr(id) {
-    $(`tr[data-id=${id}]`).removeClass('bg-danger').find('td').removeClass('text-white')
-}
-
-$('#goods-table tr').click(function() {
-    activeTr(this)
-    showModal({
-        id: $(this).data('id'),
-        name: $(this).data('name')
-    })
-})
+$('#goods-table tr').on('click', function() {
+    layer.open({
+        type: 1,
+        title: $(this).find('.group').html(),
+        area: ['600px', '360px'],
+        shadeClose: true, //点击遮罩关闭
+        content: $('#modal-page')
+    });
+    setInputVal($(this).data('id'))
+});
 </script>
