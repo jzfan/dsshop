@@ -31,6 +31,8 @@ class SeckillGoods extends Model
 	        'id' => $this->id,
 	        'name' => $this->info->goods_name,
 	        'image' => $this->info->goods_image,
+	        'price' => $this->price,
+	        'mi' => $this->mi,
 	        'qty' => $this->qty,
 	        'sold' => $this->sold
 	    ];
