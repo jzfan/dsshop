@@ -3,19 +3,26 @@
 /**
  * 发货
  */
-namespace app\admin\controller;
-use think\Lang;
-class Deliver extends AdminControl {
 
-    public function _initialize() {
+namespace app\admin\controller;
+
+use think\Lang;
+
+class Deliver extends AdminControl
+{
+
+    public function _initialize()
+    {
         parent::_initialize();
-        Lang::load(APP_PATH . 'admin/lang/'.config('default_lang').'/deliver.lang.php');
+        Lang::load(APP_PATH . 'admin/lang/' . config('default_lang') . '/deliver.lang.php');
     }
+
     /**
      * 发货列表
      *
      */
-    public function index() {
+    public function index()
+    {
         $order_model = model('order');
         $state = input('state');
         if (!in_array($state, array('deliverno', 'delivering', 'delivered'))) {
@@ -25,10 +32,14 @@ class Deliver extends AdminControl {
         $order_state = str_replace(array('deliverno', 'delivering', 'delivered'), array(ORDER_STATE_PAY, ORDER_STATE_SEND, ORDER_STATE_SUCCESS), $state);
         $condition = array();
         $condition['order_state'] = $order_state;
-        $shop=session('is_shop');
-        $id=session('admin_id');
-        if($shop==2){
-            $condition['supplier']=$id;
+        $shop = session('is_shop');
+        $id = session('admin_id');
+        if ($shop == 2) {
+            $goods_id = db('goods')->where('supplier', $id)->column('goods_id');
+            $where = db('ordergoods')->whereIn('goods_id', $goods_id)->column('order_id');
+        } else {
+            $goods_id = db('goods')->where('is_platform', 0)->column('goods_id');
+            $where = db('ordergoods')->whereIn('goods_id', $goods_id)->column('order_id');
         }
         $buyer_name = input('buyer_name');
         if ($buyer_name != '') {
@@ -47,10 +58,10 @@ class Deliver extends AdminControl {
         if ($start_unixtime || $end_unixtime) {
             $condition['add_time'] = array('between', array($start_unixtime, $end_unixtime));
         }
-        $order_list = $order_model->getOrderList($condition, '', '*', 'order_id desc', '', array('order_goods', 'order_common','ppintuanorder', 'member'));
+        $order_list = $order_model->getOrderList($condition, '', $where, '*', 'order_id desc', '', array('order_goods', 'order_common', 'ppintuanorder', 'member'));
 
         foreach ($order_list as $key => $order_info) {
-            if(isset($order_info['extend_order_goods'])){
+            if (isset($order_info['extend_order_goods'])) {
                 foreach ($order_info['extend_order_goods'] as $value) {
                     $value['image_240_url'] = goods_cthumb($value['goods_image'], 240);
                     $value['goods_type_cn'] = get_order_goodstype($value['goods_type']);
@@ -63,10 +74,10 @@ class Deliver extends AdminControl {
                 }
 
                 if (empty($order_info['zengpin_list'])) {
-                $order_info['goods_count'] = count($order_info['goods_list']);
-            } else {
-                $order_info['goods_count'] = count($order_info['goods_list']) + 1;
-            }
+                    $order_info['goods_count'] = count($order_info['goods_list']);
+                } else {
+                    $order_info['goods_count'] = count($order_info['goods_list']) + 1;
+                }
             }
             $order_list[$key] = $order_info;
         }
@@ -79,10 +90,11 @@ class Deliver extends AdminControl {
     /**
      * 发货
      */
-    public function send() {
+    public function send()
+    {
         $order_id = input('param.order_id');
         if ($order_id <= 0) {
-            ds_json_encode(10001,lang('param_error'));
+            ds_json_encode(10001, lang('param_error'));
         }
 
         $order_model = model('order');
@@ -91,7 +103,7 @@ class Deliver extends AdminControl {
         $order_info = $order_model->getOrderInfo($condition, array('order_common', 'order_goods'));
         $if_allow_send = intval($order_info['lock_state']) || !in_array($order_info['order_state'], array(ORDER_STATE_PAY, ORDER_STATE_SEND));
         if ($if_allow_send) {
-            ds_json_encode(10001,lang('param_error'));
+            ds_json_encode(10001, lang('param_error'));
         }
 
         if (!request()->isPost()) {
@@ -102,7 +114,7 @@ class Deliver extends AdminControl {
             if ($order_info['extend_order_common']['daddress_id'] > 0) {
                 $daddress_info = $daddress_model->getAddressInfo(array('daddress_id' => $order_info['extend_order_common']['daddress_id']));
             }
-            if(empty($daddress_info)){
+            if (empty($daddress_info)) {
                 //取默认地址
                 $daddress_info = $daddress_model->getAddressList(array(), '*', 'daddress_isdefault desc', 1);
                 if (!empty($daddress_info)) {
@@ -119,20 +131,20 @@ class Deliver extends AdminControl {
             $express_list = rkcache('express', true);
 
             $this->assign('express_list', $express_list);
-            
+
             $this->setAdminCurItem('send');
             return $this->fetch();
         } else {
-            $logic_order = model('order','logic');
+            $logic_order = model('order', 'logic');
             $_POST['reciver_info'] = $this->_get_reciver_info();
-            if (empty($_POST['daddress_id'])){
-                ds_json_encode(10001,'请选择收货地址');
+            if (empty($_POST['daddress_id'])) {
+                ds_json_encode(10001, '请选择收货地址');
             }
             $result = $logic_order->changeOrderSend($order_info, 'admin', session('member_name'), $_POST);
             if (!$result['code']) {
-                ds_json_encode(10001,$result['msg']);
+                ds_json_encode(10001, $result['msg']);
             } else {
-                ds_json_encode(10000,'操作成功');
+                ds_json_encode(10000, '操作成功');
             }
         }
     }
@@ -141,16 +153,17 @@ class Deliver extends AdminControl {
      * 编辑收货地址
      * @return boolean
      */
-    public function buyer_address_edit() {
+    public function buyer_address_edit()
+    {
         $order_id = input('param.order_id');
-        if ($order_id <= 0){
+        if ($order_id <= 0) {
             return false;
         }
         $order_model = model('order');
         $condition = array();
         $condition['order_id'] = $order_id;
         $order_common_info = $order_model->getOrdercommonInfo($condition);
-        if (!$order_common_info){
+        if (!$order_common_info) {
             return false;
         }
         $order_common_info['reciver_info'] = @unserialize($order_common_info['reciver_info']);
@@ -161,7 +174,8 @@ class Deliver extends AdminControl {
     /**
      * 收货地址保存
      */
-    public function buyer_address_save() {
+    public function buyer_address_save()
+    {
         $order_model = model('order');
         $data = array();
         $data['reciver_name'] = input('post.new_reciver_name');
@@ -169,7 +183,7 @@ class Deliver extends AdminControl {
         $condition = array();
         $condition['order_id'] = intval(input('param.order_id'));
         $result = $order_model->editOrdercommon($data, $condition);
-        if ($result>=0) {
+        if ($result >= 0) {
             dsLayerOpenSuccess('保存成功');
         } else {
             $this->error('保存失败');
@@ -179,7 +193,8 @@ class Deliver extends AdminControl {
     /**
      * 组合reciver_info
      */
-    private function _get_reciver_info() {
+    private function _get_reciver_info()
+    {
         $reciver_info = array(
             'address' => input('post.reciver_area') . ' ' . input('post.reciver_street'),
             'phone' => trim(input('post.reciver_mob_phone') . ',' . input('post.reciver_tel_phone'), ','),
@@ -197,7 +212,8 @@ class Deliver extends AdminControl {
      * 选择发货地址
      * @return boolean
      */
-    public function send_address_select() {
+    public function send_address_select()
+    {
         $address_list = model('daddress')->getAddressList(array());
         $this->assign('address_list', $address_list);
         $this->assign('order_id', input('param.order_id'));
@@ -207,9 +223,10 @@ class Deliver extends AdminControl {
     /**
      * 保存发货地址修改
      */
-    public function send_address_save() {
+    public function send_address_save()
+    {
         $result = $this->_edit_order_daddress(input('param.daddress_id'), input('param.order_id'));
-        if ($result>=0) {
+        if ($result >= 0) {
             dsLayerOpenSuccess('保存成功');
         } else {
             $this->error('保存失败');
@@ -219,7 +236,8 @@ class Deliver extends AdminControl {
     /**
      * 修改发货地址
      */
-    private function _edit_order_daddress($daddress_id, $order_id) {
+    private function _edit_order_daddress($daddress_id, $order_id)
+    {
         $order_model = model('order');
         $data = array();
         $data['daddress_id'] = intval($daddress_id);
@@ -231,7 +249,8 @@ class Deliver extends AdminControl {
     /**
      * 物流跟踪
      */
-    public function search_deliver() {
+    public function search_deliver()
+    {
         $order_sn = input('param.order_sn');
         if (!is_numeric($order_sn)) {
             $this->error(lang('param_error'));
@@ -255,7 +274,7 @@ class Deliver extends AdminControl {
         $this->assign('express_name', $express[$order_info['extend_order_common']['shipping_express_id']]['express_name']);
         $this->assign('express_url', $express[$order_info['extend_order_common']['shipping_express_id']]['express_url']);
         $this->assign('shipping_code', $order_info['shipping_code']);
-        
+
         $this->setAdminCurItem('search_deliver');
         return $this->fetch('search_deliver');
     }
@@ -264,7 +283,8 @@ class Deliver extends AdminControl {
      * 从第三方取快递信息
      *
      */
-    public function get_express() {
+    public function get_express()
+    {
         $url = 'http://www.kuaidi100.com/query?type=' . input('param.express_code') . '&postid=' . input('param.shipping_code') . '&id=1&valicode=&temp=' . random(4) . '&sessionid=&tmp=' . random(4);
         $content = http_request($url);
         $content = json_decode($content, true);
@@ -287,7 +307,8 @@ class Deliver extends AdminControl {
     /**
      * 运单打印
      */
-    public function waybill_print() {
+    public function waybill_print()
+    {
         $order_id = intval(input('param.order_id'));
         if ($order_id <= 0) {
             $this->error(lang('param_error'));
@@ -337,7 +358,8 @@ class Deliver extends AdminControl {
     /**
      * 获取当前打印模板
      */
-    private function _getCurrentWaybill($waybill_list, $waybill_id) {
+    private function _getCurrentWaybill($waybill_list, $waybill_id)
+    {
         if (empty($waybill_list)) {
             return false;
         }
@@ -366,28 +388,28 @@ class Deliver extends AdminControl {
     /**
      * 用户中心右边，小导航
      *
-     * @param string	$menu_type	导航类型
-     * @param string 	$name	当前导航的name
+     * @param string $menu_type 导航类型
+     * @param string $name 当前导航的name
      * @return
      */
     protected function getAdminItemList()
     {
         $menu_array = array();
-        $menu_type=request()->action();
+        $menu_type = request()->action();
         switch ($menu_type) {
             case 'index':
                 $menu_array = array(
-                    array('name' => 'deliverno', 'text' => lang('ds_member_path_deliverno'), 'url' => url('Deliver/index','state=deliverno')),
-                    array('name' => 'delivering', 'text' => lang('ds_member_path_delivering'),  'url' => url('Deliver/index','state=delivering')),
-                    array('name' => 'delivered', 'text' => lang('ds_member_path_delivered'), 'url' => url('Deliver/index','state=delivered')),
+                    array('name' => 'deliverno', 'text' => lang('ds_member_path_deliverno'), 'url' => url('Deliver/index', 'state=deliverno')),
+                    array('name' => 'delivering', 'text' => lang('ds_member_path_delivering'), 'url' => url('Deliver/index', 'state=delivering')),
+                    array('name' => 'delivered', 'text' => lang('ds_member_path_delivered'), 'url' => url('Deliver/index', 'state=delivered')),
                 );
                 break;
             case 'search':
                 $menu_array = array(
-                     array('name' => 'nodeliver', 'text' => lang('ds_member_path_deliverno'), 'url' => url('Deliver/index/state/nodeliver')),
-                     array('name' => 'delivering', 'text' => lang('ds_member_path_delivering'), 'url' => url('Deliver/index/state/delivering')),
-                     array('name' => 'delivered', 'text' => lang('ds_member_path_delivered'), 'url' => url('Deliver/index/state/delivered')),
-                     array('name' => 'search', 'text' => lang('ds_member_path_deliver_info'), 'url' => '###'),
+                    array('name' => 'nodeliver', 'text' => lang('ds_member_path_deliverno'), 'url' => url('Deliver/index/state/nodeliver')),
+                    array('name' => 'delivering', 'text' => lang('ds_member_path_delivering'), 'url' => url('Deliver/index/state/delivering')),
+                    array('name' => 'delivered', 'text' => lang('ds_member_path_delivered'), 'url' => url('Deliver/index/state/delivered')),
+                    array('name' => 'search', 'text' => lang('ds_member_path_deliver_info'), 'url' => '###'),
                 );
                 break;
         }
