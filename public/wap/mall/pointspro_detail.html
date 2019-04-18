@@ -160,44 +160,44 @@
 <script type="text/javascript" src="js/pointspro_detail.js"></script>
 <script type="text/javascript" src="lang/pointspro_detail.js"></script>
 <script type="text/javascript" src="../js/lang.js"></script>
-    <script type="text/javascript">
-    $(function(){
-    var imglist =document.getElementsByTagName("img");
-    //安卓4.0+等高版本不支持window.screen.width，安卓2.3.3系统支持
-    var _width;
-    doDraw();
+<script type="text/javascript">
+$(function(){
+	var imglist =document.getElementsByTagName("img");
+	//安卓4.0+等高版本不支持window.screen.width，安卓2.3.3系统支持
+	var _width;
+	doDraw();
 
-    window.onresize = function(){
-        //捕捉屏幕窗口变化，始终保证图片根据屏幕宽度合理显示
-        doDraw();
-    }
+	window.onresize = function(){
+		//捕捉屏幕窗口变化，始终保证图片根据屏幕宽度合理显示
+		doDraw();
+	}
 
-    function doDraw(){
-        _width = window.innerWidth;
-        for( var i = 0, len = imglist.length; i < len; i++){
-            ResizeImage(imglist[i],_width);
-        }
-    }
+	function doDraw(){
+		_width = window.innerWidth;
+		for( var i = 0, len = imglist.length; i < len; i++){
+			ResizeImage(imglist[i],_width);
+		}
+	}
 
-    function ResizeImage(ImgD,_width){
-        var image=new Image();
-        image.src=ImgD.src;
-        image.onload = function(){
-            //限制，只对宽高都大于30的图片做显示处理
-            if(image.width>30 && image.height>30){
-                if(image.width>_width){
-                    ImgD.width=_width;
-                    ImgD.height=(image.height*_width)/image.width;
-                }else{
-                    ImgD.width=image.width;
-                    ImgD.height=image.height;
-                }
+	function ResizeImage(ImgD,_width){
+		var image=new Image();
+		image.src=ImgD.src;
+		image.onload = function(){
+			//限制，只对宽高都大于30的图片做显示处理
+			if(image.width>30 && image.height>30){
+				if(image.width>_width){
+					ImgD.width=_width;
+					ImgD.height=(image.height*_width)/image.width;
+				}else{
+					ImgD.width=image.width;
+					ImgD.height=image.height;
+				}
 
-            }
-        }
-    }
+			}
+		}
+	}
 
-    })
-    </script>
+})
+</script>
 </body>
 </html>

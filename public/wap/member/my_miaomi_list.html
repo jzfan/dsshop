@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-touch-fullscreen" content="yes" />
+<meta name="format-detection" content="telephone=no"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="msapplication-tap-highlight" content="no" />
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1" />
+<title></title>
+<link rel="stylesheet" type="text/css" href="../css/base.css">
+<link rel="stylesheet" type="text/css" href="../css/dstouch_member.css">
+<link rel="stylesheet" type="text/css" href="../css/page.css">
+
+</head>
+<body>
+<header id="header">
+  <div class="header-wrap">
+    <div class="header-l"><a href="javascript:history.go(-1)"><i class="back iconfont"></i></a></div>
+    <div class="header-title">
+      <h1><langConf data-id="miaomi"></langConf>明细</h1>
+    </div>
+    <div class="header-r"> <a id="header-nav" href="javascript:void(0);"><i class="more iconfont"></i><sup></sup></a> </div>
+  </div>
+</header>
+<div class="dstouch-main-layout">
+  <div id="pointscount" class="dstouch-asset-info"></div>
+  <ul id="pointsloglist" class="dstouch-log-list">
+  </ul>
+</div>
+<footer id="footer"></footer>
+<script type="text/html" id="pointscount_model">
+	<div class="container point">
+		<!--<i class="icon iconfont"></i>-->
+			<dl>
+				<dt>我的<%=langConf('miaomi') %></dt>
+				<dd><em><%=miaomi;%></em></dd>
+			</dl>
+	</div>
+</script> 
+
+<script type="text/html" id="list_model">
+    <% if(log.length >10){%>
+    	
+    <% for (var k in log) { var v = log[k]; %>
+        <li>
+        	<dl>
+        		<dt><%=v.lg_type;%></dt>
+            <dd><%=v.lg_desc;%></dd>
+						</dl>
+            <% if(v.lg_av_amount >0){%>
+            <div class="money add">+<%=v.lg_av_amount;%></div>
+            <%}else{%>
+            <div class="money reduce"><%=v.lg_av_amount;%></div>
+            <%}%>
+            <time class="date"><%=v.lg_addtime;%></time>
+        </li>
+    <%}%>
+    <li class="loading"><div class="spinner"><i></i></div><%=lang('data_reading')%></li>
+    <%
+    }else {
+    %>
+    <div class="dstouch-norecord signin noData" style="top: 40%;">
+    	<img src="../images/noData_pic.png" />
+    	<p>您当前没有任何<%=langConf('miaomi') %>的变动哦～</p>
+    </div>
+    <%
+    }
+    %>
+</script>
+
+<script type="text/javascript" src="../js/config.js"></script>
+<script type="text/javascript" src="../js/zepto.min.js"></script>
+<script type="text/javascript" src="../js/template.js"></script> 
+<script type="text/javascript" src="../js/common.js"></script> 
+<script type="text/javascript" src="../js/ncscroll-load.js"></script>
+<script type="text/javascript" src="lang/my_miaomi_list.js"></script>
+<script type="text/javascript" src="../js/lang.js"></script>
+<script type="text/javascript" src="../js/langConf.js"></script>
+<script>
+$(function(){
+    var key = getCookie('key');
+    if (!key) {
+        window.location.href = WapSiteUrl+'/member/login.html';
+        return;
+    }
+		
+		//获取我的总积分
+    $.getJSON(ApiUrl + '/Member/my_asset.html', {'key':key,'fields':'miaomi'}, function(result){
+        var html = template('pointscount_model', result.result);
+        $("#pointscount").html(html);
+    });
+		
+    //获取秒米明细list
+    var load_class = new ncScrollLoad();
+    load_class.loadInit({'url':ApiUrl + '/member/get_member_miao','getparam':{'key':key},'tmplid':'list_model','containerobj':$("#pointsloglist"),'iIntervalId':true});
+
+});
+</script>
+</body>
+</html>

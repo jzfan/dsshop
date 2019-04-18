@@ -10,7 +10,7 @@ ds_lang={
     'launch_collage':'发起拼团',
     'to':'至',
     'data_reading':'数据读取中',
-    'deposit_tips_one':'您尚无预存款收支信息',
-    'deposit_tips_two':'使用商城预存款结算更方便',
+    'deposit_tips_one':'您尚无余额收支信息',
+    'deposit_tips_two':'使用商城余额结算更方便',
 };
 document.title = ds_lang.title;

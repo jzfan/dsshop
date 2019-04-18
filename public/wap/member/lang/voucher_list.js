@@ -14,6 +14,7 @@ ds_lang={
     'data_reading':'数据读取中',
     'cash_coupon_tips_one':'您还没有相关的代金券',
     'cash_coupon_tips_two':'商城代金券可享受商品折扣',
-    'invalid_ticket':'已失效的券',
+    'invalid_ticket':'已失效的券'
+    //'invalid_ticket':'已失效的券',
 };
 document.title = ds_lang.title;

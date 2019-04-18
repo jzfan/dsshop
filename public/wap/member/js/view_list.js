@@ -1,6 +1,5 @@
 var key = getCookie('key');
 $(function() {
-
     //渲染list
     var load_class = new ncScrollLoad();
     load_class.loadInit({

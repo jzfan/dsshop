@@ -220,7 +220,7 @@
 .dstouch-order-item-con .goods-info .goods-type { overflow: hidden; height: 1.2rem; font-size: 0.45rem; line-height: 0.6rem; color: #999;}
 
 .dstouch-order-item-con .goods-subtotal  { display: block; position: absolute; z-index: 1; top: 0.38rem; right: 0; width: 3.4rem; text-align: right; overflow: hidden;}
-.dstouch-order-item-con .goods-subtotal .goods-price { display: block; font-size: 0.55rem; line-height: 0.9rem; font-weight: 600;}
+.dstouch-order-item-con .goods-subtotal .goods-price { display: block; font-size: 0.55rem; line-height: 0.9rem; font-weight: 600;color: #EA5514;}
 .dstouch-order-item-con .goods-subtotal .goods-price em { font-size: 0.6rem; font-weight: 600;}
 .dstouch-order-item-con .goods-subtotal .goods-num { display: block; font-size: 0.55rem; line-height: 0.9rem; color: #999; font-weight: 600;}
 .dstouch-order-item-con .goods-return { position: absolute; z-index: 2; right: 0rem; bottom: 0.4rem; display: block; font-size: 0.6rem; line-height: 1.2rem; height: 1.2rem; padding: 0 0.4rem ; border: solid 0.05rem #EEE; border-radius: 0.2rem; color: #f23030 !important; background-color: #FFF;}
@@ -436,7 +436,7 @@
 .dstouch-log-list li dt i { display: inline-block; vertical-align: top; width: 1rem; height: 1rem; margin-right: 0.1rem;}
 .dstouch-log-list li dt i:before { content: "\e62b"; }
 .dstouch-log-list li dt span { font-size: 0.55rem; color: #4FC0E8;}
-.dstouch-log-list li dd { font-size: 0.55rem; line-height: 0.65rem; color: #777;}
+.dstouch-log-list li dd { font-size: 0.55rem; line-height: 0.65rem; color: #777;max-width: 60%;}
 .dstouch-log-list li .arrow-r { position: absolute; z-index: 2; top: 50%; right: 0.4rem; display: block; width: 0.8rem; height: 0.9rem; margin-top: -0.4rem; background-image: url(../images/arrow_right_b.png); background-repeat: no-repeat; background-repeat: 50% 50%; background-size: 80%; opacity: 0.3;}
 
 

@@ -69,16 +69,18 @@
 			<dt><a href="<%= WapSiteUrl %>/mall/product_list.html?gc_id=<%= class_list[i].gc_id %>"><%= class_list[i].gc_name %></a></dt>
 			<% if(class_list[i].child){ %>
 				<% for(var j=0; j<class_list[i].child.length; j++) { %>
-                                    <dd>
-                                        <i>
-                                        <%if(class_list[i].child[j].image != ''){%>
-                                        <img src="<%= class_list[i].child[j].image %>">
-                                        <%}else{%>
-                                        <span class="iconfont">&#xe680;</span>
-                                        <%}%>
-                                        </i>
-                                        <a href="<%= WapSiteUrl %>/mall/product_list.html?gc_id=<%= class_list[i].child[j].gc_id %>"><%= class_list[i].child[j].gc_name %></a>
-                                    </dd>
+					<dd>
+						<a href="<%= WapSiteUrl %>/mall/product_list.html?gc_id=<%= class_list[i].child[j].gc_id %>">
+							<i>
+							<%if(class_list[i].child[j].image != ''){%>
+							<img src="<%= class_list[i].child[j].image %>">
+							<%}else{%>
+							<span class="iconfont">&#xe680;</span>
+							<%}%>
+							</i>
+							<p><%= class_list[i].child[j].gc_name %></p>
+						</a>
+					</dd>
 				<% } %>
 			<% } %>
 		<% } %>

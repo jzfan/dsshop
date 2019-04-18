@@ -1,0 +1,209 @@
+<!doctype html>
+<html class="html_white">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-touch-fullscreen" content="yes" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="msapplication-tap-highlight" content="no" />
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1" />
+<title>绑定提现卡</title>
+<link rel="stylesheet" type="text/css" href="../css/base.css">
+<link rel="stylesheet" type="text/css" href="../css/dstouch_member.css">
+<link rel="stylesheet" type="text/css" href="../css/dstouch_cart.css">
+<link rel="stylesheet" type="text/css" href="../css/page.css">
+</head>
+
+<body>
+<header id="header" class="fixed">
+	<div class="header-wrap">
+		<div class="header-l">
+			<a href="javascript:history.go(-1)"><i class="back iconfont"></i></a>
+		</div>
+		<div class="header-title">
+			<h1>绑定提现卡</h1>
+		</div>
+		<div class="header-r">
+			<a id="header-nav" href="javascript:void(0);"><i class="more iconfont"></i><sup></sup></a>
+		</div>
+	</div>
+</header>
+
+<div class="scroller-body" style="top: 2rem;">
+	<div class="putBankAll">
+		<p class="getPut"><span class="putSpan"><b>*</b>姓名</span><input type="text" class="name" placeholder="请输入真实姓名" /></p>
+		<p class="getPut"><span class="putSpan"><b>*</b>身份证号码</span><input type="text" class="uid" placeholder="请输入身份证号码" /></p>
+		<p class="getPut"><span class="putSpan"><b>*</b>银行卡号</span><input type="text" class="card" placeholder="请输入银行卡号" /></p>
+		<p class="getPut"><span class="putSpan"><b>*</b>选择银行</span><input type="text"class="card_type" readonly="readonly" placeholder="请选择银行" /><i class="arrow-r iconfont">&#xe632;</i></p>
+		<p class="getPut"><span class="putSpan"><b>*</b>开户银行</span><input type="text" class="card_address" placeholder="请输入开户银行" /></p>
+		<p class="getPut"><span class="putSpan"><b>*</b>手机号</span><input type="number" class="phone" placeholder="请输入手机号" /><span class="getMsg">获取验证码</span></p>
+		<p class="getPut"><span class="putSpan"><b>*</b>验证码</span><input type="text" class="msg" placeholder="请输入短信验证码" /></p>
+	</div>
+	
+	<div class="ftBtns">
+		<div class="ftBtn_by buy-now bindCard_btn" value="0">立刻绑定</div>
+	</div>
+	
+</div>
+
+<!--选择银行面板Begin-->
+<div class="binkList">
+	<div class="header-wrap">
+    	<div class="header-l">
+			<a><i class="back iconfont"></i></a>
+		</div>
+    	<div class="header-title">
+      		<h1>选择所属银行</h1>
+    	</div>
+  	</div>
+  	<div class="bankList">
+  		<div class="banks">招商银行</div>
+  		<div class="banks">招商银行</div>
+  		<div class="banks">招商银行</div>
+  		<div class="banks">招商银行</div>
+  	</div>
+  	
+</div>
+
+<!--选择银行面板end-->
+
+
+
+<script type="text/javascript" src="../js/zepto.min.js"></script> 
+<script type="text/javascript" src="../js/config.js"></script> 
+<script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript" src="../js/template.js"></script>
+<script type="text/javascript" src="../js/footer.js"></script> 
+<script type="text/javascript" src="lang/member.js"></script>
+<script type="text/javascript" src="../js/lang.js"></script>
+<script type="text/javascript" src="../js/langConf.js"></script>
+
+<script>
+//绑定事件
+$(".bindCard_btn").on("click",function(){
+	var name = $(".name").val();
+	layer.open({content: '请输入手机号码',skin: 'msg',time: 2});
+	return false;
+});
+//关闭面板
+$(".header-l").on("click",function(){
+	$(".binkList").removeClass("left");
+	$(".binkList").addClass("right");
+});
+
+//选择银行侧边模块
+$(".card_type").on("click",function(){
+	$(".binkList").removeClass("right");
+	$(".binkList").addClass("left");
+});
+//选择银行
+$(".binkList").on("click",".banks",function(){
+	console.log($(this).text());
+	$(".card_type").val($(this).text());
+	$(".binkList").removeClass("left");
+	$(".binkList").addClass("right");
+});
+
+//绑定事件
+$(".bindCard_btn").on("click",function(){
+	var isBind =$(this).attr("value");
+	if(isBind == "0"){
+		var name = $(".name").val();
+		var uid = $(".uid").val();
+		var card = $(".card").val();
+		var card_type = $(".card_type").val();
+		var card_address = $(".card_address").val();
+		var phone = $(".phone").val();
+		var msg = $(".msg").val();
+		if(name == ""){
+			layer.open({content: '请输入真实姓名',skin: 'msg',time: 2});
+			return false;
+		}else if(uid == ""){
+			layer.open({content: '请输入身份证号码',skin: 'msg',time: 2});
+			return false;
+		}else if(card == ""){
+			layer.open({content: '请输入银行卡号',skin: 'msg',time: 2});
+			return false;
+		}else if(card_type == ""){
+			layer.open({content: '请选择银行',skin: 'msg',time: 2});
+			return false;
+		}else if(card_address == ""){
+			layer.open({content: '请输入开户银行',skin: 'msg',time: 2});
+			return false;
+		}else if(phone == ""){
+			layer.open({content: '请输入手机号',skin: 'msg',time: 2});
+			return false;
+		}else if(msg.length != 11){
+			layer.open({content: '请输入正确的手机号',skin: 'msg',time: 2});
+			return false;
+		}else if(msg == ""){
+			layer.open({content: '请输入短信验证码',skin: 'msg',time: 2});
+			return false;
+		}else{
+			alert("提交~");
+		}
+		
+	}else{
+		console.log("2")
+	}
+});
+
+
+//发送验证码
+var timer="";
+var nums=60;
+var validCode=true;
+$(".getMsg").on('click',function(){
+	var iphone = $(".iphone").val();
+	if(iphone == ""){
+		layer.open({content: '请输入手机号码',skin: 'msg',time: 2});
+		return false;
+	}else if(iphone.length != 11){
+		layer.open({content: '请输入正确的手机号码',skin: 'msg',time: 2});
+		return false;
+	}else{
+	    var code=$(this);
+	    if(validCode){
+	    	$.ajax({
+		        url: "http://zfxt.miaozancn.com/api/send/sendSmsCode",
+		        type: 'post',
+		        dataType: 'json',
+		        data:{phone:iphone},
+		        success: function(res) {
+		        	if(res.code == 200){
+		        		layer.open({content: '短信验证码发送成功，请注意查收',skin: 'msg',time: 2});
+		        		validCode=false;
+				        timer=setInterval(function(){
+				            if(nums>0){
+				                nums--;
+				                code.text(nums+"s后重新发送");
+				                code.addClass("getMsgOver");
+				            }else{
+				                clearInterval(timer);
+				                nums=60;//重置回去
+				                validCode=true;
+				                code.removeClass("getMsgOver");
+				                code.text("发送验证码");
+				    		}
+				        },1000);
+		        	}
+		        },
+		        error:function(e){
+		        	layer.open({content: '短信验证码发送失败，请稍候重试',skin: 'msg',time: 2});
+					return false;
+		        }
+	        });
+	    }
+    }
+})
+
+
+
+</script>
+
+</body>
+
+</html>

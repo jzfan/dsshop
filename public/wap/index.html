@@ -24,19 +24,17 @@
         </div>
         
         <div class="home-category">
-        
-        <div class="linear"></div>
-        <div class='toggle-wrap'>
-        <div class="toggle iconfont">&#xe63f;</div>
+            <div class="category-nav">
+                <div class="category-item active">推荐</div>
+            </div>
+            <div class="linear"></div>
+            <div class='toggle-wrap'>
+                <div class="toggle iconfont">&#xe63f;</div>
+            </div>
         </div>
-        <div class="category-nav">
-            <div class="category-item active">推荐</div>
-        </div>
-        </div>
-    </div>
     </header>
-  <div class="adv_list" id="main-container1"></div>
 </div>
+<div class="adv_list" id="main-container1"></div>
 <div class="dstouch-home-nav fixed-Width" id="main-navlist"></div>
 <div class="dstouch-home-layout" id="main-container2"></div>
 <div class="fix-block-r">
@@ -57,10 +55,10 @@
         
     </div>
     <div class="swipe-nav">
-            <% for (var i in adv_list) { %>
-            <em class="<%if(i==0){%>active<%}%>"></em>
-            <% } %>
-        </div>
+        <% for (var i in adv_list) { %>
+        <em class="<%if(i==0){%>active<%}%>"></em>
+        <% } %>
+    </div>
 </script>
 <script type="text/html" id="nav_list">
     <ul>
@@ -91,34 +89,43 @@
     </div>
 </script>
 <script type="text/html" id="recommend_list">
-    <% for (var i in recommend_list) { %>
+<% for (var i in recommend_list) { %>
     <% var gc_list=recommend_list[i]; %>
-    <% if (gc_list.gc_list.length>0) { %>
-	<div class="dstouch-home-block item-goods">
-		<div class="tit-bar"><%= gc_list.gc_name %></div>
-		<div class="goods-list">
-                    <div class="style1">
-		<% for (var j in gc_list.gc_list) { %>
-                <%if(j==4){%></div><div class="style2"><%}%>
-			<div>
-				<a href="mall/product_detail.html?goods_id=<%= gc_list.gc_list[j].goods_id %>">
-					<div class="goods-pic">
-                                            <img src="<%= gc_list.gc_list[j].goods_image %>" alt="">
-                                            <div class="goods_advword"><%= gc_list.gc_list[j].goods_advword %></div>
-                                        </div>
-					<dl class="goods-info">
-						<dt class="goods-name"><%= gc_list.gc_list[j].goods_name %></dt>
-						<dd class="goods-price">￥<em><%= gc_list.gc_list[j].goods_promotion_price %></em></dd>
-					</dl>
-				</a>
-			</div>
-		<% } %>
-		</div>
+        <% if (gc_list.gc_list.length>0) { %>
+        <div class="dstouch-home-block item-goods">
+            <div class="tit-bar"><%= gc_list.gc_name %></div>
+            <div class="goods-list">
+                <div class="style1">
+                <% for (var j in gc_list.gc_list) { %>
+                    <%if(j==4){%>
+                </div>
+                <div class="style2"><%}%>
+                    <div>
+                        <a href="mall/product_detail.html?goods_id=<%= gc_list.gc_list[j].goods_id %>">
+                            <div class="goods-pic">
+                                <img src="<%= gc_list.gc_list[j].goods_image %>" alt="">
+                                <div class="goods_advword"><%= gc_list.gc_list[j].goods_advword %></div>
+                            </div>
+                            <dl class="goods-info">
+                                <dt class="goods-name">
+                                    <% if (gc_list.gc_list[j].active != "") { %>
+                                    <em><%= gc_list.gc_list[j].active %></em>
+                                    <% } %>
+                                    <%= gc_list.gc_list[j].goods_name %></dt>
+                                <dd class="goods-price goods-price-new">
+                                    <span class="price-left">￥<em><%= gc_list.gc_list[j].goods_tpprice %></em></span>
+                                    <span class="price-right">￥<em><%= gc_list.gc_list[j].goods_promotion_price %></em></span>
+                                </dd>
+                            </dl>
+                        </a>
                     </div>
-                <div class="more"><a href="mall/product_list.html?gc_id=<%= gc_list.gc_id %>">发现更多<%= gc_list.gc_name %><span class="iconfont">&#xe632;</span></a></div>
+                    <% } %>
+                </div>
+            </div>
+        <div class="more"><a href="mall/product_list.html?gc_id=<%= gc_list.gc_id %>">发现更多<%= gc_list.gc_name %><span class="iconfont">&#xe632;</span></a></div>
 	</div>
     <% } %>
-    <% } %>
+<% } %>
 </script>
 <script type="text/html" id="promotion_list">
     <% if (promotion_list.length) { %>

@@ -8,7 +8,7 @@ ds_lang={
     'cart':'购物车',
     'my_business_city':'我的商城',
     'account_balance':'账户余额',
-    'pre_deposit':'预存款账户余额、充值及提现明细',
+    'pre_deposit':'余额账户余额、充值及提现明细',
     'recharge_card_balance':'充值卡余额',
     'rechargeable_card':'充充值卡账户余额以及卡密充值操作',
     'shop_voucher':'lin商城代金券',

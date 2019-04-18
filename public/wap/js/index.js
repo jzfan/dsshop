@@ -1,13 +1,15 @@
 $(function() {
     $('.home-category .toggle').click(function(){
         if($(this).hasClass('active')){
-            $(this).removeClass('active')
-            $('.category-nav').removeClass('active')
+            $(this).removeClass('active');
+            $('.category-nav').removeClass('active');
+            $(".linear").show();
         }else{
-            $(this).addClass('active')
-            $('.category-nav').addClass('active')
+            $(this).addClass('active');
+            $('.category-nav').addClass('active');
+            $(".linear").hide();
         }
-    })
+    });
 
 
 
@@ -16,6 +18,7 @@ $(function() {
         type: 'get',
         dataType: 'json',
         success: function(result) {
+            console.log(result)
             var data = result.result;
             //goodsclass
             for(var i in data.extral.goodsclass_list){
@@ -40,25 +43,7 @@ $(function() {
             $("#main-container2").html(html);
             //限时购倒计时
             if (data.promotion_list.length > 0) {
-                var time = setInterval(function(){
-                    var left_time=countDown(data.promotion_list[0].xianshigoods_end_time);
-                    if ($.isEmptyObject(left_time)) {
-                        $('.pxianshi .left_time').remove()
-                        clearInterval(time);
-                    } else {
-                        if($('.pxianshi .day_wrap').length>0){
-                            if(left_time.day>0){
-                                $('.pxianshi .day').text(left_time.day);
-                            }else{
-                                $('.pxianshi .day_wrap').remove();
-                            }
-                        }
-                        
-                        $('.pxianshi .hour').text(left_time.hour);
-                        $('.pxianshi .minute').text(left_time.minute);
-                        $('.pxianshi .second').text(left_time.second);
-                    }
-                }, 1000);
+                timer(data.promotion_list[0].xianshigoods_end_time-data.promotion_list[0].request_time);
             }
             $('.adv_list').each(function() {
                 if ($(this).find('.item').length < 2) {
@@ -83,5 +68,32 @@ $(function() {
         }
     });
 
+    //重写倒计时  时间为差值
+    function timer(intDiff) {
+        var times= window.setInterval(function () {
+            var day = 0,
+                hour = 0,
+                minute = 0,
+                second = 0; //时间默认值
+            if (intDiff > 0) {
+                day = Math.floor(intDiff / (60 * 60 * 24));
+                //day*24
+                hour = Math.floor(intDiff / (60 * 60)) - (day * 24);
+                minute = Math.floor(intDiff / 60) - (day * 24 * 60) - (hour * 60);
+                second = Math.floor(intDiff) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60);
+            }
+            if (minute <= 9) minute = '0' + minute;
+            if (second <= 9) second = '0' + second;
+
+            $('.pxianshi .day').text(day);
+            $('.pxianshi .hour').text(hour);
+            $('.pxianshi .minute').text(minute);
+            $('.pxianshi .second').text(second);
+            intDiff--;
+            if(intDiff==0){
+                clearInterval(times);
+            }
+        }, 1000);
+    }
 });
 

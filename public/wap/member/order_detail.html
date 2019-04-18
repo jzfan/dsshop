@@ -42,6 +42,16 @@
 	</div>
 </div>
 <footer id="footer"></footer>
+<!-- 添加用户显示上传凭证css-->
+<style>
+.pay_pic{width: 2rem;height: 2rem;border: solid 0.05rem #EEE;border-radius: 0.1rem;vertical-align: top;position: absolute;overflow: hidden;top: 0.4rem;right: 0.4rem;}
+.pay_pic img{width: 100%;height: 100%;}
+/*<!-- 放大付款二维码css-->*/
+.showBigPay{width: 100%;height: 100%;position: fixed;top: 0px;left: 0px;z-index: 999;background: rgba(0, 0, 0, 0.7);display: none;}
+.showBigPay .shop_payPic{width: 96%;margin: 0px auto;padding: 2rem 0px;position: relative;}
+.showBigPay .shop_payPic .show_close{width: 1.6rem;height: 1.6rem;display: block;line-height: 1.6rem;text-align: center;position: absolute;top: 2.2rem;right: 0.2rem;background: #828282;overflow: hidden;font-size: 1.6rem;color: #fff;border-radius: 12%;}
+.showBigPay .shop_payPic img{max-width: 100%;max-height: 100%;}
+</style>
 <script type="text/html" id="order-info-tmpl">
 	<div class="dstouch-oredr-detail-block">
 		<h3><i class="orders iconfont"></i><%=lang('trading_state')%></h3>
@@ -77,16 +87,13 @@
 		<div class="info"><%=order_message%></div>
 	</div>
 	<%}%>
-	<%if (invoice != ''){%>
-	<div class="dstouch-oredr-detail-block">
-		<h3><i class="invoice iconfont"></i><%=lang('invoice_information')%></h3>
-		<div class="info"><%=invoice%></div>
-	</div>
-	<%}%>
 	<%if (payment_name != ''){%>
-	<div class="dstouch-oredr-detail-block">
+	<div class="dstouch-oredr-detail-block" style="position: relative;">
 		<h3><i class="pay iconfont"></i><%=lang('payment_method')%></h3>
-		<div class="info"><%=payment_name%></div>
+		<div class="info" style=""><%=payment_name%></div>
+		<%if (payment_code == 'payoffline'){%>
+			<div class="pay_pic"><img src="/uploads/home/refund/<%=pay_offline_pic%>" /></div>
+		<%}%>
 	</div>
 	<%}%>
 	<div class="dstouch-order-item mt5">
@@ -105,7 +112,7 @@
 						<span class="goods-price">￥<em><%=goods_list[i].goods_price%></em></span>
 						<span class="goods-num">x<%=goods_list[i].goods_num%></span>
 					</div>
-					<% if (goods_list[i].refund == 1) {%>
+					<% if (goods_list[i].refund == 1 && order_state ==40 ) {%>
 					<a href="javascript:void(0)" order_id="<%=order_id%>" order_goods_id="<%=goods_list[i].rec_id%>" class="goods-refund"><%=lang('refund')%></a>
 					<a href="javascript:void(0)" order_id="<%=order_id%>" order_goods_id="<%=goods_list[i].rec_id%>" class="goods-return"><%=lang('return_goods')%></a>
 					<%}%>
@@ -138,7 +145,7 @@
 			</div>
 		</div>
 		<div class="dstouch-order-item-bottom">
-			<span><a tel="<%=store_phone%>"><i class="tel iconfont"></i><%=lang('dialing')%></a></span>
+			<span><a href="tel:<%=site_phone%>"><i class="tel iconfont"></i><%=lang('dialing')%></a></span>
 		</div>
 	</div>
 	<div class="dstouch-oredr-detail-block mt5">
@@ -160,10 +167,10 @@
 		<% if (if_lock) {%>
 		<p><%=lang('refunds')%></p>
 		<% } %>
-		<% if (if_buyer_cancel) {%>
+		<% if (if_buyer_cancel && payment_code !='offline') {%>
 		<a href="javascript:void(0)" order_id="<%=order_id%>" class="btn cancel-order"><%=lang('cancellation_of_order')%></a>
 		<% } %>
-		<% if (if_refund_cancel) {%>
+		<% if (if_refund_cancel && payment_code !='offline'&& order_state ==40) {%>
 		<a href="javascript:void(0)" order_id="<%=order_id%>" class="btn all_refund_order"><%=lang('order_refund')%></a>
 		<% } %>
 		<% if (if_deliver) { %>
@@ -177,6 +184,16 @@
 		<% } %>
 	</div>
 </script>
+
+<!-- 放大支付宝付款二维码Begin-->
+<div class="showBigPay">
+	<div class="shop_payPic">
+		<span class="show_close">×</span>
+		<img src="../images/xxpay_alipay.jpg"/>
+	</div>
+</div>
+<!--放大支付宝付款二维码End-->
+
 <script type="text/javascript" src="../js/zepto.min.js"></script>
 <script type="text/javascript" src="../js/template.js"></script>
 <script type="text/javascript" src="../js/config.js"></script>

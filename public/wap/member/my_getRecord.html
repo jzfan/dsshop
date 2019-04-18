@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-touch-fullscreen" content="yes" />
+<meta name="format-detection" content="telephone=no"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="msapplication-tap-highlight" content="no" />
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1" />
+<title></title>
+<link rel="stylesheet" type="text/css" href="../css/base.css">
+<link rel="stylesheet" type="text/css" href="../css/dstouch_member.css">
+</head>
+<body>
+<header id="header">
+  <div class="header-wrap">
+    <div class="header-l"><a href="javascript:history.go(-1)"><i class="back iconfont"></i></a></div>
+    <div class="header-title">
+      <h1><langConf data-id="miaomi"></langConf></h1>
+    </div>
+    <div class="header-r"> <a id="header-nav" href="javascript:void(0);"><i class="more iconfont"></i><sup></sup></a> </div>
+  </div>
+  <div class="dstouch-nav-layout">
+    <div class="dstouch-nav-menu"> <span class="arrow"></span>
+      <ul>
+          <li><a href="../index.html"><i class="iconfont home"></i><lang data-id="home"></lang></a></li>
+          <li><a href="../mall/search.html"><i class="iconfont search"></i><lang data-id="search"></lang></a></li>
+          <li><a href="../mall/product_first_categroy.html"><i class="iconfont categroy"></i><lang data-id="classification"></lang></a></li>
+          <li><a href="../mall/cart_list.html"><i class="iconfont cart"></i><lang data-id="cart"></lang><sup></sup></a></li>
+          <li><a href="../member/member.html"><i class="iconfont member"></i><lang data-id="my_business_city"></lang></a></li>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<div class="dstouch-main-layout">
+  <ul id="pointsloglist" class="dstouch-log-list recoedAll">
+  </ul>
+</div>
+
+<footer id="footer"></footer>
+
+<script type="text/html" id="pointscount_model">
+	<div class="container point">
+		<!--<i class="icon iconfont"></i>-->
+			<dl>
+				<dt>我的秒米</dt>
+				<dd><em><%=miaomi;%></em></dd>
+			</dl>
+	</div>
+</script> 
+
+<style>
+/*提现记录页面CSS*/
+.getRecord{padding: 0.2rem 0.5rem;background: #fff;}
+.getRecord .recoedAll{font-size: 0.75rem;}
+.recoedAll .recds{}
+.recoedAll .recds .recds_tip{width: 100%;height: 1.5rem;line-height: 1.5rem;border-bottom: 1px solid #dedede;}
+.recoedAll .recds .recds_tip .recd_money{float: right;color: #F27304;font-weight: bold;}
+.recds_tip .recd_money em{}
+.recoedAll .recds .recd_info{padding: 0.2rem 0;font-size: 0.7rem;color: #777;}
+.recoedAll .recds .recd_infos{line-height: 1rem;}
+.recoedAll .recds .recd_infos span{float: right;}
+</style>
+
+<div class="getRecord">
+	<div class="recoedAll">
+		<div class="recds">
+			<p class="recds_tip">提现成功<span class="recd_money">￥<em>54554</em></span></p>
+			<div class="recd_info">
+				<p class="recd_infos">时间<span>2019年4月16日</span></p>
+				<p class="recd_infos">会员备注<span>00</span></p>
+				<p class="recd_infos">管理员备注<span>00</span></p>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<script type="text/html" id="list_model">
+<% if(log.length >0){ %>
+	
+<% for (var k in log) { var v = log[k]; %>
+    <li class="records">
+    	<dl class="record_tip">提现成功<span class="record_money">￥<em>5555</em></span></dl>
+    	
+    	<dl>
+    		<dt><%=v.lg_type;%></dt>
+        	<dd><%=v.lg_desc;%></dd>
+		</dl>
+        <% if(v.lg_av_amount >0){%>
+        <div class="money add">+<%=v.lg_av_amount;%></div>
+        <%}else{%>
+        <div class="money reduce"><%=v.lg_av_amount;%></div>
+        <%}%>
+        <time class="date"><%=v.lg_addtime;%></time>
+    </li>
+<%}%>
+<li class="loading"><div class="spinner"><i></i></div><%=lang('data_reading')%></li>
+<% } else { %>
+<div class="dstouch-norecord signin noData" style="top: 40%;">
+	<img src="../images/noData_pic.png" />
+	<p>您当前没有任何提现的变动哦～</p>
+</div>
+<%}%>
+</script> 
+
+
+<script type="text/javascript" src="../js/zepto.min.js"></script>
+<script type="text/javascript" src="../js/config.js"></script>
+<script type="text/javascript" src="../js/template.js"></script> 
+<script type="text/javascript" src="../js/common.js"></script> 
+<script type="text/javascript" src="../js/ncscroll-load.js"></script>
+<script type="text/javascript" src="lang/my_getRecord.js"></script>
+<script type="text/javascript" src="../js/lang.js"></script>
+
+<script>
+$(function(){
+    var key = getCookie('key');
+    if (!key) {
+        window.location.href = WapSiteUrl+'/member/login.html';
+        return;
+    }
+	
+    //获取秒米明细list
+    var load_class = new ncScrollLoad();
+    load_class.loadInit({'url':ApiUrl + '/member/get_member_miao','getparam':{'key':key},'tmplid':'list_model','containerobj':$("#pointsloglist"),'iIntervalId':true});
+
+});
+</script>
+</body>
+</html>

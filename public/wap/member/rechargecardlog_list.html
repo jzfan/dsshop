@@ -93,7 +93,7 @@
         var load_class = new ncScrollLoad();
         load_class.loadInit({'url':ApiUrl + '/Memberfund/rcblog.html','getparam':{'key':key},'tmplid':'list_model','containerobj':$("#rcbloglist"),'iIntervalId':true});
 
-        //获取预存款余额
+        //获取余额余额
         $.getJSON(ApiUrl + '/Member/my_asset.html', {'key':key,'fields':'available_rc_balance'}, function(result){
             var html = template('rcb_count_model', result.result);
             $("#rcb_count").html(html);

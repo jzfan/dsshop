@@ -116,4 +116,14 @@ $(function() {
         var e = $(this).attr("order_goods_id");
         location.href = WapSiteUrl + "/member/return.html?order_id=" + r + "&order_goods_id=" + e
     }
+
+    //pay_pic 支付二维码方法事件
+    $(document).on("click",".pay_pic img",function(){
+        var pay_src=$(this).attr("src");
+        $(".shop_payPic img").attr("src",pay_src);
+        $(".showBigPay").show();
+    });
+    $(".show_close").on("click",function(){
+        $(".showBigPay").hide();
+    });
 });

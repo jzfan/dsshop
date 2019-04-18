@@ -72,6 +72,7 @@ sup { vertical-align: text-top }
 sub { vertical-align: text-bottom }
 .hide { display: none !important;}
 .show { display: block !important;}
+.hides{display: none;}
 /*clear float*/
 .clearfix { zoom: 1 }
 .clearfix:after { display: block; clear: both; content: '\20' }
@@ -216,7 +217,7 @@ footer { display: block; position: relative; z-index: 1; bottom: 0; left: 0; rig
 .footer-blank{width:100%;height:50px;}
 .footer-nav{position: fixed;bottom: 0;left:0;width: 100%;height:50px;background:#fff;box-shadow: 0 3px 14px 2px rgba(0,0,0,.12);z-index:101;padding: 0px;margin: 0px; box-sizing:border-box; padding-top:5px;}
 .footer-nav ul{ width: 100%;height:45px;margin:0 auto;padding: 0px;display: -webkit-box !important;display: box !important;position: relative;}
-.footer-nav ul li {position: relative;-webkit-box-flex: 1;box-flex: 1;height:45px;text-align: center;margin: 0px; width:100%; box-sizing:border-box;}
+.footer-nav ul li {position: relative;-webkit-box-flex: 1;height:45px;text-align: center;margin: 0px; width:100%; box-sizing:border-box;}
 .footer-nav ul li.active a{color: #f23030}
 .footer-nav ul li a {text-align: center;font-size: 12px;color: #333;display: block;height:45px;position: relative;margin: auto;}
 .footer-nav ul li i {display: block;width: 25px;height: 25px;line-height:25px;font-size:26px;margin: auto;background-size:contain;}
@@ -226,7 +227,7 @@ footer { display: block; position: relative; z-index: 1; bottom: 0; left: 0; rig
 
 /*默认内容区域*/
 .dstouch-main-layout { display: block; margin-top: 2rem; background-color: #F5F5F5; }
-.dstouch-main-layout-a { display: block; position: absolute; top: 4rem; right: 0; left: 0; bottom: 0; overflow: hidden; z-index: 1;}
+.dstouch-main-layout-a { display: block;position: absolute;top: 4rem;right: 0;left: 0;bottom: 0;z-index: 1; height: auto;overflow-y: auto;}
 
 /*特别提示*/
 .special-tips { display: block; padding: 0.4rem 5%;}
@@ -254,7 +255,7 @@ footer { display: block; position: relative; z-index: 1; bottom: 0; left: 0; rig
 
 /*默认单行列表*/
 .dstouch-default-list-tit { font-size: 0.7rem; line-height: 1rem; padding: 0.5rem;}
-.dstouch-default-list { overflow: hidden; padding: 0 0 0 0.5rem; background-color: #FFF; border-top: solid 0.05rem #EEE; border-bottom: solid 0.05rem #EEE; }
+.dstouch-default-list {padding: 0 0 0 0.5rem; background-color: #FFF; border-top: solid 0.05rem #EEE; border-bottom: solid 0.05rem #EEE; }
 .dstouch-default-list li { position: relative; z-index: 1; display: block; clear: both; overflow: hidden; padding: 0.5rem 0; line-height: 1rem; border-top: solid 0.05rem #EEE; }
 .dstouch-default-list li:first-child { border-top: none; }
 .dstouch-default-list li a { display: block; overflow: hidden; font-size: 0.65rem; color: #000; }
@@ -338,7 +339,7 @@ footer { display: block; position: relative; z-index: 1; bottom: 0; left: 0; rig
 /*默认按钮样式*/
 .btn { vertical-align: top; display: inline-block !important; height: 1.1rem; padding: 0 0.3rem; margin: 0 auto; font-size: 0.6rem; color: #555 !important; line-height: 1.1rem; text-align: center; background-color: #FFF; border: solid 1px #CCC; border-radius: 0.15rem }
 .btn.key { border-color: #f23030; color: #f23030 !important; font-weight: 600;}
-.btn-l { display: inline-block; width: 90%; margin: 0 5%; font-size: 0.8rem; line-height: 1.8rem; text-align: center; color: #FFF; background: #f23030; border-radius: 0.2rem; }
+.btn-l { display: inline-block; width: 90%; margin: 0 5%; font-size: 0.8rem; line-height: 1.8rem; text-align: center; color: #FFF; border-radius: 0.2rem;background: linear-gradient(90deg, #F37801 42.93%, #EA5514 100%); }
 
 /*图片选择上传*/
 .dstouch-upload { display: inline-block; width: 1.94rem; height: 1.94rem; border: solid 0.05rem #EEE; border-radius: 0.1rem; vertical-align: top;}
@@ -446,3 +447,29 @@ to {  width: 100%;}
 #addressSelected .address_list_wrap{border-bottom:1px solid rgb(216, 216, 216);height:2.4rem;overflow: hidden;}
 #addressSelected .address_mt{font-size: 0.7rem;color:rgb(110,110,110);padding-bottom: 0.2rem;}
 #addressSelected .address_mc{font-size: 0.5rem;color:rgb(170,170,170);padding-bottom: 0.2rem;}
+
+/*新功能修复CSS  2019年1月4日 21:09:53*/
+.new-header-tab a{padding: 0 0.5rem;}
+
+/*成为VIP会员页面CSS*/
+/*<!-- 购买会员**TP会员-->*/
+.html_white{background-color: #fff;}
+.vip_div{width: 100%;background-color: #fff;}
+.vip_div .vip_banner{width: 100%;}
+.vip_div .vip_banner img{width: 100%;}
+.vip_div .vip_info{width: 100%;}
+.vip_info .vip_txt{width: 90%;margin: 0px auto;border-radius: 5px;height: 15rem;overflow: hidden;position: relative;top: -1rem;background: #fff;box-shadow: 1px 3px 10px #dadada;overflow-y: auto;}
+.vip_div .vip_buyBtn{width: 90%;height: 2rem;position: fixed;left: 5%;bottom: 1rem;text-align: center;color: #513837;line-height: 2rem;border-radius: 20px;background: linear-gradient(#f4ddae, #b89c56);}
+.vip_buyBtn em{font-size: 1rem;}
+.vip_buyBtn em .vip1_money{font-size: 0.9rem;font-weight: bold;}
+.vip_buyBtn .to_buys{font-size: 0.8rem;margin-left: 0.6rem;line-height: 1.8rem;display: inline-block;position: relative;top: -0.05rem;}
+.vip_info .vip_txt p img{max-width: 100%;display: block;margin: 0px auto;}
+
+
+/*公共按钮    2019年4月16日 19:54:03   HY */
+.btnColor{background: linear-gradient(90deg, #F37801 42.93%, #EA5514 100%);color: #fff;}
+.ftBtns{width: 100%;height: 2rem;position: fixed;left: 0px;bottom: 0px;}
+.ftBtns .ftBtn_by{width: 100%;height: 100%;text-align: center;background: linear-gradient(90deg, #F37801 42.93%, #EA5514 100%);line-height: 2rem;color: #fff;font-size: 0.85rem;letter-spacing: 4px;}
+
+
+
