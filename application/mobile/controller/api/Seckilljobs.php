@@ -1,6 +1,6 @@
 <?php
 
-namespace app\api\controller;
+namespace app\mobile\controller\api;
 
 class Seckilljobs extends BaseController
 {

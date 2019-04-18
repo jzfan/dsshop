@@ -50,7 +50,7 @@ class SeckillJobs extends Model
 
     public function formatGoods()
     {
-        $job_goods = $this->goods()->with('info')->select();
+        $job_goods = $this->goods()->with('info')->order('commend desc')->select();
         return array_map(function ($good) {
             return $good->format();
         }, $job_goods);

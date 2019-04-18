@@ -1,6 +1,6 @@
 <?php
 
-namespace app\api\controller;
+namespace app\mobile\controller\api;
 
 use think\Controller;
 
