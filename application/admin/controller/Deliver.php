@@ -25,8 +25,11 @@ class Deliver extends AdminControl {
         $order_state = str_replace(array('deliverno', 'delivering', 'delivered'), array(ORDER_STATE_PAY, ORDER_STATE_SEND, ORDER_STATE_SUCCESS), $state);
         $condition = array();
         $condition['order_state'] = $order_state;
-
-
+        $shop=session('is_shop');
+        $id=session('admin_id');
+        if($shop==2){
+            $condition['supplier']=$id;
+        }
         $buyer_name = input('buyer_name');
         if ($buyer_name != '') {
             $condition['buyer_name'] = $buyer_name;

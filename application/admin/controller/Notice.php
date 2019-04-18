@@ -1,6 +1,6 @@
 <?php
 namespace app\admin\controller;
-
+use app\common\model\Member;
 use think\Lang;
 
 class Notice extends AdminControl
@@ -20,11 +20,15 @@ class Notice extends AdminControl
         $condition['message_type'] = 1;
         $message_model = model('message');
         $message_list = $message_model->getMessageList($condition,10);
+        foreach ($message_list as $k=>$v){
+            $message_list[$k]['member_name']=Member::getNameById($v['to_member_id']);
+        }
         $this->assign('message_list', $message_list);
         $this->assign('show_page', $message_model->page_info->render());
         $this->setAdminCurItem('index');
         return $this->fetch();
     }
+
     /**
      * 会员通知
      */
@@ -112,10 +116,10 @@ class Notice extends AdminControl
     {
         $menu_array=array(
             array(
-                'name'=>'index','text'=>'会员通知','url'=>url('Notice/index')
+                'name'=>'index','text'=>'消息通知','url'=>url('Notice/index')
             ),
             array(
-                'name'=>'notice','text'=>'发送通知','url'=>"javascript:dsLayerOpen('".url('Notice/notice')."','新增用户')"
+                'name'=>'notice','text'=>'发送消息','url'=>"javascript:dsLayerOpen('".url('Notice/notice')."','新增用户')"
             )
         );
         return $menu_array;
