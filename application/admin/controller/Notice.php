@@ -116,10 +116,10 @@ class Notice extends AdminControl
     {
         $menu_array=array(
             array(
-                'name'=>'index','text'=>'会员通知','url'=>url('Notice/index')
+                'name'=>'index','text'=>'消息通知','url'=>url('Notice/index')
             ),
             array(
-                'name'=>'notice','text'=>'发送通知','url'=>"javascript:dsLayerOpen('".url('Notice/notice')."','新增用户')"
+                'name'=>'notice','text'=>'发送消息','url'=>"javascript:dsLayerOpen('".url('Notice/notice')."','新增用户')"
             )
         );
         return $menu_array;
