@@ -16,4 +16,12 @@ class Seckillgoods extends BaseController
 		}
 	}
 
+	public function get()
+	{
+		$data = checkInput([
+			'id' => 'require|number'
+		]);
+	    return json($this->model->byId($data['id']));
+	}
+
 }

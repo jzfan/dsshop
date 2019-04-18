@@ -47,4 +47,12 @@ class SeckillJobs extends Model
     	}
     	return false;
     }
+
+    public function formatGoods()
+    {
+        $job_goods = $this->goods()->with('info')->select();
+        return array_map(function ($good) {
+            return $good->format();
+        }, $job_goods);
+    }
 }
