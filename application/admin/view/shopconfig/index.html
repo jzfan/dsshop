@@ -1,0 +1,33 @@
+{include file="public/header" /}
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>配置管理</h3>
+                <h5></h5>
+            </div>
+            {include file="public/admin_items" /}
+        </div>
+    </div>
+    <table class="ds-default-table">
+        <thead>
+        <tr>
+            <th>域名</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach name="list" item="type"}
+        <tr>
+            <td>{$type.host}</td>
+            <td>
+                <a href="javascript:dsLayerOpen('{:url('Shopconfig/view',['host'=>$type.host])}','查看')" class="dsui-btn-view"><i class="fa"></i>查看</a>
+                <a href="javascript:dsLayerOpen('{:url('Shopconfig/edit',['host'=>$type.host])}','修改')" class="dsui-btn-edit"><i class="fa"></i>编辑</a>
+                <!--<a href="javascript:dsLayerConfirm('{:url('Shopconfig/del',['host'=>$type.host])}','{$Think.lang.ds_ensure_del}')"  class="dsui-btn-del"><i class="fa"></i>{$Think.lang.ds_del}</a>-->
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {$show_page}
+</div>

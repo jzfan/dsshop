@@ -1,0 +1,94 @@
+{include file="public/header" /}
+
+<div class="page">
+    <div class="explanation" id="explanation">
+        <div class="title" id="checkZoom">
+            <h4 title="{$Think.lang.ds_explanation_tip}">{$Think.lang.ds_explanation}</h4>
+            <span id="explanationZoom" title="{$Think.lang.ds_explanation_close}" class="arrow"></span>
+        </div>
+        <ul>
+            <li>系统平台全局设置,包括基础设置、购物、短信、邮件、水印和分销等相关模块。</li>
+        </ul>
+    </div>
+
+
+    <form id="user_form" enctype="multipart/form-data" method="post" >
+        <table class="ds-default-table">
+            <tbody>
+            <input type="hidden" value="{:$goods.goods_id}" name="goods_id" id="goods_id" class="txt">
+            <tr class="noborder">
+                <td class="required w120"><label>商品名称:</label></td>
+                <td class="vatop rowform">{$goods.goods_name}</td>
+                <td class="vatop tips"></td>
+            </tr>
+            <tr class="noborder">
+                <td class="required w120"><label class="validation" for="goods_price">销售价格:</label></td>
+                <td class="vatop rowform"><input type="text" value="" name="goods_price" id="goods_price" class="txt"></td>
+                <td class="vatop tips"></td>
+            </tr>
+            <tr class="noborder">
+                <td class="required w120"><label class="validation" for="goods_point">所需积分:</label></td>
+                <td class="vatop rowform"><input type="text" value="" name="goods_point" id="goods_point" class="txt"></td>
+                <td class="vatop tips"></td>
+            </tr>
+            <tr class="noborder">
+                <td class="required w120"><label class="validation" for="goods_storage">商品库存:</label></td>
+                <td class="vatop rowform"><input type="text" value="" name="goods_storage" id="goods_storage" class="txt"></td>
+                <td class="vatop tips"></td>
+            </tr>
+            <tr class="noborder">
+                <td class="required w120"><label class="validation" for="goods_state">商品状态:</label></td>
+                <td class="vatop rowform"><input type="text" value="" name="goods_state" id="goods_state" class="txt"></td>
+                <td class="vatop tips"></td>
+            </tr>
+            <tfoot>
+                <tr class="tfoot">
+                    <td colspan="15"><input  id='sub' class="btn" type="submit" value="{$Think.lang.ds_submit}"/></td>
+                </tr>
+            </tfoot>
+        </table>
+    </form>
+</div>
+<script type="text/javascript">
+    $(function() {
+        //按钮先执行验证再提交表单
+        $("#sub").click(function() {
+            if ($("#user_form").valid()) {
+                $("#user_form").submit();
+            }
+        });
+        $('#user_form').validate({
+            errorPlacement: function(error, element) {
+                error.appendTo(element.parent().parent().find('td:last'));
+            },
+            rules: {
+                goods_price: {
+                    required: true,
+                },
+                goods_point: {
+                    required: true,
+                },
+                goods_storage: {
+                    required: true,
+                },
+                goods_state: {
+                    required: true,
+                },
+            },
+            messages: {
+                goods_price: {
+                    required: '商品价格不能为空',
+                },
+                goods_point: {
+                    required: '密码不能为空',
+                },
+                goods_storage: {
+                    required: '商品库存不能为空',
+                },
+                goods_state: {
+                    digits: '请选择商品状态',
+                }
+            }
+        });
+    });
+</script>

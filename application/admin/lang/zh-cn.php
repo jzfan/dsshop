@@ -98,6 +98,7 @@ $lang['mb_app'] = '下载设置';
 $lang['mb_feedback'] = '意见反馈';
 $lang['appadv'] = 'APP广告';
 $lang['appadvposition'] = 'APP广告位';
+$lang['shopconfig'] = '商户配置';
 
 //微信端
 $lang['wechat'] = '公众号配置';

@@ -126,9 +126,35 @@ class Pointgoods extends AdminControl
 
     public function add_pointgoods()
     {
-        if(request()->isPost()) {
-
+        $goods_id = input("param.goods_id");
+        //检测商品
+        $goods_model = model("Goods");
+        $goods = $goods_model->getGoodsInfo(array("goods_id"=>$goods_id,"goods_state"=>1));
+        if (!$goods) {
+            //商品不存在或已下架
+            $this->error("商品不存在或以下架");
         }
+
+        if(request()->isPost()) {
+            $pointgoods_model = model("Pointgoods");
+            $pointgoods_validate = validate('Pointgoods');
+            $params = input("param.");
+
+            if (!$pointgoods_validate->scene("add_pointgoods")->check($params)) {
+                $this->error($pointgoods_validate->getError());
+            }
+            $is_exist = $pointgoods_model->get(array('goods_id'=>$goods_id));
+            if ($is_exist) {
+                $this->error("重复添加");
+            }
+            //添加积分商品
+            $result = $pointgoods_model->add_pointgoods($params);
+            if ($result) {
+                dsLayerOpenSuccess("添加成功");
+            }
+            $this->error("添加失败");
+        }
+        $this->assign("goods",$goods);
         return $this->fetch();
     }
 
