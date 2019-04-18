@@ -623,7 +623,9 @@ class Goods extends Model {
         $goods_info['groupbuy_info'] = '';
         $goods_info['pintuan_info'] = '';
         $goods_info['xianshi_info'] = '';
-        
+
+
+
         
         //抢购
         if (config('groupbuy_allow')) {
@@ -1174,14 +1176,16 @@ class Goods extends Model {
      * 获取单条商品信息
      * @access public
      * @author csdeshang
-     * @param int $goods_id 商品ID 
+     * @param int $goods_id 商品ID
+     * @param int $goods_type 商品类型
      * @return array
      */
-    public function getGoodsDetail($goods_id) {
+    public function getGoodsDetail($goods_id, $goods_type = 0) {
         if ($goods_id <= 0) {
             return null;
         }
-        $result1 = $this->getGoodsInfoAndPromotionById($goods_id);
+
+        $result1 = $this->_getGoodsDetail($goods_type, $goods_id);
 
         if (empty($result1)) {
             return null;
@@ -1337,6 +1341,8 @@ class Goods extends Model {
         $result['gift_array'] = $gift_array;
         return $result;
     }
+
+
     /**
      * 获取移动端商品
      * @access public
@@ -1373,5 +1379,111 @@ class Goods extends Model {
         return $common_info;
     }
 
+
+    /**
+     * 获取商品列表，目前支持待售商品，积分商品
+     * @param $goods_type
+     * @param $condition
+     * @param $field
+     * @param $page
+     * @param $order
+     * @return array
+     */
+    public function _getGoodsList($goods_type,$condition, $field = '*', $page = 0, $order = '', $limit = 0, $group = '', $lock = false, $count = 0)
+    {
+        $model = null;
+        $goods_list = array();
+        switch ($goods_type)  {
+            case 1:
+                $model = model('goods');
+                break;
+            case 20:
+                $model = model("Pointgoods");
+                break;
+            case 30:
+                $model= model("Forsalegoods");
+                break;
+        }
+        if (is_null($model)) {
+            return $goods_list;
+        }
+        $goods_list = $model->getGoodsOnlineList($condition, $field, $page, $order, $limit, $group, $lock, $count);
+        $this->page_info = $model->page_info;
+
+        return $goods_list;
+    }
+
+
+    public function _getGoodsDetail($goods_type, $goods_id)
+    {
+        $model = null;
+        $goods = array();
+        switch ($goods_type)  {
+            case 1:
+                $model = model('goods');
+                break;
+            case 20:
+                $model = model("Pointgoods");
+                break;
+            case 30:
+                $model= model("Forsalegoods");
+                break;
+        }
+        if (is_null($model)) {
+            return $goods;
+        }
+        $goods = $model->getGoodsInfoAndPromotionById($goods_id);
+
+        return $goods;
+    }
+
+
+    public function _getGoodsOnlineInfoAndPromotionById($goods_type, $goods_id)
+    {
+        $model = null;
+        $goods = array();
+        switch ($goods_type)  {
+            case 1:
+                $model = model('goods');
+                break;
+            case 20:
+                $model = model("Pointgoods");
+                break;
+            case 30:
+                $model= model("Forsalegoods");
+                break;
+        }
+        if (is_null($model)) {
+            return $goods;
+        }
+        $goods = $model->getGoodsOnlineInfoAndPromotionById($goods_id);
+
+        return $goods;
+    }
+
+
+    public function _getGoodsOnlineListAndPromotionByIdArray($goods_info)
+    {
+        $goods_list = array();
+        foreach ($goods_info as $item) {
+            $model = null;
+            switch ($item['goods_type']) {
+                case 1:
+                    $model = model('goods');
+                    break;
+                case 20:
+                    $model = model("Pointgoods");
+                    break;
+                case 30:
+                    $model = model("Forsalegoods");
+                    break;
+            }
+            if (is_null($model)) {
+                continue;
+            }
+            $goods_list[] = $model->getGoodsOnlineListAndPromotionById($item['goods_id']);
+        }
+        return $goods_list;
+    }
 
 }

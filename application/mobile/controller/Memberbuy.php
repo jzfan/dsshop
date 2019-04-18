@@ -36,6 +36,9 @@ class Memberbuy extends MobileMember {
         //得到购买数据
         $ifcart = !empty(input('param.ifcart')) ? true : false;
 
+        //商品类型
+        $goods_type = input('param.goods_type',20);
+
         //额外数据用来处理拼团等其他活动
         $pintuan_id = intval(input('param.pintuan_id'));
         $extra = array();
@@ -44,6 +47,7 @@ class Memberbuy extends MobileMember {
             #是否为开团订单
             $extra['pintuangroup_id'] = empty(input('param.pintuangroup_id')) ? 0 : intval(input('param.pintuangroup_id'));
         }
+        $extra['goods_type'] = $goods_type;
 
         $result = $logic_buy->buyStep1($cart_id, $ifcart, $this->member_info['member_id'], $extra);
 
@@ -136,6 +140,9 @@ class Memberbuy extends MobileMember {
 
         $param['pintuan_id'] = input('post.pintuan_id');
         $param['pintuangroup_id'] = input('post.pintuangroup_id');
+
+        //商品类型
+        $param['goods_type'] = input('post.goods_type',20);
 
         //处理代金券
         $voucher = array();
