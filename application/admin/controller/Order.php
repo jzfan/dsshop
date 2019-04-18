@@ -3,7 +3,7 @@
 namespace app\admin\controller;
 
 use think\Lang;
-
+use think\Db;
 class Order extends AdminControl
 {
 
@@ -26,7 +26,11 @@ class Order extends AdminControl
         }
         $id=session('admin_id');
         if ($id!='1'){
-            $condition['supplier']=$id;
+            $goods_id=db('goods')->where('supplier',$id)->column('goods_id');
+            $where=db('ordergoods')->whereIn('goods_id',$goods_id)->column('order_id');
+        }else{
+            $goods_id=db('goods')->where('is_platform',0)->column('goods_id');
+            $where=db('ordergoods')->whereIn('goods_id',$goods_id)->column('order_id');
         }
         $order_state = input('param.order_state');
         if (in_array($order_state, array('0', '10', '20', '30', '40'))) {
@@ -49,7 +53,7 @@ class Order extends AdminControl
         if ($start_unixtime || $end_unixtime) {
             $condition['add_time'] = array('between', array($start_unixtime, $end_unixtime));
         }
-        $order_list = $order_model->getOrderList($condition, 10);
+        $order_list = $order_model->getOrderList($condition, 10,$where);
         $this->assign('show_page', $order_model->page_info->render());
 
         foreach ($order_list as $order_id => $order_info) {
@@ -486,7 +490,11 @@ class Order extends AdminControl
         }
         $id=session('admin_id');
         if ($id!='1'){
-            $condition['supplier']=$id;
+            $goods_id=db('goods')->where('supplier',$id)->column('goods_id');
+            $where=db('ordergoods')->whereIn('goods_id',$goods_id)->column('order_id');
+        }else{
+            $goods_id=db('goods')->where('is_platform',0)->column('goods_id');
+            $where=db('ordergoods')->whereIn('goods_id',$goods_id)->column('order_id');
         }
         $order_state = input('param.order_state');
         if (in_array($order_state, array('0', '10', '20', '30', '40'))) {
@@ -510,7 +518,7 @@ class Order extends AdminControl
             $condition['add_time'] = array('between', array($start_unixtime, $end_unixtime));
         }
         $condition['order_state']='2';
-        $order_list = $order_model->getOrderList($condition, 10);
+        $order_list = $order_model->getOrderList($condition, 10,$where);
         $this->assign('show_page', $order_model->page_info->render());
 
         foreach ($order_list as $order_id => $order_info) {
@@ -546,7 +554,11 @@ class Order extends AdminControl
         }
         $id=session('admin_id');
         if ($id!='1'){
-            $condition['supplier']=$id;
+            $goods_id=db('goods')->where('supplier',$id)->column('goods_id');
+            $where=db('ordergoods')->whereIn('goods_id',$goods_id)->column('order_id');
+        }else{
+            $goods_id=db('goods')->where('is_platform',0)->column('goods_id');
+            $where=db('ordergoods')->whereIn('goods_id',$goods_id)->column('order_id');
         }
         $order_state = input('param.order_state');
         if (in_array($order_state, array('0', '10', '20', '30', '40'))) {
@@ -570,7 +582,7 @@ class Order extends AdminControl
             $condition['add_time'] = array('between', array($start_unixtime, $end_unixtime));
         }
         $condition['order_state']='3';
-        $order_list = $order_model->getOrderList($condition, 10);
+        $order_list = $order_model->getOrderList($condition, 10,$where);
         $this->assign('show_page', $order_model->page_info->render());
 
         foreach ($order_list as $order_id => $order_info) {
