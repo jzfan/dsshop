@@ -499,13 +499,6 @@ class Predeposit extends AdminControl {
         if (!(request()->isPost())) {
             return $this->fetch();
         } else {
-            $data = array(
-                'member_name' => input('post.member_name'),
-                'amount' => input('post.amount'),
-                'operatetype' => input('post.operatetype'),
-                'lg_desc' => input('post.lg_desc'),
-            );
-
             $money = abs(floatval(input('post.amount')));
             $memo = trim(input('post.lg_desc'));
             if ($money <= 0) {
@@ -556,7 +549,7 @@ class Predeposit extends AdminControl {
             }
             try {
                 $predeposit_model->startTrans();
-                //扣除冻结的预存款
+                //扣除冻结的秒米
                 $data = array();
                 $data['member_id'] = $member_info['member_id'];
                 $data['member_name'] = $member_info['member_name'];
