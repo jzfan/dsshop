@@ -46,7 +46,6 @@ class Type extends AdminControl {
             return $this->fetch('type_form');
         } else {
 
-
             $data = array(
                 'type_name' => input('post.type_name'),
                 'type_sort' => input('post.type_sort'),
@@ -86,7 +85,6 @@ class Type extends AdminControl {
                     $type_model->addTypespec($typespec);
                 }
             }
-
             //添加类型属性
             if (!empty($_POST['at_value'])) {
                 $attribute_array = $_POST['at_value'];

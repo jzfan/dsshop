@@ -630,6 +630,29 @@ class Member extends Model
         }
     }
 
+    public static function getNameById($id){
+        if (is_numeric($id)){
+            $lsit=self::where('member_id',$id)->find();
+            return $lsit['member_name'];
+        }else{
+            if ($id=='all'){
+                $name='所有会员';
+                return $name;
+            }else{
+                $arr=explode(',',$id);
+                $lsit=Db::name('member')->whereIn('member_id',$arr)->select();
+                foreach ($lsit as $k=>$value){
+                    $res[]=$value['member_name'];
+                }
+                $name=implode(',',$res);
+                $name = strlen($name) > 20 ? substr($name,0,20)."..." : $name;
+                return $name;
+            }
+
+        }
+
+    }
+
 
 
 }

@@ -78,7 +78,7 @@ class Admin extends AdminControl {
             $data['admin_name'] = input('post.admin_name');
             $data['admin_gid'] = input('post.gid');
             $data['admin_password'] = md5(input('post.admin_password'));
-            $data['is_shop'] = md5(input('post.is_shop'));
+            $data['is_shop'] = (input('post.is_shop'));
 
             //验证数据  BEGIN
 

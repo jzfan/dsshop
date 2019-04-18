@@ -1,6 +1,6 @@
 <?php
 namespace app\admin\controller;
-
+use app\common\model\Member;
 use think\Lang;
 
 class Notice extends AdminControl
@@ -20,11 +20,15 @@ class Notice extends AdminControl
         $condition['message_type'] = 1;
         $message_model = model('message');
         $message_list = $message_model->getMessageList($condition,10);
+        foreach ($message_list as $k=>$v){
+            $message_list[$k]['member_name']=Member::getNameById($v['to_member_id']);
+        }
         $this->assign('message_list', $message_list);
         $this->assign('show_page', $message_model->page_info->render());
         $this->setAdminCurItem('index');
         return $this->fetch();
     }
+
     /**
      * 会员通知
      */
