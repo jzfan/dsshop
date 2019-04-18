@@ -252,7 +252,7 @@ class Member extends Model
     public function addMemberAfter($member_id,$member_info){
         //添加会员积分
         if (config('points_isuse')) {
-            model('points')->savePointslog('regist', array('pl_memberid' => $member_id, 'pl_membername' => $member_info['member_name']), false);
+            //model('points')->savePointslog('regist', array('pl_memberid' => $member_id, 'pl_membername' => $member_info['member_name']), false);
             if (isset($member_info['inviter_id'])) {
                 //向上查询3级更新分销成员数
                 db('inviter')->where('inviter_id='.$member_info['inviter_id'])->setInc('inviter_1_quantity');
@@ -354,11 +354,11 @@ class Member extends Model
             }
 
             //添加会员积分
-            if (config('points_isuse')) {
-                model('points')->savePointslog('regist', array(
-                    'pl_memberid' => $insert_id, 'pl_membername' => $data['member_name']
-                ), false);
-            }
+//            if (config('points_isuse')) {
+//                model('points')->savePointslog('regist', array(
+//                    'pl_memberid' => $insert_id, 'pl_membername' => $data['member_name']
+//                ), false);
+//            }
             $this->commit();
             return $insert_id;
         } catch (Exception $e) {
