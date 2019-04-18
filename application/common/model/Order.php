@@ -124,9 +124,12 @@ class Order extends Model {
      * @param string $master 主服务器
      * @return Ambigous <multitype:boolean Ambigous <string, mixed> , unknown>
      */
-    public function getOrderList($condition, $page = '', $field = '*', $order = 'order_id desc', $limit = '', $extend = array(), $master = false) {
-
-        $list_paginate = db('order')->field($field)->where($condition)->order($order)->paginate($page, false, ['query' => request()->param()]);
+    public function getOrderList($condition, $page = '',$where, $field = '*',$order = 'order_id desc', $limit = '', $extend = array(), $master = false) {
+        if ($where==''){
+            $list_paginate = db('order')->field($field)->where($condition)->order($order)->paginate($page, false, ['query' => request()->param()]);
+        }else{
+            $list_paginate = db('order')->field($field)->where($condition)->whereIn('order_id',$where)->order($order)->paginate($page, false, ['query' => request()->param()]);
+        }
         $this->page_info = $list_paginate;
         $list = $list_paginate->items();
 
