@@ -85,17 +85,6 @@ class Member extends MobileMember
             'member_sex' => input('param.member_sex'),
             'member_birthday' => strtotime(input('param.member_birthday')),
         );
-        //验证数据  BEGIN
-        $rule = [
-            ['member_truename', 'max:10', '真实姓名不应超过20'],
-        ];
-        $validate = new Validate();
-        $validate_result = $validate->check($data, $rule);
-        if (!$validate_result) {
-            ds_json_encode(10001, $validate->getError());
-        }
-        //验证数据  END
-
         $member_model = model('member');
         $condition['member_id'] = $this->member_info['member_id'];
         $result = $member_model->editMember($condition, $data);
