@@ -140,7 +140,7 @@ $(function() {
                     }
                 } else {
                     $(".goods-detail-turn").hide();
-                    $("#mySwipe ul").append('<li><img src="' + d[i] + '" onerror="imgError(this)"/></li>');
+                    $("#mySwipe ul").append('<li><img src="' + d[i] + '" onerror=""/></li>');
                 }
                 $(".good_name").text(e.name);
                 $(".good_advword").text(); //商品介绍
