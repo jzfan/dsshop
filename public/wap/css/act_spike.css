@@ -1,0 +1,18 @@
+@charset "utf-8";
+
+/*<!--补救css  2019年4月15日 14:24:32-->*/
+header{background:none;border-bottom:none;}
+.header-l a i{color: #fff;}
+.dstouch-main-layout{margin-top: 0rem;}
+.list .goods-secrch-list .goods-pic{}
+.list .goods-secrch-list .goods-pic img{border-radius: 0.2rem;}
+.list .goods-secrch-list .goods-pic img.sale_overPic{position: absolute;top: 0.38rem;left: 0.38rem;width: 1.86rem;height: 1.86rem;padding: 1.38rem;background: rgba(0, 0, 0, 0.5);}
+.list .goods-secrch-list .goods-name{height: 1.5rem;margin-top: 0.5rem;}
+
+.list .goods-secrch-list .goods-assist{height: 2rem;margin-top: 0.5rem;overflow: initial;}
+.list .goods-secrch-list .sales{width: 40%;height: 0.5rem;border-radius: 20px;display: block;background: #ccc;position: relative;float: left;}
+.list .goods-secrch-list .sales .sale_over{width: 40%;background: linear-gradient(90deg, #F68619 0%, #FF4F09 93.64%);display: block;height: 100%;border-radius: 20px;max-width: 100%;}
+.list .goods-secrch-list .btnNew{float: right;position: relative;top: -0.5rem;} 
+.list .goods-secrch-list .btnClass{background: #EA5514;color: #fff !important;border-radius: 4px;border: 0px;}
+.list .goods-secrch-list .btnClassNO{background: #B6B4B4;}
+.list .goods-secrch-list .goods-price{color: #EA5514;}    

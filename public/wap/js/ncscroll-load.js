@@ -45,28 +45,32 @@ function ncScrollLoad() {
         }
         param.page = curpage;
         param.pagesize = pagesize;
+        //获取数据
         $.getJSON(options.url, param, function(result){
             checkLogin(result.login);
             $('.loading').remove();
             curpage++;
             var data = result.result;
-            //处理返回数据
+
             if(options.resulthandle){
                 eval('data = '+options.resulthandle+'(data);');
             }
-
             if (!$.isEmptyObject(options.data)) {
                 data = $.extend({}, options.data, data);
             }
+            //绑定获取的数据
             var html = template(options.tmplid, data);
+
             if(options.iIntervalId === false){
                 $(options.containerobj).append(html);
             }else{
                 $(options.containerobj).html(html);
             }
-            hasmore = result.hasmore;
+            //这里，原判断有误，已修复，但不确保全部。
+            hasmore = result.result.hasmore;
+
             if (!hasmore) {
-                $('.loading').remove();
+                $('.loading').hide();
                 //加载底部
                 if ($('#footer').length > 0) {
                     ncScrollLoad.prototype.getLoadEnding();
@@ -77,6 +81,7 @@ function ncScrollLoad() {
                     }
                 }
             }
+
             if (options.callback) {
                 options.callback.call('callback');
             }

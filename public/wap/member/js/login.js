@@ -1,4 +1,8 @@
 $(function() {
+
+    //layer.open({type: 2,content: '加载中',shadeClose: false, time: 2});
+    //layer.open({content: '加载中', skin: 'msg', time: 2});
+	
     var e = getCookie("key");
     if (e) {
         window.location.href = WapSiteUrl + "/member/member.html";
@@ -22,7 +26,9 @@ $(function() {
         callback: function(e, r, a) {
             if (e.length > 0) {
                 var i = "";
-                $.map(r,function(e, r) {i += "<p>" + e + "</p>"});
+                $.map(r,function(e, r) {
+                    i += "<p>" + e + "</p>"
+                });
                 layer.open({content: i, skin: 'msg', time: 2});
             }
         }
@@ -72,6 +78,7 @@ $(function() {
             })
         }
     });
+	
     $(".weibo").click(function() {
         location.href = ApiUrl + "/Connect/get_sina_oauth2.html"
     });

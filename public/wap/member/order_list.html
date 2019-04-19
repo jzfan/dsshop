@@ -20,7 +20,11 @@
 <header id="header" class="fixed">
   <div class="header-wrap">
     <div class="header-l"><a href="member.html"><i class="back iconfont"></i></a></div>
-    <span class="header-tab"><a href="javascript:void(0);" class="cur"><lang data-id="real_order"></lang></a><a href="vr_order_list.html"><lang data-id="virtual_order"></lang></a></span>
+    <span class="header-tab new-header-tab">
+		<a href="javascript:void(0);" class="cur"><lang data-id="real_order"></lang></a>
+		<!--<a href="vr_order_list.html"><lang data-id="virtual_order"></lang></a>-->
+		<a href="pointorder_list.html">积分订单</a>
+	</span>
     <div class="header-r"> <a id="header-nav" href="javascript:void(0);"><i class="more iconfont"></i><sup></sup></a> </div>
   </div>
   <div class="dstouch-nav-layout">
@@ -179,13 +183,10 @@
 							<span><%=lang('common')%><em><%=count%></em><%=lang('commons')%></span><span class="sum">￥<em><%=orderlist[j].order_amount%></em></span><span class="freight">(<%=lang('freight_charges')%>￥<%=orderlist[j].shipping_fee%>)</span>
 						</div>    
 						<div class="handle">
-							<%if(orderlist[j].if_delete){%>
-							<a href="javascript:void(0)" order_id="<%=orderlist[j].order_id%>" class="del delete-order"><i></i><%=lang('remove')%></a>
-							<%}%>
 							<%if(orderlist[j].if_lock){%>
 							<p><%=lang('refund')%></p>
 							<%}%>
-							<%if(orderlist[j].if_cancel){%>
+							<%if(orderlist[j].if_cancel && orderlist[j].payment_code!='offline'){%>
 							<a href="javascript:void(0)" order_id="<%=orderlist[j].order_id%>" class="btn cancel-order"><%=lang('cancellation_of_order')%></a>
 							<%}%>
 							<%if(orderlist[j].if_deliver){%>
@@ -201,7 +202,8 @@
 					</div>
 				</div>
 			<%}%>
-			<%if(order_group_list[i].pay_amount && order_group_list[i].pay_amount>0){%>
+
+			<%if(order_group_list[i].pay_amount && order_group_list[i].pay_amount>0&&order_group_list[i]['order_list'][0]['payment_code']!='offline'){%>
 				<a href="javascript:;" data-paySn="<%=order_group_list[i].pay_sn%>" class="btn-l check-payment"><%=lang('order_payment')%><em>（￥<%= p2f(order_group_list[i].pay_amount) %>）</em></a>
 			<%}%>
 		</li>

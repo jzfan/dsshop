@@ -52,35 +52,39 @@ $(function () {
         var e = $(this).addClass("cur").text();
         $("#sort_default").html(e + "<i></i>")
     });
+    //获取列表数据
     get_list();
     $(window).scroll(function () {
         if ($(window).scrollTop() + $(window).height() > $(document).height() - 1) {
-            get_list()
+            //滚到页面底部，继续加载
+            get_list();
         }
     });
     search_adv()
 });
+
+//获取列表数据
 function get_list() {
     $(".loading").remove();
+    //默认第一次加载
     if (!hasmore) {
-        return false
+        return false;
     }
-    hasmore = false;
     param = {};
     param.page = curpage;
     param.pagesize = pagesize;
     if (gc_id != "") {
-        param.gc_id = gc_id
+        param.gc_id = gc_id;
     } else if (keyword != "") {
-        param.keyword = keyword
+        param.keyword = keyword;
     } else if (b_id != "") {
-        param.b_id = b_id
+        param.b_id = b_id;
     }
     if (key != "") {
-        param.key = key
+        param.key = key;
     }
     if (order != "") {
-        param.order = order
+        param.order = order;
     }
     $.getJSON(ApiUrl + "/goods/goods_list.html" + window.location.search.replace("?", "&"), param, function (e) {
         if (!e) {
@@ -92,9 +96,15 @@ function get_list() {
         curpage++;
         var r = template("home_body", e);
         $("#product_list .goods-secrch-list").append(r);
-        hasmore = e.hasmore
-    })
+        if(e.result.goods_list.length >= 10){
+            hasmore = true;
+        }else{
+            hasmore = false;
+        }
+    });
 }
+
+//商品筛选模版 数据获取
 function search_adv() {
     $.getJSON(ApiUrl + "/index/search_adv.html", function (e) {
         var r = e.result;
@@ -133,8 +143,10 @@ function search_adv() {
                 })
             }
         }
+        //筛选点击确定
         $("#search_submit").click(function () {
             var e = "?keyword=" + keyword, r = "";
+            e += "&gc_id=" + gc_id;
             e += "&area_id=" + $("#area_id").val();
             if ($("#price_from").val() != "") {
                 e += "&price_from=" + $("#price_from").val()
@@ -163,20 +175,20 @@ function search_adv() {
                 }
             });
             if (r != "") {
-                e += "&ci=" + r
+                e += "&ci=" + r;
             }
-            window.location.href = WapSiteUrl + "/mall/product_list.html" + e
+            window.location.href = WapSiteUrl + "/mall/product_list.html" + e;
         });
         $('a[dstype="items"]').click(function () {
             var e = new Date;
             if (e.getTime() - searchTimes > 300) {
                 $(this).toggleClass("current");
-                searchTimes = e.getTime()
+                searchTimes = e.getTime();
             }
         });
         $('input[dstype="price"]').on("blur", function () {
             if ($(this).val() != "" && !/^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/.test($(this).val())) {
-                $(this).val("")
+                $(this).val("");
             }
         });
         $("#reset").click(function () {
@@ -186,6 +198,8 @@ function search_adv() {
         })
     })
 }
+
+//商品列表页面，销量排序事件
 function init_get_list(e, r) {
     order = e;
     key = r;

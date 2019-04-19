@@ -1,4 +1,5 @@
 var key = getCookie("key");
+var goods_id = getQueryString("goods_id");
 var rcb_pay, pd_pay, payment_code;
 function toPay(a, e, p) {
     $.ajax({
@@ -11,6 +12,8 @@ function toPay(a, e, p) {
         dataType: "json",
         success: function(p) {
             checkLogin(p.login);
+
+            console.log(p);
             if (p.code != 10000) {
                 layer.open({content: p.message, btn: '我知道了'});
                 return false
@@ -92,6 +95,12 @@ function toPay(a, e, p) {
                 }
                 for (var o = 0; o < p.result.pay_info.payment_list.length; o++) {
                     var i = p.result.pay_info.payment_list[o].payment_code;
+                    if (i == "offline" && r) {
+                        if (payment_code == "") {
+                            payment_code = i;
+                            $("#" + i).attr("checked", true).parents("label").addClass("checked")
+                        }
+                    }
                     $("#" + i).parents("label").show();
                     if (i == "alipay_h5" && r) {
                         if (payment_code == "") {
@@ -131,6 +140,18 @@ function toPay(a, e, p) {
             $("#wxpay_minipro").click(function () {
                 payment_code = "wxpay_minipro";
             });
+
+            if(goods_id){
+                //页面滚到最上端
+                $("#paymentPassword").on("click",function(){
+                    $(window).scrollTop(0);
+                });
+                $("#paymentPassword").blur(function(){
+                    $(window).scrollTop(0);
+                });
+            }
+
+            //付款点击事件
             $("#toPay").click(function() {
                 if (payment_code == "") {
                     layer.open({content: '请选择支付方式',skin: 'msg',time: 2});
@@ -139,6 +160,7 @@ function toPay(a, e, p) {
                 if (s) {
                     if ($("#paymentPassword").val() == "") {
                         layer.open({content: '请填写支付密码',skin: 'msg',time: 2});
+                        $("#paymentPassword").focus();
                         return false
                     }
                     $.ajax({

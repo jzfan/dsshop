@@ -1,6 +1,6 @@
 ds_lang={
-    'title':'预存款提现',
-    'pre_deposit_withdrawals':'预存款提现',
+    'title':'余额提现',
+    'pre_deposit_withdrawals':'余额提现',
     'home':'首页',
     'search':'搜索',
     'classification':'分类',
@@ -19,7 +19,7 @@ ds_lang={
     'phone_number':'手机号码',
     'payment_password':'支付密码',
     'submission':'提交',
-    'pre_deposit_balance':'预存款余额',
+    'pre_deposit_balance':'余额余额',
 
 
 };

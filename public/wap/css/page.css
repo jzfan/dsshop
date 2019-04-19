@@ -1,0 +1,135 @@
+@charset "utf-8";
+/*无数据DEMO  css*/
+.noData{text-align: center;}
+.noData img{margin: 0px auto;}
+.noData p{font-size: 0.7rem;color: #999;}
+
+/*我的资产主页面CSS*/	
+.userWalAll{width: 100%; margin: 0.2rem auto; background-image: url(../images/walBG.png); background-size: 100%; background-repeat: no-repeat; color: #fff;}
+.userWalAll .walAll{width: 80%; margin: 0px auto; text-align: center; padding: 0.5rem 0; font-size: 0.8rem;}
+.userWalAll .wal1{height: 1rem; line-height: 1rem;margin-top: 1rem; font-size: 0.7rem; position: relative;}
+.userWalAll .wal1 .show_wal{vertical-align: middle; position: absolute; top: -2px; left: 62%;}
+.userWalAll .wal2{font-size: 1.2rem;}
+.userWalAll .wal3{font-size: 0.65rem; color: #efefef;}
+.userWalAll .wal4{width: 49%; float: left;margin: 0.5rem 0rem;}
+.userWalAll .wal4.bord_left{border-left: 1px solid #efefef;}
+.userWalAll .walAll:after{clear: both;content: "";display: block;}
+
+/*已绑定银行卡页面CSS*/
+.bindCard{width: 96%;margin: 0.3rem auto;height: 3rem;background: #F2F2F2;}
+.cardAll .nodeCard{text-align: center;line-height: 3rem;font-size: 0.7rem;color: #777;display: none;}
+.bindCard .bindPic{width: 15%;float: left;height: 100%;line-height: 4rem;text-align: center;}
+.bindCard .bindPic .addCard_icon{width: 1.4rem;height: 1.4rem;margin: 0.8rem 0;}
+.bindCard .bindTip{width: 70%;height: 100%;float: left;color: #999;}
+.bindTip .p1{font-size: 0.8rem;color: #777;margin: 0.3rem 0rem;}
+.bindTip .p2{font-size: 0.6rem;}
+.bindCard .bindIcon{width: 15%;float: right;text-align: center;height: 100%;}
+.bindCard .bindIcon .iconfont{margin-top: 1rem;display: block;}
+.bindCard.cards{border-radius: 6px;background: #fff;box-shadow: 0px 0px 7px #ccc;margin-top: 0.5rem;}
+.bindCard.cards .bindPic{width: 5%;}
+.bindCard.cards .bindIcon{width: 25%;}
+.bindCard.cards .bindIcon .newI{font-size: 0.6rem;background: #8FD6BF;padding: 0.05rem 0.2rem;margin-top: 0.5rem;color: #fff;-webkit-transform: skew(-18deg);display: inline-block;}
+.bindCard.cards .bindIcon .newI em{display: inline-block;-webkit-transform: skew(18deg);}
+
+/*绑定提现银行卡CSS*/	
+.putBankAll{width: 96%;margin: 0px auto;}
+.putBankAll .getPut{width: 100%;position: relative;height: 2rem;border-bottom: 1px solid #dedede;line-height: 2rem;font-size: 0.7rem;color: #666;}
+.putBankAll .getPut .putSpan{display: inline-block;width: 28%;float: left;}
+.putBankAll .getPut .putSpan b{color: #FF0000;margin-right: 4%;}
+.putBankAll .getPut input{width: 70%;height: 100%;border: 0px;background: none;}
+.putBankAll .getPut .arrow-r{position: absolute;right: 2%;top: 0.2rem;}
+.putBankAll .getPut .getMsg{position: absolute;right: 2%;top: 0.4rem;padding: 0 0.3rem;height: 1.2rem;line-height: 1.2rem;border-radius: 6px;color: #F37801;border: 1px solid #F37801;}
+.putBankAll .getPut .getMsgOver{color: #fff;border: 1px solid #999;background: #999;}
+
+/*选择银行卡列表CSS*/
+.binkList{width: 100%;height: 100%;background: #fff;position: fixed;top: 0;left: 0;z-index: 999;display: none;}
+.bankList{overflow-y: auto;height: calc(100% - 2rem);}
+.bankList .banks{padding: 0 1rem;height: 2rem;line-height: 2rem;font-size: 0.7rem;color: #666;border-bottom: 1px solid #dfdfdf;}
+.binkList.left{display: block;left: 0;right: 0;animation: optionBlockLeft 0.3s ease-in-out;-webkit-animation: optionBlockLeft 0.3s ease-in-out;}
+.binkList.right{left: 110%;right: -110%;animation: optionBlockRight 0.5s ease-in-out;-webkit-animation: optionBlockRight 0.5s ease-in-out;}
+
+@keyframes optionBlockLeft{
+from { display: none; left: 100%; right:-100%;}
+to { display: block; left: 0; right:0;}}
+@-webkit-keyframes optionBlockLeft{
+from { display: none; left: 100%; right:-100%;}
+to { display: block; left: 0; right:0;}}
+@keyframes optionBlockRight{
+from { display: block; left: 0; right:0;}
+to { display: none; left: 110%; right: -110%;}}
+@-webkit-keyframes optionBlockRight{
+from { display: block; left: 0; right:0;}
+to { display: none; left: 110%; right: -110%;}}
+
+/********代售详情页面CSS*********/
+/*轮播图新版CSS*/
+.goods-detail-price dt{font-size: 0.7rem;color: #EA5514;}
+.goods-detail-pic{height: 100% !important;}
+.goods-detail-pic ul{height: 100% !important;}
+/*快速选择操作面板*/
+.fastChose{padding: 0.5rem 0.5rem 0.25rem 0.5rem;background-color: #F9F9F9;font-size: 0.7rem;}
+.fastChose .fast_nums{width: 100%;height: 1.5rem;line-height: 1.5rem;}
+.fastChose .fast_nums .fast_left{width: 50%;height: 2rem;float: left;}
+.fast_left .f_nums{display: inline-block;width: 1rem;height: 1rem;border: 1px solid #e3e3e3;background: #e3e3e3;text-align: center;line-height: 1rem;color: #fff;margin: 0 0.2rem;}
+.fast_left .f_numsON{background: #feece5;color: #f4a07c;border: 1px solid #f4a07c;}
+.fastChose .fast_nums .fast_right{width: 48%;text-align: right;height: 2rem;float: right;}
+.fast_right .f_numBtn{display: inline-block;width: 1rem;height: 1rem;background: #e3e3e3;text-align: center;line-height: 1rem;margin: 0 0.1rem;}
+.fast_right .fastnum{width: 2rem;height: 1rem;border: 0px;text-align: center;font-weight: bold;}
+.fastChose .fast_nums:after{clear: both;display: block;content: "";}
+.fastChose .fast_type{width: 100%;height: 2rem;}
+.fastChose .fast_type .fast_types{display: inline-block;background: #e3e3e3;color: #fff;padding: 0 0.8rem;border-radius: 20px;height: 1rem;line-height: 1rem;margin-right: 0.5rem;border: 1px solid #e3e3e3;}
+.fastChose .fast_type .fast_typeON{background: #feece5;color: #f4a07c;border: 1px solid #f4a07c;}
+
+/*用户选择地址css*/
+.getUads{padding: 0.5rem 0.5rem 0.5rem 0.5rem;background-color: #F9F9F9;font-size: 0.7rem;border-top:2px solid #fff;display: none;}
+.getUads .getUadsNo{width: 100%;height: 2rem;line-height: 2rem;text-align: center;display: none;}
+.getUads .getUads_infos{}
+.getUads .getUads_infos:after{clear: both;display: block;content: "";}
+.getUads .getUads_infos .addre{color: #666;}
+.getUads .getUads_infos .addre .newAdd{width: 80%;height: 1rem;color: #666;border: 1px solid #dedede;text-indent: 0.5rem;margin-top: 0.2rem;}
+.getUads .getUads_infos .addre .add_btns{width: 16%;height: 1rem;margin-left: 2%;text-align: center;background: #feece5;color: #f4a07c;border: 1px solid #f4a07c;display: inline-block;position: relative;top: 1px;}
+.getUads .adr_left{width: 80%;float: left;color: #666;}
+.getUads .adr_left .u_infos{color: #333;font-size: 0.72rem;}
+.getUads .adr_left .radio{display: inline-block;width: 8%;float: left;position: relative;top: 4px;}
+.getUads .adr_left .radio .sel_ads{-webkit-appearance: radio;}
+.getUads .adr_left .sel_ads{display: inline-block;width: 92%;float: left;}
+.getUads .adr_left .show_address{display: inline-block;width: 92%;float: left;}
+.getUads .adr_right{width: 20%;float: right;text-align: center;margin-top: 0.8rem;}
+.getUads .adr_right .other_ads{background: #feece5;color: #f4a07c;border: 1px solid #f4a07c;display: inline-block;padding: 0 0.5rem;border-radius: 20px;height: 1rem;line-height: 1rem;}
+/*秒杀详情页面确认订单模块CSS*/
+.order_show{padding: 0.5rem 0.5rem 0.25rem 0.5rem;font-size: 0.7rem;}
+.order_show .order_show_tip{height: 1.2rem;}
+.order_show .order_show_infos{color: #999;}
+.order_show .order_show_infos .oShows{display: inline-block;width: 84px;}
+.order_show .order_show_infos .oShows em{}
+
+
+
+/*代售列表页面	CSS*/
+.sale_nav{}
+.sale_nav .sale_navAll{}
+.sale_nav .sale_navAll li{width: 33.33%;}
+.sale_nav ul li.selected a{color: #EA5514;border-bottom: solid 0.1rem #EA5514 !important;}
+
+.dstouch-order-item-footer .sysSales .saleLeft{width: 20%;float: left;text-align: left;color: #EA5514;}
+.dstouch-order-item-footer .sysSales .saleRight{width: 80%;float: right;}	
+.dstouch-order-item-footer .sysSales .saleRight span{margin: 0 0.2rem;}
+.dstouch-order-item-footer .sysSales .saleRight .sp1{color: #777;}
+.dstouch-order-item-footer .sysSales .saleRight .sp2{color: #EA5514;}
+.dstouch-order-item-footer .sysSales .saleRight .sp3{color: #333;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

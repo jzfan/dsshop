@@ -1,6 +1,6 @@
 $(function() {
     var a = getCookie("key");
-    str = '<div class="footer-blank"></div>'
+    str = '<div class="footer-blank"></div>';
     str += '<div class="footer-nav"><ul>';
     str += '<li class="current"><a href="' + WapSiteUrl + '/index.html"><i class="iconfont">&#xe751;</i><span>首页</span></a></li>';
     str += '<li><a href="' + WapSiteUrl + '/mall/product_first_categroy.html"><i class="iconfont">&#xe754;</i><span>分类</span></a></li>';
@@ -10,6 +10,7 @@ $(function() {
     } else {
         str += '<li><a href="' + WapSiteUrl + '/member/login.html"><i class="iconfont">&#xe75e;</i><span>我的</span></a></li></ul></div>';
     }
+
     $("#footer").html(str);
     if(Domain.indexOf(WapSiteUrl + "/index.html")>-1){
         $('.footer-nav li').eq(0).addClass('active');

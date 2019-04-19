@@ -11,3 +11,6 @@ var AndroidSiteUrl = http+SiteDomain+"/app.apk";
 var WeiXinOauth = true;
 
 document.write("<script type='text/javascript' src='"+ WapSiteUrl +"/js/layer_mobile/layer.js'></script>");
+
+
+

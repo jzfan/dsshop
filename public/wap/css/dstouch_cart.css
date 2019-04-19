@@ -79,7 +79,7 @@ to { opacity: 0;  display: none;}
 .dstouch-cart-item .buy-item .notransport { position: absolute; z-index: 3; top: 0; left: -0.5rem; right: 0; bottom: 0; display: none; text-align: center; filter:progid:DXImageTransform.Microsoft.gradient(enabled='true',startColorstr='#E5F5F5F5', endColorstr='#E5F5F5F5');background:rgba(245,245,245,0.9);}
 .dstouch-cart-item .buy-item .notransport p { margin-top: 1.5rem; font-size: 0.7rem; line-height: 1rem; color: #f23030;}
 
-.dstouch-cart-bottom { position: fixed; z-index: 1; top: auto; left: 0; right: 0; bottom:48px; height: 2rem; background-color: rgba(255,255,255,0.85); border-top: solid 0.05rem #EEE;}
+.dstouch-cart-bottom { position: fixed; z-index: 1; top: auto; left: 0; right: 0; bottom:0px; height: 2rem; background-color: rgba(255,255,255,0.85); border-top: solid 0.05rem #EEE;}
 .dstouch-cart-bottom .all-check { position: absolute; z-index: 1; top: 0.4rem; left: 0.5rem;}
 .dstouch-cart-bottom .all-check label{font-size:.6rem;line-height:1rem;}
 .dstouch-cart-bottom .all-check input[type="checkbox"]{margin-right:0.3rem;}
@@ -139,7 +139,7 @@ to { opacity: 0;  display: none;}
 .dstouch-cart-subtotal dl { position: relative; z-index: 1; height: 1rem; padding: 0.4rem 0 0; font-size: 0;}
 .dstouch-cart-subtotal dt { position: absolute; z-index: 1; top: 0.4rem; left: 0.4rem; display: block; width: 50%; height: 1rem; font-size: 0.6rem; line-height: 1rem;}
 .dstouch-cart-subtotal dd { height: 1rem; margin: 0 0.5rem 0 50%; text-align: right; font-size: 0.6rem; line-height: 1rem;}
-.dstouch-cart-subtotal .message { position: relative; z-index: 1; display: block; height: 1.6rem; padding-top: 0.4rem;}
+.dstouch-cart-subtotal .message { position: relative; z-index: 1; display: block; height: 1.6rem; padding-top: 0.4rem;padding-bottom: 0.4rem;}
 .dstouch-cart-subtotal .message input[type="text"] { display: block; width: 91%; height: 0.9rem; padding: 2%; margin: 0 2.5%; background-color: #F0F0F0; border: none; border-radius: 0.2rem; line-height: 0.9rem; font-size: 0.6rem;}
 .dstouch-cart-subtotal .store-total { padding: 0.5rem; text-align: right; font-size: 0.6rem; line-height: 0.9rem;}
 .dstouch-cart-subtotal .store-total span { font-size: 0.45rem; color: #DB4453;}

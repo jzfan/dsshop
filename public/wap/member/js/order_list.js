@@ -23,14 +23,17 @@ $(function() {
     });
     function t() {
         if (reset) {
+            $("#order-list").empty();
             curpage = 1;
             hasMore = true;
+            reset = false;
         }
-        $(".loading").remove();
-        if (!hasMore) {
+        if(!hasMore){
             return false;
         }
-        hasMore = false;
+
+        $(".loading").remove();
+
         var t = $("#filtrate_ul").find(".selected").find("a").attr("data-state");
         var r = $("#order_key").val();
         $.ajax({
@@ -45,7 +48,7 @@ $(function() {
             success: function(e) {
                 checkLogin(e.login);
                 curpage++;
-                hasMore = e.hasmore;
+                hasMore = e.result.hasmore;
                 if (!hasMore) {
                     get_footer()
                 }
@@ -58,8 +61,7 @@ $(function() {
                 t.WapSiteUrl = WapSiteUrl;
                 t.ApiUrl = ApiUrl;
                 t.key = getCookie("key");
-                template.helper("$getLocalTime",
-                function(e) {
+                template.helper("$getLocalTime",function(e) {
                     var t = new Date(parseInt(e) * 1e3);
                     var r = "";
                     r += t.getFullYear() + "年";
@@ -69,20 +71,18 @@ $(function() {
                     r += t.getMinutes();
                     return r
                 });
-                template.helper("p2f",
-                function(e) {
-                    return (parseFloat(e) || 0).toFixed(2)
+                template.helper("p2f",function(e) {
+                    return (parseFloat(e) || 0).toFixed(2);
                 });
-                template.helper("parseInt",
-                function(e) {
-                    return parseInt(e)
+                template.helper("parseInt",function(e) {
+                    return parseInt(e);
                 });
                 var r = template("order-list-tmpl", t);
-                if (reset) {
-                    reset = false;
-                    $("#order-list").html(r)
+
+                if (!reset) {
+                    $("#order-list").append(r);
                 } else {
-                    $("#order-list").append(r)
+                    $("#order-list").html(r);
                 }
             }
         })
@@ -210,7 +210,8 @@ $(function() {
     });
     t();
     $(window).scroll(function() {
-        if ($(window).scrollTop() + $(window).height() > $(document).height() - 1) {
+        if ($(window).scrollTop() + $(window).height() > $(document).height() - 10) {
+            //console.log($(window).scrollTop() + $(window).height());
             t();
         }
     })

@@ -18,7 +18,7 @@
 <body>
 <header id="header" class="fixed">
   <div class="header-wrap">
-    <div class="header-l"><a href="recharge.html"><i class="back iconfont"></i></a></div>
+    <div class="header-l"><a href="javascript:history.go(-1)"><i class="back iconfont"></i></a></div>
     <div class="header-title">
       <h1><lang data-id="recharge_confirmation"></lang></h1>
     </div>
@@ -41,20 +41,20 @@
       <script type="text/html" id="rechargeinfo-tmpl">
           <ul class="form-box">
               <li class="form-item">
-                  <h4><%=lang('recharge_order')%>：</h4>
+                  <h4><%= lang('recharge_order')%>：</h4>
                   <div class="txt-box"><%=pdinfo.pdr_sn %> </div>
               </li>   
               <li class="form-item">
-                  <h4><%=lang('recharge_amount')%>：</h4>
+                  <h4><%= lang('recharge_amount')%>：</h4>
                   <div class="txt-box"><%=pdinfo.pdr_amount %><%=lang('element')%></div>
               </li>  		
           </ul>
-          <%if(payment_list.length > 0) {%>
-          <%for(var p = 0;p < payment_list.length;p++){%>
+          <% if(payment_list.length > 0) { %>
+          <% for(var p = 0;p < payment_list.length;p++){ %>
           <div class="form-btn ok">
-              <a href="<%=base_site_url %>?s=mobile/Memberpayment/pd_pay/key/<%=key %>/pay_sn/<%=pdinfo.pdr_sn %>/payment_code/<%=payment_list[p].payment_code%>" class="btn" ><%=payment_list[p].payment_name%></a>
+              <a href="<%= base_site_url %>?s=mobile/Memberpayment/pd_pay/key/<%= key %>/pay_sn/<%= pdinfo.pdr_sn %>/payment_code/<%= payment_list[p].payment_code %>" class="btn" ><%= payment_list[p].payment_name %></a>
           </div>
-          <%}}%>
+          <% }} %>
       </script> 
   </div>
 </div>
@@ -63,9 +63,9 @@
 <script type="text/javascript" src="../js/config.js"></script>
 <script type="text/javascript" src="../js/zepto.min.js"></script>
 <script type="text/javascript" src="../js/template.js"></script> 
-<script type="text/javascript" src="../js/common.js"></script> 
+<script type="text/javascript" src="../js/common.js"></script>
 <script type="text/javascript" src="../js/simple-plugin.js"></script> 
-<script type="text/javascript" src="js/rechargeinfo.js"></script> 
+<script type="text/javascript" src="js/rechargeinfo.js"></script>
 <script type="text/javascript" src="../js/footer.js"></script>
 <script type="text/javascript" src="lang/rechargeinfo.js"></script>
 <script type="text/javascript" src="../js/lang.js"></script>

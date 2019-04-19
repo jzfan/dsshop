@@ -1,0 +1,144 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-touch-fullscreen" content="yes"/>
+<meta name="format-detection" content="telephone=no"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<meta name="format-detection" content="telephone=no"/>
+<meta name="msapplication-tap-highlight" content="no"/>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1"/>
+<title></title>
+<link rel="stylesheet" type="text/css" href="../css/base.css">
+<link rel="stylesheet" type="text/css" href="../css/dstouch_common.css">
+<link rel="stylesheet" type="text/css" href="../css/dstouch_products_detail.css">
+<link rel="stylesheet" type="text/css" href="../css/page.css">
+</head>
+<body>
+
+<!--head模块  -->
+<header id="header" class="transparent">
+    <div class="header-wrap">
+        <div class="header-l"><a href="javascript:history.go(-1)"> <i class="back iconfont"></i></a></div>
+        <div class="header-r"><a id="header-nav" href="javascript:void(0);"><i class="more iconfont"></i><sup></sup></a>
+        </div>
+    </div>
+</header>
+
+<style>
+/*.goods-detail-turn{display: none;}*/	
+</style>
+
+
+<div type="text/html" id="product_detail" style="position: relative; z-index: 1;">
+    <!--商品banner模块-->
+    <div class="goods-detail-top">
+        <div class="goods-detail-pic" id="mySwipe">
+            <ul></ul>
+        </div>
+<!--        <%if(image.length>1){%>-->
+        <div class="goods-detail-turn">
+            <span class="now_page">1</span>/<span class="total_page"></span>
+        </div>
+        <!--<%}%>-->
+        <!--<div class="round pd-share hides"><i></i></div>-->
+    </div>
+
+    <!--商品详情模块-->
+    <div class="goods-detail-cnt">
+        <!-- 商品名称-->
+        <div class="goods-detail-name">
+            <dl>
+                <dt class="good_name"><%= goods_info.goods_name %></dt>
+                <dd class="goods_advword"><%= goods_info.goods_advword %></dd>
+            </dl>
+        </div>
+        <!-- 商品价格-->
+        <div class="goods-detail-price">
+        	<dl>
+                <dt>￥<em id="good_price"><%=goods_info.goods_price %></em>+<em id="good_miaomi"><%=goods_info.goods_price %></em><langConf data-id="miaomi"></langConf></dt>
+                <dd style="text-decoration: none;">剩余：<em class="nowNum"></em></dd>
+            </dl>
+        </div>
+		
+		<!--快速选择模块-->
+		<div class="fastChose">
+			<div class="fast_nums">
+				<span class="fast_left">
+					秒杀数量
+					<b class="f_nums f_numsON" value="3">3</b>
+					<b class="f_nums" value="5">5</b>
+					<b class="f_nums" value="10">10</b>
+				</span>
+				<span class="fast_right">
+					<b class="f_numBtn f_numCut">-</b>
+					<input class="fastnum" type="number" value="3" />
+					<b class="f_numBtn f_numAdd">+</b>
+				</span>
+			</div>
+			<div class="fast_type">
+				使用方式
+				<span class="fast_types " value="0">自用</span>
+				<span class="fast_types fast_typeON" value="1"><langConf data-id="good_type"></langConf></span>
+			</div>
+		</div>
+
+		
+		<!--默认待售，自用模块-->
+		<div class="getUads">
+			<!--如果用户无地址-->
+			<div class="getUadsNo">新增收货地址</div>
+			<div class="getUads_infos ">
+				<div class="adr_left">
+					<div class="u_infos"><span style="margin: 0 0.2rem;" class="uname">黄帅</span><span style="margin: 0 0.2rem;" class="uphone">17092555555</span></div>
+					<label>
+						<span class="radio"><input type="radio" class="sel_ads" name="sel_ads" checked value="1"/></span>
+						<span class="show_address">江苏省南京市江苏省南京市江苏省南京市</span>
+					</label>
+				</div>
+				<div class="adr_right"><span class="other_ads">其他</span></div>
+			</div>
+		</div>
+		
+		
+		<!--确认订单  默认显示3 -->
+		<div class="order_show">
+			<p class="order_show_tip">确认订单</p>
+			<p class="order_show_infos"><span class="oShows">秒杀数量：</span><span>共<em class="gdNums">3</em>件商品</span></p>
+			<p class="order_show_infos"><span class="oShows">使用方式：</span><span class="gdType"><%=langConf('good_type')%></p>
+			<p class="order_show_infos"><span class="oShows">需&nbsp;&nbsp;支&nbsp;&nbsp;付：</span><span>￥<em class="gdPrice">3</em>+<em class="gdMiaomi">3</em><langConf data-id="miaomi"></langConf></span></p>
+		</div>
+		
+		<!--秒米额度-->
+		<div class="order_show" style="background: #F9F9F9;">
+			<p class="order_show_infos"><span class="oShows"><%=langConf('miaomi')%>余额：</span><span>M<em>31212</em></span></p>
+		</div>
+		<!--秒杀按钮-->
+		<div class="ftBtns">
+			<div class="ftBtn_by buy-now">立刻秒杀</div>
+		</div>
+		
+
+
+</div>
+
+
+
+<script type="text/javascript" src="../js/zepto.min.js"></script>
+<script type="text/javascript" src="../js/config.js"></script>
+<script type="text/javascript" src="../js/template.js"></script>
+<script type="text/javascript" src="../js/swipe.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript" src="../js/iscroll.js"></script>
+<script type="text/javascript" src="../js/simple-plugin.js"></script>
+<script type="text/javascript" src="../js/footer.js"></script>
+<script type="text/javascript" src="../js/fly/requestAnimationFrame.js"></script>
+<script type="text/javascript" src="../js/fly/zepto.fly.min.js"></script>
+<script type="text/javascript" src="js/product_detail.js"></script>
+<script type="text/javascript" src="lang/product_detail.js"></script>
+<script type="text/javascript" src="../js/lang.js"></script>
+<script type="text/javascript" src="../js/langConf.js"></script>
+</body>
+</html>

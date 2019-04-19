@@ -32,10 +32,12 @@
 <div class="fix-block-r">
 	<a href="javascript:void(0);" class="gotop-btn gotop hide" id="goTopBtn"><i class="iconfont"></i></a>
 </div>
+
+<!-- 浏览记录模块-->
 <script type="text/html" id="viewlist_data">
 <% if (goodsbrowse_list.length > 0) {%>
 	<ul class="goods-secrch-list">
-	<% for (var i=0; i<goodsbrowse_list.length; i++) {%>
+	    <% for (var i=0; i<goodsbrowse_list.length; i++) {%>
             <li class="goods-item">
                 <span class="goods-pic">
                     <a href="../mall/product_detail.html?goods_id=<%=goodsbrowse_list[i].goods_id%>">
@@ -56,18 +58,18 @@
                     </dd>
                 </dl>
             </li>
-<% } %>
-<li class="loading"><div class="spinner"><i></i></div><%=lang('browsing_record_reading')%></li>
-</ul>
-<% } else {%>
-<div class="dstouch-norecord views">
-    <div class="norecord-ico"><i class="iconfont"></i></div>
-    <dl>
-        <dt><%=lang('browse_one')%></dt>
-        <dd><%=lang('browse_two')%></dd>
-    </dl>
-    <a href="<%=WapSiteUrl%>" class="btn"><%=lang('look_around')%></a>
-</div>
+        <% } %>
+        <li class="loading"><div class="spinner"><i></i></div><%=lang('browsing_record_reading')%></li>
+    </ul>
+    <% } else {%>
+    <div class="dstouch-norecord views">
+        <div class="norecord-ico"><i class="iconfont"></i></div>
+        <dl>
+            <dt><%=lang('browse_one')%></dt>
+            <dd><%=lang('browse_two')%></dd>
+        </dl>
+        <a href="<%=WapSiteUrl%>" class="btn"><%=lang('look_around')%></a>
+    </div>
 <% } %>
 </script>
 <script type="text/javascript" src="../js/config.js"></script>
