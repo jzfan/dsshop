@@ -4,7 +4,6 @@ namespace app\mobile\controller;
 
 use think\Lang;
 use think\Validate;
-
 class Member extends MobileMember
 {
 
@@ -133,7 +132,7 @@ class Member extends MobileMember
      * 秒米明细
      * */
     public function get_member_miao() {
-        $condition['lg_member_id'] = 8;
+        $condition['lg_member_id'] = $this->member_info['member_id'];
         $meter_log=model('meterlog');
         $list_log = $meter_log->getLogList($condition, 10);
         foreach ($list_log as $k=>$v ){
@@ -141,6 +140,22 @@ class Member extends MobileMember
         }
         $result= array_merge(array('log' => $list_log), mobile_page(is_object($meter_log->page_info)?$meter_log->page_info:''));
         ds_json_encode(10000, '获取成功',$result);
+    }
+
+    /*
+     * 获取二维码
+    */
+    public function get_inviter_code(){
+        $member_id = $this->member_info['member_id'];
+        $qrcode_path = BASE_UPLOAD_PATH . '/' . ATTACH_INVITER . '/' . $member_id . '.png';
+        if (!file_exists($qrcode_path)) {
+            import('qrcode.phpqrcode', EXTEND_PATH);
+            \QRcode::png(WAP_SITE_URL . '/member/register.html?inviter_id=' . $member_id, $qrcode_path);
+        }
+        $arr['qcode_url']=WAP_SITE_URL.$qrcode_path;
+        $arr['title']='扫码即送100积分';
+        $arr['points']=intval(config('points_invite'));
+        ds_json_encode(10000, '获取成功',$arr);
     }
 
 
