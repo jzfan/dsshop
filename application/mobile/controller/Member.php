@@ -140,7 +140,7 @@ class Member extends MobileMember
             import('qrcode.phpqrcode', EXTEND_PATH);
             \QRcode::png(WAP_SITE_URL . '/member/register.html?inviter_id=' . $member_id, $qrcode_path);
         }
-        $arr['qcode_url']=WAP_SITE_URL.$qrcode_path;
+        $arr['qcode_url']=WAP_SITE_URL. '/' . ATTACH_INVITER . '/' . $member_id . '.png';
         $arr['title']='扫码即送100积分';
         $arr['uid']=$member_id;
         $arr['points']=intval(config('points_invite'));
