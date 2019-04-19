@@ -99,7 +99,7 @@ class Member extends MobileMember
     /**
      * 更新用户头像
      */
-    public function memberavatar()
+    public function edit_memberavatar()
     {
         print_r($_FILES);die;
         $file = request()->file('memberavatar');
@@ -142,6 +142,7 @@ class Member extends MobileMember
         }
         $arr['qcode_url']=WAP_SITE_URL.$qrcode_path;
         $arr['title']='扫码即送100积分';
+        $arr['uid']=$member_id;
         $arr['points']=intval(config('points_invite'));
         ds_json_encode(10000, '获取成功',$arr);
     }
