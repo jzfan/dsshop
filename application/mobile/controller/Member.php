@@ -24,8 +24,6 @@ class Member extends MobileMember
             $member_info['voucher_count'] = model('voucher')->getCurrentAvailableVoucherCount(session('member_id'));
             $member_info['member_avatar'] = get_member_avatar_for_id($this->member_info['member_id']);
         }
-
-
         // 交易提醒
         $order_model = model('order');
         $refundreturn_model = model('refundreturn');
@@ -85,15 +83,11 @@ class Member extends MobileMember
         $data = array(
             'member_truename' => input('param.member_truename'),
             'member_sex' => input('param.member_sex'),
+            'member_birthday' => strtotime(input('param.member_birthday')),
         );
-        if (strlen(input('post.birthday')) == 10) {
-            $data['member_birthday'] = strtotime(input('post.birthday'));
-        }else{
-            ds_json_encode(10001, '请传入正确的生日时间');
-        }
         //验证数据  BEGIN
         $rule = [
-            ['member_nickname', 'max:10', '真实姓名不应超过10'],
+            ['member_truename', 'max:10', '真实姓名不应超过10'],
         ];
         $validate = new Validate();
         $validate_result = $validate->check($data, $rule);
