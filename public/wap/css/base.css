@@ -55,6 +55,9 @@ li { list-style: none; }
 input[type="checkbox"] { position: relative; width: 0.75rem; height: 0.75rem; background-color: #F5F5F5; border: 0.05rem solid #CCC; -webkit-border-radius: 50%; border-radius: 50%; vertical-align: middle; }
 input[type="checkbox"]:checked { border-color: #f23030; background-color: #f23030; }
 input[type="checkbox"]:checked:after { content: ''; position: absolute; left: 0.1rem; top: 0.14rem; width: 0.4rem; height: 0.2rem; border-left: 0.065rem solid #fff; border-bottom: 0.065rem solid #fff; -webkit-transform: rotate(-45deg); -ms-transform: rotate(-45deg); transform: rotate(-45deg); }
+input[type="radio"] { position: relative; width: 0.75rem; height: 0.75rem; background-color: #F5F5F5; border: 0.05rem solid #CCC; -webkit-border-radius: 50%; border-radius: 50%; vertical-align: middle; }
+input[type="radio"]:checked { border-color: #f23030; background-color: #f23030; }
+input[type="radio"]:checked:after { content: ''; position: absolute; left: 0.1rem; top: 0.14rem; width: 0.4rem; height: 0.2rem; border-left: 0.065rem solid #fff; border-bottom: 0.065rem solid #fff; -webkit-transform: rotate(-45deg); -ms-transform: rotate(-45deg); transform: rotate(-45deg); }
 
 /*阿里字体库 BEGIN*/
 @font-face {font-family: 'iconfont';
@@ -468,8 +471,9 @@ to {  width: 100%;}
 
 /*公共按钮    2019年4月16日 19:54:03   HY */
 .btnColor{background: linear-gradient(90deg, #F37801 42.93%, #EA5514 100%);color: #fff;}
+.btns-80{width: 80%;height: 2rem;margin: 0px auto;text-align: center;line-height: 2rem;color: #fff;font-size: 0.85rem;letter-spacing: 4px;display: inline-block;border-radius: 4px;}
 .ftBtns{width: 100%;height: 2rem;position: fixed;left: 0px;bottom: 0px;}
 .ftBtns .ftBtn_by{width: 100%;height: 100%;text-align: center;background: linear-gradient(90deg, #F37801 42.93%, #EA5514 100%);line-height: 2rem;color: #fff;font-size: 0.85rem;letter-spacing: 4px;}
-
+.ftBtn_by.no{background: #ccc;}
 
 
