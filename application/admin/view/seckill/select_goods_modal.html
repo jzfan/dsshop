@@ -41,13 +41,6 @@
     </form>
 </div>
 <script>
-// function showModal(obj) {
-//     $('.modal').modal('show')
-//     $('.modal-title').html(obj.name)
-//     $('#goods-id-input').val(obj.id)
-//     setInputVal(obj.id)
-// }
-
 function setInputVal(gid) {
     $('#goods-id-input').val(gid)
     $.get(`/mobile/api.seckillgoods?goods_id=${gid}`, function(res) {
@@ -60,9 +53,6 @@ function setInputVal(gid) {
     })
 }
 
-// $('.modal').on('hide.bs.modal', function(e) {
-//     unActiveTr($('#goods-id-input').val())
-// })
 function submitGoodForm(e) {
     e.preventDefault()
     $.post('/admin/seckillgoods/store', $('#modal-form').serialize(), function(res) {

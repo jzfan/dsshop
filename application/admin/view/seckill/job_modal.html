@@ -1,0 +1,54 @@
+<div class="modal fade" id="jobModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <table class="ds-default-table">
+                <tbody>
+                    <tr class="noborder" style="background: rgb(255, 255, 255);">
+                        <td class="required w120" aria-required="true">任务名:</td>
+                        <td class="vatop rowform" id='job_name'></td>
+                    </tr>
+                    <tr class="noborder" style="background: rgb(255, 255, 255);">
+                        <td class="required" aria-required="true">开始时间:</td>
+                        <td class="vatop rowform" id='job_start'></td>
+                    </tr>
+                    <tr class="noborder" style="background: rgb(255, 255, 255);">
+                        <td class="required" aria-required="true">结束时间:</td>
+                        <td class="vatop rowform" id='job_end'></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+function initJob(id) {
+
+    $.get(`/mobile/api.seckilljobs/find?id=${id}`, function(res) {
+        console.log(res)
+        $('#job_name').html(res.job.name)
+        $('#job_start').html(res.job.start)
+        $('#job_end').html(res.job.end)
+        for (let good of res.goods) {
+            showGood(good)
+        }
+    })
+}
+
+function showGood(data) {
+    $('#jobModal tbody').append(`
+            <tr>
+                <td>商品名</td>
+                <td>${data.name}</td>
+            </tr>
+            <tr>
+                <td>价格</td>
+                <td>${data.price}</td>
+            </tr>
+            <tr>
+                <td>库存</td>
+                <td>${data.qty}</td>
+            </tr>
+
+        `)
+}
+</script>

@@ -1,4 +1,4 @@
-<table class="ds-default-table">
+<table class="ds-default-table" id=jobs-table>
     <thead>
         <tr class="thead">
             <th class="align-center">ID</th>
@@ -13,7 +13,7 @@
     <tbody id="treet1">
         {notempty name="jobs"}
         {foreach name="jobs" item="job"}
-        <tr class="hover">
+        <tr class="hover" data-id='{$job.id}'>
             <td>
                 {$job.id}
             </td>
