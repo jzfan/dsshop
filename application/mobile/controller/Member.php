@@ -94,8 +94,7 @@ class Member extends MobileMember
             ds_json_encode(10001, '修改失败');
         }
     }
-
-
+    
     /**
      * 更新用户头像
      */
