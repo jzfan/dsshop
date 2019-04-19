@@ -3,6 +3,7 @@
 1. 添加数据表:
 	a. seckill_goods
 	b. seckill_jobs
+	c. seckill_users
 	
 2.增加阅读积分配置	
 INSERT INTO `ds_config` (`id`, `code`, `value`, `remark`) VALUES (null, 'points_read', '10', '阅读文章赠送积分')	
@@ -25,7 +26,6 @@ CREATE TABLE `ds_pointgoods` (
 4.购物车增加商品类型
 ALTER TABLE `ds_cart`
 ADD COLUMN `goods_type`  tinyint(4) NOT NULL DEFAULT 1 COMMENT '商品类型：1 普通商品；20 积分商品；30 91购商品' AFTER `buyer_id`;
-
 
 
 

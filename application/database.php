@@ -4,13 +4,17 @@ return [
 // 数据库类型
 'type'           => 'mysql',
 // 服务器地址
-'hostname'       => '127.0.0.1',
+'hostname'       => '192.168.137.2',
+// 'hostname'       => '47.110.235.2',
 // 数据库名
+// 'database'       => 'shoptest',
 'database'       => 'ds_shop',
 // 用户名
-'username'       => 'ds_shop',
+// 'username'       => 'shoptest',
+'username'       => 'root',
 // 密码
-'password'       => 'LAm6pw3ksErxHzJ7',
+// 'password'       => '8XctWST8XZaGZ2em',
+'password'       => '123',
 // 端口
 'hostport'       => '3306',
 // 连接dsn

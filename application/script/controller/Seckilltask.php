@@ -39,9 +39,9 @@ class Seckilltask extends Controller
 
 	protected function start($job)
 	{
-		foreach ($job->goods as $goods) {
-			for ($i = $goods->qty; $i--;) {
-				$this->redis->lpush("seckill:{$job->id}", "goods_id:{$goods->goods_id}:index:{$i}");
+		foreach ($job->goods as $good) {
+			for ($i = $good->qty; $i--;) {
+				$this->redis->lpush("seckill:{$job->id}", "good:{$good->id}");
 			}
 		}
 	}

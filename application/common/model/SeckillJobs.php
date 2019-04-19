@@ -19,7 +19,7 @@ class SeckillJobs extends Model
         return $this->where('status', 1)->find();
     }
 
-    public function isOvder()
+    public function isOver()
     {
         if (strtotime($this->end) < time()) {
             $this->status = 3;
@@ -29,7 +29,7 @@ class SeckillJobs extends Model
         return false;
     }
 
-    public function isWating()
+    public function isWaiting()
     {
         if (strtotime($this->start) > time() + 60) {
         	return true;
