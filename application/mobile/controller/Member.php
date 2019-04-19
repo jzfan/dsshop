@@ -94,8 +94,7 @@ class Member extends MobileMember
             ds_json_encode(10001, '修改失败');
         }
     }
-
-
+    
     /**
      * 更新用户头像
      */
@@ -107,7 +106,7 @@ class Member extends MobileMember
         $info = $file->validate(['ext' => ALLOW_IMG_EXT])->move($upload_file, $avatar_name);
         //生成缩略图
         $image = \think\Image::open($upload_file . '/' . $avatar_name);
-        $image->thumb(100, 100, \think\Image::THUMB_CENTER)->save($upload_file . '/' . $avatar_name);
+        $image->thumb(120, 120, \think\Image::THUMB_CENTER)->save($upload_file . '/' . $avatar_name);
         if ($info) {
             ds_json_encode(10000, '', get_member_avatar_for_id($this->member_info['member_id']));
         } else {
