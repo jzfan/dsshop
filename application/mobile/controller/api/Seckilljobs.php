@@ -30,4 +30,18 @@ class Seckilljobs extends BaseController
 		}
 	}
 
+	public function find()
+	{
+		checkInput([
+			'id' => 'require|number'
+		]);
+
+		$job = $this->model->find(input('id'));
+		
+		if ($job) {
+			$goods = $job->formatGoods();
+			return json(compact('job', 'goods'));
+		}
+	}
+
 }

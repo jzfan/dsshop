@@ -32,7 +32,7 @@
 </style>
 
 
-<div type="text/html" id="product_detail" style="position: relative; z-index: 1;">
+<div type="text/html" id="product_detail" style="position: relative; z-index: 1;margin-bottom: 3rem;">
     <!--商品banner模块-->
     <div class="goods-detail-top">
         <div class="goods-detail-pic" id="mySwipe">
@@ -80,8 +80,8 @@
 			</div>
 			<div class="fast_type">
 				使用方式
-				<span class="fast_types " value="0">自用</span>
 				<span class="fast_types fast_typeON" value="1"><langConf data-id="good_type"></langConf></span>
+				<span class="fast_types " value="0">自用</span>
 			</div>
 		</div>
 
@@ -113,11 +113,11 @@
 		
 		<!--秒米额度-->
 		<div class="order_show" style="background: #F9F9F9;">
-			<p class="order_show_infos"><span class="oShows"><%=langConf('miaomi')%>余额：</span><span>M<em>31212</em></span></p>
+			<p class="order_show_infos"><span class="oShows"><langConf data-id = "miaomi"></langConf>余额：</span><span>M<em>0</em></span></p>
 		</div>
 		<!--秒杀按钮-->
 		<div class="ftBtns">
-			<div class="ftBtn_by buy-now">立刻秒杀</div>
+			<div class="ftBtn_by buy-now no">立刻秒杀</div>
 		</div>
 		
 

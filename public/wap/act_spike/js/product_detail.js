@@ -5,6 +5,7 @@ var map_index_id = "";
 var tuan_sku;
 var goodsid;
 var isOne = true;
+var miammi = 0;
 $(function() {
 	
     //记录浏览历史
@@ -13,6 +14,14 @@ $(function() {
     if(!e){
     	$(".getUadsNo").text("尚未登录");
     }
+    
+    //获取我的总积分
+    $.getJSON(ApiUrl + '/Member/my_asset.html', {'key':key,'fields':'miaomi'}, function(result){
+    	miammi=result.result.miaomi;
+    });
+   
+    
+    
     
     var t = function(e, t) {
         e = parseFloat(e) || 0;
@@ -136,62 +145,17 @@ $(function() {
 				$(".good_advword").text();   //商品介绍
 				$("#good_price").text(e.price);
 				$("#good_miaomi").text(e.mi);
-				$(".goods-detail-price .nowNum").text(e.sold-e.qty);
 				$(".gdPrice").text(e.price);
 				$(".miaomi").text(e.mi);
+				$(".nowNum").text(e.sold-e.qty);
+				//判断当前库存是否满足最小快速选择
+				if(e.sold-e.qty < 3){
+					$(".fastnum").val(e.sold-e.qty);
+					$(".f_nums").removeClass("f_numsON");
+				}else{
+					$(".fastnum").val(3);
+				}
 				
-				
-//              if (e.images) {
-//                  var d = e.images.split(",");
-//                  e.images = d;
-//                 
-//              } 
-                
-                
-                
-//              console.log(e.image.length);
-                
-                
-                    //获取商品SKU
-//                  if (l.goods_info.spec_name) {
-//                      var c = $.map(l.goods_info.spec_name,function(e, t) {
-//                          var o = {};
-//                          o["goods_spec_id"] = t;
-//                          o["goods_spec_name"] = e;
-//                          if (l.goods_info.spec_value) {
-//                              $.map(l.goods_info.spec_value,function(e, a) {
-//                                  if (t == a) {
-//                                      o["goods_spec_value"] = $.map(e,function(e, t) {
-//                                          var o = {};
-//                                          o["specs_value_id"] = t;
-//                                          o["specs_value_name"] = e;
-//                                          return o
-//                                      });
-//                                  }
-//                              });
-//                              return o
-//                          } else {
-//                              l.goods_info.spec_value = []
-//                          }
-//                      });
-//                      l.goods_map_spec = c
-//                  } else {
-//                      l.goods_map_spec = []
-//                  }
-//                  if (l.goods_info.is_virtual == "1") {
-//                      l.goods_info.virtual_indate_str = t(l.goods_info.virtual_indate, true);
-//                      l.goods_info.buyLimitation = o(l.goods_info.virtual_limit, l.goods_info.upper_limit)
-//                  }
-//                  if (l.goods_info.is_presell == "1") {
-//                      l.goods_info.presell_deliverdate_str = t(l.goods_info.presell_deliverdate)
-//                  }
-                   
-//                  var _ = template("product_detail_sepc", l);
-//                  $("#product_detail_spec_html").html(_);
-//                  var _ = template("product_detail_foot", l);
-//
-//                  var _ = template("voucher_script", l);
-//                  $("#voucher_html").html(_);
 
 
                     if (getCookie("cart_count")) {
@@ -224,147 +188,50 @@ $(function() {
                     $(".pddcp-arrow").click(function() {
                         $(this).parents(".pddcp-one-wp").toggleClass("current")
                     });
-//                  var p = {};
-//                  p["spec_list"] = l.spec_list;
-//                  $(".spec a").click(function() {
-//                      var e = this;
-//                      i(e, p)
-//                  });
-//                  $(".minus").click(function() {
-//                      var e = $(".buy-num").val();
-//                      if (e > 1) {
-//                          $(".buy-num").val(parseInt(e - 1))
-//                      }
-//                  });
-//                  $(".add").click(function() {
-//                      var e = parseInt($(".buy-num").val());
-//                      if (e < l.goods_info.goods_storage) {
-//                          $(".buy-num").val(parseInt(e + 1))
-//                      }
-//                  });
-//                  if (l.goods_info.is_goodsfcode == "1") {
-//                      $(".minus").hide();
-//                      $(".add").hide();
-//                      $(".buy-num").attr("readOnly", true)
-//                  }
-
-                    //收藏点击事件
-//                  $(".pd-collect").click(function() {
-//                      if ($(this).hasClass("favorate")) {
-//                          if (dropFavoriteGoods(r))
-//                              $(this).removeClass("favorate");
-//                      } else {
-//                          if (favoriteGoods(r))
-//                              $(this).addClass("favorate");
-//                      }
-//                  });
-                    
-					
-                    //加入购物车点击事件
-//                  $(".add-cart").click(function() {
-//                      if(!$('#product_detail_spec_html').hasClass('up')){
-//                          return;
-//                      }
-//                      var e = getCookie("key");
-//                      var t = parseInt($(".buy-num").val());
-//                      if (!e) {
-//                          var o = getCookie("goods_cart");
-//                          if (o == null) {
-//                              o = ""
-//                          }else{
-//                              o = decodeURIComponent(o);
-//                          }
-//                          if (r < 1) {//非法商品ID，不允许添加
-//                              //show_tip();
-//                              return false
-//                          }
-//                          var a = 0;
-//                          if (!o) {
-//                              o = r + "," + t;
-//                              //a = 1
-//                          } else {
-//                              var i = o.split("|");
-//                              for (var n = 0; n < i.length; n++) {
-//                                  var l = i[n].split(",");
-//	                        if (s(l, r)) {
-//	                            show_tip();
-//	                            return false
-//	                        }
-//                          }
-//                          o += "|" + r + "," + t;
-//                          //a = i.length + 1
-//                      	}
-//                          addCookie("goods_cart", o);
-//                      }
-//                      $.ajax({
-//                          url: ApiUrl + "/Membercart/cart_add.html",
-//                          data: {
-//                              key: e,
-//                              goods_id: r,
-//                              quantity: t
-//                          },
-//                          type: "post",
-//                          success: function(e) {
-//                              var t = $.parseJSON(e);
-//
-//                              if (t.code==10000) {
-//                                  show_tip();
-//                                  if(getCookie("key")){
-//                                      delCookie("cart_count");
-//                                      getCartCount();
-//
-//                                  }else{
-//                                      var a = 0;
-//                                      if(getCookie("cart_count")!=null){
-//                                          a=parseInt(getCookie("cart_count"));
-//                                      }
-//                                      a=a+1;
-//                                      delCookie("cart_count");
-//                                      addCookie("cart_count", a);
-//                                  }
-//                                  $("#cart_count").html("<sup>" + getCookie("cart_count") + "</sup>")
-//                              } else {
-//                                  layer.open({content: t.message, btn: '我知道了'});
-//                              }
-//
-//                          }
-//                      })
-//
-//                  });
-					
 					
 					//立刻购买事件
                     $(".buy-now").click(function() {
-                        var e = getCookie("key");
-                        var t = parseInt($(".buy-num").val()) || 0;
-                        if (t < 1) {
-                            layer.open({content: '参数错误！',skin: 'msg',time: 2});
-                            return
+                    	//判断当前是否可以下单
+                    	if($(this).hasClass("no")){
+	                        var e = getCookie("key");
+	                        if(!e){
+	                        	layer.open({
+								  	content:  "请先登录~",
+								  	btn: '确定',
+								  	shadeClose: false,
+								  	yes: function(){
+								    	window.location.href = WapSiteUrl + "/member/login.html";
+								  	}
+								});
+	                        }
+	                        
+	                        var o = {};
+	                        o.key = e;
+	                        o.cart_id = r + "|" + $(".fastnum").val();
+	                        o.address_id = "7";
+	                        o.pay_name = "online";
+	                        o.goods_type = "40";
+	                        o.invoice_id = "";
+	                        
+	                        
+	                        $.ajax({
+	                            type: "post",
+	                            url: ApiUrl + "/Memberbuy/buy_step2.html",
+	                            data: o,
+	                            dataType: "json",
+	                            success: function(e) {
+	                                console.log(e)
+	                                if (e.code!=10000) {
+	                                    layer.open({content: e.message,skin: 'msg',time: 2});
+	                                } else {
+	                                    //带参，跳转到收银台页面
+	                                    location.href = WapSiteUrl + "/order/buy_step1.html?goods_id=" + r + "&buynum=" + t
+	                                }
+	                            }
+	                        })
                         }
-                        if (t > l.goods_info.goods_storage) {
-                            layer.open({content: '库存不足！',skin: 'msg',time: 2});
-                            return
-                        }
-                        var o = {};
-                        o.key = e;
-                        o.cart_id = r + "|" + t;
-                        $.ajax({
-                            type: "post",
-                            url: ApiUrl + "/Memberbuy/buy_step1.html",
-                            data: o,
-                            dataType: "json",
-                            success: function(e) {
-                                console.log(e)
-                                if (e.code!=10000) {
-                                    layer.open({content: e.message,skin: 'msg',time: 2});
-                                } else {
-                                    //带参，跳转到收银台页面
-                                    location.href = WapSiteUrl + "/order/buy_step1.html?goods_id=" + r + "&buynum=" + t
-                                }
-                            }
-                        })
                     })
-                	
+					
                 	
                 	//页面初始化
 					initNew();
@@ -384,7 +251,7 @@ $(function() {
 							if(i == 0){
 								$(".getUads").show();
 								//如果没有默认地址，将出现选择地址，点击创建新地址
-								if(1==1){
+								if(1==0){
 									$(".getUadsNo").show();
 									$(".getUads_infos").hide();
 								}else{
@@ -420,16 +287,6 @@ $(function() {
 					});			
 				    
                 
-//              } else {
-//                  layer.open({
-//                      content: e.message + "！<br>请返回上一页继续操作…"
-//                      , btn: ['返回', '取消']
-//                      , yes: function (index) {
-//                          history.back()
-//                          layer.close(index);
-//                      }
-//                  });
-//              }
 
                 $("#buynum").blur(n);
                 $.animationUp({
@@ -463,7 +320,6 @@ $(function() {
 	//这里修改成用户创建新地址
 	$(".getUadsNo").on("click", function() {
 		console.log(e);
-//  $("#product_detail_html").on("click", ".getUadsNo",function() {
         $.areaSelected({
             success: function(e) {
             	//默认已经选择好了地址
@@ -474,24 +330,7 @@ $(function() {
             	$(".getUads_infos").append('<div class="u_infos"><span style="margin: 0 0.2rem;" class="uname">黄帅</span><span style="margin: 0 0.2rem;" class="uphone">17092555555</span></div>');
             	$(".getUads_infos").append('<div class="addre">'+e.area_info+'</div>');
             	$(".getUads_infos").append('<div class="addre"><input type="text" class="newAdd" placeholder="请输入详细地址" /><span class="add_btns">确定</span></div>');
-//              $("#get_area_selected_name").html(e.area_info);
-//              var t = e.area_id_2 == 0 ? e.area_id_1 : e.area_id_2;
-//              $.getJSON(ApiUrl + "/Goods/calc.html", {
-//                      goods_id: goods_id,
-//                      area_id: t
-//                  },
-//                  function(e) {
-//                      $("#get_area_selected_whether").html(e.result.if_deliver_cn);
-//                      $("#get_area_selected_content").html(e.result.content);
-//                      if (!e.result.if_deliver) {
-//                          $(".buy-handle").addClass("no-buy")
-//                      } else {
-//                          $(".buy-handle").removeClass("no-buy")
-//                      }
-//						
-//						console.log(e.result.if_deliver_cn)
-//						
-//                  })
+//              
             }
         })
     });
@@ -503,8 +342,6 @@ $(function() {
     $("body").on("click", "#goodsEvaluation,#goodsEvaluation1",function() {
         window.location.href = WapSiteUrl + "/mall/product_eval_list.html?goods_id=" + goods_id
     });
-    
-    
     
     
 });

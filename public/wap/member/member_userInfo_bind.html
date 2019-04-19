@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-touch-fullscreen" content="yes" />
+<meta name="format-detection" content="telephone=no"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="msapplication-tap-highlight" content="no" />
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1" />
+<title></title>
+<link rel="stylesheet" type="text/css" href="../css/base.css">
+<link rel="stylesheet" type="text/css" href="../css/dstouch_member.css">
+</head>
+<body style="background-color: #fff;">
+
+
+<header id="header" style="background-color: #fff;">
+  <div class="header-wrap">
+    <div class="header-l"> <a href="member_account.html"> <i class="back iconfont"></i> </a> </div>
+    <div class="header-title">
+      <h1><lang data-id="mobile_phone_verification"></lang></h1>
+    </div>
+  </div>
+</header>
+
+<style>
+/*个人信息编辑页面*/	
+.userInfo{width: 80%;text-align: center;padding: 2rem 0;margin: 0px auto;}
+.userInfo .userPic{width: 5rem;height: 5rem;border-radius: 50%;overflow: hidden;margin: 0px auto;position: relative;}
+.userInfo .userPic img{width: 100%;height: 100%;}
+.userInfo .userPic .userPhoto{position: absolute;top: 0px;left: 0px;width: 100%;height: 100%;font-size: 50rem;opacity: 0;}
+.userInfo .userInfos{height: 2rem;line-height: 2rem;font-size: 0.7rem;color: #666;text-align: left;border-bottom: 1px solid #dedede;}
+.userInfo .userInfos .uInfoL{display: inline-block;width: 2rem;text-align: center;}
+.userInfo .userInfos .txt{width: 10rem;height: 2rem;border: 0px;background: none;color: #666;text-indent: 1rem;}
+.userInfo .userInfos .sex{}
+.userInfo .userInfos label{margin: 0 0.2rem;}
+</style>
+
+<div class="dstouch-main-layout" style="background-color: #fff;">
+  <div class="dstouch-inp-con">
+  	<div class="userInfo">
+  		<div class="userPic"><img src="../../uploads/home/common/default_user_portrait.gif" />
+  		
+  			<input type="file" name="file" id="userPhoto" class="userPhoto"/>
+  		</div>
+  		<div class="userInfos"><span class="uInfoL">昵称</span><input class="txt uNicheng" type="text" value=""/></div>
+  		<div class="userInfos"><span class="uInfoL">生日</span><input class="txt birthday" placeholder="格式：1990-01-01" type="text" value=""/></div>
+  		<div class="userInfos"><span class="uInfoL">性别</span>
+  			<div style="display: inline-block;">
+  			<label style="margin-left: 0.5rem;"><input type="radio" class="sex" name="sex" value="3" checked="checked" />保密</label>
+  			<label><input type="radio" class="sex" name="sex" value="1" />男</label>
+  			<label><input type="radio" class="sex" name="sex" value="2" />女</label>
+  			</div>
+  		</div>
+  	</div>
+    <!--<form action="" method ="">
+      <ul class="form-box">
+        <li class="form-item">
+          <h4><lang data-id="cell_phone_number"></lang></h4>
+          <div class="input-box">
+            <input type="text" id="mobile" name="mobile" class="inp" autocomplete="off" maxlength="11" placeholder="输入手机号" oninput="writeClear($(this));" onfocus="writeClear($(this));" pattern="[0-9]*"/>
+            <span class="input-del code"></span> <span class="code-countdown" style=" display: none;">
+            <p>（<lang data-id="wait_for"></lang><em>59</em><lang data-id="second_after_second"></lang>）</p>
+            <p><lang data-id="regain_validation_code"></lang></p>
+            </span> <span class="code-again" style=""><a id="send" href="javascript: void(0);"><lang data-id="get_SMS_verification"></lang></a></span> </div>
+        </li>
+        <li class="form-item">
+          <h4><lang data-id="verification_code"></lang></h4>
+          <div class="input-box">
+            <input type="text" id="captcha" name="captcha" maxlength="4" size="10" class="inp" autocomplete="off" placeholder="输入图形验证码" oninput="writeClear($(this));"/>
+            <span class="input-del code"></span> <a href="javascript:void(0)" id="refreshcode" class="code-img"><img border="0" id="codeimage" name="codeimage"></a>
+          </div>
+        </li>
+      </ul>
+    </form>
+    <form action="" method ="">
+      <ul class="form-box mt5">
+        <li class="form-item">
+        <h4><lang data-id="dynamic_state_codes"></lang></h4>
+          <div class="input-box">
+            <input type="text" id="auth_code" readonly=true name="auth_code" class="inp" maxlength="6" placeholder="输入短信动态验证码" oninput="writeClear($(this));" onfocus="writeClear($(this));" pattern="[0-9]*"/>
+            <span class="input-del"></span> </div>
+        </li>
+      </ul>
+      <div class="form-btn"><a href="javascript:void(0);" class="btn" id="nextform"><lang data-id="next_step"></lang></a></div>
+    </form>-->
+    <div class="form-btn" style="text-align: center;"><a href="javascript:void(0);" class="btns-80 btnColor" id="nextform">完成</a></div>
+    <!--<div class="register-mobile-tip"> <lang data-id="little_hint"></lang></div>-->
+  </div>
+</div>
+<footer id="footer"></footer>
+<script type="text/javascript" src="../js/config.js"></script>
+<script type="text/javascript" src="../js/zepto.min.js"></script>
+<script type="text/javascript" src="../js/template.js"></script> 
+<script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript" src="../js/simple-plugin.js"></script> 
+<script type="text/javascript" src="js/member_userInfo_bind.js"></script>
+<script type="text/javascript" src="../js/footer.js"></script>
+<script type="text/javascript" src="lang/member_userInfo_bind.js"></script>
+<script type="text/javascript" src="../js/lang.js"></script>
+</body>
+</html>
