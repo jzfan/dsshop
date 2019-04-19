@@ -42,6 +42,42 @@ CREATE TABLE `ds_forsalegoods` (
   KEY `goods_id` (`goods_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='91购商品表';
 
+6.会员挂售商品表
+DROP TABLE IF EXISTS `ds_memberforsalegoods`;
+CREATE TABLE `ds_memberforsalegoods` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `member_id` int(10) NOT NULL DEFAULT '0' COMMENT '会员ID',
+  `goods_id` int(10) NOT NULL DEFAULT '0' COMMENT '商品ID',
+  `goods_commonid` int(10) NOT NULL DEFAULT '0' COMMENT '商品公共表ID',
+  `goods_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '商品价格',
+  `goods_type` tinyint(4) NOT NULL DEFAULT '30' COMMENT '商品类型',
+  `goods_number` int(10) NOT NULL DEFAULT '0' COMMENT '商品数量',
+  `sale_number` int(10) NOT NULL DEFAULT '0' COMMENT '已销售数量',
+  `left_number` int(10) NOT NULL DEFAULT '0' COMMENT '剩余数量',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `goods_id` (`goods_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员挂售列表';
+
+7.会员挂售订单表
+DROP TABLE IF EXISTS `ds_memberforsaleorder`;
+CREATE TABLE `ds_memberforsaleorder` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL COMMENT '订单ID',
+  `order_sn` varchar(50) NOT NULL COMMENT '订单号',
+  `buyer_id` int(11) NOT NULL COMMENT '购买人ID',
+  `goods_number` int(11) NOT NULL COMMENT '购买商品数量',
+  `goods_price` decimal(10,2) NOT NULL COMMENT '商品价格',
+  `member_id` int(11) NOT NULL COMMENT '挂售人ID',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `order_id` (`order_id`) USING BTREE,
+  KEY `member_id` (`member_id`) USING BTREE,
+  KEY `order_sn` (`order_sn`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户挂售订单表';
+
 
 
 ## TODO
