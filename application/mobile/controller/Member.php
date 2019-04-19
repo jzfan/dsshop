@@ -24,8 +24,6 @@ class Member extends MobileMember
             $member_info['voucher_count'] = model('voucher')->getCurrentAvailableVoucherCount(session('member_id'));
             $member_info['member_avatar'] = get_member_avatar_for_id($this->member_info['member_id']);
         }
-
-
         // 交易提醒
         $order_model = model('order');
         $refundreturn_model = model('refundreturn');
@@ -72,6 +70,7 @@ class Member extends MobileMember
         $member_model = model('member');
         $condition['member_id'] = $this->member_info['member_id'];
         $member_info = $member_model->getMemberInfo($condition);
+        $member_info['member_birthday']=date('Y-m-d',$member_info['member_birthday']);
         $member_info['member_avatar'] = get_member_avatar_for_id($member_info['member_id']);
         ds_json_encode(10000, '', $member_info);
     }
@@ -84,25 +83,8 @@ class Member extends MobileMember
         $data = array(
             'member_truename' => input('param.member_truename'),
             'member_sex' => input('param.member_sex'),
-            'member_qq' => input('param.member_qq'),
-            'member_ww' => input('param.member_ww'),
+            'member_birthday' => strtotime(input('param.member_birthday')),
         );
-        if (strlen(input('post.birthday')) == 10) {
-            $data['member_birthday'] = strtotime(input('post.birthday'));
-        }else{
-            ds_json_encode(10001, '请传入正确的生日时间');
-        }
-        //验证数据  BEGIN
-        $rule = [
-            ['member_nickname', 'max:10', '真实姓名不应超过10'],
-        ];
-        $validate = new Validate();
-        $validate_result = $validate->check($data, $rule);
-        if (!$validate_result) {
-            ds_json_encode(10001, $validate->getError());
-        }
-        //验证数据  END
-
         $member_model = model('member');
         $condition['member_id'] = $this->member_info['member_id'];
         $result = $member_model->editMember($condition, $data);
@@ -113,11 +95,13 @@ class Member extends MobileMember
         }
     }
 
+
     /**
      * 更新用户头像
      */
     public function edit_memberavatar()
     {
+        print_r($_FILES);die;
         $file = request()->file('memberavatar');
         $upload_file = BASE_UPLOAD_PATH . DS . ATTACH_AVATAR . DS;
         $avatar_name = 'avatar_' . $this->member_info['member_id'] . '.jpg';
@@ -158,10 +142,10 @@ class Member extends MobileMember
         }
         $arr['qcode_url']=WAP_SITE_URL.$qrcode_path;
         $arr['title']='扫码即送100积分';
+        $arr['uid']=$member_id;
         $arr['points']=intval(config('points_invite'));
         ds_json_encode(10000, '获取成功',$arr);
     }
-
 
 }
 

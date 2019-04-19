@@ -1452,6 +1452,9 @@ class Goods extends Model {
             case 30:
                 $model= model("Forsalegoods");
                 break;
+            case 40:
+                $model= model("SeckillGoods");
+                break;
         }
         if (is_null($model)) {
             return $goods;

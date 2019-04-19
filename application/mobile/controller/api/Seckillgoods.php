@@ -26,20 +26,42 @@ class Seckillgoods extends BaseController
 
 	public function buy()
 	{
+		$data = checkInput([
+			'id' => 'require|number',
+			'seckill_id' => 'require|number',
+			'number' => 'require|number',
+			'key' => 'require|number'
+		]);
+		$good = $this->model->find($data['id']);
+
+		$redis = new \Redis();
+		$redis->connect('127.0.0.1', 6379);
+
 		//取商品队列
-
+		$redisGood = $redis->lpop('seckill:' . input('seckill_id'));
 			//1. 队列为空，商品卖完，错误返回
+		if (!$redisGood) {
+			throw new JsonException("此商品已售完", 422);
+		}
+			// 2. 队列不为空，取客户ID 检查限额
+		// $member_id = memberIdByKey($data('key'));
+		// \Db::transaction(function () use ($good, $data) {
+		// 	$buyLog = SeckillUsers::where('member_id', $member_id)
+		// 			->where('seckill_id', $data['seckill_id'])
+		// 			->lock(true)
+		// 			->find();
 
-			// 2. 队列不为空，取客户ID入客户队列
+		// 	$good->checkLimit($buyLog, $data['number']);
+		// 	// 3. 生成订单
 
-					//1. 客户为新客户，入队列，已购商品数增加
-					//2. 客户在队列中，检查商品数量
-							//1. 大于秒杀商品数量限制，错误返回
-							//2. 不超过限制 ,已购商品数增加
-							//    下单生成订单，进入支付页面
-		    // 3. 支付页面
+		//     // 4. 支付页面
+		// 			// 1. 支付失败， 错误返回
+		// 			// 2. 支付成功，更新订单状态，客户队列已购商品数量增加
+		// // return json();
 
-		// return json();
+		// 	$buyLog->purchased += $data['number'];
+		// 	$buyLog->save();
+		// }
 	}
 
 }
