@@ -2,10 +2,12 @@ var goods_id = getQueryString("goods_id");
 var pintuangroup_share_id = getQueryString("pintuangroup_share_id");
 var map_list = [];
 var map_index_id = "";
-
+var tuan_sku;
+var goodsid;
+var isOne = true;
 $(function() {
-	//记录浏览历史
-	$.get(ApiUrl + "/Goods/addbrowse/gid/"+getQueryString("goods_id"));
+    //记录浏览历史
+    $.get(ApiUrl + "/Goods/addbrowse/gid/"+getQueryString("goods_id"));
     var e = getCookie("key");
     var t = function(e, t) {
         e = parseFloat(e) || 0;
@@ -33,12 +35,12 @@ $(function() {
         return o
     };
     template.helper("isEmpty",
-            function(e) {
-                for (var t in e) {
-                    return false
-                }
-                return true
-            });
+        function(e) {
+            for (var t in e) {
+                return false
+            }
+            return true
+        });
     function a() {
         var e = $("#mySwipe")[0];
         window.mySwipe = Swipe(e, {
@@ -50,19 +52,28 @@ $(function() {
         });
     }
     r(goods_id);
+    //SKU事件在这里触发
     function i(e, t) {
         $(e).addClass("current").siblings().removeClass("current");
         var o = $(".spec").find("a.current");
         var a = [];
         $.each(o,
-                function(e, t) {
-                    a.push(parseInt($(t).attr("specs_value_id")) || 0)
-                });
+            function(e, t) {
+                a.push(parseInt($(t).attr("specs_value_id")) || 0)
+            });
         var i = a.sort(function(e, t) {
             return e - t;
         }).join("|");
         goods_id = t.spec_list[i];
         r(goods_id);
+
+        //获取开团的sku
+        //var sku = $(e).attr("goodsid"); //获取点击的sku的id
+        //if(tuan_sku == sku ){
+        //    $(".pintuan-now").text("去参团");
+        //}else{
+        //    $(".pintuan-now").text("立即开团");
+        //}
     }
     function s(e, t) {
         var o = e.length;
@@ -91,6 +102,8 @@ $(function() {
     function n() {
         $.sValid();
     }
+
+    //获取数据
     function r(r) {
         $.ajax({
             url: ApiUrl + "/goods/goods_detail",
@@ -103,6 +116,7 @@ $(function() {
             dataType: "json",
             success: function(e) {
                 var l = e.result;
+                //console.log(l);
                 if (e.code==10000) {
                     if (l.goods_image) {
                         var d = l.goods_image.split(",");
@@ -111,29 +125,27 @@ $(function() {
                         l.goods_image = []
                     }
                     if (l.goods_info.spec_name) {
-                        var c = $.map(l.goods_info.spec_name,
-                                function(e, t) {
-                                    var o = {};
-                                    o["goods_spec_id"] = t;
-                                    o["goods_spec_name"] = e;
-                                    if (l.goods_info.spec_value) {
-                                        $.map(l.goods_info.spec_value,
-                                                function(e, a) {
-                                                    if (t == a) {
-                                                        o["goods_spec_value"] = $.map(e,
-                                                                function(e, t) {
-                                                                    var o = {};
-                                                                    o["specs_value_id"] = t;
-                                                                    o["specs_value_name"] = e;
-                                                                    return o
-                                                                })
-                                                    }
-                                                });
-                                        return o
-                                    } else {
-                                        l.goods_info.spec_value = []
+                        var c = $.map(l.goods_info.spec_name,function(e, t) {
+                            var o = {};
+                            o["goods_spec_id"] = t;
+                            o["goods_spec_name"] = e;
+                            if (l.goods_info.spec_value) {
+                                $.map(l.goods_info.spec_value,function(e, a) {
+                                    if (t == a) {
+                                        o["goods_spec_value"] = $.map(e,
+                                            function(e, t) {
+                                                var o = {};
+                                                o["specs_value_id"] = t;
+                                                o["specs_value_name"] = e;
+                                                return o
+                                            })
                                     }
                                 });
+                                return o
+                            } else {
+                                l.goods_info.spec_value = []
+                            }
+                        });
                         l.goods_map_spec = c
                     } else {
                         l.goods_map_spec = []
@@ -150,9 +162,20 @@ $(function() {
                     var _ = template("product_detail_sepc", l);
                     $("#product_detail_spec_html").html(_);
                     var _ = template("product_detail_foot", l);
+                    //这里修改了立刻开团的文本
                     $("#product_detail_foot_html").html(_);
+                    //新增判断，判断文字显示；
+                    var cc = getQueryString("goods_id");
+                    if(r == cc && !isOne){
+                        $(".pintuan-now").text("去参团");
+                    }else{
+                        $(".pintuan-now").text("立即开团");
+                    }
+
                     var _ = template("voucher_script", l);
                     $("#voucher_html").html(_);
+
+
                     if (getCookie("cart_count")) {
                         if (getCookie("cart_count") > 0) {
                             $("#cart_count").html("<sup>" + getCookie("cart_count") + "</sup>")
@@ -177,7 +200,7 @@ $(function() {
                         $('.goods-body').css('max-height','initial');
                         $('.goods-body .more').remove();
                     });
-                    
+
                     $(".pddcp-arrow").click(function() {
                         $(this).parents(".pddcp-one-wp").toggleClass("current")
                     });
@@ -204,15 +227,19 @@ $(function() {
                         $(".add").hide();
                         $(".buy-num").attr("readOnly", true)
                     }
+
+                    //收藏点击事件
                     $(".pd-collect").click(function() {
                         if ($(this).hasClass("favorate")) {
                             if (dropFavoriteGoods(r))
-                                $(this).removeClass("favorate")
+                                $(this).removeClass("favorate");
                         } else {
                             if (favoriteGoods(r))
-                                $(this).addClass("favorate")
+                                $(this).addClass("favorate");
                         }
                     });
+
+                    //加入购物车点击事件
                     $(".add-cart").click(function() {
                         if(!$('#product_detail_spec_html').hasClass('up')){
                             return;
@@ -224,8 +251,8 @@ $(function() {
                             if (o == null) {
                                 o = ""
                             }else{
-								o = decodeURIComponent(o);
-							}
+                                o = decodeURIComponent(o);
+                            }
                             if (r < 1) {//非法商品ID，不允许添加
                                 //show_tip();
                                 return false
@@ -253,42 +280,45 @@ $(function() {
                             //$("#cart_count,#cart_count1").html("<sup>" + a + "</sup>");
                             //return false
                         }
-                            $.ajax({
-                                url: ApiUrl + "/Membercart/cart_add.html",
-                                data: {
-                                    key: e,
-                                    goods_id: r,
-                                    quantity: t
-                                },
-                                type: "post",
-                                success: function(e) {
-                                    var t = $.parseJSON(e);
+                        $.ajax({
+                            url: ApiUrl + "/Membercart/cart_add.html",
+                            data: {
+                                key: e,
+                                goods_id: r,
+                                quantity: t
+                            },
+                            type: "post",
+                            success: function(e) {
+                                var t = $.parseJSON(e);
 
-                                        if (t.code==10000) {
-                                            show_tip();
-                                            if(getCookie("key")){
-                                                delCookie("cart_count");
-                                                getCartCount();
+                                if (t.code==10000) {
+                                    show_tip();
+                                    if(getCookie("key")){
+                                        delCookie("cart_count");
+                                        getCartCount();
 
-                                            }else{
-                                                var a = 0;
-                                                if(getCookie("cart_count")!=null){
-                                                    a=parseInt(getCookie("cart_count"));
-                                                }
-                                                a=a+1;
-                                                delCookie("cart_count");
-                                                addCookie("cart_count", a);
-                                            }
-                                            $("#cart_count").html("<sup>" + getCookie("cart_count") + "</sup>")
-                                        } else {
-                                            layer.open({content: t.message, btn: '我知道了'});
+                                    }else{
+                                        var a = 0;
+                                        if(getCookie("cart_count")!=null){
+                                            a=parseInt(getCookie("cart_count"));
                                         }
-
+                                        a=a+1;
+                                        delCookie("cart_count");
+                                        addCookie("cart_count", a);
+                                    }
+                                    $("#cart_count").html("<sup>" + getCookie("cart_count") + "</sup>")
+                                } else {
+                                    layer.open({content: t.message, btn: '我知道了'});
                                 }
-                            })
+
+                            }
+                        })
 
                     });
+
+                    //判断是不是虚拟商品
                     if (l.goods_info.is_virtual == "1") {
+                        //立刻购买事件
                         $(".buy-now").click(function() {
                             if(!$('#product_detail_spec_html').hasClass('up')){
                                 return;
@@ -330,6 +360,7 @@ $(function() {
                             })
                         })
                     } else {
+                        //立刻购买事件
                         $(".buy-now").click(function() {
                             if(!$('#product_detail_spec_html').hasClass('up')){
                                 return;
@@ -356,9 +387,11 @@ $(function() {
                                     data: o,
                                     dataType: "json",
                                     success: function(e) {
+                                        console.log(e)
                                         if (e.code!=10000) {
                                             layer.open({content: e.message,skin: 'msg',time: 2});
                                         } else {
+                                            //带参，跳转到收银台页面
                                             location.href = WapSiteUrl + "/order/buy_step1.html?goods_id=" + r + "&buynum=" + t
                                         }
                                     }
@@ -377,11 +410,25 @@ $(function() {
                             });
                         });
                     }else {
-                        $("#pintuan-now").click(function(){
-                            $('#product_detail_spec_html').removeClass('down').addClass('up')
-                            $("#product_detail_foot_html .pintuan-now").attr('fieldid',$(this).attr('fieldid'))
-                            $("#product_detail_foot_html .pintuan-now").text(ds_lang.join_the_group)
-                            $("#product_detail_foot_html").css('z-index','30')
+                        $(".go_pintuan").click(function(){
+                            isOne = false;
+                            //获取拼团的SKU
+                            tuan_sku = $(this).attr("goodsid");
+
+                            $('#product_detail_spec_html').removeClass('down').addClass('up');
+                            $("#product_detail_foot_html .pintuan-now").attr('fieldid',$(this).attr('fieldid'));
+                            $("#product_detail_foot_html .pintuan-now").text(ds_lang.join_the_group);
+                            $("#product_detail_foot_html").css('z-index','30');
+                            //console.log($(this).attr('fieldid'))
+                            //console.log(ds_lang.join_the_group);
+                            //默认删除所有的SKU
+                            //$(".spec a").removeClass("current");
+                            //循环对应的SKU，根据SKU和开团的SKU对应
+                            //$(".spec a").each(function(i){
+                            //    if($(".spec a").eq(i).attr("goodsid") == tuan_sku ){
+                            //        $(".spec a").eq(i).addClass("current").siblings().removeClass("current");
+                            //    }
+                            //});
                         });
                         $(".pintuan-now").click(function () {
                             if(!$('#product_detail_spec_html').hasClass('up')){
@@ -459,7 +506,7 @@ $(function() {
                     close: function() {
                         $("#product_detail_foot_html").css('z-index','1')
                         $("#product_detail_foot_html .pintuan-now").attr('fieldid','0')
-                        $("#product_detail_foot_html .pintuan-now").text(ds_lang.immediately_open_regiment)
+                        $("#product_detail_foot_html .pintuan-now").text(ds_lang.immediately_open_regiment);
                     }
                 });
                 $.animationUp({
@@ -467,20 +514,26 @@ $(function() {
                     wrapper: "#voucher_html",
                     scroll: "#voucher_roll"
                 });
-                $("#voucher_html").on("click", ".btn",
-                        function() {
-                            getFreeVoucher($(this).attr("data-tid"))
-                        });
+                $("#voucher_html").on("click", ".btn",function() {
+                    getFreeVoucher($(this).attr("data-tid"))
+                });
+                //console.log(l.spec_list);
+                //循环每一个，然后赋值进去
+                //$.each(l.spec_list,function(i,sku){
+                //    console.log(sku);
+                //    console.log($("#product_roll .spec a").eq(i).text());
+                //    $(".spec a").eq(i).attr("goodsid",sku);
+                //});
             }
-        })
+        });
     }
     $("#product_detail_html").on("click", "#get_area_selected",
-            function() {
-                $.areaSelected({
-                    success: function(e) {
-                        $("#get_area_selected_name").html(e.area_info);
-                        var t = e.area_id_2 == 0 ? e.area_id_1 : e.area_id_2;
-                        $.getJSON(ApiUrl + "/Goods/calc.html", {
+        function() {
+            $.areaSelected({
+                success: function(e) {
+                    $("#get_area_selected_name").html(e.area_info);
+                    var t = e.area_id_2 == 0 ? e.area_id_1 : e.area_id_2;
+                    $.getJSON(ApiUrl + "/Goods/calc.html", {
                             goods_id: goods_id,
                             area_id: t
                         },
@@ -493,17 +546,17 @@ $(function() {
                                 $(".buy-handle").removeClass("no-buy")
                             }
                         })
-                    }
-                })
-            });
+                }
+            })
+        });
     $("body").on("click", "#goodsBody,#goodsBody1",
-            function() {
-                window.location.href = WapSiteUrl + "/mall/product_info.html?goods_id=" + goods_id
-            });
+        function() {
+            window.location.href = WapSiteUrl + "/mall/product_info.html?goods_id=" + goods_id
+        });
     $("body").on("click", "#goodsEvaluation,#goodsEvaluation1",
-            function() {
-                window.location.href = WapSiteUrl + "/mall/product_eval_list.html?goods_id=" + goods_id
-            });
+        function() {
+            window.location.href = WapSiteUrl + "/mall/product_eval_list.html?goods_id=" + goods_id
+        });
 });
 function show_tip() {
     var e = $(".goods-pic > img").clone().css({

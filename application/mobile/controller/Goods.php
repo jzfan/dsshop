@@ -22,6 +22,9 @@ class Goods extends MobileMall {
         $goods_model = model('goods');
         $search_model = model('search');
 
+        //查询商品类型
+        $goods_type = input('get.goods_type',20);
+
         //查询条件
         $condition = array();
         $gc_id = intval(input('get.gc_id'));
@@ -116,7 +119,7 @@ class Goods extends MobileMall {
                 $condition['is_virtual'] = 1;
             }
 
-            $goods_list = $goods_model->getGoodsListByColorDistinct($condition, $fieldstr, $order, $this->pagesize);
+            $goods_list = $goods_model->_getGoodsList($goods_type,$condition, $fieldstr, $this->pagesize, $order);
         }
         //处理商品列表(抢购、限时折扣、商品图片)
         $goods_list = $this->_goods_list_extend($goods_list);
@@ -203,7 +206,10 @@ class Goods extends MobileMall {
         $area_id = intval(input('get.area_id'));
         // 商品详细信息
         $goods_model = model('goods');
-        $goods_detail = $goods_model->getGoodsDetail($goods_id);
+
+        $goods_type = intval(input('get.goods_type',20));
+        $goods_detail = $goods_model->getGoodsDetail($goods_id,20);
+
         //halt($goods_detail);
         if (empty($goods_detail)) {
             ds_json_encode(10001,'商品不存在');

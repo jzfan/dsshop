@@ -252,8 +252,31 @@ class Payment extends Model
                 return true;
             }
             $result = $this->updatePdOrder($out_trade_no, $payment_code, $order['data'], $trade_no);
+        }elseif ($order_type == 'point_order') {
+
+        }elseif ($order_type == 'forsale_order') {
+
         }
         return $result['code'] ? TRUE : FALSE;
+    }
+
+
+    /**
+     *
+     */
+    public function updateForsaleOrder()
+    {
+
+        //选择商品结算产生
+
+    }
+
+
+    public function updatePointOrder()
+    {
+
+
+
     }
 
 

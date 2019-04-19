@@ -31,6 +31,8 @@ class Membercart extends MobileMember {
 //            $goods_data = $goods_model->getGoodsOnlineInfoForShare($val['goods_id']);
 
             $cart_a[0]['goods'][$key]['cart_id'] = $val['cart_id'];
+            $cart_a[0]['goods'][$key]['goods_type'] = $val['goods_type'];
+            $cart_a[0]['goods'][$key]['goods_point'] = isset($val['goods_point']) ? $val['goods_point'] : 0;
             $cart_a[0]['goods'][$key]['goods_name'] = $val['goods_name'];
             $cart_a[0]['goods'][$key]['goods_price'] = $val['goods_price'];
             $cart_a[0]['goods'][$key]['goods_num'] = $val['goods_num'];
@@ -67,6 +69,9 @@ class Membercart extends MobileMember {
         }
         $goods_id = intval(input('post.goods_id'));
         $quantity = intval(input('post.quantity'));
+
+        $goods_type = intval(input('post.goods_type'),20);
+
         if ($goods_id <= 0 || $quantity <= 0) {
             ds_json_encode(10001,'参数错误');
         }
@@ -75,7 +80,7 @@ class Membercart extends MobileMember {
         $cart_model = model('cart');
         $logic_buy_1 = model('buy_1','logic');
 
-        $goods_info = $goods_model->getGoodsOnlineInfoAndPromotionById($goods_id);
+        $goods_info = $goods_model->_getGoodsOnlineInfoAndPromotionById($goods_type,$goods_id);
 
         //验证是否可以购买
         if (empty($goods_info)) {
@@ -101,6 +106,7 @@ class Membercart extends MobileMember {
         $param['goods_name'] = $goods_info['goods_name'];
         $param['goods_price'] = $goods_info['goods_price'];
         $param['goods_image'] = $goods_info['goods_image'];
+        $param['goods_type'] = $goods_info['goods_type'];
 
         $result = $cart_model->addCart($param, isset($this->member_info)?'db':'cookie', $quantity);
         if ($result) {

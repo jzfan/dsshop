@@ -47,7 +47,7 @@ class Index extends MobileMall {
         $recommend_list=array();
         //获取每个分类下的商品
         foreach($extral['goodsclass_list'] as $goodsclass){
-            $gc_list=model('goods')->getGoodsOnlineList(array('gc_id' => $goodsclass['gc_id']),'*', 0, 'goods_commend desc,goods_id desc', 10,'goods_commonid');
+            $gc_list=model('goods')->_getGoodsList(20,array('gc_id' => $goodsclass['gc_id']),'*', 0, 'goods_commend desc,goods_id desc', 10,'goods_commonid');
             foreach($gc_list as $k => $val){
                 $gc_list[$k]['goods_image'] = goods_cthumb($val['goods_image'],240);
             }

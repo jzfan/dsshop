@@ -16,7 +16,7 @@ ds_lang={
     'element':'元',
     'recharge_card_payment':'使用充值卡支付',
     'available_balance':'可用余额',
-    'pre_deposit_payments':'使用预存款支付',
+    'pre_deposit_payments':'使用余额支付',
     'input_payment_password':'输入支付密码',
     'not_set':'尚未设置',
     'online_payment_method':'在线支付方式',

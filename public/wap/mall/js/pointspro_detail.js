@@ -40,7 +40,7 @@ $(function (){
     get_detail(goods_id);
  
 
-  function contains(arr, str) {//检测goods_id是否存入
+  function contains(arr, str) {  //检测goods_id是否存入
 	    var i = arr.length;
 	    while (i--) {
            if (arr[i] === str) {
@@ -82,48 +82,44 @@ $(function (){
             var data = result.result;
             if(result.code == 10000){
              
-              //渲染模板
-              var html = template('product_detail', data);
-              $("#product_detail_html").html(html);
-			  $("#fixed-tab-pannel").html(data.goods_info.pgoods_body);
-			//渲染模板
-              var html = template('product_detail_sepc', data);
-              $("#product_detail_spec_html").html(html);
+                //渲染模板
+                var html = template('product_detail', data);
+                $("#product_detail_html").html(html);
+                $("#fixed-tab-pannel").html(data.goods_info.pgoods_body);
+			    //渲染模板
+                var html = template('product_detail_sepc', data);
+                $("#product_detail_spec_html").html(html);
 
-          
-              //购买数量，减
-              $(".minus").click(function (){
-                 var buynum = $(".buy-num").val();
-                 if(buynum >1){
-                    $(".buy-num").val(parseInt(buynum-1));
-                 }
-              });
-              //购买数量加
-              $(".add").click(function (){
-                 var buynum = parseInt($(".buy-num").val());
-                 if(buynum < data.goods_info.pgoods_storage){
-                    $(".buy-num").val(parseInt(buynum+1));
-                 }
-              });
+                //购买数量，减
+                $(".minus").click(function (){
+                    var buynum = $(".buy-num").val();
+                    if(buynum >1){
+                        $(".buy-num").val(parseInt(buynum-1));
+                    }
+                });
+                //购买数量加
+                $(".add").click(function (){
+                    var buynum = parseInt($(".buy-num").val());
+                    if(buynum < data.goods_info.pgoods_storage){
+                        $(".buy-num").val(parseInt(buynum+1));
+                    }
+                });
             
-              //立即购买
-             
-                  $("#buy-now").click(function (){
-                     var key = getCookie('key');//登录标记
-                     if(!key){
+                //立即购买
+                $("#buy-now").click(function (){
+                    var key = getCookie('key');  //登录标记
+                    if(!key){
                         window.location.href = WapSiteUrl+'/member/login.html';
-                     }else{
-                         var buynum = parseInt($('.buy-num').val()) || 0;
-
-                      if (buynum < 1) {
-                          layer.open({content: '参数错误！',skin: 'msg',time: 2});
-                          return;
-                      }
-                      if (buynum > data.goods_info.pgoods_storage) {
-                          layer.open({content: '库存不足！',skin: 'msg',time: 2});
-                          return;
-                      }
-
+                    }else{
+                        var buynum = parseInt($('.buy-num').val()) || 0;
+                        if (buynum < 1) {
+                            layer.open({content: '参数错误！',skin: 'msg',time: 2});
+                            return;
+                        }
+                        if (buynum > data.goods_info.pgoods_storage) {
+                            layer.open({content: '库存不足！',skin: 'msg',time: 2});
+                            return;
+                        }
                         var json = {};
                         json.key = key;
                         json.pgid = goods_id;
@@ -141,10 +137,9 @@ $(function (){
                                 }
                             }
                         });
-                     }
-                  });
+                    }
+                });
 
-             
 
                 } else {
                     layer.open({

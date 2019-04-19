@@ -1,0 +1,34 @@
+@charset "utf-8";
+
+/* ================================ */
+/* 新年活动专题css
+/* 在原css中叠加覆盖              */
+/* ================================ */
+
+/*body { background-color: #e93b3d;}*/
+
+#header{background: linear-gradient(-90deg,#dc1416,#ff8f67);}
+.pxianshi{background-color: #e93b3d;padding-top: 10px;}
+.home-category{background: linear-gradient(-90deg,#dc1416,#ff8f67);}
+.home-category .linear{display: none !important;}
+.home-category .category-nav.active{width: 92%;background: none;}
+.home-category .category-nav .category-item{color: #fff;}
+.home-category .category-nav.active .category-item{color: #f23030;border-radius: 20px;margin: 0.3rem 1%;margin-top: 0;padding: 0px 12px;font-size: 0.5rem;border: none;}
+
+.home-category .category-nav.active .category-item.active{color: #fff;background: linear-gradient(-31deg,#ff2d2f,#ff6845);}
+.home-category .toggle-wrap .toggle{color: #fff;}
+.dstouch-home-nav{background: linear-gradient(0deg,#e8393b,#fb9b79);}
+.dstouch-home-nav li p{color: #fff;}
+.pxianshi .title{color: #fff;}
+.pxianshi .title .icon{color: #fff;}
+.pxianshi .content .item .price_info .now_price{color: #fff;}
+.pxianshi .content .item .price_info del{color: #f1f1f1;}
+
+.dstouch-home-block .tit-bar:first-child{background: linear-gradient(-90deg,#dc1416,#ff8f67);color: #fff;}
+
+.dstouch-home-block{background: linear-gradient(-90deg,#dc1416,#ff8f67);}
+.item-goods .goods-list > div > div{border-radius: 8px;}
+.dstouch-home-block .more a{color: #fff;}
+
+.footer-nav{background-image: linear-gradient(-90deg,#dc1416,#ff8f67);}
+.footer-nav ul li a{color: #fff;}

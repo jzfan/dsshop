@@ -113,7 +113,7 @@
             'containerobj':$("#pdcashlist"),
             'iIntervalId':true});
 
-        //获取预存款余额
+        //获取余额余额
         $.getJSON(ApiUrl + '/Member/my_asset.html', {'key':key,'fields':'predepoit'}, function(result){
             var html = template('pd_count_model', result.result);
             $("#pd_count").html(html);

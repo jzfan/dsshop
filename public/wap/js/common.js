@@ -55,12 +55,12 @@ function contains(e, t) {
 }
 function buildUrl(e, t) {
     switch (e) {
-    case "keyword":
-        return WapSiteUrl + "/mall/product_list.html?keyword=" + encodeURIComponent(t);
-    case "goods":
-        return WapSiteUrl + "/mall/product_detail.html?goods_id=" + t;
-    case "url":
-        return t
+        case "keyword":
+            return WapSiteUrl + "/mall/product_list.html?keyword=" + encodeURIComponent(t);
+        case "goods":
+            return WapSiteUrl + "/mall/product_detail.html?goods_id=" + t;
+        case "url":
+            return t
     }
     return WapSiteUrl
 }
@@ -74,7 +74,7 @@ function writeClear(e) {
 }
 function btnCheck(e) {
     var t = true;
-    e.find("input").each(function() {
+    e.find("input").each(function () {
         if ($(this).hasClass("no-follow")) {
             return
         }
@@ -93,18 +93,18 @@ function getSearchName() {
     if (e == "") {
         if (getCookie("deft_key_value") == null) {
             $.getJSON(ApiUrl + "/Index/search_hot_info.html",
-            function(e) {
-                var t = e.result.hot_info;
-                if (typeof t.name != "undefined") {
-                    $("#keyword").attr("placeholder", t.name);
-                    $("#keyword").html(t.name);
-                    addCookie("deft_key_name", t.name, 1);
-                    addCookie("deft_key_value", t.value, 1)
-                } else {
-                    addCookie("deft_key_name", "", 1);
-                    addCookie("deft_key_value", "", 1)
-                }
-            })
+                function (e) {
+                    var t = e.result.hot_info;
+                    if (typeof t.name != "undefined") {
+                        $("#keyword").attr("placeholder", t.name);
+                        $("#keyword").html(t.name);
+                        addCookie("deft_key_name", t.name, 1);
+                        addCookie("deft_key_value", t.value, 1)
+                    } else {
+                        addCookie("deft_key_name", "", 1);
+                        addCookie("deft_key_value", "", 1)
+                    }
+                })
         } else {
             $("#keyword").attr("placeholder", getCookie("deft_key_name"));
             $("#keyword").html(getCookie("deft_key_name"))
@@ -125,13 +125,13 @@ function getFreeVoucher(e) {
             key: t
         },
         dataType: "json",
-        success: function(e) {
+        success: function (e) {
             checkLogin(e.login);
             var t = "领取成功";
-            if (e.code!='10000') {
+            if (e.code != '10000') {
                 t = "领取失败：" + e.message;
             }
-            layer.open({content: t,skin: 'msg',time: 2});
+            layer.open({content: t, skin: 'msg', time: 2});
         }
     })
 }
@@ -153,7 +153,7 @@ function updateCookieCart(e) {
 }
 function getCartCount(e, t) {
     var a = 0;
-	
+
     if (getCookie("key") !== null && getCookie("cart_count") === null) {
         var e = getCookie("key");
         $.ajax({
@@ -164,9 +164,9 @@ function getCartCount(e, t) {
             },
             dataType: "json",
             async: false,
-            success: function(e) {
+            success: function (e) {
                 if (typeof e.result.cart_count != "undefined") {
-					delCookie("cart_count")
+                    delCookie("cart_count")
                     addCookie("cart_count", e.result.cart_count, t);
                     a = e.result.cart_count
                 }
@@ -180,25 +180,25 @@ function getCartCount(e, t) {
         $("#header-nav").find("sup").show()
     }
 }
-$(function() {
+$(function () {
 
 
-    $(".input-del").click(function() {
+    $(".input-del").click(function () {
         $(this).parent().removeClass("write").find("input").val("");
         btnCheck($(this).parents("form"))
     });
     $("body").on("click", "label",
-    function() {
-        if ($(this).has('input[type="radio"]').length > 0) {
-            $(this).addClass("checked").siblings().removeAttr("class").find('input[type="radio"]').removeAttr("checked")
-        } else if ($(this).has('[type="checkbox"]')) {
-            if ($(this).find('input[type="checkbox"]').prop("checked")) {
-                $(this).addClass("checked")
-            } else {
-                $(this).removeClass("checked")
+        function () {
+            if ($(this).has('input[type="radio"]').length > 0) {
+                $(this).addClass("checked").siblings().removeAttr("class").find('input[type="radio"]').removeAttr("checked")
+            } else if ($(this).has('[type="checkbox"]')) {
+                if ($(this).find('input[type="checkbox"]').prop("checked")) {
+                    $(this).addClass("checked")
+                } else {
+                    $(this).removeClass("checked")
+                }
             }
-        }
-    });
+        });
     if ($("body").hasClass("scroller-body")) {
         new IScroll(".scroller-body", {
             mouseWheel: true,
@@ -206,49 +206,50 @@ $(function() {
         })
     }
     $("#header").on("click", "#header-nav",
-    function() {
-        if ($(".dstouch-nav-layout").hasClass("show")) {
-            $(".dstouch-nav-layout").removeClass("show")
-        } else {
-            $(".dstouch-nav-layout").addClass("show")
-        }
-    });
+        function () {
+            if ($(".dstouch-nav-layout").hasClass("show")) {
+                $(".dstouch-nav-layout").removeClass("show")
+            } else {
+                $(".dstouch-nav-layout").addClass("show")
+            }
+        });
     $("#header").on("click", ".dstouch-nav-layout",
-    function() {
-        $(".dstouch-nav-layout").removeClass("show")
-    });
-    $(document).scroll(function() {
+        function () {
+            $(".dstouch-nav-layout").removeClass("show")
+        });
+    $(document).scroll(function () {
         $(".dstouch-nav-layout").removeClass("show")
     });
     //getSearchName();
     getCartCount();
-    $(document).scroll(function() {
+    $(document).scroll(function () {
         e()
     });
     $(".fix-block-r,footer").on("click", ".gotop",
-    function() {
-        btn = $(this)[0];
-        this.timer = setInterval(function() {
-            $(window).scrollTop(Math.floor($(window).scrollTop() * .8));
-            if ($(window).scrollTop() == 0) clearInterval(btn.timer, e)
-        },
-        10)
-    });
+        function () {
+            btn = $(this)[0];
+            this.timer = setInterval(function () {
+                    $(window).scrollTop(Math.floor($(window).scrollTop() * .8));
+                    if ($(window).scrollTop() == 0) clearInterval(btn.timer, e)
+                },
+                10)
+        });
     function e() {
         $(window).scrollTop() == 0 ? $("#goTopBtn").addClass("hide") : $("#goTopBtn").removeClass("hide")
     }
-}); 
-(function($) {
+});
+(function ($) {
     $.extend($, {
-        scrollTransparent: function(e) {
+        scrollTransparent: function (e) {
             var t = {
                 valve: "#header",
                 scrollHeight: 50
             };
             var e = $.extend({},
-            t, e);
+                t, e);
+
             function a() {
-                $(window).scroll(function() {
+                $(window).scroll(function () {
                     if ($(window).scrollTop() <= e.scrollHeight) {
                         $(e.valve).addClass("transparent").removeClass("posf")
                     } else {
@@ -256,16 +257,18 @@ $(function() {
                     }
                 })
             }
-            return this.each(function() {
+
+            return this.each(function () {
                 a()
             })()
         },
-        areaSelected: function(options) {
+        areaSelected: function (options) {
             var defaults = {
-                success: function(e) {}
+                success: function (e) {
+                }
             };
             var options = $.extend({},
-            defaults, options);
+                defaults, options);
             var ASID = 0;
             var ASID_1 = 0;
             var ASID_2 = 0;
@@ -274,6 +277,7 @@ $(function() {
             var ASINFO = "";
             var ASDEEP = 1;
             var ASINIT = true;
+
             function _init() {
                 if ($("#areaSelected").length > 0) {
                     $("#areaSelected").remove()
@@ -284,6 +288,7 @@ $(function() {
                 _bindEvent();
                 _close()
             }
+
             function _getAreaList() {
                 $.ajax({
                     type: "get",
@@ -293,7 +298,7 @@ $(function() {
                     },
                     dataType: "json",
                     async: false,
-                    success: function(e) {
+                    success: function (e) {
                         if (e.result.area_list.length == 0) {
                             _finish();
                             return false
@@ -330,57 +335,59 @@ $(function() {
                 });
                 return false
             }
+
             function _bindEvent() {
                 $("#areaSelected").find(".dstouch-default-list").off("click", "li > a");
                 $("#areaSelected").find(".dstouch-default-list").on("click", "li > a",
-                function() {
-                    ASID = $(this).attr("data-id");
-                    eval("ASID_" + ASDEEP + "=$(this).attr('data-id')");
-                    ASNAME = $(this).attr("data-name");
-                    ASINFO += ASNAME + " ";
-                    var _li = $("#areaSelected").find("#filtrate_ul").find("li").eq(ASDEEP);
-                    _li.prev().find("a").attr({
-                        "data-id": ASID,
-                        "data-name": ASNAME
-                    }).html(ASNAME);
-                    if (ASDEEP == 3) {
-                        _finish();
-                        return false
-                    }
-                    _getAreaList()
-                });
+                    function () {
+                        ASID = $(this).attr("data-id");
+                        eval("ASID_" + ASDEEP + "=$(this).attr('data-id')");
+                        ASNAME = $(this).attr("data-name");
+                        ASINFO += ASNAME + " ";
+                        var _li = $("#areaSelected").find("#filtrate_ul").find("li").eq(ASDEEP);
+                        _li.prev().find("a").attr({
+                            "data-id": ASID,
+                            "data-name": ASNAME
+                        }).html(ASNAME);
+                        if (ASDEEP == 3) {
+                            _finish();
+                            return false
+                        }
+                        _getAreaList()
+                    });
                 $("#areaSelected").find("#filtrate_ul").off("click", "li > a");
                 $("#areaSelected").find("#filtrate_ul").on("click", "li > a",
-                function() {
-                    if ($(this).parent().index() >= $("#areaSelected").find("#filtrate_ul").find(".selected").index()) {
-                        return false
-                    }
-                    ASID = $(this).parent().prev().find("a").attr("data-id");
-                    ASNAME = $(this).parent().prev().find("a").attr("data-name");
-                    ASDEEP = $(this).parent().index();
-                    ASINFO = "";
-                    for (var e = 0; e < $("#areaSelected").find("#filtrate_ul").find("a").length; e++) {
-                        if (e < ASDEEP) {
-                            ASINFO += $("#areaSelected").find("#filtrate_ul").find("a").eq(e).attr("data-name") + " "
-                        } else {
-                            var t = "";
-                            switch (e) {
-                            case 0:
-                                t = "一级地区";
-                                break;
-                            case 1:
-                                t = "二级地区";
-                                break;
-                            case 2:
-                                t = "三级地区";
-                                break
-                            }
-                            $("#areaSelected").find("#filtrate_ul").find("a").eq(e).html(t)
+                    function () {
+                        if ($(this).parent().index() >= $("#areaSelected").find("#filtrate_ul").find(".selected").index()) {
+                            return false
                         }
-                    }
-                    _getAreaList()
-                })
+                        ASID = $(this).parent().prev().find("a").attr("data-id");
+                        ASNAME = $(this).parent().prev().find("a").attr("data-name");
+                        ASDEEP = $(this).parent().index();
+                        ASINFO = "";
+                        for (var e = 0; e < $("#areaSelected").find("#filtrate_ul").find("a").length; e++) {
+                            if (e < ASDEEP) {
+                                ASINFO += $("#areaSelected").find("#filtrate_ul").find("a").eq(e).attr("data-name") + " "
+                            } else {
+                                var t = "";
+                                switch (e) {
+                                    case 0:
+                                        t = "一级地区";
+                                        break;
+                                    case 1:
+                                        t = "二级地区";
+                                        break;
+                                    case 2:
+                                        t = "三级地区";
+                                        break
+                                }
+                                $("#areaSelected").find("#filtrate_ul").find("a").eq(e).html(t)
+                            }
+                        }
+                        _getAreaList()
+                    })
             }
+
             function _finish() {
                 var e = {
                     area_id: ASID,
@@ -396,77 +403,82 @@ $(function() {
                 }
                 return false
             }
+
             function _close() {
                 $("#areaSelected").find(".header-l").off("click", "a");
                 $("#areaSelected").find(".header-l").on("click", "a",
-                function() {
-                    $("#areaSelected").find(".dstouch-full-mask").addClass("right").removeClass("left")
-                });
+                    function () {
+                        $("#areaSelected").find(".dstouch-full-mask").addClass("right").removeClass("left")
+                    });
                 return false
             }
-            return this.each(function() {
+
+            return this.each(function () {
                 return _init()
             })()
         },
-        addressSelected: function(options) {
+        addressSelected: function (options) {
             var defaults = {
-                success: function(e) {}
+                success: function (e) {
+                }
             };
             var options = $.extend({},
-            defaults, options);
-            var MAP='';
-            var LOCAL='';
+                defaults, options);
+            var MAP = '';
+            var LOCAL = '';
             var ADDRESS = "";
             var LNG = "";
             var LAT = '';
+
             function _init() {
                 if ($("#addressSelected").length > 0) {
                     $("#addressSelected").remove()
                 }
-                var e = '<div id="addressSelected">' + '<div class="dstouch-full-mask left">' + '<div class="dstouch-full-mask-bg"></div>' + '<div class="dstouch-full-mask-block">' + '<div class="header">' + '<div class="header-wrap">' + '<div class="header-l"><a href="javascript:void(0);"><i class="back iconfont"></i></a></div>' + '<div class="header-title">' + "<h1>选择地址</h1>" + "</div>" + '<div class="header-r"><a href="javascript:void(0);"><i class="close iconfont"></i></a></div>' + "</div>" + "</div>"+ '<div class="map_content">' + '<div class="location_name"><input type="text" id="map_keywords" placeholder="小区、写字楼、学校"><span class="icon_search"></span></div>' + '<div id="allmap">' + "</div>" +'<div id="r-result"></div>'+ "</div>" + "</div>" + "</div>" + "</div>";
+                var e = '<div id="addressSelected">' + '<div class="dstouch-full-mask left">' + '<div class="dstouch-full-mask-bg"></div>' + '<div class="dstouch-full-mask-block">' + '<div class="header">' + '<div class="header-wrap">' + '<div class="header-l"><a href="javascript:void(0);"><i class="back iconfont"></i></a></div>' + '<div class="header-title">' + "<h1>选择地址</h1>" + "</div>" + '<div class="header-r"><a href="javascript:void(0);"><i class="close iconfont"></i></a></div>' + "</div>" + "</div>" + '<div class="map_content">' + '<div class="location_name"><input type="text" id="map_keywords" placeholder="小区、写字楼、学校"><span class="icon_search"></span></div>' + '<div id="allmap">' + "</div>" + '<div id="r-result"></div>' + "</div>" + "</div>" + "</div>" + "</div>";
                 $("body").append(e);
                 _getMap();
                 _bindEvent();
                 _close()
             }
+
             function _getMap() {
                 MAP = new BMap.Map("allmap");
                 var lng = getCookie("longitude");
                 var lat = getCookie("latitude");
-             
+
                 if (!lng && !lat) {
-                var geolocation = new BMap.Geolocation();
-                geolocation.getCurrentPosition(function (r) {
-                    if (this.getStatus() == BMAP_STATUS_SUCCESS) {
-                        var lng = r.point.lng;
-                        var lat = r.point.lat;
-                        var point = new BMap.Point(lng, lat);
-                        MAP.centerAndZoom(point, 16);
-                        MAP.addControl(new BMap.NavigationControl());
-                        MAP.enableScrollWheelZoom();    
-                        var marker = new BMap.Marker(point);  // 创建标注
-                        MAP.addOverlay(marker);              // 将标注添加到地图中
-                        marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+                    var geolocation = new BMap.Geolocation();
+                    geolocation.getCurrentPosition(function (r) {
+                        if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+                            var lng = r.point.lng;
+                            var lat = r.point.lat;
+                            var point = new BMap.Point(lng, lat);
+                            MAP.centerAndZoom(point, 16);
+                            MAP.addControl(new BMap.NavigationControl());
+                            MAP.enableScrollWheelZoom();
+                            var marker = new BMap.Marker(point);  // 创建标注
+                            MAP.addOverlay(marker);              // 将标注添加到地图中
+                            marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
 //                        LNG = lng;
 //                        LAT = lat;
 
-                    } else {
-                        alert('failed' + this.getStatus());
-                    }
-                }, {enableHighAccuracy: true});
-                }else{
-                	var point = new BMap.Point(lng, lat);
-                	MAP.centerAndZoom(point, 16);
+                        } else {
+                            alert('failed' + this.getStatus());
+                        }
+                    }, {enableHighAccuracy: true});
+                } else {
+                    var point = new BMap.Point(lng, lat);
+                    MAP.centerAndZoom(point, 16);
                     MAP.addControl(new BMap.NavigationControl());
-                    MAP.enableScrollWheelZoom();    
+                    MAP.enableScrollWheelZoom();
                     var marker = new BMap.Marker(point);  // 创建标注
                     MAP.addOverlay(marker);              // 将标注添加到地图中
                     marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
                 }
-                MAP.addEventListener("click", function(e){
+                MAP.addEventListener("click", function (e) {
 //                    alert(e.point.lng + ", " + e.point.lat);
                     MAP.clearOverlays();  //清除标注  或者可以把market 放入数组
-                    var point = new BMap.Point(e.point.lng , e.point.lat);
+                    var point = new BMap.Point(e.point.lng, e.point.lat);
                     var marker = new BMap.Marker(point);
                     MAP.addOverlay(marker);
                     marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
@@ -475,75 +487,79 @@ $(function() {
 //                    LAT = e.point.lat;
                 });
                 var options = {
-                        onSearchComplete: function(results){
-                                // 判断状态是否正确
-                                if (LOCAL.getStatus() == BMAP_STATUS_SUCCESS){
-                                        var s = [];
-                                        for (var i = 0; i < results.getCurrentNumPois(); i ++){
-                                                s.push('<p class="address_list_wrap" data-lng="'+results.getPoi(i).point.lng+'" data-lat="'+results.getPoi(i).point.lat+'" data-address="'+results.getPoi(i).address+'"><span class="address_mt">'+results.getPoi(i).title + "</span><br><span class='address_mc'> " + results.getPoi(i).address+'</span></p>');
-                                        }
-                                        if(results.getCurrentNumPois()>0){
+                    onSearchComplete: function (results) {
+                        // 判断状态是否正确
+                        if (LOCAL.getStatus() == BMAP_STATUS_SUCCESS) {
+                            var s = [];
+                            for (var i = 0; i < results.getCurrentNumPois(); i++) {
+                                s.push('<p class="address_list_wrap" data-lng="' + results.getPoi(i).point.lng + '" data-lat="' + results.getPoi(i).point.lat + '" data-address="' + results.getPoi(i).address + '"><span class="address_mt">' + results.getPoi(i).title + "</span><br><span class='address_mc'> " + results.getPoi(i).address + '</span></p>');
+                            }
+                            if (results.getCurrentNumPois() > 0) {
 
-                                            MAP.clearOverlays();  //清除标注  或者可以把market 放入数组
-                                            var point = new BMap.Point(results.getPoi(0).point.lng , results.getPoi(0).point.lat);
-                                            var marker = new BMap.Marker(point);
-                                            MAP.centerAndZoom(point, 16);
-                                            MAP.addOverlay(marker);
-                                            marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+                                MAP.clearOverlays();  //清除标注  或者可以把market 放入数组
+                                var point = new BMap.Point(results.getPoi(0).point.lng, results.getPoi(0).point.lat);
+                                var marker = new BMap.Marker(point);
+                                MAP.centerAndZoom(point, 16);
+                                MAP.addOverlay(marker);
+                                marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
 
 //                                            LNG = results.getPoi(0).point.lng;
 //                                            LAT = results.getPoi(0).point.lat;
-                                            document.getElementById("r-result").innerHTML = s.join("");
+                                document.getElementById("r-result").innerHTML = s.join("");
 
-                                        }
-                                        
-                                }
+                            }
+
                         }
+                    }
                 };
                 LOCAL = new BMap.LocalSearch(MAP, options);
                 return false
             }
+
             function _bindEvent() {
                 $("#addressSelected").find(".location_name").off("keyup", "#map_keywords");
                 $("#addressSelected").find(".location_name").on("keyup", "#map_keywords",
-                function() {
-                    LOCAL.search($('#map_keywords').val());
-                });
+                    function () {
+                        LOCAL.search($('#map_keywords').val());
+                    });
                 $("#addressSelected").find("#r-result").off("click", ".address_list_wrap");
                 $("#addressSelected").find("#r-result").on("click", ".address_list_wrap",
-                function() {
-                    var e = {
-                        address: $(this).attr('data-address'),
-                        lng: $(this).attr('data-lng'),
-                        lat: $(this).attr('data-lat')
-                    };
-                    options.success.call("success", e);
-                    $("#addressSelected").find(".dstouch-full-mask").addClass("right").removeClass("left")
-                    return false
-                });
+                    function () {
+                        var e = {
+                            address: $(this).attr('data-address'),
+                            lng: $(this).attr('data-lng'),
+                            lat: $(this).attr('data-lat')
+                        };
+                        options.success.call("success", e);
+                        $("#addressSelected").find(".dstouch-full-mask").addClass("right").removeClass("left")
+                        return false
+                    });
             }
+
             function _close() {
                 $("#addressSelected").find(".header-l").off("click", "a");
                 $("#addressSelected").find(".header-l").on("click", "a",
-                function() {
-                    $("#addressSelected").find(".dstouch-full-mask").addClass("right").removeClass("left")
-                });
+                    function () {
+                        $("#addressSelected").find(".dstouch-full-mask").addClass("right").removeClass("left")
+                    });
                 return false
             }
-            return this.each(function() {
+
+            return this.each(function () {
                 return _init()
             })()
         },
-        animationLeft: function(e) {
+        animationLeft: function (e) {
             var t = {
                 valve: ".animation-left",
                 wrapper: ".dstouch-full-mask",
                 scroll: ""
             };
             var e = $.extend({},
-            t, e);
+                t, e);
+
             function a() {
-                $(e.valve).click(function() {
+                $(e.valve).click(function () {
                     $(e.wrapper).removeClass("hide").removeClass("right").addClass("left");
                     if (e.scroll != "") {
                         if (typeof myScrollAnimationLeft == "undefined") {
@@ -564,24 +580,27 @@ $(function() {
                     }
                 });
                 $(e.wrapper).on("click", ".header-l > a",
-                function() {
-                    $(e.wrapper).addClass("right").removeClass("left")
-                })
+                    function () {
+                        $(e.wrapper).addClass("right").removeClass("left")
+                    })
             }
-            return this.each(function() {
+
+            return this.each(function () {
                 a()
             })()
         },
-        animationUp: function(e) {
+        animationUp: function (e) {
             var t = {
                 valve: ".animation-up",
                 wrapper: ".dstouch-bottom-mask",
                 scroll: ".dstouch-bottom-mask-rolling",
-                start: function() {},
-                close: function() {}
+                start: function () {
+                },
+                close: function () {
+                }
             };
-            var e = $.extend({},
-            t, e);
+            var e = $.extend({}, t, e);
+
             function a() {
                 e.start.call("start");
                 $(e.wrapper).removeClass("down").addClass("up");
@@ -603,34 +622,38 @@ $(function() {
                     }
                 }
             }
-            return this.each(function() {
+
+            return this.each(function () {
                 if (e.valve != "") {
                     $(e.valve).on("click",
-                    function() {
-                        a()
-                    })
+                        function () {
+                            a()
+                        })
                 } else {
                     a()
                 }
                 $(e.wrapper).on("click", ".dstouch-bottom-mask-bg,.dstouch-bottom-mask-close",
-                function() {
-                    $(e.wrapper).addClass("down").removeClass("up");
-                    e.close.call("close")
-                })
+                    function () {
+                        $(e.wrapper).addClass("down").removeClass("up");
+                        e.close.call("close")
+                    })
             })()
         }
     })
 })(Zepto);
-$.fn.ajaxUploadImage = function(e) {
+$.fn.ajaxUploadImage = function (e) {
     var t = {
         url: "",
         data: {},
-        start: function() {},
-        success: function() {}
+        start: function () {
+        },
+        success: function () {
+        }
     };
     var e = $.extend({},
-    t, e);
+        t, e);
     var a;
+
     function n() {
         if (a === null || a === undefined) {
             alert("请选择您要上传的文件！");
@@ -638,39 +661,42 @@ $.fn.ajaxUploadImage = function(e) {
         }
         return true
     }
-    return this.each(function() {
+
+    return this.each(function () {
         $(this).on("change",
-        function() {
-            var t = $(this);
-            e.start.call("start", t);
-            a = t.prop("files")[0];
-            if (!n) return false;
-            try {
-                var r = new XMLHttpRequest;
-                r.open("post", e.url, true);
-                r.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-                r.onreadystatechange = function() {
-                    if (r.readyState == 4) {
-                        returnDate = $.parseJSON(r.responseText);
-                        e.success.call("success", t, returnDate)
+            function () {
+                var t = $(this);
+                e.start.call("start", t);
+                a = t.prop("files")[0];
+                if (!n) return false;
+                try {
+                    var r = new XMLHttpRequest;
+                    r.open("post", e.url, true);
+                    r.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+                    r.onreadystatechange = function () {
+                        if (r.readyState == 4) {
+                            returnDate = $.parseJSON(r.responseText);
+                            e.success.call("success", t, returnDate)
+                        }
+                    };
+                    var i = new FormData;
+                    for (k in e.data) {
+                        i.append(k, e.data[k])
                     }
-                };
-                var i = new FormData;
-                for (k in e.data) {
-                    i.append(k, e.data[k])
+                    i.append(t.attr("name"), a);
+                    result = r.send(i)
+                } catch (o) {
+                    console.log(o);
+                    alert(o)
                 }
-                i.append(t.attr("name"), a);
-                result = r.send(i)
-            } catch(o) {
-                console.log(o);
-                alert(o)
-            }
-        })
+            })
     })
 };
 function loadSeccode() {
     $("#codeimage").attr("src", ApiUrl + "/Seccode/makecode.html")
 }
+
+//收藏商品--添加收藏 事件
 function favoriteGoods(e) {
     var t = getCookie("key");
     if (!t) {
@@ -678,7 +704,7 @@ function favoriteGoods(e) {
         return
     }
     if (e <= 0) {
-        layer.open({content: '参数错误',skin: 'msg',time: 2});
+        layer.open({content: '参数错误', skin: 'msg', time: 2});
         return false
     }
     var a = false;
@@ -691,16 +717,17 @@ function favoriteGoods(e) {
         },
         dataType: "json",
         async: false,
-        success: function(e) {
-        if (e.code == 10000) {
+        success: function (e) {
+            if (e.code == 10000) {
                 a = true
             } else {
-                layer.open({content: e.message,skin: 'msg',time: 2});
+                layer.open({content: e.message, skin: 'msg', time: 2});
             }
         }
     });
     return a
 }
+//收藏商品--取消收藏 事件
 function dropFavoriteGoods(e) {
     var t = getCookie("key");
     if (!t) {
@@ -708,7 +735,7 @@ function dropFavoriteGoods(e) {
         return
     }
     if (e <= 0) {
-        layer.open({content: '参数错误',skin: 'msg',time: 2});
+        layer.open({content: '参数错误', skin: 'msg', time: 2});
         return false
     }
     var a = false;
@@ -721,11 +748,11 @@ function dropFavoriteGoods(e) {
         },
         dataType: "json",
         async: false,
-        success: function(e) {
+        success: function (e) {
             if (e.code == 10000) {
                 a = true
             } else {
-                layer.open({content: e.message,skin: 'msg',time: 2});
+                layer.open({content: e.message, skin: 'msg', time: 2});
             }
         }
     });
@@ -733,22 +760,29 @@ function dropFavoriteGoods(e) {
 }
 
 function loadScript(url, callback) {
-  var script = document.createElement("script");
-  script.type = "text/javascript";
-  if(typeof(callback) != "undefined"){
-    if (script.readyState) {
-      script.onreadystatechange = function () {
-        if (script.readyState == "loaded" || script.readyState == "complete") {
-          script.onreadystatechange = null;
-          callback();
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    if (typeof(callback) != "undefined") {
+        if (script.readyState) {
+            script.onreadystatechange = function () {
+                if (script.readyState == "loaded" || script.readyState == "complete") {
+                    script.onreadystatechange = null;
+                    callback();
+                }
+            };
+        } else {
+            script.onload = function () {
+                callback();
+            };
         }
-      };
-    } else {
-      script.onload = function () {
-        callback();
-      };
     }
-  }
-  script.src = url;
-  document.body.appendChild(script);
+    script.src = url;
+    document.body.appendChild(script);
 }
+//爆炸图片处理
+function imgError(img){
+	$(img).attr("src","http://www.shop.com/wap/act_spike/img/spike_headBg.png");
+}
+
+
+

@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-touch-fullscreen" content="yes" />
+<meta name="format-detection" content="telephone=no"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="msapplication-tap-highlight" content="no" />
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1" />
+<title></title>
+<link rel="stylesheet" type="text/css" href="../css/base.css">
+<link rel="stylesheet" type="text/css" href="../css/dstouch_member.css">
+</head>
+
+<body>
+<header id="header" class="fixed">
+  <div class="header-wrap">
+    <div class="header-l"><a href="javascript:history.go(-1)"><i class="back iconfont"></i></a></div>
+    <div class="header-title">
+      <h1>购买VIP激活包</h1>
+    </div>
+    <div class="header-r"> <a id="header-nav" href="javascript:void(0);"><i class="more iconfont"></i><sup></sup></a> </div>
+  </div>
+  <div class="dstouch-nav-layout">
+    <div class="dstouch-nav-menu"> <span class="arrow"></span>
+      <ul>
+          <li><a href="../index.html"><i class="iconfont home"></i><lang data-id="home"></lang></a></li>
+          <li><a href="../mall/search.html"><i class="iconfont search"></i><lang data-id="search"></lang></a></li>
+          <li><a href="../mall/product_first_categroy.html"><i class="iconfont categroy"></i><lang data-id="classification"></lang></a></li>
+          <li><a href="../mall/cart_list.html"><i class="iconfont cart"></i><lang data-id="cart"></lang><sup></sup></a></li>
+          <li><a href="../member/member.html"><i class="iconfont member"></i><lang data-id="my_business_city"></lang></a></li>
+      </ul>
+    </div>
+  </div>
+</header>
+<div class="dstouch-main-layout">
+  <div class="dstouch-inp-con" id="rechargeinfo"> 
+      <script type="text/html" id="rechargeinfo-tmpl">
+          <ul class="form-box">
+              <li class="form-item">
+                  <h4><%= lang('recharge_order')%>：</h4>
+                  <div class="txt-box"><%=pdinfo.plus_sn %> </div>
+              </li>   
+              <li class="form-item">
+                  <h4><%= lang('recharge_amount')%>：</h4>
+                  <div class="txt-box"><%=pdinfo.plus_amount %><%=lang('element')%></div>
+              </li>  		
+          </ul>
+
+          <% if(payment_list.length > 0) { %>
+          <% for(var p = 0;p < payment_list.length;p++){ %>
+          <div class="form-btn ok">
+              <a value="<%= base_site_url %>?s=mobile/Memberpayment/plusPay/key/<%= key %>/pay_sn/<%= pdinfo.plus_sn %>/payment_code/<%= payment_list[p].payment_code %>" class="btn btn_pay" ><%= payment_list[p].payment_name %></a>
+          </div>
+          <% }} %>
+      </script> 
+  </div>
+</div>
+<style>
+/*<!-- 选择线下支付CSS-->*/
+.pay_offline_info{width: 96%;overflow: hidden;padding-bottom: 1rem;margin: 0px auto;padding: 2% 2%;background: #fff;margin-top: 1rem;display: none;}
+.pay_offline_info .tit{display: block;padding: 0.5rem 0;font-size: 0.7rem;line-height: 0.9rem;}
+.pay_offline_info .tit2{font-size: 0.5rem;line-height: 0.5rem;color: #f23030;padding: 0;padding-bottom: 0.5rem;}
+.pay_offline_info .pay_off_infos{width: 2.7rem;height: 2.7rem;padding: 0.2rem;display: block;border: solid 0.05rem #EEE;border-radius: 0.2rem;overflow: hidden;position: relative;}
+.pay_offline_info .pay_off_infos .file_pay_offline{width: 100%;height: 100%;position: absolute;top: 0px;left: 0px;font-size: 3rem;opacity: 0;}
+.pay_offline_info .off_info_img{width: 100%;height: 100%;border-radius: 0.2rem;}
+.pay_offline_info .pay_off_btn{display: inline-block;height: 0.9rem;margin: 0.3rem 0.3rem 0 0;font-size: 0.55rem;line-height: 0.9rem;border-radius: 0.15rem;padding: 0.28rem 2rem;color: #FFF;background: #f23030;border: none;}
+.xxPay_pic{border: solid 0.05rem #EEE;border-radius: 0.1rem;vertical-align: top;width: 3rem;height: 3rem;margin-bottom: 0.5rem;}
+.xxPay_pic img{width: 100%;height: 100%;}
+/*<!-- 放大付款二维码css-->*/
+.showBigPay{width: 100%;height: 100%;position: fixed;top: 0px;left: 0px;z-index: 999;background: rgba(0, 0, 0, 0.7);display: none;}
+.showBigPay .shop_payPic{width: 96%;margin: 0px auto;padding: 2rem 0px;position: relative;}
+.showBigPay .shop_payPic .show_close{width: 1.6rem;height: 1.6rem;display: block;line-height: 1.6rem;text-align: center;position: absolute;top: 2.2rem;right: 0.2rem;background: #828282;overflow: hidden;font-size: 1.6rem;color: #fff;border-radius: 12%;}
+.showBigPay .shop_payPic img{max-width: 100%;max-height: 100%;}
+</style>
+<div class="pay_offline_info">
+    <span class="tit">上传支付凭证</span>
+    <!--<span class="tit tit2">线下支付优惠<em>0</em>%，本次需要支付<b>0</b>元</span>-->
+    <div class="xxPay_pic"><img src="../images/xxpay_alipay.jpg" /></div>
+    <div class="dstouch-upload" style="display: block;width: 3rem;height: 3rem;">
+        <a href="javascript:void(0);">
+                <span>
+                  <input type="file" hidefocus="true" size="1" class="input-file" name="refund_pic" />
+                </span>
+            <p><i class="icon-upload"></i></p>
+        </a>
+        <input type="hidden" name="refund_pic[0]" value="" />
+    </div>
+    <a class="pay_off_btn">确定</a>
+</div>
+<!-- 放大支付宝付款二维码Begin-->
+<div class="showBigPay">
+    <div class="shop_payPic">
+        <span class="show_close">×</span>
+        <img src="../images/xxpay_alipay.jpg"/>
+    </div>
+</div>
+<!--放大支付宝付款二维码End-->
+<script> var navigate_id ="5";</script>
+<footer id="footer"></footer>
+<script type="text/javascript" src="../js/config.js"></script>
+<script type="text/javascript" src="../js/zepto.min.js"></script>
+<script type="text/javascript" src="../js/template.js"></script> 
+<script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript" src="../js/simple-plugin.js"></script> 
+<script type="text/javascript" src="js/bd_buyVip.js"></script>
+<script type="text/javascript" src="../js/footer.js"></script>
+<script type="text/javascript" src="lang/rechargeinfo.js"></script>
+<script type="text/javascript" src="../js/lang.js"></script>
+</body>
+</html>

@@ -35,7 +35,7 @@ class Buy_1 extends Model {
      * @return array
      */
     public function getGoodsOnlineInfo($goods_id, $quantity, $extra = array()) {
-        $goods_info = $this->_getGoodsOnlineInfo($goods_id, $quantity);
+        $goods_info = $this->_getGoodsOnlineInfo($goods_id, $quantity, $extra);
         if (isset($extra['pintuan_id']) && intval($extra['pintuan_id']) > 0) {
             //如果是特定拼团商品，则只按照拼团的规则进行处理
             $this->getPintuanInfo($goods_info, $goods_info['goods_num'], $extra);
@@ -794,11 +794,12 @@ class Buy_1 extends Model {
      *
      * @param int $goods_id 所购商品ID
      * @param int $quantity 购买数量
+     * @param array $extra
      * @return array
      */
-    private function _getGoodsOnlineInfo($goods_id, $quantity) {
+    private function _getGoodsOnlineInfo($goods_id, $quantity, $extra = array()) {
         //取目前在售商品
-        $goods_info = model('goods')->getGoodsOnlineInfoAndPromotionById($goods_id);
+        $goods_info = model('goods')->_getGoodsOnlineInfoAndPromotionById($extra['goods_type'], $goods_id);
         if (empty($goods_info)) {
             return null;
         }
@@ -819,9 +820,11 @@ class Buy_1 extends Model {
         $new_array['is_have_gift'] = $goods_info['is_have_gift'];
         $new_array['state'] = true;
         $new_array['storage_state'] = intval($goods_info['goods_storage']) < intval($quantity) ? false : true;
-        $new_array['groupbuy_info'] = $goods_info['groupbuy_info'];
-        $new_array['xianshi_info'] = $goods_info['xianshi_info'];
-        $new_array['pintuan_info'] = $goods_info['pintuan_info'];
+        $new_array['groupbuy_info'] = isset($goods_info['groupbuy_info']) ? $goods_info['groupbuy_info'] : array();
+        $new_array['xianshi_info'] = isset($goods_info['xianshi_info']) ? $goods_info['xianshi_info'] : array();
+        $new_array['pintuan_info'] = isset($goods_info['pintuan_info']) ? $goods_info['pintuan_info'] : array();
+        $new_array['goods_type'] = isset($goods_info['goods_type']) ? $goods_info['goods_type'] : 1;
+        $new_array['goods_point'] = isset($goods_info['goods_point']) ? $goods_info['goods_point'] : 0;
 
         //填充必要下标，方便后面统一使用购物车方法与模板
         //cart_id=goods_id,优惠套装目前只能进购物车,不能立即购买
@@ -898,11 +901,14 @@ class Buy_1 extends Model {
         $goods_id_array = array();
         foreach ($cart_list as $key => $cart_info) {
             if (!intval($cart_info['bl_id'])) {
-                $goods_id_array[] = $cart_info['goods_id'];
+                $goods_id_array[] = array(
+                    "goods_id"  => $cart_info['goods_id'],
+                    "goods_type"  => $cart_info['goods_type']
+                );
             }
         }
         $goods_model = model('goods');
-        $goods_online_list = $goods_model->getGoodsOnlineListAndPromotionByIdArray($goods_id_array);
+        $goods_online_list = $goods_model->_getGoodsOnlineListAndPromotionByIdArray($goods_id_array);
         $goods_online_array = array();
         foreach ($goods_online_list as $goods) {
             $goods_online_array[$goods['goods_id']] = $goods;
@@ -930,8 +936,9 @@ class Buy_1 extends Model {
                 if ($cart_info['goods_num'] > $goods_online_info['goods_storage']) {
                     $cart_list[$key]['storage_state'] = false;
                 }
-                $cart_list[$key]['groupbuy_info'] = $goods_online_info['groupbuy_info'];
-                $cart_list[$key]['xianshi_info'] = $goods_online_info['xianshi_info'];
+                $cart_list[$key]['groupbuy_info'] = isset($goods_online_info['groupbuy_info']) ? $goods_online_info['groupbuy_info'] : array();
+                $cart_list[$key]['xianshi_info'] = isset($goods_online_info['xianshi_info']) ? $goods_online_info['xianshi_info'] : array();
+                $cart_list[$key]['goods_point'] = isset($goods_online_info['goods_point']) ? intval($goods_online_info['goods_point']) : 0;
             } else {
                 //如果商品下架
                 $cart_list[$key]['state'] = false;

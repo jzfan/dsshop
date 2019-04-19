@@ -55,11 +55,11 @@
 .categroy-rgt .big_pic{width: 100%;padding: 10px;box-sizing: border-box}
 /* 品牌推荐 */
 .brands-recommend { font-size: 0; }
-.brands-recommend dd { background-color: #FFF; vertical-align: top; display: inline-block; width: 3.3rem; height: 3.3rem; padding: 0.2rem; margin: 0.3rem 0 0 0.3rem; }
+.brands-recommend dd { background-color: #FFF;display: inline-block; width: 3.3rem; height: 3.3rem; padding: 0.2rem; margin: 0.3rem 0 0 0.3rem; }
 .brands-recommend dd a { display: block;}
 .brands-recommend dd img { width: 100%; margin: 0.5rem 0; }
 .brands-recommend dd a { color: #333; }
-.brands-recommend dd p { font-size: 0.5rem; line-height: 1rem; white-space: nowrap; text-overflow: ellipsis; text-align: center; overflow: hidden;}
+.brands-recommend dd p { font-size: 0.5rem; line-height: 1rem; white-space: nowrap; text-overflow: ellipsis; text-align: center; overflow: -webkit-paged-x;}
 .footer-blank{height: 0}
 /* 二三级分类 */
 .categroy-child-list { font-size: 0; width: 100%; background-color: #FFF;padding-bottom:50px;}
@@ -82,7 +82,7 @@
     -webkit-transform: translate3d(150%,-50%,0);
 }
 .categroy-child-list dd { font-size: 0.55rem; line-height: 1.48rem; vertical-align: top; display: inline-block; width: 3.35rem; padding: 0.2rem; margin-left: 0.3rem; border-radius: 0;text-align: center;}
-.categroy-child-list dd a { display: block; color: #444; white-space: nowrap;  text-overflow: ellipsis; overflow: hidden;}
+.categroy-child-list dd p { display: block; color: #444; white-space: nowrap;  text-overflow: ellipsis; overflow: hidden;}
 .categroy-child-list dd i{display: block;width: 60px;height: 60px;line-height: 60px;margin: 0 auto;text-align: center}
 .categroy-child-list dd i img{width: 60px;height: 60px;}
 .categroy-child-list dd i .iconfont{font-size: 30px;display: block;width: 60px;height: 60px;background: #eee;color: #fff;border-radius: 3px;}
