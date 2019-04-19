@@ -5,7 +5,7 @@
 	b. seckill_jobs
 	
 2.增加阅读积分配置	
-INSERT INTO `ds_config` (`id`, `code`, `value`, `remark`) VALUES (1, 'points_read', '10', '阅读文章赠送积分')	
+INSERT INTO `ds_config` (`id`, `code`, `value`, `remark`) VALUES (null, 'points_read', '10', '阅读文章赠送积分')	
 
 3.增加积分商品扩展表
 DROP TABLE IF EXISTS `ds_pointgoods`;
