@@ -101,7 +101,6 @@ class Member extends MobileMember
      */
     public function edit_memberavatar()
     {
-        print_r($_FILES);die;
         $file = request()->file('memberavatar');
         $upload_file = BASE_UPLOAD_PATH . DS . ATTACH_AVATAR . DS;
         $avatar_name = 'avatar_' . $this->member_info['member_id'] . '.jpg';
