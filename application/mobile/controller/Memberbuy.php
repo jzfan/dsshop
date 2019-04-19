@@ -147,7 +147,9 @@ class Memberbuy extends MobileMember {
         //处理代金券
         $voucher = array();
         $post_voucher = explode(',', input('post.voucher'));
-        if (!empty($post_voucher)) {
+
+        if ($post_voucher != [''] && !empty($post_voucher)) {
+        dd($post_voucher);
             foreach ($post_voucher as $value) {
                 list($vouchertemplate_id, $store_id, $voucher_price) = explode('|', $value);
                 $voucher = $value;
