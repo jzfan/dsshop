@@ -113,6 +113,7 @@ class Member extends MobileMember
         }
     }
 
+
     /**
      * 更新用户头像
      */
