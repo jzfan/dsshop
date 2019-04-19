@@ -17,18 +17,24 @@ class Memberorder extends MobileMember {
     public function order_list() {
         $order_model = model('order');
         $condition = array();
-        $condition = $this->order_type_no(input('post.state_type'));
+        $state_type=input('post.state_type');
+        if ($state_type==''){
+            $condition['order_state'] = '';
+        }else{
+            $condition = $this->order_type_no(input('post.state_type'));
+        }
         $condition['buyer_id'] = $this->member_info['member_id'];
         $condition['delete_state'] = 0; #订单未被删除
         $order_sn = input('post.order_key');
         if ($order_sn != '') {
             $condition['order_sn'] = array('like','%'.$order_sn.'%');
         }
-        $order_list_array = $order_model->getOrderList($condition, 5, '*', 'order_id desc', '', array('order_common', 'order_goods'));
-
+        $order_list_array = $order_model->getOrderList($condition, 5, '*', 'order_id desc,add_time desc', '', array('order_common', 'order_goods'));
         $order_group_list = $order_pay_sn_array = array();
-        foreach ($order_list_array as $value) {
+        foreach ($order_list_array as $k=>$value) {
             //$value['zengpin_list'] = false;
+            //获取订单类型名称
+            $value['order_type_name']=$this->get_type_name($value['order_type']);
             //显示取消订单
             $value['if_cancel'] = $order_model->getOrderOperateState('buyer_cancel', $value);
             //显示退款取消订单
@@ -39,10 +45,10 @@ class Memberorder extends MobileMember {
             $value['if_lock'] = $order_model->getOrderOperateState('lock', $value);
             //显示物流跟踪
             $value['if_deliver'] = $order_model->getOrderOperateState('deliver', $value);
-
             $value['if_evaluation'] = $order_model->getOrderOperateState('evaluation', $value);
             $value['if_delete'] = $order_model->getOrderOperateState('delete', $value);
-
+            //显示代售订单
+            $order['sideline']=$order_model->getOrderOperateState('sideline', $value);
             $value['zengpin_list'] = false;
             if (isset($value['extend_order_goods'])) {
                 foreach ($value['extend_order_goods'] as $val) {
@@ -66,6 +72,8 @@ class Memberorder extends MobileMember {
                 }
             }
             $order_group_list[$value['pay_sn']]['order_list'][] = $value;
+
+
             //如果有在线支付且未付款的订单则显示合并付款链接
             if ($value['order_state'] == ORDER_STATE_NEW) {
                 if(!isset($order_group_list[$value['pay_sn']]['pay_amount'])){
@@ -78,16 +86,20 @@ class Memberorder extends MobileMember {
             //记录一下pay_sn，后面需要查询支付单表
             $order_pay_sn_array[] = $value['pay_sn'];
         }
-
+        //print_r($order_list_array);die;
         $new_order_group_list = array();
         foreach ($order_group_list as $key => $value) {
             $value['pay_sn'] = strval($key);
             $new_order_group_list[] = $value;
         }
-
         $result= array_merge(array('order_group_list' => $new_order_group_list), mobile_page($order_model->page_info));
         ds_json_encode(10000, '',$result);
     }
+
+
+
+
+
 
     private function order_type_no($stage) {
         $condition = array();
@@ -103,6 +115,9 @@ class Memberorder extends MobileMember {
                 break;
             case 'state_noeval':
                 $condition['order_state'] = '40';
+                break;
+            case 'state_sideline':
+                $condition['order_state'] = '50';
                 break;
         }
         return $condition;
@@ -412,6 +427,22 @@ class Memberorder extends MobileMember {
         return $output;
     }
 
+
+    public function get_type_name($type){
+        switch ($type) {
+            case 20:
+                $name ='积分订单' ;
+                break;
+            case 30:
+                $name ='91购订单' ;
+                break;
+            case 40:
+                $name ='秒伤订单' ;
+                break;
+
+        }
+        return $name;
+    }
 }
 
 ?>
