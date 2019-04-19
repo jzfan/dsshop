@@ -43,8 +43,9 @@
   <div class="dstouch-inp-con">
   	<div class="userInfo">
   		<div class="userPic"><img src="../../uploads/home/common/default_user_portrait.gif" />
-  		
-  			<input type="file" name="file" id="userPhoto" class="userPhoto"/>
+  			<form id="form1"  enctype="multipart/form-data" method="post">
+  				<input type="file" name="file" id="userPhoto" class="userPhoto"/>
+  			</form>
   		</div>
   		<div class="userInfos"><span class="uInfoL">昵称</span><input class="txt uNicheng" type="text" value=""/></div>
   		<div class="userInfos"><span class="uInfoL">生日</span><input class="txt birthday" placeholder="格式：1990-01-01" type="text" value=""/></div>

@@ -73,8 +73,11 @@ $(function() {
     //图片上传
     $("#userPhoto").on("change",function(e){
     	var c = getCookie("key");
-    	var formData = new FormData($('#userPhoto')[0]);
-    	formData.append('memberavatar', formData);
+    	
+    	var formData = new FormData();
+    	var files = $('#userPhoto')[0].files[0];
+    	formData.append('memberavatar', files);
+    	
    		console.log(formData);
 		$.ajax({
 		    url: ApiUrl +'/member/edit_memberavatar?key='+c,
@@ -83,12 +86,19 @@ $(function() {
 		    data: formData,
 		    processData: false,
 		    contentType: false,
+		    dataType: "json",
 		    enctype:"multipart/form-data" ,
-		    success: function (data) {
-		    	console.log(data);
+		    success: function (datas) {
+		    	if(datas.code == "10000"){
+		    		$(".userPic img").attr("src",datas.result);
+		    	}else{
+		    		layer.open({content: datas.message, skin: 'msg', time: 2});
+            		return false;
+		    	}
 		    },
-		    error: function (data) {
-		         console.log("上传失败");
+		    error: function (datas) {
+		        layer.open({content: datas.message, skin: 'msg', time: 2});
+            	return false;
 		    }
 		}); 
     });
@@ -121,6 +131,7 @@ $(function() {
 					});
             	}else{
             		layer.open({content: e.message, skin: 'msg', time: 2});
+            		return false;
             	}
             }
         })
