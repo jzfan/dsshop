@@ -87,7 +87,11 @@ class Member extends MobileMember
             'member_qq' => input('param.member_qq'),
             'member_ww' => input('param.member_ww'),
         );
-
+        if (strlen(input('post.birthday')) == 10) {
+            $data['member_birthday'] = strtotime(input('post.birthday'));
+        }else{
+            ds_json_encode(10001, '请传入正确的生日时间');
+        }
         //验证数据  BEGIN
         $rule = [
             ['member_nickname', 'max:10', '真实姓名不应超过10'],
