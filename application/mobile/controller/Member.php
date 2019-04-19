@@ -87,7 +87,7 @@ class Member extends MobileMember
         );
         //验证数据  BEGIN
         $rule = [
-            ['member_truename', 'max:10', '真实姓名不应超过10'],
+            ['member_truename', 'max:10', '真实姓名不应超过20'],
         ];
         $validate = new Validate();
         $validate_result = $validate->check($data, $rule);
