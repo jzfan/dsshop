@@ -72,6 +72,7 @@ class Member extends MobileMember
         $member_model = model('member');
         $condition['member_id'] = $this->member_info['member_id'];
         $member_info = $member_model->getMemberInfo($condition);
+        $member_info['member_birthday']=date('Y-m-d',$member_info['member_birthday']);
         $member_info['member_avatar'] = get_member_avatar_for_id($member_info['member_id']);
         ds_json_encode(10000, '', $member_info);
     }
@@ -84,8 +85,6 @@ class Member extends MobileMember
         $data = array(
             'member_truename' => input('param.member_truename'),
             'member_sex' => input('param.member_sex'),
-            'member_qq' => input('param.member_qq'),
-            'member_ww' => input('param.member_ww'),
         );
         if (strlen(input('post.birthday')) == 10) {
             $data['member_birthday'] = strtotime(input('post.birthday'));
@@ -117,7 +116,7 @@ class Member extends MobileMember
     /**
      * 更新用户头像
      */
-    public function edit_memberavatar()
+    public function memberavatar()
     {
         print_r($_FILES);die;
         $file = request()->file('memberavatar');
