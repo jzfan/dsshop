@@ -29,10 +29,40 @@ class Forsalegoods extends Model
         return $this->parseGoodsList($goodsList);
     }
 
+    public function getBaseCondition($condition)
+    {
+        $condition['goods_id'] = array("in", $this->getPointGoodsId());
+        $condition['goods_state'] = 1;
+
+        return $condition;
+    }
+
+
+    public function getPointGoodsId()
+    {
+        return self::where('goods_state',1)->where('goods_storage','gt',0)
+            ->column('goods_id');
+    }
+
+
+    public function parseGoodsList($goodsList)
+    {
+        foreach ($goodsList as &$goods) {
+            $pointGoods = self::get(['goods_id'=>$goods['goods_id']]);
+
+            $goods['goods_price'] = $pointGoods->goods_price;
+            $goods['goods_storage'] = $pointGoods->goods_storage;
+            $goods['goods_type'] = $pointGoods->goods_type;
+            $goods['goods_promotion_price'] = $pointGoods->goods_price;
+        }
+        return $goodsList;
+    }
+
+
     public function getGoodsInfoAndPromotionById($goods_id)
     {
         $goods = db('goods')->where("goods_id",$goods_id)->find();
-        $point_goods = db('pointgoods')->where("goods_id",$goods_id)->find();
+        $point_goods = db('forsalegoods')->where("goods_id",$goods_id)->find();
 
         if ($point_goods) {
             $goods['goods_price'] = $point_goods['goods_price'];
