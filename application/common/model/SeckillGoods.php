@@ -9,6 +9,8 @@ class SeckillGoods extends Model
 {
     use ModelTrait;
 
+    public $page_info;
+
     public function sku()
     {
         return $this->belongsTo(Goods::class, 'goods_id', 'goods_id');
@@ -67,6 +69,20 @@ class SeckillGoods extends Model
             'qty' => $this->qty,
             'sold' => $this->sold,
         ];
+    }
+
+    public function getGoodsInfoAndPromotionById($goods_id)
+    {
+        $goods = db('goods')->where("goods_id",$goods_id)->find();
+        $seckill_good = db('seckill_goods')->where("goods_id",$goods_id)->find();
+
+        if ($seckill_good) {
+            return arary_merge($seckill_good->toArray(),[
+                'goods_type' => 40
+            ]);
+        }
+
+        return array();
     }
 
 }
