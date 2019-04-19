@@ -936,8 +936,8 @@ class Buy_1 extends Model {
                 if ($cart_info['goods_num'] > $goods_online_info['goods_storage']) {
                     $cart_list[$key]['storage_state'] = false;
                 }
-                $cart_list[$key]['groupbuy_info'] = $goods_online_info['groupbuy_info'];
-                $cart_list[$key]['xianshi_info'] = $goods_online_info['xianshi_info'];
+                $cart_list[$key]['groupbuy_info'] = isset($goods_online_info['groupbuy_info']) ? $goods_online_info['groupbuy_info'] : array();
+                $cart_list[$key]['xianshi_info'] = isset($goods_online_info['xianshi_info']) ? $goods_online_info['xianshi_info'] : array();
                 $cart_list[$key]['goods_point'] = isset($goods_online_info['goods_point']) ? intval($goods_online_info['goods_point']) : 0;
             } else {
                 //如果商品下架

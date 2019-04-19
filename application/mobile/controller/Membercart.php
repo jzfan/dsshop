@@ -31,6 +31,8 @@ class Membercart extends MobileMember {
 //            $goods_data = $goods_model->getGoodsOnlineInfoForShare($val['goods_id']);
 
             $cart_a[0]['goods'][$key]['cart_id'] = $val['cart_id'];
+            $cart_a[0]['goods'][$key]['goods_type'] = $val['goods_type'];
+            $cart_a[0]['goods'][$key]['goods_point'] = isset($val['goods_point']) ? $val['goods_point'] : 0;
             $cart_a[0]['goods'][$key]['goods_name'] = $val['goods_name'];
             $cart_a[0]['goods'][$key]['goods_price'] = $val['goods_price'];
             $cart_a[0]['goods'][$key]['goods_num'] = $val['goods_num'];

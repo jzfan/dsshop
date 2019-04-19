@@ -1481,7 +1481,10 @@ class Goods extends Model {
             if (is_null($model)) {
                 continue;
             }
-            $goods_list[] = $model->getGoodsOnlineListAndPromotionById($item['goods_id']);
+            $goods = $model->getGoodsOnlineInfoAndPromotionById($item['goods_id']);
+            if ($goods) {
+                $goods_list[] = $goods;
+            }
         }
         return $goods_list;
     }
