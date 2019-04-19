@@ -2,9 +2,8 @@
 
 namespace app\common\model;
 
-use app\common\ModelTrait;
-use think\Db;
 use think\Model;
+use app\common\ModelTrait;
 
 class SeckillGoods extends Model
 {
@@ -20,9 +19,29 @@ class SeckillGoods extends Model
         return $this->belongsTo(Goods::class, 'goods_id', 'goods_id')->field('goods_id,goods_commonid,goods_name,goods_image');
     }
 
+    public function limit()
+    {
+        return \Cache::remember("seckill_{$this->job_id}_good_{$this->id}_limit", function () {
+            return $this->limit;
+        });
+    }
+
     public function byId($id)
     {
         return $this->with('info')->find($id);
+    }
+
+    public function checkLimit($log, $num)
+    {
+        if(!$log) {
+            if ($num > $this->limit) {
+                throw new JsonException("购买商品数量超过限制", 422);
+            }
+            return true;
+        }
+        if ($num + $log->purchased > $this->limit) {
+            throw new JsonException("购买商品数量超过限制", 422);
+        }
     }
 
     public function commonId()
@@ -37,10 +56,12 @@ class SeckillGoods extends Model
 
     public function format()
     {
+    	$images = $this->images();
         return [
             'id' => $this->id,
             'name' => $this->info->goods_name,
-            'images' => join(',', $this->images()),
+            'default_image' => array_shift($images),
+            'images' => join(',', $images),
             'price' => $this->price,
             'mi' => $this->mi,
             'qty' => $this->qty,

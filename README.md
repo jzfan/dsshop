@@ -3,6 +3,7 @@
 1. 添加数据表:
 	a. seckill_goods
 	b. seckill_jobs
+	c. seckill_users
 
 
 

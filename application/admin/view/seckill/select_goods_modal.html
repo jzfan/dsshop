@@ -50,7 +50,7 @@
 
 function setInputVal(gid) {
     $('#goods-id-input').val(gid)
-    $.get(`/api/seckillgoods?goods_id=${gid}`, function(res) {
+    $.get(`/mobile/api.seckillgoods?goods_id=${gid}`, function(res) {
         if (res != '') {
             $('#number-input').val(res.qty)
             $('#price-input').val(res.price)
