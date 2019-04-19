@@ -18,13 +18,13 @@ class MobileMember extends MobileHome {
             }
             $member_model = model('member');
             $this->member_info = $member_model->getMemberInfoByID($mb_user_token_info['member_id']);
-
-
+            $meter_second=model('member')->where('member_id',$mb_user_token_info['member_id'])->find();
 
             if (empty($this->member_info)) {
                 ds_json_encode(10001,'参数错误', array('login' => '0'));
             } else {
                 $this->member_info['member_clienttype'] = $mb_user_token_info['member_clienttype'];
+                $this->member_info['meter_second'] = $meter_second['meter_second'];
                 $this->member_info['member_openid'] = $mb_user_token_info['member_openid'];
                 $this->member_info['member_token'] = $mb_user_token_info['member_token'];
                 $level_name = $member_model->getOneMemberGrade($mb_user_token_info['member_id']);
