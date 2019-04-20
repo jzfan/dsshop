@@ -538,6 +538,9 @@ class Buy extends Model
 
         //是否开增值税发票
         $input_if_vat = $this->buyDecrypt($post['vat_hash'], $this->_member_info['member_id']);
+        if ($post['goods_type'] == 40) {
+            $input_if_vat = 'deny_vat';
+        }
         if (!in_array($input_if_vat, array('allow_vat', 'deny_vat'))) {
             exception('订单保存出现异常[值税发票出现错误]，请重试');
         }
@@ -640,8 +643,9 @@ class Buy extends Model
                 #是否为开团订单
                 $extra['pintuangroup_id'] = empty(input('param.pintuangroup_id'))?0:intval(input('param.pintuangroup_id'));
             }
-            $extra['goods_type'] = isset($post['goods_type']) ? intval($post['goods_type']):0;
-
+            if (isset($post['goods_type'])) {
+                $extra['goods_type'] = $post['goods_type'];
+            }
             //商品信息[得到最新商品属性及促销信息]
             $goods_info = $this->_logic_buy_1->getGoodsOnlineInfo($goods_id, intval($quantity),$extra);
             if (empty($goods_info)) {
@@ -682,12 +686,6 @@ class Buy extends Model
 
         //商品金额计算(分别对每个商品/优惠套装小计、每个店铺小计)
         list($cart_list, $goods_total) = $this->_logic_buy_1->calcCartList($cart_list);
-
-        //验证积分商城用户积分是否满足
-        if (!$this->validateMemberPoint($cart_list,$this->_member_info['member_id'])) {
-            exception("会员积分不足");
-        }
-
 
         //取得店铺优惠 - 满即送(赠品列表，店铺满送规则列表)
         list($premiums_list, $mansong_rule_list) = $this->_logic_buy_1->getMansongruleCartListByTotal($goods_total);
@@ -921,9 +919,8 @@ class Buy extends Model
                         model('ppintuan')->_dGoodsPintuanCache($goods_info['pintuan_info']['pintuan_goods_commonid']);
                     }
                     else {
-                        $order_goods[$i]['goods_type'] = $goods_info['goods_type'];
+                        $order_goods[$i]['goods_type'] = 1;
                     }
-
                     $order_goods[$i]['promotions_id'] = isset($goods_info['promotions_id']) ? $goods_info['promotions_id'] : 0;
 
                     $order_goods[$i]['gc_id'] = $goods_info['gc_id'];
@@ -986,7 +983,6 @@ class Buy extends Model
                     }
                 }
             }
-
             $insert = $order_model->addOrdergoods($order_goods);
             if (!$insert) {
                 exception('订单保存失败[未生成商品数据]');
@@ -1157,7 +1153,6 @@ class Buy extends Model
                 $goods_list[$i]['goods_vat'] = $cart['goods_vat'];
                 $goods_list[$i]['is_goodsfcode'] = $cart['is_goodsfcode'];
                 $goods_list[$i]['bl_id'] = 0;
-                $goods_list[$i]['goods_type'] = $cart['goods_type'];
                 $i++;
             }
             else {
@@ -1173,7 +1168,6 @@ class Buy extends Model
                     $goods_list[$i]['goods_freight'] = $bl_goods['goods_freight'];
                     $goods_list[$i]['goods_vat'] = $bl_goods['goods_vat'];
                     $goods_list[$i]['bl_id'] = $cart['bl_id'];
-                    $goods_list[$i]['goods_type'] = $cart['goods_type'];
                     $i++;
                 }
             }
@@ -1209,22 +1203,5 @@ class Buy extends Model
         else {
             return false;
         }
-    }
-
-
-    private function validateMemberPoint($cart_list,$member_id)
-    {
-        $member = model("member")->getMemberInfo(array("member_id"=>$member_id));
-        $need_points = 0;
-        foreach ($cart_list as $goods) {
-            if ($goods['goods_type'] == 20) {
-                $need_points += intval($goods['goods_point']);
-            }
-        }
-
-        if ($need_points > $member['member_points']) {
-            return false;
-        }
-        return true;
     }
 }

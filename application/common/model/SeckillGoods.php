@@ -28,9 +28,9 @@ class SeckillGoods extends Model
         });
     }
 
-    public function byId($id)
+    public function byGoodsId($id)
     {
-        return $this->with('info')->find($id);
+        return $this->with('info')->where('goods_id', $id)->find();
     }
 
     public function checkLimit($log, $num)
@@ -73,16 +73,51 @@ class SeckillGoods extends Model
 
     public function getGoodsInfoAndPromotionById($goods_id)
     {
-        $goods = db('goods')->where("goods_id",$goods_id)->find();
-        $seckill_good = db('seckill_goods')->where("goods_id",$goods_id)->find();
-
+        // $goods = db('goods')->where("goods_id",$goods_id)->find();
+        $seckill_good = model('seckillgoods')->where("goods_id",$goods_id)->find();
+        $sku = $seckill_good->sku;
         if ($seckill_good) {
-            return arary_merge($seckill_good->toArray(),[
-                'goods_type' => 40
+            return array_merge($seckill_good->toArray(),[
+                'goods_type' => 40,
+                'is_goodsfcode' => 1,
+                'goods_commonid' => $sku->goods_commonid,
+                'gc_id' => $sku->gc_id,
+                'goods_name' => $sku->goods_name,
+                'goods_price' => $seckill_good->price,
+                'goods_image' => $sku->goods_image,
+                'transport_id' => $sku->transport_id,
+                'goods_freight' => $sku->goods_freight,
+                'goods_vat' => $sku->goods_vat,
+                'goods_storage' => $seckill_good->qty,
+                'goods_storage_alarm' => 0,
+                'is_have_gift' => 0,
+                
             ]);
         }
 
         return array();
+    }
+
+    /**
+     * 查询出售中的商品详细信息及其促销信息
+     * @access public
+     * @author csdeshang
+     * @param int $goods_id 商品ID
+     * @return array
+     */
+    public function getGoodsOnlineInfoAndPromotionById($goods_id) {
+        return $this->getGoodsInfoAndPromotionById($goods_id);
+    }
+
+    /**
+     * 取得商品最新的属性及促销[立即购买]
+     * @param type $goods_id
+     * @param type $quantity
+     * @param type $extra  
+     * @return array
+     */
+    public function getGoodsOnlineInfo($goods_id, $quantity, $extra = array()) {
+        return $this->getGoodsInfoAndPromotionById($goods_id);
     }
 
 }

@@ -140,7 +140,7 @@ $(function() {
                     }
                 } else {
                     $(".goods-detail-turn").hide();
-                    $("#mySwipe ul").append('<li><img src="' + d[i] + '" onerror=""/></li>');
+                    $("#mySwipe ul").append('<li><img src="' + d[i] + '" onerror="imgError(this)"/></li>');
                 }
                 $(".good_name").text(e.name);
                 $(".good_advword").text(); //商品介绍
@@ -214,7 +214,7 @@ $(function() {
                         o.goods_type = "40";
                         o.invoice_id = "";
                         o.voucher = '';
-
+                        o.is_goodsfcode = 1;
 
                         $.ajax({
                             type: "post",
