@@ -972,6 +972,18 @@ class Buy extends Model
                         }
                     }
                 }
+
+                # 91购商品处理
+                if ($goods_info['goods_type'] == 30) {
+                    #根据队列选择冻结挂售人商品库存
+                    $memberforsalegoods = model("memberforsalegoods")->freezeMemberForsaleGoods($goods_info['goods_id'], $order['order_sn'], $member_id, $goods_info['goods_num']);
+
+                    #生成挂售订单
+                    model("memberforsaleorder")->createMemberForsaleOrder($order_id,$memberforsalegoods);
+
+                    #生成分账记录
+                    model("memberforsalebill")->createMemberForsaleBill($order_id, $order['order_sn'], $member_id, $memberforsalegoods);
+                }
             }
             //将因舍出小数部分出现的差值补到最后一个商品的实际成交价中(商品goods_price=0时不给补，可能是赠品)
             if ($promotion_total > $promotion_sum) {
@@ -992,6 +1004,14 @@ class Buy extends Model
             if ($pay_type_list == 'offline') {
                 $notice_list['new_order'] = array('order_sn' => $order['order_sn']);
             }
+
+            // 变更库存和销量
+            $result = model('goods')->_updateGoodsStorageAndSell($cart_list);
+            if (!$result) {
+                exception('订单保存失败[商品库存更新失败]');
+            }
+
+
 
         //保存数据
         $this->_order_data['pay_sn'] = $pay_sn;
@@ -1038,8 +1058,8 @@ class Buy extends Model
         $goodsfcode_id = $this->_order_data['goodsfcode_id'];
         $ifgroupbuy = $this->_order_data['ifgroupbuy'];
 
-        //变更库存和销量
-        \mall\queue\QueueClient::push('createOrderUpdateStorage', $goods_buy_quantity);
+        // 变更库存和销量
+        // \mall\queue\QueueClient::push('createOrderUpdateStorage', $goods_buy_quantity);
 
         //更新使用的代金券状态
         if (!empty($input_voucher_list) && is_array($input_voucher_list)) {

@@ -1492,4 +1492,34 @@ class Goods extends Model {
         return $goods_list;
     }
 
+
+    public function _updateGoodsStorageAndSell($goods_list)
+    {
+        $update_result = true;
+        foreach ($goods_list as $goods) {
+            $model = null;
+            switch ($goods['goods_type']) {
+                case 1:
+                    $model = model('goods');
+                    break;
+                case 20:
+                    $model = model("Pointgoods");
+                    break;
+                case 30:
+                    $model = model("Forsalegoods");
+                    break;
+            }
+            if (is_null($model)) {
+                $update_result = false;
+                break;
+            }
+            $result = $model->updateGoodsStorageAndSell($goods['goods_id'],$goods['goods_num']);
+            if (!$result) {
+                $update_result = false;
+                break;
+            }
+        }
+        return $update_result;
+    }
+
 }

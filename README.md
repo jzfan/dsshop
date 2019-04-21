@@ -78,9 +78,28 @@ CREATE TABLE `ds_memberforsaleorder` (
   KEY `order_sn` (`order_sn`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户挂售订单表';
 
+8.订单表增加积分、秒米支付金额
+ALTER TABLE `ds_shop`.`ds_order` 
+ADD COLUMN `points_amount` decimal(10, 2) NOT NULL DEFAULT 0 COMMENT '积分支付金额' AFTER `pd_amount`,
+ADD COLUMN `miaomi_amount` decimal(10, 2) NOT NULL DEFAULT 0 COMMENT '秒米支付金额' AFTER `points_amount`;
 
 
-
+9.会员挂售分账表
+DROP TABLE IF EXISTS `ds_memberforsalebill`;
+CREATE TABLE `ds_memberforsalebill`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `order_id` int(10) NOT NULL DEFAULT 0 COMMENT '订单ID',
+  `order_sn` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '订单号',
+  `member_id` int(10) NOT NULL DEFAULT 0 COMMENT '会员ID',
+  `order_amount` decimal(10, 2) UNSIGNED NOT NULL DEFAULT 0 COMMENT '订单金额',
+  `bill_percent` decimal(6, 2) UNSIGNED NOT NULL DEFAULT 0 COMMENT '分账所占订单比例',
+  `bill_amount` decimal(10, 2) UNSIGNED NOT NULL DEFAULT 0 COMMENT '分账金额',
+  `bill_state` tinyint(2) NOT NULL DEFAULT 0 COMMENT '分账状态',
+  `created_at` datetime(0) NULL DEFAULT NULL,
+  `updated_at` datetime(0) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `member_id`(`member_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '会员挂售分账表';
 
 
 ## TODO

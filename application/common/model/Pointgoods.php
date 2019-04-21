@@ -142,10 +142,18 @@ class Pointgoods extends Model
     }
 
 
-
     public function add_pointgoods($data)
     {
         return self::create($data);
+    }
+
+
+    public function updateGoodsStorageAndSell($goods_id, $goods_number)
+    {
+        $pointgoods = self::get(['goods_id'=>$goods_id]);
+        $pointgoods->goods_storage -= $goods_number;
+        $pointgoods->sell_number += $goods_number;
+        $pointgoods->save();
     }
 
 }

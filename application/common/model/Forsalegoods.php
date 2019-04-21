@@ -91,4 +91,13 @@ class Forsalegoods extends Model
         }
         return $goods_info;
     }
+
+
+    public function updateGoodsStorageAndSell($goods_id, $goods_number)
+    {
+        $pointgoods = self::get(['goods_id'=>$goods_id]);
+        $pointgoods->goods_storage -= $goods_number;
+        $pointgoods->sell_number += $goods_number;
+        $pointgoods->save();
+    }
 }

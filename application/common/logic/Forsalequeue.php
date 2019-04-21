@@ -11,7 +11,7 @@ namespace app\common\logic;
 
 use think\Model;
 
-class Forsalegoodsqueue extends Model
+class Forsalequeue extends Model
 {
 
 
@@ -48,10 +48,4 @@ class Forsalegoodsqueue extends Model
     }
 
 
-    public function updateForsaleGoodsInfo($goods_id, $goods_info)
-    {
-        foreach ($goods_info as $goods) {
-            
-        }
-    }
 }
