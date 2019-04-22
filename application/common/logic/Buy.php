@@ -690,6 +690,11 @@ class Buy extends Model
             exception("会员积分不足");
         }
 
+        //检查秒杀商品用户限额
+        if ($cart_list[0]['goods_type'] == 40) {
+            $this->checkSeckillLimit($cart_list,$this->_member_info['member_id']);
+        }
+
         //商品金额计算(分别对每个商品/优惠套装小计、每个店铺小计)
         list($cart_list, $goods_total) = $this->_logic_buy_1->calcCartList($cart_list);
 
@@ -1244,6 +1249,15 @@ class Buy extends Model
             return false;
         }
         return true;
+    }
+
+    private function checkSeckillLimit($cart_list, $member_id)
+    {
+        $goods_id = $cart_list[0]['goods_id'];
+
+        if ((new \app\common\model\SeckillGoods)->byGoodsId($goods_id)->isMemberOverLimit($member_id)) {
+            exception("秒杀商品数量超过定额");
+        }
     }
 
 

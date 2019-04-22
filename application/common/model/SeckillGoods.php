@@ -5,6 +5,7 @@ namespace app\common\model;
 use think\Model;
 use app\common\DsRedis;
 use app\common\ModelTrait;
+use app\common\model\SeckillJobs;
 
 class SeckillGoods extends Model
 {
@@ -16,6 +17,11 @@ class SeckillGoods extends Model
     {
         parent::initialize();
         $this->redis = DsRedis::getInstance();
+    }
+
+    public function job()
+    {
+        return $this->belongsTo(SeckillJobs::class, 'job_id', 'id');
     }
 
     public function sku()
@@ -30,7 +36,7 @@ class SeckillGoods extends Model
 
     public function limit()
     {
-        return \Cache::remember("seckill_{$this->job_id}_good_{$this->id}_limit", function () {
+        return \think\Cache::remember("seckill:{$this->job_id}_good:{$this->id}_limit", function () {
             return $this->limit;
         });
     }
@@ -122,6 +128,15 @@ class SeckillGoods extends Model
         }
 
         return array();
+    }
+
+    public function isMemberOverLimit($member_id)
+    {
+        $purchased = $this->redis->get("seckill:{$this->job->id}_goods:{$this->goods_id}_member:{$member_id}");
+        if (!$purchased) {
+            return true;
+        }
+        return $purchased >= $this->limit();
     }
 
     /**

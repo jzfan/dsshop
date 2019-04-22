@@ -1508,6 +1508,8 @@ class Goods extends Model {
                 case 30:
                     $model = model("Forsalegoods");
                     break;
+                case 40:
+                    return true;
             }
             if (is_null($model)) {
                 $update_result = false;
