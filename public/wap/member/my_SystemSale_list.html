@@ -105,76 +105,56 @@
 <footer id="footer"></footer>
 
 <script type="text/html" id="order-list-tmpl">
-<% var order_group_list = result.order_group_list; %>
-<% if (order_group_list.length > 0){%>
-	<% for(var i = 0;i<order_group_list.length;i++){
-		var orderlist = order_group_list[i].order_list;
-	%>
+	<% var sale_list = result.orderlist; %>
+	<% if (sale_list.length > 0){%>
 		<li class="green-order-skin">
-			<% for(var j = 0;j<orderlist.length;j++){
-				var order_goods = orderlist[j].extend_order_goods;
+			<% for(var j = 0;j<sale_list.length;j++){
+				var order_goods = sale_list[j].extend_order_goods;
 			%>
 				<div class="dstouch-order-item">
 					<div class="dstouch-order-item-con">
-						<%
-							var count = 0;
-							 for (k in order_goods){
-								count += parseInt(order_goods[k].goods_num);
-						%>
 						<div class="goods-block">
-						<a href="<%=WapSiteUrl%>/member/order_detail.html?order_id=<%=orderlist[j].order_id%>">
+						<a href="<%=WapSiteUrl%>/member/order_detail.html?order_id=<%=sale_list[j].goods_id%>">
 							<div class="goods-pic">
-								<img src="<%=order_goods[k].goods_image_url%>"/>
+								<img src="<%=sale_list[j].good_img%>"/>
 							</div>
 							<dl class="goods-info">
-								<dt class="goods-name"><%=order_goods[k].goods_name%></dt>
-								<dd class="goods-type"><%=order_goods[k].goods_spec%></dd>
+								<dt class="goods-name"><%=sale_list[j].goods_name%></dt>
+								<dd class="goods-type"><%=sale_list[j].specs%></dd>
 							</dl>
 							<div class="goods-subtotal">
-								<span class="goods-price">￥<em><%=order_goods[k].goods_price%></em></span>
-								<span class="goods-num">x<%=order_goods[k].goods_num%></span>
+								<span class="goods-price">￥<em><%=sale_list[j].goods_price%></em></span>
+								<span class="goods-num">x<%=sale_list[j].goods_number%></span>
 							</div>
 						</a>
 						</div>
-						<%}%>
-						<%if (orderlist[j].zengpin_list.length > 0){%>
-						<div class="goods-gift">
-							<span><em><%=lang('gift')%></em>
-								<%
-									var num = 1;
-									for (k in orderlist[j].zengpin_list){%>
-										<%=num;%>、<%=orderlist[j].zengpin_list[k].goods_name;%><br>
-								<% ++num;}%>
-							</span>
-						</div>
-						<%}%>
 					</div>
 					<div class="dstouch-order-item-footer sysSale">
 						<div class="store-totle sysSales">
-							<p class="saleLeft"><span>代售商品</span></p>
+							<p class="saleLeft"><span><%=sale_list[j].goods_type%></span></p>
 							<p class="saleRight">
-								<span class="sp1">共<em><%=count%></em>件</span>
-								<span class="sp2">已售<em><%=orderlist[j].order_amount%></em>件</span>
-								<span class="sp3">代售<em><%=count%></em>件</span>
+								<span class="sp1">共<em><%=sale_list[j].goods_number%></em>件</span>
+								<span class="sp2">已售<em><%=sale_list[j].sale_number%></em>件</span>
+								<span class="sp3">代售<em><%=sale_list[j].left_number%></em>件</span>
 							</p>
 						</div>
 					</div>
 				</div>
-			<%}%>
 		</li>
 	<%}%>
+	
 	<% if (hasmore) {%>
-	<li class="loading"><div class="spinner"><i></i></div><%=lang('order_data_read')%></li>
+		<li class="loading"><div class="spinner"><i></i></div><%=lang('order_data_read')%></li>
 	<% } %>
+	
 <%}else {%>
-<div class="dstouch-norecord order">
-    <div class="norecord-ico"><i class="iconfont"></i></div>
-    <dl>
-        <dt><%=lang('order_prompt')%></dt>
-        <dd><%=lang('order_prompts')%></dd>
-    </dl>
-    <a href="<%=WapSiteUrl%>" class="btn"><%=lang('look_around')%></a>
-</div>
+	<div class="dstouch-norecord order">
+	    <div class="norecord-ico"><i class="iconfont"></i></div>
+	    <dl>
+	        <dt><%=lang('order_prompt')%></dt>
+	        <dd><%=lang('order_prompts')%></dd>
+	    </dl>
+	</div>
 <%}%>
 </script> 
 
