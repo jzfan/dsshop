@@ -470,6 +470,23 @@ class Memberorder extends MobileMember
     }
 
     //得到代售详情列表
+    public function getmemberforsaledetail()
+    {
+        $wheere['member_id']=$this->member_info['member_id'];
+        $res=model('memberforsalegoods');
+        $member_info = db('memberforsalegoods')->where($wheere)->select();
+        if (!empty($member_info)){
+            foreach ($member_info as $k=>$value){
+                $member_info[$k]['specs']=$res->getgoodsinfo($value['goods_commonid']);//规格
+                $member_info[$k]['goods_type']='代售商品';
+            }
+            //秒杀记录
+            $where['buyer_id']=$this->member_info['member_id'];
+            $where['order_type']='40';
+            $orderinfo=db('order')->where($where)->select();
+
+        }
+    }
 
 }
 
