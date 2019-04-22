@@ -17,10 +17,52 @@
 <link rel="stylesheet" type="text/css" href="../css/act_spike.css">
 </head>
 <body>
-	
+
+<!--秒杀头部图片-->
 <div class="head_pic">
 	<img class="head_pic" src="img/spike_headBg.png" />
-</div>	
+</div>
+
+<style>
+/*秒杀规则弹出框*/
+.spike_rule{width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;}
+.spike_rule .rule{    width: 80%;
+    height: 100%;
+    background-image: url(img/spike_bg.png);
+    background-repeat: no-repeat;
+    background-size: 100%;
+    margin: 3rem auto;}
+
+.spike_rule .rule .rule_top{text-align: center;
+    color: #fff;
+    transform: rotate(-3deg);}
+.rule .rule_txt{}
+.rule .rule_txt .rules{}
+.rule .rule_txt .rules .rule_num{}
+.rule_txt .rules .p1{}
+.rule_txt .rules .p1 span{}
+.rule_txt .rules .p2{}
+</style>
+
+<!--秒杀规则-->
+<div class="spike_rule">
+	<div class="rule">
+		<div class="rule_top">秒杀规则</div>
+		<div class="rule_txt">
+			<div class="rules">
+				<p class="rule_num"><span class="ruleNums">1</span></p>
+				<p class="p1">秒杀时间</p>
+				<p class="p2">每周二 四 六  下午2:58</p>
+			</div>
+		</div>
+	</div>
+</div>
 
 <!--头部模块-->
 <header id="header" class="dstouch-product-header">
