@@ -470,6 +470,7 @@ class Memberorder extends MobileMember
                 $member_info[$k]['good_img']=$res->getpic($value['goods_id']);
                 $member_info[$k]['goods_name']=$res->getname($value['goods_id']);
                 $member_info[$k]['specs']=$res->getgoodsinfo($value['goods_commonid']);//规格
+                $member_info[$k]['goods_state']=$res->getStatus($value['goods_state']);//状态
                 $member_info[$k]['goods_type']='代售商品';
             }
             $result= array_merge(array('orderlist' => $member_info), mobile_page(is_object($res->page_info)?$res->page_info:''));
@@ -493,13 +494,24 @@ class Memberorder extends MobileMember
                 $member_info['goods_type']='代售商品';
             //秒杀记录
             $where['member_id']=$this->member_info['member_id'];
-            $where['order_type']='40';
+            //$where['order_type']='40';
             $orderinfo=db('memberforsaleorder')->where($where)->select();
             if(!empty($orderinfo)){
                 foreach ($orderinfo as $k=>$v){
-
+                    $arr[]=$v['buyer_id'];//得到购买人id
                 }
+                $res=db('order')->whereIn('buy_id',$arr)->where('order_type',40)->select();
+                if (!empty($res)){
+                    foreach ($res as $k=>$v){
+                        $res[$k]['count']=db('order')->whereIn('buy_id',$arr)->where(array(['buy_id'=>$v['buy_id']],['order_type'=>40]))->count();
+                    }
+                }else{
+                    ds_json_encode(10001, '该用户没有秒杀记录');
+                }
+
+
             }
+
 
         }
     }

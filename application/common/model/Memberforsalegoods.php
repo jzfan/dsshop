@@ -94,4 +94,13 @@ class Memberforsalegoods extends Model
             return '';
         }
     }
+    public function getStatus($status){
+        if ($status==0){
+            return '等待挂售';
+        }elseif ($status==1){
+            return '挂售中';
+        }else{
+            return '挂售完成';
+        }
+    }
 }
