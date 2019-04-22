@@ -511,12 +511,9 @@ class Memberorder extends MobileMember
                 }
 
             //代售记录
-            $condition['buyer_id']=$this->member_info['member_id'];
-            $condition['order_type']=30;
-            $sale=$order->getsaleorderlist($condition,10,'');
-            foreach ($sale as $k=>$v){
-                $sale[$k]['count']=$res->getnum($v['order_sn']);
-            }
+            $memberforsaleorder=model('memberforsaleorder');
+            $condition['member_id']=$this->member_info['member_id'];
+            $sale=$memberforsaleorder->getmemberforsaleorder($condition,10,'');
             $result['goods_sale']= array_merge( $sale, mobile_page(is_object($order->page_info)?$order->page_info:''));
             $result['goods_info']=$member_info;
             ds_json_encode(10000, '获取成功',$result);
