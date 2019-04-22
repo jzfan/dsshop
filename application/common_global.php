@@ -120,6 +120,7 @@ define('ORDER_STATE_SEND', 30);
 define('ORDER_STATE_SUCCESS', 40);
 //默认未删除
 define('ORDER_DEL_STATE_DEFAULT', 0);
+define('ORDER_SIDELINE', 50);
 //已删除
 define('ORDER_DEL_STATE_DELETE', 1);
 //彻底删除

@@ -19,7 +19,7 @@ class Memberforsalegoods extends Model
     {
         $queue = model("forsalequeue");
         $goods_info = array();
-        while(true) {
+        while (true) {
             $forsalegoods = $queue->getForsaleGoods($goods_id);
             #当前商品真实剩余库存
             $goods_storage = $forsalegoods->left_number - $forsalegoods->freeze_number;
@@ -48,5 +48,23 @@ class Memberforsalegoods extends Model
         }
 
         return $goods_info;
+    }
+
+    public function getgoodsinfo($goods_common_id)
+    {
+        $model=db('goodscommon')->where('goods_commonid',$goods_common_id)->find();
+        if ($model['spec_name']=='N;'&&$model['spec_value']=='N;'){
+            return '';
+        }else{
+            $model['spec_value']=unserialize($model['spec_value']);
+            foreach ($model['spec_value'] as $k=>$v){
+                foreach ($v as $vo){
+                    $arr[]=$vo;
+                }
+            }
+            $result=implode(',',$arr);
+            return $result;
+        }
+
     }
 }
