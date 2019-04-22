@@ -476,7 +476,8 @@ class Memberorder extends MobileMember
             $result= array_merge(array('orderlist' => $member_info), mobile_page(is_object($res->page_info)?$res->page_info:''));
             ds_json_encode(10000, '获取成功',$result);
         }else{
-            ds_json_encode(10001, '该用户没有代售订单');
+            $result['orderlist']=[];$result['page_total']=1;$result['hasmore']=false;
+            ds_json_encode(10001, '该用户没有代售订单',$result);
         }
     }
     //得到代售详情列表
@@ -494,7 +495,6 @@ class Memberorder extends MobileMember
                 $member_info['goods_type']='代售商品';
             //秒杀记录
             $where['member_id']=$this->member_info['member_id'];
-            //$where['order_type']='40';
             $orderinfo=db('memberforsaleorder')->where($where)->select();
             if(!empty($orderinfo)){
                 foreach ($orderinfo as $k=>$v){
@@ -508,10 +508,10 @@ class Memberorder extends MobileMember
                 }else{
                     ds_json_encode(10001, '该用户没有秒杀记录');
                 }
-
-
+            }else{
+                ds_json_encode(10001, '该用户没有秒杀记录');
             }
-
+            //代售记录
 
         }
     }
