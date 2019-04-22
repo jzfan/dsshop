@@ -454,7 +454,7 @@ class Memberorder extends MobileMember
     //得到代售订单
     public function getmemberforsaleorder()
     {
-        $wheere['state_type']=input('state_type');
+        $wheere['goods_state']=input('state_type');
         $wheere['member_id']=$this->member_info['member_id'];
         $res=model('memberforsalegoods');
         $member_info = db('memberforsalegoods')->where($wheere)->select();
