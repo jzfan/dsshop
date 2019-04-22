@@ -37,9 +37,11 @@ class Deliver extends AdminControl
         if ($shop == 2) {
             $goods_id = db('goods')->where('supplier', $id)->column('goods_id');
             $where = db('ordergoods')->whereIn('goods_id', $goods_id)->column('order_id');
+            $condition['order_id']=['in',$where];
         } else {
             $goods_id = db('goods')->where('is_platform', 0)->column('goods_id');
             $where = db('ordergoods')->whereIn('goods_id', $goods_id)->column('order_id');
+            $condition['order_id']=['in',$where];
         }
         $buyer_name = input('buyer_name');
         if ($buyer_name != '') {
@@ -58,7 +60,7 @@ class Deliver extends AdminControl
         if ($start_unixtime || $end_unixtime) {
             $condition['add_time'] = array('between', array($start_unixtime, $end_unixtime));
         }
-        $order_list = $order_model->getOrderList($condition, '', $where, '*', 'order_id desc', '', array('order_goods', 'order_common', 'ppintuanorder', 'member'));
+        $order_list = $order_model->getOrderList($condition, '', '*', 'order_id desc', '', array('order_goods', 'order_common', 'ppintuanorder', 'member'));
 
         foreach ($order_list as $key => $order_info) {
             if (isset($order_info['extend_order_goods'])) {
