@@ -550,6 +550,9 @@ class Memberorder extends MobileMember
             $memberforsaleorder = model('memberforsaleorder');
             $condition['member_id'] = $this->member_info['member_id'];
             $sale = $memberforsaleorder->getmemberforsaleorder($condition, $this->pagesize, '');
+            foreach ($sale as $k=>$v){
+                $sale[$k]['service_fee']=100;
+            }
             $result['goods_sale'] = array_merge(array('data' => $sale), mobile_page(is_object($order->page_info) ? $order->page_info : ''));
             $result['goods_info'] = $member_info;
             ds_json_encode(10000, '获取成功', $result);
