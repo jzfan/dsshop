@@ -518,7 +518,7 @@ class Memberorder extends MobileMember
         }
         $wheere['member_id'] = $this->member_info['member_id'];
         $wheere['goods_id'] = input('goods_id');
-        $wheere['created_at'] = input('created_at');
+        //$wheere['created_at'] = input('created_at');
         $res = model('memberforsalegoods');
         $member_info = db('memberforsalegoods')->where($wheere)->find();
         //print_r($member_info);die;
