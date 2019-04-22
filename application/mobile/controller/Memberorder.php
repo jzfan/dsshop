@@ -516,7 +516,6 @@ class Memberorder extends MobileMember
         } else {
             $wheere['member_id'] = $this->member_info['member_id'];
         }
-        $wheere['member_id'] = $this->member_info['member_id'];
         $wheere['goods_id'] = input('goods_id');
         //$wheere['created_at'] = input('created_at');
         $res = model('memberforsalegoods');
@@ -537,7 +536,7 @@ class Memberorder extends MobileMember
             if (!empty($orderlist)) {
                 foreach ($orderlist as $k => $v) {
                     $orderlist[$k]['count'] = $res->getnum($v['order_sn']);
-                    $orderlist[$k]['add_time'] = date('Y-m-d H:i:s',$v['add_time']);
+                    $orderlist[$k]['add_time'] = date('Y-m-d H:i:s', $v['add_time']);
                 }
                 $result['goods_kill'] = array_merge(array('data' => $orderlist), mobile_page(is_object($order->page_info) ? $order->page_info : ''));
             } else {
@@ -550,8 +549,8 @@ class Memberorder extends MobileMember
             $memberforsaleorder = model('memberforsaleorder');
             $condition['member_id'] = $this->member_info['member_id'];
             $sale = $memberforsaleorder->getmemberforsaleorder($condition, $this->pagesize, '');
-            foreach ($sale as $k=>$v){
-                $sale[$k]['service_fee']=100;
+            foreach ($sale as $k => $v) {
+                $sale[$k]['service_fee'] = 100;
             }
             $result['goods_sale'] = array_merge(array('data' => $sale), mobile_page(is_object($order->page_info) ? $order->page_info : ''));
             $result['goods_info'] = $member_info;
@@ -561,6 +560,47 @@ class Memberorder extends MobileMember
         }
     }
 
+    //秒杀记录
+    public function getgoodskill()
+    {
+        $res = model('memberforsalegoods');
+        $order = model('order');
+        $con['buyer_id'] = $this->member_info['member_id'];
+        $con['order_type'] = 40;
+        $orderlist = $order->getsaleorderlist($con, $this->pagesize, '');
+        if (!empty($orderlist)) {
+            foreach ($orderlist as $k => $v) {
+                $orderlist[$k]['count'] = $res->getnum($v['order_sn']);
+                $orderlist[$k]['add_time'] = date('Y-m-d H:i:s', $v['add_time']);
+            }
+            $result['goods_kill'] = array_merge(array('data' => $orderlist), mobile_page(is_object($order->page_info) ? $order->page_info : ''));
+        } else {
+            $result['page_total'] = 1;
+            $result['hasmore'] = false;
+            $result['data'] = [];
+            ds_json_encode(10001, '该用户没有秒杀记录',$result);
+        }
+    }
+
+    //代售记录
+    public function getsalegoods()
+    {
+        $order = model('order');
+        $memberforsaleorder = model('memberforsaleorder');
+        $condition['member_id'] = $this->member_info['member_id'];
+        $sale = $memberforsaleorder->getmemberforsaleorder($condition, $this->pagesize, '');
+        if (!empty($sale)) {
+            foreach ($sale as $k => $v) {
+                $sale[$k]['service_fee'] = 100;
+            }
+            ds_json_encode(10000, '获取成功', $sale);
+        } else {
+            $result['page_total'] = 1;
+            $result['hasmore'] = false;
+            $result['data'] = [];
+            ds_json_encode(10001, '该用户没有挂售记录',$result);
+        }
+    }
 }
 
 ?>
