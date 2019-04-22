@@ -3,11 +3,20 @@
 namespace app\common\model;
 
 use think\Model;
+use app\common\DsRedis;
 use app\common\ModelTrait;
 
 class SeckillGoods extends Model
 {
     use ModelTrait;
+
+    protected $redis;
+
+    public function initialize()
+    {
+        parent::initialize();
+        $this->redis = DsRedis::getInstance();
+    }
 
     public function sku()
     {
@@ -73,20 +82,17 @@ class SeckillGoods extends Model
 
     public function push($job_id, $n=null)
     {
-        $redis = new \Redis;
-        $redis->connect('127.0.0.1');
         $n = $n ?? $this->qty;
         foreach (range(1, $n) as $i) {
-            $redis->lpush("seckill:{$job_id}:good:{$this->goods_id}", $i);
+            $this->redis->lpush("seckill:{$job_id}:good:{$this->goods_id}", $i);
         }
     }
 
     public function pop($job_id, $n)
     {
-        $redis = new \Redis;
         $arr = [];
         for ($n;$n--;) {
-            $arr[] = $redis->rpop("seckill:{$job_id}:good:{$this->goods_id}");
+            $arr[] = $this->redis->rpop("seckill:{$job_id}:good:{$this->goods_id}");
         }
         return $arr;
     }

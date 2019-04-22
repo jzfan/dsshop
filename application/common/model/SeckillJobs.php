@@ -14,6 +14,11 @@ class SeckillJobs extends Model
         return $this->hasMany(SeckillGoods::class, 'job_id');
     }
 
+    public function scopeUnCompleted($query)
+    {
+        $query->where('status', 0)->whereOr('status', 1)->order('start');
+    }
+
     public function active()
     {
         return $this->where('status', 1)->find();

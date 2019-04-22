@@ -8,20 +8,12 @@ use app\common\model\SeckillJobs;
 
 class Seckilltask extends Controller
 {
-	protected $redis;
-
-	protected function _initialize()
-	{
-		$this->redis = new \Redis;
-		$this->redis->connect('127.0.0.1', 6379);
-		$this->seed();
-		sleep(1);
-	}
 
 	public function handle()
 	{
 		Db::transaction(function () {
-			$jobs = SeckillJobs::where('status', 0)->order('start', 'asc')->lock(true)->select();
+			$jobs = SeckillJobs::unCompleted()
+							->lock(true)->select();
 			foreach ($jobs as $job) {
 				if ($job->isOver() || $job->isWaiting()) {
 					continue;
@@ -50,6 +42,8 @@ class Seckilltask extends Controller
 			'end' => date('Y-m-d H:i:s', time() + 3600),
 			'status' => 0
 		]);
+		// $sql = Db::getLastSql();
+		// dd($sql);
 		$goods = db('goods')->orderRaw('rand()')->limit(rand(1, 3))->select();
 		foreach ($goods as $good) {
 			db('seckill_goods')->insert([
