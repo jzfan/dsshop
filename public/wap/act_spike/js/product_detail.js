@@ -209,8 +209,7 @@ $(function() {
                 //立刻购买事件
                 $(".buy-now").click(function() {
                     //判断当前是否可以下单
-                    if ($(this).hasClass("no")) {
-                    	return false;
+//                  if ($(this).hasClass("no")) {
                         var e = getCookie("key");
                         if (!e) {
                             layer.open({
@@ -224,7 +223,6 @@ $(function() {
                         }
 						
 						//获取用户信息
-						
                         var o = {};
                         o.key = e;
                         o.cart_id = r + "|" + $(".fastnum").val();
@@ -251,7 +249,7 @@ $(function() {
                                 }
                             }
                         })
-                    }
+//                  }
                 })
 
 					
