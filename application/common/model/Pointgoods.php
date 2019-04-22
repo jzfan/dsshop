@@ -27,6 +27,7 @@ class Pointgoods extends Model
             $goods['goods_type'] = $point_goods['goods_type'];
             $goods['goods_promotion_price'] = $point_goods['goods_price'];
             $goods['goods_point'] = $point_goods['goods_point'];
+            $goods['goods_salenum'] = $point_goods['sale_number'];
 
             return $goods;
         }
@@ -83,11 +84,10 @@ class Pointgoods extends Model
     public function calculateStorage($goods_list)
     {
         if (!empty($goods_list)) {
-            $goodsid_array = array();
             foreach ($goods_list as $value) {
                 $goodscommonid_array[] = $value['goods_commonid'];
             }
-            $goods_storage = $this->getPointGoodsList(array('goods_commonid' => array('in', $goodscommonid_array)), 'goods_storage,goods_commonid,goods_id');
+            $goods_storage = $this->getGoodsOnlineList(array('goods_commonid' => array('in', $goodscommonid_array)), 'goods_storage,goods_commonid,goods_id');
             $storage_array = array();
             foreach ($goods_storage as $val) {
                 //初始化
@@ -137,14 +137,40 @@ class Pointgoods extends Model
             $goods['goods_type'] = $pointGoods->goods_type;
             $goods['goods_promotion_price'] = $pointGoods->goods_price;
             $goods['goods_point'] = $pointGoods->goods_point;
+            $goods['goods_salenum'] = $pointGoods->sale_number;
         }
         return $goodsList;
     }
 
 
-    public function add_pointgoods($data)
+    public function addOrUpdatePointGoods($data)
     {
-        return self::create($data);
+        $common_id  = $data['common_id'];
+        $count = count($data['goods_id']);
+        $insert_data = array();
+        for($i=0; $i < $count; ++$i) {
+            $insert_data[] = array(
+                "goods_commonid" =>  $common_id,
+                "goods_id" => $data['goods_id'][$i],
+                "goods_price" => $data['goods_price'][$i],
+                "goods_storage" => $data['goods_storage'][$i],
+                "goods_point" => $data['goods_point'][$i],
+                "goods_state" => 1,
+                "sale_number" => 0,
+                "created_at"  => date('Y-m-d H:i:s',time()),
+                "updated_at"  => date('Y-m-d H:i:s',time()),
+            );
+        }
+        //商品已经存在就更新
+        foreach ($insert_data as $insert_datum) {
+            $pointgoods = self::get(['goods_id'=>$insert_datum['goods_id']]);
+            if($pointgoods) {
+                unset($insert_datum['created_at']);
+                $pointgoods->save($insert_datum);
+            } else {
+                self::create($insert_datum);
+            }
+        }
     }
 
 
@@ -152,8 +178,8 @@ class Pointgoods extends Model
     {
         $pointgoods = self::get(['goods_id'=>$goods_id]);
         $pointgoods->goods_storage -= $goods_number;
-        $pointgoods->sell_number += $goods_number;
-        $pointgoods->save();
+        $pointgoods->sale_number += $goods_number;
+        return $pointgoods->save();
     }
 
 }

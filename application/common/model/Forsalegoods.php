@@ -100,4 +100,27 @@ class Forsalegoods extends Model
         $pointgoods->sell_number += $goods_number;
         $pointgoods->save();
     }
+
+
+    public function calculateStorage($goods_list)
+    {
+        if (!empty($goods_list)) {
+            foreach ($goods_list as $value) {
+                $goodscommonid_array[] = $value['goods_commonid'];
+            }
+            $goods_storage = $this->getGoodsOnlineList(array('goods_commonid' => array('in', $goodscommonid_array)), 'goods_storage,goods_commonid,goods_id');
+            $storage_array = array();
+            foreach ($goods_storage as $val) {
+                //初始化
+                if (!isset($storage_array[$val['goods_commonid']]['sum'])) {
+                    $storage_array[$val['goods_commonid']]['sum'] = 0;
+                }
+                $storage_array[$val['goods_commonid']]['sum'] += $val['goods_storage'];
+                $storage_array[$val['goods_commonid']]['goods_id'] = $val['goods_id'];
+            }
+            return $storage_array;
+        } else {
+            return false;
+        }
+    }
 }

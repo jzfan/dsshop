@@ -9,12 +9,12 @@
 namespace app\admin\controller;
 
 
-class Pointgoods extends AdminControl
+class Forsalegoods extends AdminControl
 {
 
     public function index()
     {
-        $pointgoods_model = model('Pointgoods');
+        $forsalegoods_model = model('Forsalegoods');
         /**
          * 处理商品分类
          */
@@ -47,11 +47,11 @@ class Pointgoods extends AdminControl
             $where['goods_state'] = $goods_state;
         }
 
-        $goods_list = $pointgoods_model->getGoodsOnlineList($where, '*', 15);
+        $goods_list = $forsalegoods_model->getGoodsOnlineList($where, '*', 15);
         $this->assign('goods_list', $goods_list);
-        $this->assign('show_page', $pointgoods_model->page_info->render());
+        $this->assign('show_page', $forsalegoods_model->page_info->render());
 
-        $storage_array = $pointgoods_model->calculateStorage($goods_list);
+        $storage_array = $forsalegoods_model->calculateStorage($goods_list);
         $this->assign('storage_array', $storage_array);
         // 品牌
         $brand_list = model('brand')->getBrandPassedList(array());
@@ -162,13 +162,13 @@ class Pointgoods extends AdminControl
         $menu_array = array(
             array(
                 'name' => 'index',
-                'text' => lang('积分商品管理'),
-                'url' => url('Pointgoods/index')
+                'text' => lang('91购商品管理'),
+                'url' => url('Forsalegoods/index')
             ),
             array(
                 'name' => 'goods_search',
-                'text' => lang('添加积分商品'),
-                'url' => url('Pointgoods/goods_search')
+                'text' => lang('添加91购商品'),
+                'url' => url('Forsalegoods/goods_search')
             )
         );
         return $menu_array;

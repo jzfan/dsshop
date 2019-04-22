@@ -599,6 +599,11 @@ class AdminControl extends Controller {
                         'text' => lang('积分商品'),
                         'args' => 'index,Pointgoods,operation',
                     ),
+                    'Forsalegoods' => array(
+                        'ico'=>'&#xe643;',
+                        'text' => lang('91购商品'),
+                        'args' => 'index,Forsalegoods,operation',
+                    ),
                 ),
             ),
             'stat' => array(
@@ -782,6 +787,7 @@ class AdminControl extends Controller {
                     array('name' => lang('ds_shop_consult'), 'action' => null, 'controller' => 'Mallconsult'),
                     array('name' => lang('ds_rechargecard'), 'action' => null, 'controller' => 'Rechargecard'),
                     array('name' => lang('积分商品'), 'action' => null, 'controller' => 'Pointgoods'),
+                    array('name' => lang('91购商品'), 'action' => null, 'controller' => 'Forsalegoods'),
                 )),
             array('name' => lang('ds_stat'), 'child' => array(
                     array('name' => lang('ds_statgeneral'), 'action' => null, 'controller' => 'Statgeneral'),
