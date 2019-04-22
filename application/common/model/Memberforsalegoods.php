@@ -103,4 +103,13 @@ class Memberforsalegoods extends Model
             return '挂售完成';
         }
     }
+
+    public function getNum($order_sn){
+        $model = db('memberforsaleorder')->where('order_sn', $order_sn)->find();
+        if (!empty($model)){
+            return $model['goods_number'];
+        }else{
+            return '';
+        }
+    }
 }
