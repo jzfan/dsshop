@@ -3,7 +3,7 @@
 namespace app\mobile\controller;
 
 
-class Article extends MobileMember
+class Article extends MobileHome
 {
     public function _initialize()
     {
