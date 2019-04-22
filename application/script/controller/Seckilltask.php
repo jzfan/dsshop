@@ -39,28 +39,27 @@ class Seckilltask extends Controller
 
 	protected function start($job)
 	{
-		foreach ($job->goods as $good) {
-			for ($i = $good->qty; $i--;) {
-				$this->redis->lpush("seckill:{$job->id}", "good:{$good->id}");
-			}
-		}
+		$job->pushGoods();
 	}
 
-	protected function seed()
+	public function seed()
 	{
 		$job = SeckillJobs::create([
 			'name' => 'test',
-			'start' => date('Y-m-d H:i:s', time()),
+			'start' => date('Y-m-d H:i:s'),
 			'end' => date('Y-m-d H:i:s', time() + 3600),
 			'status' => 0
 		]);
-		db('seckill_goods')->insert([
-			'goods_id' => rand(1, 100),
-			'job_id' => $job->id,
-			'mi' => rand(1, 10) * 100,
-			'price' =>  number_format(rand(1, 100), 2),
-			'qty' => rand(10, 500)
-		]);
+		$goods = db('goods')->orderRaw('rand()')->limit(rand(1, 3))->select();
+		foreach ($goods as $good) {
+			db('seckill_goods')->insert([
+				'goods_id' => $good['goods_id'],
+				'job_id' => $job->id,
+				'mi' => rand(1, 10) * 100,
+				'price' =>  $good['goods_price'],
+				'qty' => rand(1, $good['goods_storage'])
+			]);
+		}
 	}
 
 }

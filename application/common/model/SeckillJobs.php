@@ -55,4 +55,11 @@ class SeckillJobs extends Model
             return $good->format();
         }, $job_goods);
     }
+
+    public function pushGoods()
+    {
+        foreach ($this->goods as $good) {
+            $good->push($this->id);
+        }
+    }
 }

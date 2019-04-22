@@ -27,12 +27,12 @@ class Seckillgoods extends BaseController
 	public function buy()
 	{
 		$data = checkInput([
-			'id' => 'require|number',
+			'goods_id' => 'require|number',
 			'seckill_id' => 'require|number',
 			'number' => 'require|number',
 			'key' => 'require|number'
 		]);
-		$good = $this->model->find($data['id']);
+		$good = $this->model->where('goods_id', $data['goods_id'])->find();
 
 		$redis = new \Redis();
 		$redis->connect('127.0.0.1', 6379);

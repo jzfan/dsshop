@@ -9,8 +9,6 @@ class SeckillGoods extends Model
 {
     use ModelTrait;
 
-    public $page_info;
-
     public function sku()
     {
         return $this->belongsTo(Goods::class, 'goods_id', 'goods_id');
@@ -61,6 +59,7 @@ class SeckillGoods extends Model
     	$images = $this->images();
         return [
             'id' => $this->id,
+            'goods_id' => $this->goods_id,
             'name' => $this->info->goods_name,
             'default_image' => array_shift($images),
             'images' => join(',', $images),
@@ -68,7 +67,28 @@ class SeckillGoods extends Model
             'mi' => $this->mi,
             'qty' => $this->qty,
             'sold' => $this->sold,
+            'goods_type' => 40,
         ];
+    }
+
+    public function push($job_id, $n=null)
+    {
+        $redis = new \Redis;
+        $redis->connect('127.0.0.1');
+        $n = $n ?? $this->qty;
+        foreach (range(1, $n) as $i) {
+            $redis->lpush("seckill:{$job_id}:good:{$this->goods_id}", $i);
+        }
+    }
+
+    public function pop($job_id, $n)
+    {
+        $redis = new \Redis;
+        $arr = [];
+        for ($n;$n--;) {
+            $arr[] = $redis->rpop("seckill:{$job_id}:good:{$this->goods_id}");
+        }
+        return $arr;
     }
 
     public function getGoodsInfoAndPromotionById($goods_id)
@@ -91,7 +111,7 @@ class SeckillGoods extends Model
                 'goods_storage' => $seckill_good->qty,
                 'goods_storage_alarm' => 0,
                 'is_have_gift' => 0,
-                
+
             ]);
         }
 
@@ -106,6 +126,16 @@ class SeckillGoods extends Model
      * @return array
      */
     public function getGoodsOnlineInfoAndPromotionById($goods_id) {
+        $redis = new \Redis();
+        $redis->connect('127.0.0.1', 6379);
+        $number = input('number');
+        //取商品队列
+        $list = $this->pop(input('seckill_id'), $number);
+        dd($list);
+                //1. 队列为空，商品卖完，错误返回
+            // if (!$redisGood) {
+            //     throw new JsonException("此商品已售完", 422);
+            // }
         return $this->getGoodsInfoAndPromotionById($goods_id);
     }
 

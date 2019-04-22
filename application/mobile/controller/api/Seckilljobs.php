@@ -11,9 +11,7 @@ class Seckilljobs extends BaseController
 
 	public function active()
 	{
-		// just for dev
-		$job = $this->model->get(75);
-		// $job = $this->model->active();
+		$job = $this->model->active();
 
 		if ($job) {
 			$goods = $job->formatGoods();
