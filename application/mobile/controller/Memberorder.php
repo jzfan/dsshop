@@ -451,11 +451,13 @@ class Memberorder extends MobileMember
         return $name;
     }
 
-    //得到91购订单
+    //得到代售订单
     public function getmemberforsaleorder()
     {
+        $wheere['state_type']=input('state_type');
+        $wheere['member_id']=$this->member_info['member_id'];
         $res=model('memberforsalegoods');
-        $member_info = db('memberforsalegoods')->where('member_id',$this->member_info['member_id'])->select();
+        $member_info = db('memberforsalegoods')->where($wheere)->select();
         if (!empty($member_info)){
             foreach ($member_info as $k=>$value){
                 $member_info[$k]['specs']=$res->getgoodsinfo($value['goods_commonid']);//规格
@@ -466,6 +468,9 @@ class Memberorder extends MobileMember
             ds_json_encode(10001, '该用户没有代售订单');
         }
     }
+
+    //得到代售详情列表
+
 }
 
 ?>
