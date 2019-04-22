@@ -454,12 +454,21 @@ class Memberorder extends MobileMember
     //得到代售订单
     public function getmemberforsaleorder()
     {
-        $wheere['goods_state']=input('state_type');
+        $goods_state=input('state_type');
+        if($goods_state==1){
+            $wheere['goods_state']=0;
+        }elseif($goods_state==2){
+            $wheere['goods_state']=1;
+        }else{
+            $wheere['goods_state']=2;
+        }
         $wheere['member_id']=$this->member_info['member_id'];
         $res=model('memberforsalegoods');
         $member_info = db('memberforsalegoods')->where($wheere)->select();
         if (!empty($member_info)){
             foreach ($member_info as $k=>$value){
+                $member_info[$k]['good_img']=$res->getpic($value['goods_id']);
+                $member_info[$k]['goods_name']=$res->getname($value['goods_id']);
                 $member_info[$k]['specs']=$res->getgoodsinfo($value['goods_commonid']);//规格
                 $member_info[$k]['goods_type']='代售商品';
             }
@@ -473,17 +482,24 @@ class Memberorder extends MobileMember
     public function getmemberforsaledetail()
     {
         $wheere['member_id']=$this->member_info['member_id'];
+        $wheere['goods_id']=input('goods_id');
+        $wheere['created_at']=input('created_at');
         $res=model('memberforsalegoods');
-        $member_info = db('memberforsalegoods')->where($wheere)->select();
+        $member_info = db('memberforsalegoods')->where($wheere)->find();
         if (!empty($member_info)){
-            foreach ($member_info as $k=>$value){
-                $member_info[$k]['specs']=$res->getgoodsinfo($value['goods_commonid']);//规格
-                $member_info[$k]['goods_type']='代售商品';
-            }
+                $member_info['good_img']=$res->getpic($member_info['goods_id']);
+                $member_info['goods_name']=$res->getname($member_info['goods_id']);
+                $member_info['specs']=$res->getgoodsinfo($member_info['goods_commonid']);//规格
+                $member_info['goods_type']='代售商品';
             //秒杀记录
             $where['buyer_id']=$this->member_info['member_id'];
             $where['order_type']='40';
             $orderinfo=db('order')->where($where)->select();
+            if(!empty($orderinfo)){
+                foreach ($orderinfo as $k=>$v){
+
+                }
+            }
 
         }
     }

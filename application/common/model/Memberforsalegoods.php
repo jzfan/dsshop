@@ -52,19 +52,37 @@ class Memberforsalegoods extends Model
 
     public function getgoodsinfo($goods_common_id)
     {
-        $model=db('goodscommon')->where('goods_commonid',$goods_common_id)->find();
-        if ($model['spec_name']=='N;'&&$model['spec_value']=='N;'){
+        $model = db('goodscommon')->where('goods_commonid', $goods_common_id)->find();
+        if ($model['spec_name'] == 'N;' && $model['spec_value'] == 'N;') {
             return '';
-        }else{
-            $model['spec_value']=unserialize($model['spec_value']);
-            foreach ($model['spec_value'] as $k=>$v){
-                foreach ($v as $vo){
-                    $arr[]=$vo;
+        } else {
+            $model['spec_value'] = unserialize($model['spec_value']);
+            foreach ($model['spec_value'] as $k => $v) {
+                foreach ($v as $vo) {
+                    $arr[] = $vo;
                 }
             }
-            $result=implode(',',$arr);
+            $result = implode(',', $arr);
             return $result;
         }
 
+    }
+
+    public function getname($id)
+    {
+        $model = db('goods')->where('goods_id', $id)->find();
+        if (!empty($model)) {
+            return $model['goods_name'];
+        } else {
+            return '';
+        }
+    }
+    public function getpic($id){
+        $model=db('goods')->where('goods_id',$id)->find();
+        if (!empty($model)){
+            return UPLOAD_SITE_URL.'/'.ATTACH_GOODS.'/'.$model['goods_image'];
+        }else{
+            return '';
+        }
     }
 }
