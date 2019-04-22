@@ -537,6 +537,7 @@ class Memberorder extends MobileMember
             if (!empty($orderlist)) {
                 foreach ($orderlist as $k => $v) {
                     $orderlist[$k]['count'] = $res->getnum($v['order_sn']);
+                    $orderlist[$k]['add_time'] = date('Y-m-d H:i:s',$v['add_time']);
                 }
                 $result['goods_kill'] = array_merge(array('data' => $orderlist), mobile_page(is_object($order->page_info) ? $order->page_info : ''));
             } else {
