@@ -12,7 +12,7 @@ class DsRedis
 	private function __construct()
 	{
 		self::$instance = new \Redis;
-		self::$instance->connect(self::HOST, self::port); 
+		self::$instance->connect(self::HOST, self::PORT); 
 	}
 
 	public static function getInstance()

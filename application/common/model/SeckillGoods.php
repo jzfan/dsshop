@@ -100,7 +100,7 @@ class SeckillGoods extends Model
     public function getGoodsInfoAndPromotionById($goods_id)
     {
         // $goods = db('goods')->where("goods_id",$goods_id)->find();
-        $seckill_good = model('seckillgoods')->where("goods_id",$goods_id)->find();
+        $seckill_good = self::where("goods_id",$goods_id)->find();
         $sku = $seckill_good->sku;
         if ($seckill_good) {
             return array_merge($seckill_good->toArray(),[
@@ -131,17 +131,8 @@ class SeckillGoods extends Model
      * @param int $goods_id 商品ID
      * @return array
      */
-    public function getGoodsOnlineInfoAndPromotionById($goods_id) {
-        $redis = new \Redis();
-        $redis->connect('127.0.0.1', 6379);
-        $number = input('number');
-        //取商品队列
-        $list = $this->pop(input('seckill_id'), $number);
-        dd($list);
-                //1. 队列为空，商品卖完，错误返回
-            // if (!$redisGood) {
-            //     throw new JsonException("此商品已售完", 422);
-            // }
+    public function getGoodsOnlineInfoAndPromotionById($goods_id)
+    {
         return $this->getGoodsInfoAndPromotionById($goods_id);
     }
 
