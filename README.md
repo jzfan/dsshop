@@ -42,7 +42,7 @@ CREATE TABLE `ds_forsalegoods` (
   KEY `goods_id` (`goods_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='91购商品表';
 
-6.会员挂售商品表
+
 DROP TABLE IF EXISTS `ds_memberforsalegoods`;
 CREATE TABLE `ds_memberforsalegoods` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -54,11 +54,14 @@ CREATE TABLE `ds_memberforsalegoods` (
   `goods_number` int(10) NOT NULL DEFAULT '0' COMMENT '商品数量',
   `sale_number` int(10) NOT NULL DEFAULT '0' COMMENT '已销售数量',
   `left_number` int(10) NOT NULL DEFAULT '0' COMMENT '剩余数量',
+  `freeze_number` int(10) NOT NULL COMMENT '占位库存数量',
+  `goods_state` tinyint(4) NOT NULL DEFAULT '0' COMMENT '商品状态：0 等待挂售；1 挂售中；2 挂售完成',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `goods_id` (`goods_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员挂售列表';
+
 
 7.会员挂售订单表
 DROP TABLE IF EXISTS `ds_memberforsaleorder`;
@@ -101,7 +104,39 @@ CREATE TABLE `ds_memberforsalebill`  (
   INDEX `member_id`(`member_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '会员挂售分账表';
 
+10.后台账号表
+ALTER TABLE `ds_admin`
+ADD COLUMN `is_shop`  tinyint(4) NOT NULL DEFAULT 1 COMMENT '1为管理员2位商户';
 
+11.商品表
+ALTER TABLE `ds_goods`
+ADD COLUMN `supplier`  int(11) NOT NULL DEFAULT 0 COMMENT '供应商id';
+ADD COLUMN `is_platform`  tinyint(1) NOT NULL DEFAULT 0 COMMENT '0为平台商品1为供应商商品';
+
+12.商户配置表
+DROP TABLE IF EXISTS `ds_hostconfig`;
+CREATE TABLE `ds_hostconfig`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `key` varchar(255) NOT NULL  COMMENT '配置项key值',
+  `value` varchar(255) NOT NULL COMMENT '配置项value值',
+  `host` varchar(50) NOT NULL  COMMENT '配置的域名',
+  PRIMARY KEY (`id`),
+) ENGINE = InnoDB CHARACTER SET = utf8  COMMENT = '商户配置项';
+
+13.秒米变更日志表
+DROP TABLE IF EXISTS `ds_meterlog`;
+CREATE TABLE `ds_meterlog` (
+  `lg_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '预存款变更日志自增ID',
+  `lg_member_id` int(11) NOT NULL COMMENT '会员ID',
+  `lg_member_name` varchar(50) NOT NULL COMMENT '会员名称',
+  `lg_admin_name` varchar(50) DEFAULT NULL COMMENT '管理员名称',
+  `lg_type` varchar(15) NOT NULL DEFAULT '' COMMENT 'order_pay下单支付预存款,order_freeze下单冻结预存款,order_cancel取消订单解冻预存款,order_comb_pay下单支付被冻结的预存款,recharge充值,cash_apply申请提现冻结预存款,cash_pay提现成功,cash_del取消提现申请，解冻预存款,refund退款',
+  `lg_av_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '可用秒米变更0:未变更',
+  `lg_addtime` int(11) NOT NULL COMMENT '变更添加时间',
+  `lg_desc` varchar(150) DEFAULT NULL COMMENT '变更描述',
+  `lg_freeze_amount` decimal(10,0) DEFAULT '0' COMMENT '冻结秒米',
+  PRIMARY KEY (`lg_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='秒米变更日志表';
 ## TODO
 
 1. 计划任务

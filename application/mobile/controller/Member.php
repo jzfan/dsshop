@@ -94,7 +94,7 @@ class Member extends MobileMember
             ds_json_encode(10001, '修改失败');
         }
     }
-    
+
     /**
      * 更新用户头像
      */
@@ -120,7 +120,7 @@ class Member extends MobileMember
     public function get_member_miao() {
         $condition['lg_member_id'] = $this->member_info['member_id'];
         $meter_log=model('meterlog');
-        $list_log = $meter_log->getLogList($condition, 10);
+        $list_log = $meter_log->getLogList($condition, $this->pagesize);
         foreach ($list_log as $k=>$v ){
             $list_log[$k]['lg_addtime']=date('Y-m-d H:i:s',$v['lg_addtime']);
         }

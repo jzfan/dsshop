@@ -451,77 +451,156 @@ class Memberorder extends MobileMember
         return $name;
     }
 
+    //首页获取所有代售订单
+    public function getmemberallsaleorder()
+    {
+        $wheere['goods_state'] = 2;
+        $res = model('memberforsalegoods');
+        $member_info = $res->getlist($wheere, $this->pagesize);
+        if (!empty($member_info)) {
+            foreach ($member_info as $k => $value) {
+                $member_info[$k]['good_img'] = $res->getpic($value['goods_id']);
+                $member_info[$k]['goods_name'] = $res->getname($value['goods_id']);
+                $member_info[$k]['specs'] = $res->getgoodsinfo($value['goods_commonid']);//规格
+                $member_info[$k]['goods_state'] = $res->getStatus($value['goods_state']);//状态
+                $member_info[$k]['goods_type'] = '代售商品';
+            }
+            $result = array_merge(array('orderlist' => $member_info), mobile_page(is_object($res->page_info) ? $res->page_info : ''));
+            ds_json_encode(10000, '获取成功', $result);
+        } else {
+            $result['orderlist'] = [];
+            $result['page_total'] = 1;
+            $result['hasmore'] = false;
+            ds_json_encode(10001, '暂时无代售订单', $result);
+        }
+    }
+
     //得到代售订单
     public function getmemberforsaleorder()
     {
-        $goods_state=input('state_type');
-        if($goods_state==1){
-            $wheere['goods_state']=0;
-        }elseif($goods_state==2){
-            $wheere['goods_state']=1;
-        }else{
-            $wheere['goods_state']=2;
+        $goods_state = input('state_type');
+        if ($goods_state == 1) {
+            $wheere['goods_state'] = 0;
+        } elseif ($goods_state == 2) {
+            $wheere['goods_state'] = 1;
+        } else {
+            $wheere['goods_state'] = 2;
         }
-        $wheere['member_id']=$this->member_info['member_id'];
-        $res=model('memberforsalegoods');
-        $member_info = $res->getlist($wheere,10);
-        if (!empty($member_info)){
-            foreach ($member_info as $k=>$value){
-                $member_info[$k]['good_img']=$res->getpic($value['goods_id']);
-                $member_info[$k]['goods_name']=$res->getname($value['goods_id']);
-                $member_info[$k]['specs']=$res->getgoodsinfo($value['goods_commonid']);//规格
-                $member_info[$k]['goods_state']=$res->getStatus($value['goods_state']);//状态
-                $member_info[$k]['goods_type']='代售商品';
+        $wheere['member_id'] = $this->member_info['member_id'];
+        $res = model('memberforsalegoods');
+        $member_info = $res->getlist($wheere, $this->pagesize);
+        if (!empty($member_info)) {
+            foreach ($member_info as $k => $value) {
+                $member_info[$k]['good_img'] = $res->getpic($value['goods_id']);
+                $member_info[$k]['goods_name'] = $res->getname($value['goods_id']);
+                $member_info[$k]['specs'] = $res->getgoodsinfo($value['goods_commonid']);//规格
+                $member_info[$k]['goods_state'] = $res->getStatus($value['goods_state']);//状态
+                $member_info[$k]['goods_type'] = '代售商品';
             }
-            $result= array_merge(array('orderlist' => $member_info), mobile_page(is_object($res->page_info)?$res->page_info:''));
-            ds_json_encode(10000, '获取成功',$result);
-        }else{
-            $result['orderlist']=[];$result['page_total']=1;$result['hasmore']=false;
-            ds_json_encode(10001, '该用户没有代售订单',$result);
+            $result = array_merge(array('orderlist' => $member_info), mobile_page(is_object($res->page_info) ? $res->page_info : ''));
+            ds_json_encode(10000, '获取成功', $result);
+        } else {
+            $result['orderlist'] = [];
+            $result['page_total'] = 1;
+            $result['hasmore'] = false;
+            ds_json_encode(10001, '该用户没有代售订单', $result);
         }
     }
+
     //得到代售详情列表
     public function getmemberforsaledetail()
     {
-        $wheere['member_id']=$this->member_info['member_id'];
-        $wheere['goods_id']=input('goods_id');
-        //$wheere['created_at']=input('created_at');
-        $res=model('memberforsalegoods');
+        $member_id = input('member_id');
+        if ($member_id != '') {
+            $wheere['member_id'] = $member_id;
+        } else {
+            $wheere['member_id'] = $this->member_info['member_id'];
+        }
+        $wheere['goods_id'] = input('goods_id');
+        //$wheere['created_at'] = input('created_at');
+        $res = model('memberforsalegoods');
         $member_info = db('memberforsalegoods')->where($wheere)->find();
         //print_r($member_info);die;
-        if (!empty($member_info)){
-                $member_info['good_img']=$res->getpic($member_info['goods_id']);
-                $member_info['goods_name']=$res->getname($member_info['goods_id']);
-                $member_info['specs']=$res->getgoodsinfo($member_info['goods_commonid']);//规格
-                $member_info['goods_state']=$res->getStatus($member_info['goods_state']);//状态
-                $member_info['goods_type']='代售商品';
+        if (!empty($member_info)) {
+            $member_info['good_img'] = $res->getpic($member_info['goods_id']);
+            $member_info['goods_name'] = $res->getname($member_info['goods_id']);
+            $member_info['specs'] = $res->getgoodsinfo($member_info['goods_commonid']);//规格
+            $member_info['goods_state'] = $res->getStatus($member_info['goods_state']);//状态
+            $member_info['goods_type'] = '代售商品';
             //秒杀记录
-            $order=model('order');
-            $con['buyer_id']=$this->member_info['member_id'];
-                //去重
-            $con['order_type']=40;
-                $orderlist=$order->getsaleorderlist($con,10,'');
-                if (!empty($orderlist)){
-                    foreach ($orderlist as $k=>$v){
-                        $orderlist[$k]['count']=$res->getnum($v['order_sn']);
-                    }
-                    $result['goods_kill']= array_merge($orderlist, mobile_page(is_object($order->page_info)?$order->page_info:''));
-                }else{
-                    ds_json_encode(10001, '该用户没有秒杀记录');
+            $order = model('order');
+            $con['buyer_id'] = $this->member_info['member_id'];
+            //去重
+            $con['order_type'] = 40;
+            $orderlist = $order->getsaleorderlist($con, $this->pagesize, '');
+            if (!empty($orderlist)) {
+                foreach ($orderlist as $k => $v) {
+                    $orderlist[$k]['count'] = $res->getnum($v['order_sn']);
+                    $orderlist[$k]['add_time'] = date('Y-m-d H:i:s', $v['add_time']);
                 }
+                $result['goods_kill'] = array_merge(array('data' => $orderlist), mobile_page(is_object($order->page_info) ? $order->page_info : ''));
+            } else {
+                $result['goods_kill']['page_total'] = 1;
+                $result['goods_kill']['hasmore'] = false;
+                ds_json_encode(10001, '该用户没有秒杀记录');
+            }
 
             //代售记录
-            $memberforsaleorder=model('memberforsaleorder');
-            $condition['member_id']=$this->member_info['member_id'];
-            $sale=$memberforsaleorder->getmemberforsaleorder($condition,10,'');
-            $result['goods_sale']= array_merge( $sale, mobile_page(is_object($order->page_info)?$order->page_info:''));
-            $result['goods_info']=$member_info;
-            ds_json_encode(10000, '获取成功',$result);
-        }else{
+            $memberforsaleorder = model('memberforsaleorder');
+            $condition['member_id'] = $this->member_info['member_id'];
+            $sale = $memberforsaleorder->getmemberforsaleorder($condition, $this->pagesize, '');
+            foreach ($sale as $k => $v) {
+                $sale[$k]['service_fee'] = 100;
+            }
+            $result['goods_sale'] = array_merge(array('data' => $sale), mobile_page(is_object($order->page_info) ? $order->page_info : ''));
+            $result['goods_info'] = $member_info;
+            ds_json_encode(10000, '获取成功', $result);
+        } else {
             ds_json_encode(10001, '数据错误');
         }
     }
 
+    //秒杀记录
+    public function getgoodskill()
+    {
+        $res = model('memberforsalegoods');
+        $order = model('order');
+        $con['buyer_id'] = $this->member_info['member_id'];
+        $con['order_type'] = 40;
+        $orderlist = $order->getsaleorderlist($con, $this->pagesize, '');
+        if (!empty($orderlist)) {
+            foreach ($orderlist as $k => $v) {
+                $orderlist[$k]['count'] = $res->getnum($v['order_sn']);
+                $orderlist[$k]['add_time'] = date('Y-m-d H:i:s', $v['add_time']);
+            }
+            $result['goods_kill'] = array_merge(array('data' => $orderlist), mobile_page(is_object($order->page_info) ? $order->page_info : ''));
+        } else {
+            $result['page_total'] = 1;
+            $result['hasmore'] = false;
+            $result['data'] = [];
+            ds_json_encode(10001, '该用户没有秒杀记录',$result);
+        }
+    }
+
+    //代售记录
+    public function getsalegoods()
+    {
+        $order = model('order');
+        $memberforsaleorder = model('memberforsaleorder');
+        $condition['member_id'] = $this->member_info['member_id'];
+        $sale = $memberforsaleorder->getmemberforsaleorder($condition, $this->pagesize, '');
+        if (!empty($sale)) {
+            foreach ($sale as $k => $v) {
+                $sale[$k]['service_fee'] = 100;
+            }
+            ds_json_encode(10000, '获取成功', $sale);
+        } else {
+            $result['page_total'] = 1;
+            $result['hasmore'] = false;
+            $result['data'] = [];
+            ds_json_encode(10001, '该用户没有挂售记录',$result);
+        }
+    }
 }
 
 ?>

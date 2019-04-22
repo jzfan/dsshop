@@ -79,6 +79,8 @@ class Memberorder extends BaseMember {
             $order['if_drop'] = $order_model->getOrderOperateState('drop', $order);
             //显示还原订单
             $order['if_restore'] = $order_model->getOrderOperateState('restore', $order);
+            //显示代售订单
+            $order['sideline']=$order_model->getOrderOperateState('sideline', $order);
 
             foreach ($order['extend_order_goods'] as $value) {
                 $value['goods_type_cn'] = get_order_goodstype($value['goods_type']);
