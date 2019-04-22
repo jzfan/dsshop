@@ -39,7 +39,7 @@ $(function() {
         var r = $("#order_key").val();
         $.ajax({
             type: "post",
-            url: ApiUrl + "/Memberorder/order_list.html?page=" + curpage + "&pagesize=" + pagesize,
+            url: ApiUrl + "/memberorder/getmemberforsaleorder.html?page=" + curpage + "&pagesize=" + pagesize,
             data: {
                 key: e,
                 state_type: t,
@@ -53,7 +53,7 @@ $(function() {
                 if (!hasMore) {
                     get_footer()
                 }
-                if (e.result.order_group_list.length <= 0) {
+                if (e.result.length <= 0) {
                     $("#footer").addClass("posa")
                 } else {
                     $("#footer").removeClass("posa")
