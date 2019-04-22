@@ -101,20 +101,18 @@
                 </div>
                 <div class="style2"><%}%>
                     <div>
-                        <a href="mall/product_detail.html?goods_id=<%= gc_list.gc_list[j].goods_id %>">
+                        <a href="mall/product_detail.html?goods_id=<%= gc_list.gc_list[j].goods_id %>&goods_type=<%=gc_list.gc_list[j].goods_type%>">
                             <div class="goods-pic">
                                 <img src="<%= gc_list.gc_list[j].goods_image %>" alt="">
                                 <div class="goods_advword"><%= gc_list.gc_list[j].goods_advword %></div>
                             </div>
                             <dl class="goods-info">
-                                <dt class="goods-name">
-                                    <% if (gc_list.gc_list[j].active != "") { %>
-                                    <em><%= gc_list.gc_list[j].active %></em>
-                                    <% } %>
-                                    <%= gc_list.gc_list[j].goods_name %></dt>
+                                <dt class="goods-name"><%= gc_list.gc_list[j].goods_name %></dt>
                                 <dd class="goods-price goods-price-new">
-                                    <span class="price-left">￥<em><%= gc_list.gc_list[j].goods_tpprice %></em></span>
-                                    <span class="price-right">￥<em><%= gc_list.gc_list[j].goods_promotion_price %></em></span>
+                                	<% if (gc_list.gc_list[j].goods_type== 20) { %>
+                                    <span class="price-left">￥<em><%= gc_list.gc_list[j].goods_price %></em>+<em><%= gc_list.gc_list[j].goods_point %></em>积分</span>
+                                    <%}%>
+                                    <!--<span class="price-right">￥<em><%= gc_list.gc_list[j].goods_promotion_price %></em></span>-->
                                 </dd>
                             </dl>
                         </a>
