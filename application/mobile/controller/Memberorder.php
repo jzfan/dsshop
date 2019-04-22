@@ -478,7 +478,6 @@ class Memberorder extends MobileMember
             ds_json_encode(10001, '该用户没有代售订单');
         }
     }
-
     //得到代售详情列表
     public function getmemberforsaledetail()
     {

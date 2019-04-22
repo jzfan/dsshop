@@ -14,7 +14,7 @@ use think\Model;
 class Memberforsalegoods extends Model
 {
 
-
+    public $page_info;
     public function freezeMemberForsaleGoods($goods_id, $goods_number)
     {
         $queue = model("forsalequeue");
@@ -49,7 +49,16 @@ class Memberforsalegoods extends Model
 
         return $goods_info;
     }
-
+    public function getlist($condition = array(), $pagesize = '', $fields = '*', $order = '', $limit = ''){
+        if ($pagesize) {
+            $pdlog_list_paginate = db('memberforsalegoods')->where($condition)->field($fields)->order($order)->paginate($pagesize, false, ['query' => request()->param()]);
+            $this->page_info = $pdlog_list_paginate;
+            return $pdlog_list_paginate->items();
+        } else {
+            $pdlog_list_paginate = db('memberforsalegoods')->where($condition)->field($fields)->order($order)->limit($limit)->select();
+            return $pdlog_list_paginate;
+        }
+    }
     public function getgoodsinfo($goods_common_id)
     {
         $model = db('goodscommon')->where('goods_commonid', $goods_common_id)->find();
