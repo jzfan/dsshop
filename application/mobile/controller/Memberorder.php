@@ -4,37 +4,40 @@ namespace app\mobile\controller;
 
 use think\Lang;
 
-class Memberorder extends MobileMember {
+class Memberorder extends MobileMember
+{
 
-    public function _initialize() {
+    public function _initialize()
+    {
         parent::_initialize();
-        Lang::load(APP_PATH . 'mobile/lang/'.config('default_lang').'/memberorder.lang.php');
+        Lang::load(APP_PATH . 'mobile/lang/' . config('default_lang') . '/memberorder.lang.php');
     }
 
     /**
      * 订单列表
      */
-    public function order_list() {
+    public function order_list()
+    {
         $order_model = model('order');
         $condition = array();
-        $state_type=input('post.state_type');
-        if ($state_type==''){
+        $state_type = input('post.state_type');
+        if ($state_type == '') {
             $condition['order_state'] = '';
-        }else{
+        } else {
             $condition = $this->order_type_no(input('post.state_type'));
         }
         $condition['buyer_id'] = $this->member_info['member_id'];
         $condition['delete_state'] = 0; #订单未被删除
         $order_sn = input('post.order_key');
         if ($order_sn != '') {
-            $condition['order_sn'] = array('like','%'.$order_sn.'%');
+            $condition['order_sn'] = array('like', '%' . $order_sn . '%');
         }
         $order_list_array = $order_model->getOrderList($condition, 5, '*', 'order_id desc,add_time desc', '', array('order_common', 'order_goods'));
         $order_group_list = $order_pay_sn_array = array();
-        foreach ($order_list_array as $k=>$value) {
+        foreach ($order_list_array as $k => $value) {
             //$value['zengpin_list'] = false;
             //获取订单类型名称
-            $value['order_type_name']=$this->get_type_name($value['order_type']);
+            $value['order_type_name'] = $this->get_type_name($value['order_type']);
             //显示取消订单
             $value['if_cancel'] = $order_model->getOrderOperateState('buyer_cancel', $value);
             //显示退款取消订单
@@ -48,7 +51,7 @@ class Memberorder extends MobileMember {
             $value['if_evaluation'] = $order_model->getOrderOperateState('evaluation', $value);
             $value['if_delete'] = $order_model->getOrderOperateState('delete', $value);
             //显示代售订单
-            $order['sideline']=$order_model->getOrderOperateState('sideline', $value);
+            $order['sideline'] = $order_model->getOrderOperateState('sideline', $value);
             $value['zengpin_list'] = false;
             if (isset($value['extend_order_goods'])) {
                 foreach ($value['extend_order_goods'] as $val) {
@@ -64,8 +67,7 @@ class Memberorder extends MobileMember {
 
                     if ($goods_info['goods_type'] == 5) {
                         unset($value['extend_order_goods'][$k]);
-                    }
-                    else {
+                    } else {
                         $value['extend_order_goods'][$k] = $goods_info;
                         $value['extend_order_goods'][$k]['goods_image_url'] = goods_cthumb($goods_info['goods_image'], 240);
                     }
@@ -76,7 +78,7 @@ class Memberorder extends MobileMember {
 
             //如果有在线支付且未付款的订单则显示合并付款链接
             if ($value['order_state'] == ORDER_STATE_NEW) {
-                if(!isset($order_group_list[$value['pay_sn']]['pay_amount'])){
+                if (!isset($order_group_list[$value['pay_sn']]['pay_amount'])) {
                     $order_group_list[$value['pay_sn']]['pay_amount'] = 0;
                 }
                 $order_group_list[$value['pay_sn']]['pay_amount'] += $value['order_amount'] - $value['rcb_amount'] - $value['pd_amount'];
@@ -92,16 +94,13 @@ class Memberorder extends MobileMember {
             $value['pay_sn'] = strval($key);
             $new_order_group_list[] = $value;
         }
-        $result= array_merge(array('order_group_list' => $new_order_group_list), mobile_page($order_model->page_info));
-        ds_json_encode(10000, '',$result);
+        $result = array_merge(array('order_group_list' => $new_order_group_list), mobile_page($order_model->page_info));
+        ds_json_encode(10000, '', $result);
     }
 
 
-
-
-
-
-    private function order_type_no($stage) {
+    private function order_type_no($stage)
+    {
         $condition = array();
         switch ($stage) {
             case 'state_new':
@@ -126,9 +125,10 @@ class Memberorder extends MobileMember {
     /**
      * 取消订单
      */
-    public function order_cancel() {
+    public function order_cancel()
+    {
         $order_model = model('order');
-        $logic_order = model('order','logic');
+        $logic_order = model('order', 'logic');
         $order_id = intval(input('post.order_id'));
 
         $condition = array();
@@ -138,26 +138,27 @@ class Memberorder extends MobileMember {
         $order_info = $order_model->getOrderInfo($condition);
         $if_allow = $order_model->getOrderOperateState('buyer_cancel', $order_info);
         if (!$if_allow) {
-            ds_json_encode(10001,'无权操作');
+            ds_json_encode(10001, '无权操作');
         }
         if (TIMESTAMP - 86400 < $order_info['add_time']) {
             $_hour = ceil(($order_info['add_time'] + 86400 - TIMESTAMP) / 3600);
-            ds_json_encode(10001,'该订单曾尝试使用第三方支付平台支付，须在' . $_hour . '小时以后才可取消');
+            ds_json_encode(10001, '该订单曾尝试使用第三方支付平台支付，须在' . $_hour . '小时以后才可取消');
         }
         $result = $logic_order->changeOrderStateCancel($order_info, 'buyer', $this->member_info['member_name'], '其它原因');
         if (!$result['code']) {
-            ds_json_encode(10001,$result['msg']);
+            ds_json_encode(10001, $result['msg']);
         } else {
-            ds_json_encode(10000,'',1);
+            ds_json_encode(10000, '', 1);
         }
     }
 
     /**
      * 订单确认收货
      */
-    public function order_receive() {
+    public function order_receive()
+    {
         $order_model = model('order');
-        $logic_order = model('order','logic');
+        $logic_order = model('order', 'logic');
         $order_id = intval(input('post.order_id'));
 
         $condition = array();
@@ -166,23 +167,24 @@ class Memberorder extends MobileMember {
         $order_info = $order_model->getOrderInfo($condition);
         $if_allow = $order_model->getOrderOperateState('receive', $order_info);
         if (!$if_allow) {
-            ds_json_encode(10001,'无权操作');
+            ds_json_encode(10001, '无权操作');
         }
 
         $result = $logic_order->changeOrderStateReceive($order_info, 'buyer', $this->member_info['member_name'], '签收了货物');
         if (!$result['code']) {
-            ds_json_encode(10001,$result['msg']);
+            ds_json_encode(10001, $result['msg']);
         } else {
             ds_json_encode(10000, '', 1);
         }
     }
-    
+
     /**
      * 回收站
      */
-    public function order_delete() {
+    public function order_delete()
+    {
         $order_model = model('order');
-        $logic_order = model('order','logic');
+        $logic_order = model('order', 'logic');
         $order_id = intval(input('post.order_id'));
 
         $condition = array();
@@ -191,12 +193,12 @@ class Memberorder extends MobileMember {
         $order_info = $order_model->getOrderInfo($condition);
         $if_allow = $order_model->getOrderOperateState('delete', $order_info);
         if (!$if_allow) {
-            ds_json_encode(10001,'无权操作');
+            ds_json_encode(10001, '无权操作');
         }
-        
+
         $result = $logic_order->changeOrderStateRecycle($order_info, 'buyer', 'delete');
         if (!$result['code']) {
-            ds_json_encode(10001,$result['msg']);
+            ds_json_encode(10001, $result['msg']);
         } else {
             ds_json_encode(10000, '', 1);
         }
@@ -205,10 +207,11 @@ class Memberorder extends MobileMember {
     /**
      * 物流跟踪
      */
-    public function search_deliver() {
+    public function search_deliver()
+    {
         $order_id = intval(input('post.order_id'));
         if ($order_id <= 0) {
-            ds_json_encode(10001,'订单不存在');
+            ds_json_encode(10001, '订单不存在');
         }
 
         $order_model = model('order');
@@ -216,7 +219,7 @@ class Memberorder extends MobileMember {
         $condition['buyer_id'] = $this->member_info['member_id'];
         $order_info = $order_model->getOrderInfo($condition, array('order_common', 'order_goods'));
         if (empty($order_info) || !in_array($order_info['order_state'], array(ORDER_STATE_SEND, ORDER_STATE_SUCCESS))) {
-            ds_json_encode(10001,'订单不存在');
+            ds_json_encode(10001, '订单不存在');
         }
 
         $express = rkcache('express', true);
@@ -230,10 +233,11 @@ class Memberorder extends MobileMember {
     /**
      * 订单详情
      */
-    public function order_info() {
+    public function order_info()
+    {
         $order_id = intval(input('order_id'));
         if ($order_id <= 0) {
-            ds_json_encode(10001,'订单不存在');
+            ds_json_encode(10001, '订单不存在');
         }
         $order_model = model('order');
         $condition = array();
@@ -242,7 +246,7 @@ class Memberorder extends MobileMember {
         $order_info = $order_model->getOrderInfo($condition, array('order_goods', 'order_common'));
 
         if (empty($order_info) || $order_info['delete_state'] == ORDER_DEL_STATE_DROP) {
-            ds_json_encode(10001,'订单不存在');
+            ds_json_encode(10001, '订单不存在');
         }
 
         $refundreturn_model = model('refundreturn');
@@ -250,7 +254,7 @@ class Memberorder extends MobileMember {
         $order_list[$order_id] = $order_info;
         $order_list = $refundreturn_model->getGoodsRefundList($order_list, 1); //订单商品的退款退货显示
         $order_info = $order_list[$order_id];
-        $refund_all = isset($order_info['refund_list'][0])?$order_info['refund_list'][0]:'';
+        $refund_all = isset($order_info['refund_list'][0]) ? $order_info['refund_list'][0] : '';
         if (!empty($refund_all)) {//订单全部退款商家审核状态:1为待审核,2为同意,3为不同意
             $result['refund_all'] = $refund_all;
         }
@@ -302,7 +306,7 @@ class Memberorder extends MobileMember {
 
         //显示系统自动取消订单日期
         if ($order_info['order_state'] == ORDER_STATE_NEW) {
-            $order_info['order_cancel_day'] = $order_info['add_time'] + config('order_auto_cancel_day') * 24* 3600;
+            $order_info['order_cancel_day'] = $order_info['add_time'] + config('order_auto_cancel_day') * 24 * 3600;
         }
         $order_info['if_deliver'] = false;
         //显示快递信息
@@ -365,10 +369,11 @@ class Memberorder extends MobileMember {
     /**
      * 订单详情
      */
-    public function get_current_deliver() {
+    public function get_current_deliver()
+    {
         $order_id = intval(input('post.order_id'));
         if ($order_id <= 0) {
-            ds_json_encode(10001,'订单不存在');
+            ds_json_encode(10001, '订单不存在');
         }
 
         $order_model = model('order');
@@ -376,14 +381,14 @@ class Memberorder extends MobileMember {
         $condition['buyer_id'] = $this->member_info['member_id'];
         $order_info = $order_model->getOrderInfo($condition, array('order_common', 'order_goods'));
         if (empty($order_info) || !in_array($order_info['order_state'], array(ORDER_STATE_SEND, ORDER_STATE_SUCCESS))) {
-            ds_json_encode(10001,'订单不存在');
+            ds_json_encode(10001, '订单不存在');
         }
 
         $express = rkcache('express', true);
         if (!empty($order_info['extend_order_common']['shipping_express_id'])) {
             $express_code = $express[$order_info['extend_order_common']['shipping_express_id']]['express_code'];
             $express_name = $express[$order_info['extend_order_common']['shipping_express_id']]['express_name'];
-        }else{
+        } else {
             $express_code = '';
             $express_name = '';
         }
@@ -402,14 +407,15 @@ class Memberorder extends MobileMember {
      * 从第三方取快递信息
      *
      */
-    public function _get_express($express_code, $shipping_code) {
+    public function _get_express($express_code, $shipping_code)
+    {
 
         $url = 'http://www.kuaidi100.com/query?type=' . $express_code . '&postid=' . $shipping_code . '&id=1&valicode=&temp=' . random(4) . '&sessionid=&tmp=' . random(4);
         $content = http_request($url);
         $content = json_decode($content, true);
 
         if ($content['status'] != 200) {
-            ds_json_encode(10001,'物流信息查询失败');
+            ds_json_encode(10001, '物流信息查询失败');
         }
         $content['data'] = array_reverse($content['data']);
         $output = array();
@@ -428,20 +434,37 @@ class Memberorder extends MobileMember {
     }
 
 
-    public function get_type_name($type){
+    public function get_type_name($type)
+    {
         switch ($type) {
             case 20:
-                $name ='积分订单' ;
+                $name = '积分订单';
                 break;
             case 30:
-                $name ='91购订单' ;
+                $name = '91购订单';
                 break;
             case 40:
-                $name ='秒伤订单' ;
+                $name = '秒伤订单';
                 break;
 
         }
         return $name;
+    }
+
+    //得到91购订单
+    public function getmemberforsaleorder()
+    {
+        $res=model('memberforsalegoods');
+        $member_info = db('memberforsalegoods')->where('member_id',$this->member_info['member_id'])->select();
+        if (!empty($member_info)){
+            foreach ($member_info as $k=>$value){
+                $member_info[$k]['specs']=$res->getgoodsinfo($value['goods_commonid']);//规格
+                $member_info[$k]['goods_type']='代售商品';
+            }
+            ds_json_encode(10000, '获取成功',$member_info);
+        }else{
+            ds_json_encode(10001, '该用户没有代售订单');
+        }
     }
 }
 
