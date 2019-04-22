@@ -464,7 +464,7 @@ class Memberorder extends MobileMember
         }
         $wheere['member_id']=$this->member_info['member_id'];
         $res=model('memberforsalegoods');
-        $member_info = db('memberforsalegoods')->where($wheere)->select();
+        $member_info = $res->getlist($wheere,10);
         if (!empty($member_info)){
             foreach ($member_info as $k=>$value){
                 $member_info[$k]['good_img']=$res->getpic($value['goods_id']);
@@ -472,7 +472,8 @@ class Memberorder extends MobileMember
                 $member_info[$k]['specs']=$res->getgoodsinfo($value['goods_commonid']);//规格
                 $member_info[$k]['goods_type']='代售商品';
             }
-            ds_json_encode(10000, '获取成功',$member_info);
+            $result= array_merge(array('orderlist' => $member_info), mobile_page(is_object($res->page_info)?$res->page_info:''));
+            ds_json_encode(10000, '获取成功',$result);
         }else{
             ds_json_encode(10001, '该用户没有代售订单');
         }
@@ -492,9 +493,9 @@ class Memberorder extends MobileMember
                 $member_info['specs']=$res->getgoodsinfo($member_info['goods_commonid']);//规格
                 $member_info['goods_type']='代售商品';
             //秒杀记录
-            $where['buyer_id']=$this->member_info['member_id'];
+            $where['member_id']=$this->member_info['member_id'];
             $where['order_type']='40';
-            $orderinfo=db('order')->where($where)->select();
+            $orderinfo=db('memberforsaleorder')->where($where)->select();
             if(!empty($orderinfo)){
                 foreach ($orderinfo as $k=>$v){
 
