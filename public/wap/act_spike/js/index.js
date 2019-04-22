@@ -72,9 +72,10 @@ function get_list() {
     
     	//计算进度条
 	    $(".sale_over").each(function(i){
+	    	//qty：库存    sold：销量
 	    	var sold = $(this).attr("sold");
 	    	var qty = $(this).attr("qty");
-	    	$(this).css("width",""+parseFloat(qty/sold*100)+"%");
+	    	$(this).css("width",""+parseFloat(sold/qty*100)+"%");
 	    });
     });
 }

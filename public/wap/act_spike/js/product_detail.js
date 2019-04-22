@@ -6,11 +6,12 @@ var tuan_sku;
 var goodsid;
 var isOne = true;
 var miammi = 0;
+var needMiammi = 0;
+var e = getCookie("key");
 $(function() {
 
     //记录浏览历史
     $.get(ApiUrl + "/Goods/addbrowse/gid/" + getQueryString("goods_id"));
-    var e = getCookie("key");
     if (!e) {
         $(".getUadsNo").text("尚未登录");
     }
@@ -18,9 +19,16 @@ $(function() {
     //获取我的总积分
     $.getJSON(ApiUrl + '/Member/my_asset.html', { 'key': key, 'fields': 'miaomi' }, function(result) {
         miammi = result.result.miaomi;
+	    if (e) {
+	        $("#my_miaomi").text(miammi);
+	    }
+	    initNew();
     });
-
-
+	
+	//获取我的默认地址
+    $.getJSON(ApiUrl + '/Memberaddress/address_list.html', { 'key': key}, function(result){
+        console.log(result.result.address_list[0].address_detail);
+    });
 
 
     var t = function(e, t) {
@@ -117,7 +125,7 @@ $(function() {
     //获取数据
     function r(r) {
         $.ajax({
-            //          url: ApiUrl + "/goods/goods_detail",
+            //url: ApiUrl + "/goods/goods_detail",
             url: ApiUrl + "/api.seckillgoods/get/",
             type: "get",
             data: {
@@ -129,7 +137,7 @@ $(function() {
             success: function(e) {
                 console.log(e)
                 //数据重置，判断重写  2019年4月18日 16:49:37
-                //              if (e.code==10000) {
+                //if (e.code==10000) {
 
                 var d = e.images.split(",");
                 if (d.length > 1) {
@@ -142,6 +150,9 @@ $(function() {
                     $(".goods-detail-turn").hide();
                     $("#mySwipe ul").append('<li><img src="' + d[i] + '" onerror="imgError(this)"/></li>');
                 }
+                
+                
+                needMiammi = e.mi;
                 $(".good_name").text(e.name);
                 $(".good_advword").text(); //商品介绍
                 $("#good_price").text(e.price);
@@ -149,6 +160,11 @@ $(function() {
                 $(".gdPrice").text(e.price);
                 $(".miaomi").text(e.mi);
                 $(".nowNum").text(e.sold - e.qty);
+                
+                //页面初始化
+                initNew();
+                
+				
                 //判断当前库存是否满足最小快速选择
                 if (e.sold - e.qty < 3) {
                     $(".fastnum").val(e.sold - e.qty);
@@ -194,6 +210,7 @@ $(function() {
                 $(".buy-now").click(function() {
                     //判断当前是否可以下单
                     if ($(this).hasClass("no")) {
+                    	return false;
                         var e = getCookie("key");
                         if (!e) {
                             layer.open({
@@ -205,7 +222,9 @@ $(function() {
                                 }
                             });
                         }
-
+						
+						//获取用户信息
+						
                         var o = {};
                         o.key = e;
                         o.cart_id = r + "|" + $(".fastnum").val();
@@ -215,6 +234,7 @@ $(function() {
                         o.invoice_id = "";
                         o.voucher = '';
                         o.is_goodsfcode = 1;
+                        o.shop_to = 0;
 
                         $.ajax({
                             type: "post",
@@ -234,10 +254,7 @@ $(function() {
                     }
                 })
 
-
-                //页面初始化
-                initNew();
-
+					
                 //秒杀数量+使用方式点击事件
                 $(".f_nums").each(function(i) {
                     $(".f_nums").eq(i).on("click", function() {
@@ -381,4 +398,8 @@ function initNew() {
     $(".order_show_infos .gdType").text(good_goto);
     $(".order_show_infos .gdPrice").text(good_price * good_nums);
     $(".order_show_infos .gdMiaomi").text(good_miaomi * good_nums);
+    if(miammi != 0){
+    	$(".buy-now").removeClass("no");
+    }
+    console.log(good_miaomi);
 }

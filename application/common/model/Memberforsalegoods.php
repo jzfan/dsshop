@@ -14,7 +14,7 @@ use think\Model;
 class Memberforsalegoods extends Model
 {
 
-
+    public $page_info;
     public function freezeMemberForsaleGoods($goods_id, $goods_number)
     {
         $queue = model("forsalequeue");
@@ -49,22 +49,58 @@ class Memberforsalegoods extends Model
 
         return $goods_info;
     }
-
+    public function getlist($condition = array(), $pagesize = '', $fields = '*', $order = '', $limit = ''){
+        if ($pagesize) {
+            $pdlog_list_paginate = db('memberforsalegoods')->where($condition)->field($fields)->order($order)->paginate($pagesize, false, ['query' => request()->param()]);
+            $this->page_info = $pdlog_list_paginate;
+            return $pdlog_list_paginate->items();
+        } else {
+            $pdlog_list_paginate = db('memberforsalegoods')->where($condition)->field($fields)->order($order)->limit($limit)->select();
+            return $pdlog_list_paginate;
+        }
+    }
     public function getgoodsinfo($goods_common_id)
     {
-        $model=db('goodscommon')->where('goods_commonid',$goods_common_id)->find();
-        if ($model['spec_name']=='N;'&&$model['spec_value']=='N;'){
+        $model = db('goodscommon')->where('goods_commonid', $goods_common_id)->find();
+        if ($model['spec_name'] == 'N;' && $model['spec_value'] == 'N;') {
             return '';
-        }else{
-            $model['spec_value']=unserialize($model['spec_value']);
-            foreach ($model['spec_value'] as $k=>$v){
-                foreach ($v as $vo){
-                    $arr[]=$vo;
+        } else {
+            $model['spec_value'] = unserialize($model['spec_value']);
+            foreach ($model['spec_value'] as $k => $v) {
+                foreach ($v as $vo) {
+                    $arr[] = $vo;
                 }
             }
-            $result=implode(',',$arr);
+            $result = implode(',', $arr);
             return $result;
         }
 
+    }
+
+    public function getname($id)
+    {
+        $model = db('goods')->where('goods_id', $id)->find();
+        if (!empty($model)) {
+            return $model['goods_name'];
+        } else {
+            return '';
+        }
+    }
+    public function getpic($id){
+        $model=db('goods')->where('goods_id',$id)->find();
+        if (!empty($model)){
+            return UPLOAD_SITE_URL.'/'.ATTACH_GOODS.'/'.$model['goods_image'];
+        }else{
+            return '';
+        }
+    }
+    public function getStatus($status){
+        if ($status==0){
+            return '等待挂售';
+        }elseif ($status==1){
+            return '挂售中';
+        }else{
+            return '挂售完成';
+        }
     }
 }

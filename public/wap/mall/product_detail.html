@@ -100,7 +100,11 @@
             </dl>
             <% } else { %>
             <dl>
-                <dt>￥<em><%=goods_info.goods_price %></em></dt>
+            	<% if (goods_info.goods_type == 20) { %>
+                <dt>￥<em><%=goods_info.goods_price %></em>+<em><%=goods_info.goods_point %></em>积分</dt>
+                <% } else { %>
+                <dt>￥<em><%=goods_info.goods_price %></em></dt>	
+             	<% } %>
             </dl>
             <% } %>
             <% if (inviter_amount > 0){ %>
