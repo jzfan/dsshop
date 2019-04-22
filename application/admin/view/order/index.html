@@ -96,8 +96,8 @@
                 <td>{$order.add_time|date="Y-m-d H:i:s",###}</td>
                 <td>{$order.order_amount}</td>
                 <td>{:get_order_payment_name($order['payment_code'])}</td>
-                <td>{:get_order_from_name($order['order_from'])}</td>
                 <td>{:get_order_state($order)}</td>
+                <td>{:get_order_from_name($order['order_from'])}</td>
                 <td>
                     <a href="javascript:dsLayerOpen('{:url('Order/show_order',['order_id'=>$order.order_id])}','查看实物订单-{$order.order_sn}')" class="dsui-btn-view"><i class="fa"></i>{$Think.lang.ds_view}</a>
                     {if condition="$order.if_cancel"}

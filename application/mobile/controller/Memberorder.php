@@ -444,7 +444,7 @@ class Memberorder extends MobileMember
                 $name = '91购订单';
                 break;
             case 40:
-                $name = '秒伤订单';
+                $name = '秒杀订单';
                 break;
 
         }
