@@ -684,6 +684,12 @@ class Buy extends Model
         $input_voucher_list = $this->_order_data['input_voucher_list'];
         $input_city_id = $this->_order_data['input_city_id'];
 
+
+        //验证积分商城用户积分是否满足
+        if (!$this->validateMemberPoint($cart_list,$this->_member_info['member_id'])) {
+            exception("会员积分不足");
+        }
+
         //商品金额计算(分别对每个商品/优惠套装小计、每个店铺小计)
         list($cart_list, $goods_total) = $this->_logic_buy_1->calcCartList($cart_list);
 
@@ -806,6 +812,8 @@ class Buy extends Model
             $order['shipping_fee'] = $freight_total;
             $order['goods_amount'] = $order['order_amount'] - $order['shipping_fee'];
             $order['order_from'] = $order_from;
+            $order['points_amount'] = $this->calculateGoodsPoint($cart_list);
+
             //如果支持方式为空时，默认为货到付款
             if ($order['payment_code'] == "") {
                 $order['payment_code'] = "offline";
@@ -919,7 +927,7 @@ class Buy extends Model
                         model('ppintuan')->_dGoodsPintuanCache($goods_info['pintuan_info']['pintuan_goods_commonid']);
                     }
                     else {
-                        $order_goods[$i]['goods_type'] = 1;
+                        $order_goods[$i]['goods_type'] = $goods_info['goods_type'];
                     }
                     $order_goods[$i]['promotions_id'] = isset($goods_info['promotions_id']) ? $goods_info['promotions_id'] : 0;
 
@@ -1223,5 +1231,30 @@ class Buy extends Model
         else {
             return false;
         }
+    }
+
+
+    private function validateMemberPoint($cart_list,$member_id)
+    {
+        $member = model("member")->getMemberInfo(array("member_id"=>$member_id));
+
+        $need_points = $this->calculateGoodsPoint($cart_list);
+
+        if ($need_points > $member['member_points']) {
+            return false;
+        }
+        return true;
+    }
+
+
+    private function calculateGoodsPoint($cart_list)
+    {
+        $need_points = 0;
+        foreach ($cart_list as $goods) {
+            if ($goods['goods_type'] == 20) {
+                $need_points += intval($goods['goods_point']);
+            }
+        }
+        return $need_points;
     }
 }
