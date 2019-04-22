@@ -161,11 +161,11 @@ $(function() {
                 $(".miaomi").text(e.mi);
                 $(".nowNum").text(e.qty - e.sold);
                 
-                //页面初始化
+                // 页面初始化
                 initNew();
                 
 				
-                //判断当前库存是否满足最小快速选择
+                // 判断当前库存是否满足最小快速选择
                 if (e.qty - e.sold < 3) {
                     $(".fastnum").val(e.qty - e.sold);
                     $(".f_nums").removeClass("f_numsON");
