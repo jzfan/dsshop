@@ -21,38 +21,36 @@
 <!--秒杀头部图片-->
 <div class="head_pic">
 	<img class="head_pic" src="img/spike_headBg.png" />
+	<div class="show_rule"><span class="show_rules"><img src="img/show_rules.png" />秒杀规则</span></div>
 </div>
 
 <style>
+/*秒杀规则入口*/
+.head_pic{position: relative;}
+.head_pic .show_rule{width: 40%;height: 1rem;position: absolute;bottom: 0.5rem;left: 30%;text-align: center;}
+.show_rule .show_rules{display: inline-block;font-size: 0.6rem;background: #e06911;color: #fff;padding: 0.1rem 0.5rem;border-radius: 100px;}
+.show_rule .show_rules img{width: 0.8rem;}
 /*秒杀规则弹出框*/
-.spike_rule{width: 100%;
-    height: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;}
-.spike_rule .rule{    width: 80%;
-    height: 100%;
-    background-image: url(img/spike_bg.png);
-    background-repeat: no-repeat;
-    background-size: 100%;
-    margin: 3rem auto;}
+.spike_rule{width: 100%;height: 100%;position: fixed;top: 0;left: 0;background: rgba(0, 0, 0, 0.5);z-index: 999;display: none;}
+.spike_rule .rule{width: 88%;height: 70%;background-image: url(img/spike_bg.png);background-repeat: no-repeat;background-size: 100%;margin: 6rem auto;font-size: 1.2rem;position: relative;}
+.spike_rule .rule .spike_close{width: 2rem;height: 4rem;border-left: 2px dashed #fff;margin: 0px auto;position: absolute;left: 50%;top: -3rem;}
+.spike_rule .rule .spike_close img{width: 100%;position: absolute;left: -1rem;top: 0px;}
+.spike_rule .rule .rule_top{text-align: center;color: #fff;transform: rotate(-3deg);position: relative;top: 2rem;}
+.rule .rule_txt{margin-top: 2rem;width: 80%;margin: 4rem auto 0rem auto;font-size: 0.8rem;color: #fff;}
+.rule .rule_txt .rules{margin-bottom: 0.5rem;}
+.rule .rule_txt .rules:after{clear: both;content: "";display: block;}
+.rule .rule_txt .rules .rule_num{float: left;}
+.rule_txt .rules .p1{font-size: 0.7rem;}
+.rules .rule_num span{display: block;margin-right: 0.2rem;width: 1rem;height: 1rem;background: #fff;color: #D46411;text-align: center;line-height: 1rem;font-size: 0.8rem;font-weight: bold;border-radius: 50%;box-shadow: -3px -2px 0px 3px #D46411;}
+.rule_txt .rules .p2{font-size: 0.65rem;width: 86%;float: left;}
+.rule .ruleUser{font-size: 0.78rem;text-align: center;color: #793604;}
 
-.spike_rule .rule .rule_top{text-align: center;
-    color: #fff;
-    transform: rotate(-3deg);}
-.rule .rule_txt{}
-.rule .rule_txt .rules{}
-.rule .rule_txt .rules .rule_num{}
-.rule_txt .rules .p1{}
-.rule_txt .rules .p1 span{}
-.rule_txt .rules .p2{}
 </style>
 
 <!--秒杀规则-->
 <div class="spike_rule">
 	<div class="rule">
+		<div class="spike_close"><img src="img/spike_close.png"/></div>
 		<div class="rule_top">秒杀规则</div>
 		<div class="rule_txt">
 			<div class="rules">
@@ -60,7 +58,18 @@
 				<p class="p1">秒杀时间</p>
 				<p class="p2">每周二 四 六  下午2:58</p>
 			</div>
+			<div class="rules">
+				<p class="rule_num"><span class="ruleNums">2</span></p>
+				<p class="p1">秒杀时长</p>
+				<p class="p2">当天的秒杀从开始到结束，持续20分钟，20分钟后系统自动结束秒杀</p>
+			</div>
+			<div class="rules">
+				<p class="rule_num"><span class="ruleNums">3</span></p>
+				<p class="p1">秒杀付款时间</p>
+				<p class="p2">秒杀过程中，用户成功锁定库存后，需在3分钟时间内，完成付款；超过3分钟，系统会自动释放库存到秒杀区域；用户则锁定库存失效，无法继续完成购买行为</p>
+			</div>
 		</div>
+		<p class="ruleUser">最终解释权归91go所有</p>
 	</div>
 </div>
 

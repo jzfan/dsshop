@@ -99,19 +99,19 @@ class Member extends AdminControl
         } else {
             if ((empty($_FILES['face_card']['tmp_name']) && empty($_FILES['back_card']['tmp_name'])) || (!empty($_FILES['face_card']['tmp_name']) && !empty($_FILES['back_card']['tmp_name']))) {
                 //加入邀请id
-                $id=input('post.inviter_id');
-                if ($id!=''){
-                    $member_model=model('member');
-                    $member=$member_model->where('member_name',$id)->find();
-                    $member_id=$member['member_id'];
+                $id = input('post.inviter_id');
+                if ($id != '') {
+                    $member_model = model('member');
+                    $member = $member_model->where('member_name', $id)->find();
+                    $member_id = $member['member_id'];
                 }
                 //判断是否有上传文件
-                if (empty($_FILES['face_card']['tmp_name']) && empty($_FILES['back_card']['tmp_name'])){
-                    $face_card='';
-                    $back_card='';
-                }else{
-                    $face_card=$this->upload_face_card();
-                    $back_card=$this->upload_back_card();
+                if (empty($_FILES['face_card']['tmp_name']) && empty($_FILES['back_card']['tmp_name'])) {
+                    $face_card = '';
+                    $back_card = '';
+                } else {
+                    $face_card = $this->upload_face_card();
+                    $back_card = $this->upload_back_card();
                 }
                 //需要完善地方 1.对录入数据进行判断  2.对判断用户名是否存在
                 $member_model = model('member');
@@ -126,9 +126,9 @@ class Member extends AdminControl
                     'member_addtime' => TIMESTAMP,
                     'member_loginnum' => 0,
                     'inform_allow' => 1, //默认允许举报商品
-                    'face_card'=>$face_card,
-                    'back_card'=>$back_card,
-                    'inviter_id'=>isset($member_id)?$member_id:'',
+                    'face_card' => $face_card,
+                    'back_card' => $back_card,
+                    'inviter_id' => isset($member_id) ? $member_id : '',
                 );
                 //验证数据  BEGIN
                 $rule = [
@@ -166,29 +166,29 @@ class Member extends AdminControl
         if (!request()->isPost()) {
             $condition['member_id'] = $member_id;
             $member_array = $member_model->getMemberInfo($condition);
-            if ($member_array['inviter_id']==''){
-                $member_array['inviter_name']='';
-            }else{
-                $inviter=$member_model->getMemberInfo($member_array['inviter_id']);
-                $member_array['inviter_name']=$inviter['member_name'];
+            if ($member_array['inviter_id'] == '') {
+                $member_array['inviter_name'] = '';
+            } else {
+                $inviter = $member_model->getMemberInfo($member_array['inviter_id']);
+                $member_array['inviter_name'] = $inviter['member_name'];
             }
             $this->assign('member_array', $member_array);
             return $this->fetch();
         } else {
-            $member_inviter=input('post.member_inviter');
-            if ($member_inviter!=''){
-                $member=$member_model->where('member_name',$member_inviter)->find();
-                $m_id['inviter_id']=$member['member_id'];
-            }else{
-                $m_id['inviter_id']=null;
+            $member_inviter = input('post.member_inviter');
+            if ($member_inviter != '') {
+                $member = $member_model->where('member_name', $member_inviter)->find();
+                $m_id['inviter_id'] = $member['member_id'];
+            } else {
+                $this->error('该推荐人不是我们平台会员,暂时无法添加！');
             }
             //判断是否上传
-            if (empty($_FILES['face_card']['tmp_name']) && empty($_FILES['back_card']['tmp_name'])){
-                $m_id['face_card']='';
-                $m_id['back_card']='';
-            }else{
-                $m_id['face_card']=$this->upload_face_card();
-                $m_id['back_card']=$this->upload_back_card();
+            if (empty($_FILES['face_card']['tmp_name']) && empty($_FILES['back_card']['tmp_name'])) {
+                $m_id['face_card'] = '';
+                $m_id['back_card'] = '';
+            } else {
+                $m_id['face_card'] = $this->upload_face_card();
+                $m_id['back_card'] = $this->upload_back_card();
             }
             $data = array(
                 'member_email' => input('post.member_email'),
@@ -215,7 +215,6 @@ class Member extends AdminControl
                 $data['member_paypwd'] = md5(input('post.member_paypwd'));
             }
 
-
             //验证数据  BEGIN
             $rule = [
                 ['member_email', 'email|unique:member,member_email,' . $member_id, '邮箱格式错误|邮箱已存在'],
@@ -227,9 +226,9 @@ class Member extends AdminControl
                 $this->error($validate->getError());
             }
             //验证数据  END
-            $a=model('member')->where('member_id' ,$member_id)->update($m_id);
+            $a = model('member')->where('member_id', $member_id)->update($m_id);
             $result = $member_model->editMember(array('member_id' => intval($member_id)), $data);
-            if ($result >= 0&&$a>=0) {
+            if ($result >= 0 && $a >= 0) {
                 dsLayerOpenSuccess(lang('ds_common_op_succ'));
 //                $this->success(lang('ds_common_op_succ'), 'Member/member');
             } else {
@@ -365,16 +364,17 @@ class Member extends AdminControl
         }
     }
 
-    public function index(){
+    public function index()
+    {
         $member_id = input('param.member_id');
         $condition['member_id'] = $member_id;
         $member_model = model('member');
         $member_array = $member_model->getMemberInfo($condition);
-        if ($member_array['inviter_id']==''){
-            $member_array['inviter_name']='';
-        }else{
-            $inviter=$member_model->getMemberInfo($member_array['inviter_id']);
-            $member_array['inviter_name']=$inviter['member_name'];
+        if ($member_array['inviter_id'] == '') {
+            $member_array['inviter_name'] = '';
+        } else {
+            $inviter = $member_model->getMemberInfo($member_array['inviter_id']);
+            $member_array['inviter_name'] = $inviter['member_name'];
         }
         $this->assign('member_array', $member_array);
         return $this->fetch();

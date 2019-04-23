@@ -30,6 +30,14 @@ $(function () {
     
 });
 
+//规则交互事件
+$(".spike_close img").on("click",function(){
+	$(".spike_rule").hide();
+});
+$(".show_rules").on("click",function(){
+	$(".spike_rule").show();
+});
+
 //获取列表数据
 function get_list() {
     $(".loading").remove();

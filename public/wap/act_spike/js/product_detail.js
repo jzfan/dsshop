@@ -8,6 +8,7 @@ var isOne = true;
 var miammi = 0;
 var needMiammi = 0;
 var e = getCookie("key");
+var address = 0;
 $(function() {
 
     //记录浏览历史
@@ -17,19 +18,35 @@ $(function() {
     }
 
     //获取我的总积分
-    $.getJSON(ApiUrl + '/Member/my_asset.html', { 'key': key, 'fields': 'miaomi' }, function(result) {
-        miammi = result.result.miaomi;
+    $.getJSON(ApiUrl + '/Member/my_asset.html', { 'key': key, 'fields': 'miaomi' }, function(es) {
+        miammi = es.result.miaomi;
 	    if (e) {
 	        $("#my_miaomi").text(miammi);
 	    }
+	    
 	    initNew();
     });
 	
 	//获取我的默认地址
-    $.getJSON(ApiUrl + '/Memberaddress/address_list.html', { 'key': key}, function(result){
-        console.log(result.result.address_list[0].address_detail);
+    $.getJSON(ApiUrl + '/Memberaddress/address_list.html', { 'key': key}, function(e){
+    	//获取默认地址ID
+    	for (var i=0;i < e.result.address_list.length; i++) {
+    		if(e.result.address_list[i].address_is_default == "1"){
+    			address = e.result.address_list[i].address_id;
+    			$(".show_address").text(e.result.address_list[i].address_detail)
+    		}else{
+	    		address = e.result.address_list[0].address_id;
+	    		$(".show_address").text(e.result.address_list[0].address_detail)
+	    	}
+    	}
     });
-
+    
+    //获取其他信息
+    $.getJSON(ApiUrl + '/Member/index.html', { 'key': key}, function(e){
+    	$(".uname").text(e.result.member_info.member_name);
+    	$(".uphone").text(e.result.member_info.member_mobile);
+    });
+    
 
     var t = function(e, t) {
         e = parseFloat(e) || 0;
@@ -161,8 +178,7 @@ $(function() {
                 $(".miaomi").text(e.mi);
                 $(".nowNum").text(e.qty - e.sold);
                 
-                // 页面初始化
-                initNew();
+                
                 
 				
                 // 判断当前库存是否满足最小快速选择
@@ -172,7 +188,9 @@ $(function() {
                 } else {
                     $(".fastnum").val(3);
                 }
-
+				
+				// 页面初始化
+                initNew();
 
 
                 if (getCookie("cart_count")) {
@@ -226,7 +244,7 @@ $(function() {
                         var o = {};
                         o.key = e;
                         o.cart_id = r + "|" + $(".fastnum").val();
-                        o.address_id = "7";
+                        o.address_id = address;
                         o.pay_name = "online";
                         o.goods_type = "40";
                         o.invoice_id = "";
@@ -262,13 +280,15 @@ $(function() {
                         initNew();
                     });
                 });
+                
+                //快速选择事件
                 $(".fast_types").each(function(i) {
                     $(".fast_types").eq(i).on("click", function() {
                         $(this).addClass("fast_typeON").siblings().removeClass("fast_typeON");
-                        if (i == 0) {
+                        if (i == 1) {    //自用
                             $(".getUads").show();
                             //如果没有默认地址，将出现选择地址，点击创建新地址
-                            if (1 == 0) {
+                            if (address == 0) {
                                 $(".getUadsNo").show();
                                 $(".getUads_infos").hide();
                             } else {
@@ -276,7 +296,7 @@ $(function() {
                                 $(".getUads_infos").show();
                             }
                         } else {
-                            $(".getUads").hide();
+                            $(".getUads").show();
                         }
                         initNew();
                     });
@@ -399,5 +419,4 @@ function initNew() {
     if(miammi != 0){
     	$(".buy-now").removeClass("no");
     }
-    console.log(good_miaomi);
 }

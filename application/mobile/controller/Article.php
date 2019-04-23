@@ -17,14 +17,45 @@ class Article extends MobileHome
      */
     public function article_list()
     {
-
+        $page = input('param.page');
         $article_model = model('article');
         $condition = array();
         $condition['article_show'] = '1';
-        $article_list = $article_model->getArticleList($condition, $this->pagesize);
+        $last = strtotime(date('Y-m-d', strtotime('- 1 month')));
+        $now = time();
+        $date = date('Y-m-d', time());
+        $condition['article_time'] = ['between', array($last, $now)];
+        $article_list = $article_model->getArticleList($condition, $this->pagesize, 'article_time');
+        if (!empty($article_list)) {
+            foreach ($article_list as $k => $v) {
+                $article_list[$k]['article_time'] = date('Y-m-d', $v['article_time']);
+                $article_list[$k]['article_content'] = strip_tags($v['article_content']);
+            }
+            if ($page == 1) {
+                $arr[] = $article_list[0];
+            } else {
+                $arr = [];
+            }
+            //修复赋值不生效
+            foreach ($article_list as $k => $v) {
+                if ($v['article_time'] == $date) {
+                    $article_list[$k]['is_hot'] = 1;
+                } else {
+                    $article_list[$k]['is_hot'] = 0;
+                }
+                unset($article_list[0]);
+            }
+            $article_list = array_values($article_list);
+        } else {
+            $result['frist_list'] = ['article_id' => '', 'article_url' => '', 'article_title' => '', 'article_content' => '', 'article_time' => '', 'amount' => 0];
+            $result['article_list'] = [];
+            $result['hasmore'] = false;
+            $result['page_total'] = 1;
+            ds_json_encode(10001, '暂时没有文章', $result);
+        }
         $result = array_merge(array('article_list' => $article_list), mobile_page(is_object($article_model->page_info) ? $article_model->page_info : ''));
-        ds_json_encode(10000, '', $result);
-
+        $result['frist_list'] = $arr;
+        ds_json_encode(10000, '获取成功', $result);
     }
 
     /**
@@ -85,7 +116,6 @@ class Article extends MobileHome
                 "created_at" => date('Y-m-d H:i:s')
             ));
         }
-
     }
 
     protected function isLogin()
@@ -115,5 +145,6 @@ class Article extends MobileHome
             }
         }
     }
+
 
 }
