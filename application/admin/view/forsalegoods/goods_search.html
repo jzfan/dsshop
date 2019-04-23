@@ -138,7 +138,7 @@
                     <p class="goods-brand">品牌：{$v.brand_name}</p>
                 </td>
                 <td class="align-center">{$v.goods_price}</td>
-                <td class="align-center">{$storage_array[$v['goods_commonid']]['sum']}</td>
+                <td class="align-center">{$storage_array[$v['goods_commonid']]['sum']|default=0}</td>
                 <td class="align-center">{$state[$v['goods_state']]}</td>
                 <td class="align-center">
                     <a href='javascript:dsLayerOpen("{:url('Forsalegoods/add_forsalegoods',['common_id'=>$v['goods_commonid']])}","添加91购商品")' class="dsui-btn-edit"><i class="fa"></i>添加91购商品</a>
