@@ -184,7 +184,7 @@ class Member extends AdminControl
                     $m_id['inviter_id'] = $member['member_id'];
                 }
             } else {
-                $m_id['inviter_id'] = null;
+                $m_id['inviter_id'] = '';
             }
             //判断是否上传
             if (empty($_FILES['face_card']['tmp_name']) && empty($_FILES['back_card']['tmp_name'])) {
@@ -371,10 +371,13 @@ class Member extends AdminControl
 
     public function index()
     {
+
         $member_id = input('param.member_id');
         $condition['member_id'] = $member_id;
         $member_model = model('member');
         $member_array = $member_model->getMemberInfo($condition);
+        $member_array['back_card'] = UPLOAD_SITE_URL . '/' . ATTACH_PICTURE . '/' . $member_array['back_card'];
+        $member_array['face_card'] = UPLOAD_SITE_URL . '/' . ATTACH_PICTURE . '/' . $member_array['face_card'];
         if ($member_array['inviter_id'] == '') {
             $member_array['inviter_name'] = '';
         } else {

@@ -72,11 +72,17 @@
                 {$member_array.member_qq}
                 <td class="vatop tips"></td>
             </tr>
-            <!--<tr class="noborder">-->
-                <!--<td class="required"><label class="member_ww">{$Think.lang.member_edit_wangwang}:</label></td>-->
-                <!--{$member_array.member_ww}-->
-                <!--<td class="vatop tips"></td>-->
-            <!--</tr>-->
+            <tr class="noborder">
+                <td class="required"><label class="member_face_card">身份证正面:</label></td>
+                <td class="vatop rowform"><img class='' src='{$member_array.face_card}' alt="" height="200px" width="200px"></td>
+
+                <td class="vatop tips"></td>
+            </tr>
+            <tr class="noborder">
+                <td class="required"><label class="member_face_card">身份证反面:</label></td>
+                <td class="vatop rowform"><img class='' src='{$member_array.back_card}' alt="" height="200px" width="200px"></td>
+                <td class="vatop tips"></td>
+            </tr>
             <tr class="noborder">
                 <td class="required"><label>{$Think.lang.member_index_inform}:</label></td>
                 <td class="vatop rowform onoff">
