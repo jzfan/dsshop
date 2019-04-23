@@ -255,6 +255,35 @@ class Memberpayment extends MobileMember
         }
         ds_json_encode(10000, '', array('payment_list' => $payment_array));
     }
+
+
+    public function commonPay()
+    {
+        //H5 相关接口的调用
+        @header("Content-type: text/html; charset=UTF-8");
+        $pay_sn = input('param.pay_sn');
+        $payment_code = input('param.payment_code');
+        if (!preg_match('/^\d{20}$/', $pay_sn)) {
+            ds_json_encode(10001,'支付单号错误');
+        }
+        $logic_payment = model('payment', 'logic');
+        $result = $logic_payment->getPaymentInfo($payment_code);
+        if (!$result['code']) {
+            $this->error($result['msg']);
+        }
+        $payment_info = $result['data'];
+
+        //计算所需支付金额等支付单信息
+        $result = $logic_payment->getRealOrderInfo($pay_sn, session('member_id'));
+        if (!$result['code']) {
+            $this->error($result['msg']);
+        }
+        if ($result['data']['api_paystate'] || empty($result['data']['api_pay_amount'])) {
+            $this->error('该订单不需要支付');
+        }
+        //第三方API支付
+        $this->_api_pay($result['data'], $payment_info);
+    }
 }
 
 ?>

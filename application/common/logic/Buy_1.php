@@ -825,6 +825,7 @@ class Buy_1 extends Model {
         $new_array['pintuan_info'] = isset($goods_info['pintuan_info']) ? $goods_info['pintuan_info'] : array();
         $new_array['goods_type'] = isset($goods_info['goods_type']) ? $goods_info['goods_type'] : 1;
         $new_array['goods_point'] = isset($goods_info['goods_point']) ? $goods_info['goods_point'] : 0;
+        $new_array['goods_miaomi'] = isset($goods_info['goods_miaomi']) ? $goods_info['goods_miaomi'] : 0;
 
         //填充必要下标，方便后面统一使用购物车方法与模板
         //cart_id=goods_id,优惠套装目前只能进购物车,不能立即购买

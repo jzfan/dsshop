@@ -37,7 +37,7 @@ class Memberbuy extends MobileMember {
         $ifcart = !empty(input('param.ifcart')) ? true : false;
 
         //商品类型
-        $goods_type = input('param.goods_type',20);
+        $goods_type = input('param.goods_type',30);
 
         //额外数据用来处理拼团等其他活动
         $pintuan_id = intval(input('param.pintuan_id'));
@@ -142,14 +142,13 @@ class Memberbuy extends MobileMember {
         $param['pintuangroup_id'] = input('post.pintuangroup_id');
 
         //商品类型
-        $param['goods_type'] = input('post.goods_type',20);
+        $param['goods_type'] = input('post.goods_type',30);
 
         //处理代金券
         $voucher = array();
         $post_voucher = explode(',', input('post.voucher'));
 
         if ($post_voucher != [''] && !empty($post_voucher)) {
-        dd($post_voucher);
             foreach ($post_voucher as $value) {
                 list($vouchertemplate_id, $store_id, $voucher_price) = explode('|', $value);
                 $voucher = $value;

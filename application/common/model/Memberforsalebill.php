@@ -46,4 +46,9 @@ class Memberforsalebill extends Model
         return self::saveAll($insert_data);
     }
 
+
+    public function updateForsaleBill($condition, $data)
+    {
+        return self::update($data,$condition);
+    }
 }

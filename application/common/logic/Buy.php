@@ -740,7 +740,6 @@ class Buy extends Model
         $this->_order_data['final_order_total'] = $final_order_total;
         $this->_order_data['freight_total'] = $freight_total;
         $this->_order_data['promotion_total'] = $promotion_total;
-
         $this->_order_data['mansong_rule_list'] = $mansong_rule_list;
         $this->_order_data['cart_list'] = $cart_list;
         $this->_order_data['goods_buy_quantity'] = $goods_buy_quantity;
@@ -989,14 +988,15 @@ class Buy extends Model
 
                 # 91购商品处理
                 if ($goods_info['goods_type'] == 30) {
+
                     #根据队列选择冻结挂售人商品库存
-                    $memberforsalegoods = model("memberforsalegoods")->freezeMemberForsaleGoods($goods_info['goods_id'], $order['order_sn'], $member_id, $goods_info['goods_num']);
+                    $memberforsalegoods = model("memberforsalegoods")->freezeMemberForsaleGoods($goods_info['goods_id'], $goods_info['goods_num']);
 
                     #生成挂售订单
-                    model("memberforsaleorder")->createMemberForsaleOrder($order_id,$memberforsalegoods);
+                    model("memberforsaleorder")->createMemberForsaleOrder($order_id, $order['order_sn'], $member_id, $memberforsalegoods);
 
                     #生成分账记录
-                    model("memberforsalebill")->createMemberForsaleBill($order_id, $order['order_sn'], $member_id, $memberforsalegoods);
+                    model("memberforsalebill")->createMemberForsaleBill($order_id, $order['order_sn'], $final_order_total, $member_id, $memberforsalegoods);
                 }
             }
             //将因舍出小数部分出现的差值补到最后一个商品的实际成交价中(商品goods_price=0时不给补，可能是赠品)

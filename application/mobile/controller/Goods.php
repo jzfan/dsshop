@@ -207,8 +207,9 @@ class Goods extends MobileMall {
         // 商品详细信息
         $goods_model = model('goods');
 
-        $goods_type = intval(input('get.goods_type',20));
-        $goods_detail = $goods_model->getGoodsDetail($goods_id,20);
+        $goods_type = intval(input('get.goods_type',30));
+
+        $goods_detail = $goods_model->getGoodsDetail($goods_id,$goods_type);
 
         //halt($goods_detail);
         if (empty($goods_detail)) {

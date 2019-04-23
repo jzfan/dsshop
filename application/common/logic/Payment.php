@@ -255,31 +255,42 @@ class Payment extends Model
                 return true;
             }
             $result = $this->updatePdOrder($out_trade_no, $payment_code, $order['data'], $trade_no);
-        }elseif ($order_type == 'point_order') {
-
-        }elseif ($order_type == 'forsale_order') {
-
         }
+
         return $result['code'] ? TRUE : FALSE;
     }
 
 
-    /**
-     *
-     */
-    public function updateForsaleOrder()
+    public function _updateOrder($out_trade_no,$trade_no,$order_type,$payment_code)
     {
-
-        //选择商品结算产生
-
+        switch ($order_type) {
+            case 'forsale_order':
+                $result = $this->updateForsaleOrder($out_trade_no,$trade_no,$payment_code);
+                break;
+            case 'point_order':
+                $result = $this->updatePointOrder($out_trade_no,$trade_no,$payment_code);
+                break;
+        }
     }
 
 
-    public function updatePointOrder()
+    public function updateForsaleOrder($out_trade_no, $trade_no, $payment_code)
     {
+        $order_info = $this->getRealOrderInfo($out_trade_no);
+
+        $post['payment_code'] = $payment_code;
+        $post['trade_no'] = $trade_no;
+        return model('order','logic')->updateForsaleOrder($order_info['data']['order_list'], 'system', '系统', $post);
+    }
 
 
+    public function updatePointOrder($out_trade_no, $trade_no, $payment_code)
+    {
+        $order_info = $this->getRealOrderInfo($out_trade_no);
 
+        $post['payment_code'] = $payment_code;
+        $post['trade_no'] = $trade_no;
+        return model('order','logic')->updatePointOrder($order_info['data']['order_list'], 'system', '系统', $post);
     }
 
     public function updateSeckillForSelf()
