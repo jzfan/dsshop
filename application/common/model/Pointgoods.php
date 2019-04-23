@@ -38,16 +38,31 @@ class Pointgoods extends Model
 
     public function getGoodsOnlineList($condition, $field = '*', $page = 0, $order = 'goods_id desc', $limit = 0, $group = '', $lock = false, $count = 0)
     {
-        $condition = $this->getBaseCondition($condition);
-        if ($page) {
-            $paginate = db('goods')->field($field)->where($condition)->group($group)->order($order)->paginate($page,false,['query' => request()->param()]);
-            $this->page_info = $paginate;
-            $goodsList =  $paginate->items();
-        } else {
-            $goodsList = db('goods')->field($field)->where($condition)->limit($limit)->group($group)->order($order)->select();
-        }
+        return $this->getGoodsList($condition, $field, $page, $order, $limit, $group, $lock, $count);
+    }
 
-        return $this->parseGoodsList($goodsList);
+
+    public function getGoodsList($condition, $field = '*', $page = 0, $order = 'goods_id desc', $limit = 0, $group = '', $lock = false, $count = 0)
+    {
+        $condition['goods_id'] = array("in", $this->getPointGoodsId());
+        $goods_model = model("goods");
+
+        $goods_list = $goods_model->getGoodsList($condition, $field, $group, $order, $limit, $page, $lock, $count);
+        $this->page_info = $goods_model->page_info;
+
+        return $this->parseGoodsList($goods_list);
+    }
+
+
+    public function getGoodsCommonList($condition, $field = '*', $page = 0, $order = 'goods_commonid desc')
+    {
+        $goods_model = model("goods");
+        $condition['goods_commonid'] = array("in", $this->getGoodsCommonId());
+
+        $goodscommon_list = $goods_model->getGoodsCommonList($condition,$field,$page, $order);
+        $this->page_info = $goods_model->page_info;
+
+        return $goodscommon_list;
     }
 
 
@@ -58,7 +73,8 @@ class Pointgoods extends Model
      * @param int $goods_id 商品ID
      * @return array
      */
-    public function getGoodsOnlineInfoAndPromotionById($goods_id) {
+    public function getGoodsOnlineInfoAndPromotionById($goods_id)
+    {
         $goods_info = $this->getGoodsInfoAndPromotionById($goods_id);
         if (empty($goods_info) || $goods_info['goods_state'] != 1) {
             return array();
@@ -66,20 +82,6 @@ class Pointgoods extends Model
         return $goods_info;
     }
 
-
-    public function getCommonPointGoodsList($condition, $field = '*', $page = 10, $order = 'goods_commonid desc') {
-
-        $condition['goods_commonid'] = array("in", $this->getPointCommonId());
-        $condition = model("Goods")->__getRecursiveClass($condition);
-
-        if ($page) {
-            $result = db('goodscommon')->field($field)->where($condition)->order($order)->paginate($page,false,['query' => request()->param()]);
-            $this->page_info = $result;
-            return $result->items();
-        } else {
-            return db('goodscommon')->field($field)->where($condition)->order($order)->select();
-        }
-    }
 
     public function calculateStorage($goods_list)
     {
@@ -104,26 +106,15 @@ class Pointgoods extends Model
     }
 
 
-    public function getBaseCondition($condition)
-    {
-        $condition['goods_id'] = array("in", $this->getPointGoodsId());
-        $condition['goods_state'] = 1;
-
-        return model("Goods")->__getRecursiveClass($condition);
-    }
-
-
     public function getPointGoodsId()
     {
-        return self::where('goods_state',1)->where('goods_storage','gt',0)
-            ->column('goods_id');
+        return self::group("goods_id")->column('goods_id');
     }
 
 
-    public function getPointCommonId()
+    public function getGoodsCommonId()
     {
-        return self::where('goods_state',1)->where('goods_storage','gt',0)
-            ->column('goods_commonid');
+        return self::group("goods_commonid")->column('goods_commonid');
     }
 
 

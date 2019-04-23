@@ -47,7 +47,7 @@ class Forsalegoods extends AdminControl
             $where['goods_state'] = $goods_state;
         }
 
-        $goods_list = $forsalegoods_model->getGoodsOnlineList($where, '*', 15);
+        $goods_list = $forsalegoods_model->getGoodsCommonList($where, '*', 15);
         $this->assign('goods_list', $goods_list);
         $this->assign('show_page', $forsalegoods_model->page_info->render());
 
@@ -63,6 +63,36 @@ class Forsalegoods extends AdminControl
 
         $this->setAdminCurItem('index');
         return $this->fetch();
+    }
+
+
+    public function get_goods_list()
+    {
+        $common_id = input('param.commonid');
+        if (empty($common_id)) {
+            $this->error(lang('param_error'));
+        }
+
+        $map['goods_commonid'] = $common_id;
+
+        $goods_model = model('goods');
+        $common_info = $goods_model->getGoodeCommonInfo($map,'spec_name');
+
+        $pointgoods_model = model('Pointgoods');
+        $goods_list = $pointgoods_model->getGoodsList($map);
+
+        $spec_name = array_values((array) unserialize($common_info['spec_name']));
+        foreach ($goods_list as $key => $val) {
+            $goods_spec = array_values((array) unserialize($val['goods_spec']));
+            $spec_array = array();
+            foreach ($goods_spec as $k => $v) {
+                $spec_array[] = '<div class="goods_spec">' . $spec_name[$k] . ':' . '<em title="' . $v . '">' . $v . '</em>' . '</div>';
+            }
+            $goods_list[$key]['goods_image'] = goods_cthumb($val['goods_image']);
+            $goods_list[$key]['goods_spec'] = implode('', $spec_array);
+            $goods_list[$key]['url'] = url('Home/Goods/index', array('goods_id' => $val['goods_id']));
+        }
+        return json_encode($goods_list);
     }
 
 
@@ -122,11 +152,48 @@ class Forsalegoods extends AdminControl
     }
 
 
-    public function add_pointgoods()
+    public function add_forsalegoods()
     {
         $common_id = input("param.common_id");
         //检测商品
         $goods_model = model("Goods");
+        $goods_list = $goods_model->getGoodsList(array("goods_commonid"=>$common_id,"goods_state"=>1));
+        if (!$goods_list) {
+            //商品不存在或已下架
+            $this->error("商品不存在或以下架");
+        }
+
+        if (request()->isPost()) {
+            $pointgoods_model = model("Pointgoods");
+            $pointgoods_validate = validate('Pointgoods');
+            $params = input("param.");
+            if (!$pointgoods_validate->scene("add_pointgoods")->check($params)) {
+                $this->error($pointgoods_validate->getError());
+            }
+            \think\Db::startTrans();
+            try{
+                //添加或者更新91购商品
+                $pointgoods_model->addOrUpdateForsaleGoods($params);
+                //增加挂售商品
+                model("Memberforsalegoods")->addOrUpdateForsaleGoods($params);
+
+                \think\Db::commit();
+                dsLayerOpenSuccess("添加成功");
+            } catch (\Exception $exception) {
+                \think\Db::rollback();
+            }
+            $this->error("添加失败");
+        }
+        $this->assign("goods_list",$goods_list);
+        return $this->fetch();
+    }
+
+
+    public function edit_pointgoods()
+    {
+        $common_id = input("param.common_id");
+        //检测商品
+        $goods_model = model("Pointgoods");
         $goods_list = $goods_model->getGoodsList(array("goods_commonid"=>$common_id,"goods_state"=>1));
         if (!$goods_list) {
             //商品不存在或已下架

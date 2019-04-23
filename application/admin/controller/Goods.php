@@ -48,7 +48,7 @@ class Goods extends AdminControl {
             $where['goods_state'] = $goods_state;
         }
 
-                $goods_list = $goods_model->getGoodsCommonList($where);
+        $goods_list = $goods_model->getGoodsCommonList($where);
 
         $this->assign('goods_list', $goods_list);
         $this->assign('show_page', $goods_model->page_info->render());

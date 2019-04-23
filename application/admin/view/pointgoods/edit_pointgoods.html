@@ -8,8 +8,8 @@
             <tr class="thead">
                 <th class="w100">商品名称</th>
                 <th class="w100">商品价格（元）</th>
-                <th class="w100">商品库存</th>
-                <th class="w100">商品赠送秒米</th>
+                <th class="w60">商品库存</th>
+                <th class="w100">商品所需积分</th>
             </tr>
             <tbody>
                 {notempty name="goods_list"}
@@ -26,7 +26,7 @@
                         <input name="goods_storage[]" value="{$v.goods_storage}" type="text" class="text w100" />
                     </td>
                     <td>
-                        <input name="goods_miaomi[]" value="{$v.goods_miaomi|default=0}" type="text" class="text w100" />
+                        <input name="goods_point[]" value="{$v.goods_point|default=0}" type="text" class="text w100" />
                     </td>
                 </tr>
                 {/foreach}
