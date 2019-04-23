@@ -28,6 +28,7 @@ class Article extends MobileHome
         if (!empty($article_list)) {
             foreach ($article_list as $k => $v) {
                 $article_list[$k]['article_time'] = date('Y-m-d', $v['article_time']);
+                $article_list[0]['new'] = 1;
                 $article_list[$k]['article_content'] = strip_tags($v['article_content']);
             }
             //修复赋值不生效
