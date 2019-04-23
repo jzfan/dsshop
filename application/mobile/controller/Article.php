@@ -42,12 +42,15 @@ class Article extends MobileHome
                 }
                 unset($article_list[0]);
             }
-//            $article_list=array_values($article_list);
+            $article_list=array_values($article_list);
+        }else{
+            $result['frist_list']=['article_id'=>'','article_url'=>'','article_title'=>'','article_content'=>'','article_time'=>'','amount'=>0];
+            $result['article_list']=[];$result['hasmore']=false;$result['page_total']=1;
+            ds_json_encode(10001, '暂时没有文章', $result);
         }
         $result = array_merge(array('article_list' => $article_list), mobile_page(is_object($article_model->page_info) ? $article_model->page_info : ''));
         $result['frist_list'] = $arr;
-        ds_json_encode(10000, '', $result);
-
+        ds_json_encode(10000, '获取成功', $result);
     }
 
     /**
