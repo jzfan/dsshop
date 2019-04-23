@@ -123,6 +123,7 @@ class Forsalegoods extends Model
             $goods['goods_type'] = $pointGoods->goods_type;
             $goods['goods_promotion_price'] = $pointGoods->goods_price;
             $goods['goods_salenum'] = $pointGoods->sale_number;
+            $goods['goods_miaomi'] = $pointGoods->goods_miaomi;
         }
         return $goodsList;
     }
