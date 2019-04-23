@@ -1,0 +1,221 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-touch-fullscreen" content="yes"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="msapplication-tap-highlight" content="no"/>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1"/>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css">
+    <link rel="stylesheet" type="text/css" href="../css/dstouch_common.css">
+    <link rel="stylesheet" type="text/css" href="../css/dstouch_products_detail.css">
+</head>
+<body>
+
+<style>
+.det_mode{width: 100%;height: 2rem;border-bottom: 1px solid #dedede;background: #fff;}
+.det_mode .detBtns{display: block;width: 100%;height: 2rem;}
+.det_mode .detBtns .det_nodes{width: 46%;height: 2rem;text-align: center;float: left;line-height: 2rem;font-size: 0.7rem;margin: 0 2%;}
+.det_mode .detBtns .det_nodes.det_nodesOn{border-bottom: 1px solid #EA5514;color: #EA5514;}
+.det_panel{}
+.det_panel .det_panels{width: 100%;height: 2.8rem;background: #fff;border-bottom: 1px solid #dedede;}
+.det_panel .det_panels.noData{text-align: center;line-height: 41rem;font-size: 0.7rem;color: #666;}
+.det_panels .dets{padding: 0.3rem 0.4rem;}
+.dets p span.spL{display: inline-block;}
+.dets p span.spR{display: inline-block;float: right;}
+.det_panels .dets .p1{font-size: 0.7rem;margin-top: 0.2rem;height: 1rem;line-height: 1rem;}
+.det_panels .dets .p2{font-size: 0.6rem;color: #666;}
+.det_panels .dets .p1 .spR{color: #EA5514;}
+.det_panels .dets .p2 .spR{color: #EA5514;}	
+#goods_sale{display: none;}
+</style>
+
+
+<!--head模块  -->
+<header id="header" class="transparent">
+    <div class="header-wrap">
+        <div class="header-l"><a href="javascript:history.go(-1)"> <i class="back iconfont"></i></a></div>
+        <div class="header-r"><a id="header-nav" href="javascript:void(0);"><i class="more iconfont"></i><sup></sup></a>
+        </div>
+    </div>
+    <div class="dstouch-nav-layout">
+        <div class="dstouch-nav-menu"><span class="arrow"></span>
+            <ul>
+                <li><a href="../index.html"><i class="iconfont home"></i>
+                    <lang data-id="home"></lang>
+                </a></li>
+                <li><a href="search.html"><i class="iconfont search"></i>
+                    <lang data-id="search"></lang>
+                </a></li>
+                <li><a href="product_first_categroy.html"><i class="iconfont categroy"></i>
+                    <lang data-id="classification"></lang>
+                </a></li>
+                <li><a href="cart_list.html"><i class="iconfont cart"></i>
+                    <lang data-id="cart"></lang>
+                    <sup></sup></a></li>
+                <li><a href="../member/member.html"><i class="iconfont member"></i>
+                    <lang data-id="my_business_city"></lang>
+                </a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<!--整个页面模块-->
+<div id="product_detail_html" style="position: relative; z-index: 1;margin-bottom:1rem;"></div>
+
+
+
+<!--详情模版-->
+<script type="text/html" id="product_detail">
+    <!--商品banner模块-->
+    <div class="goods-detail-top">
+        <div class="goods-detail-pic" id="mySwipe">
+            <ul>
+                <% for (var i =0;i < goods_info.good_img.length;i++){ %>
+                <li><img src="<%=goods_info.good_img%>"/></li>
+                <% } %>
+            </ul>
+        </div>
+        <%if(goods_info>1){%>
+        <div class="goods-detail-turn">
+            <span class="now_page">1</span>/<span class="total_page"><%=goods_info.good_img.length%></span>
+        </div>
+        <%}%>
+        <!--<div class="round pd-share"><i></i></div>-->
+    </div>
+
+    <!--商品详情模块-->
+    <div class="goods-detail-cnt">
+        <!-- 商品名称-->
+        <div class="goods-detail-name">
+            <dl>
+                <dt><%= goods_info.goods_name %></dt>
+                <dd><%= goods_info.specs %></dd>
+            </dl>
+        </div>
+        <!-- 商品价格-->
+        <div class="goods-detail-price">
+        	<dl>
+                <dt>￥<em><%=goods_info.goods_price %></em></dt>
+                <!--<dd>￥<%=goods_info.goods_price %></dd>-->
+            </dl>
+            
+            <!--<% if (goods_info.promotion_type) { %>
+            <dl>
+                <dt>￥<em><%=goods_info.promotion_price %></em></dt>
+                <dd>￥<%=goods_info.goods_price %></dd>
+            </dl>
+            <% } else { %>
+            <dl>
+            	<% if (goods_info.goods_type == 20) { %>
+                <dt>￥<em><%=goods_info.goods_price %></em>+<em><%=goods_info.goods_point %></em>积分</dt>
+                <% } else { %>
+                <dt>￥<em><%=goods_info.goods_price %></em></dt>	
+             	<% } %>
+            </dl>
+            <% } %>
+            <% if (inviter_amount > 0){ %>
+            <span class="inviter"><i class='iconfont'></i>￥<%= inviter_amount %></span>
+            <% } %>
+            <br />-->
+
+        </div>
+
+
+        <% if (goods_info.mgdiscount_type) { %>
+        <div class="goods-detail-mgdiscount" style="padding-bottom:0">
+            <div class="itme-name"><%= lang('membership_discounts') %></div>
+            <div class="item-con">
+                <% for (var k in goods_info.goods_mgdiscount_arr) { var v = goods_info.goods_mgdiscount_arr[k]; %>
+            <span>
+            	<em><%= v.level_name %></em><%= v.level_discount %><%= lang('fracture') %>
+            </span>
+                <% } %>
+            </div>
+        </div>
+        <% } %>
+        
+</script>
+
+<div class="det_mode">
+	<div class="detBtns">
+		<p class="det_nodes det_nodesOn">秒杀记录</p>
+		<p class="det_nodes">代售记录</p>
+	</div>
+
+	<!--秒杀模版-->
+	<script type="text/html" id="goods_kill_list">
+	<div class="det_panel">
+		<% if (goods_kill.data.length > 0) { %>
+		<% for (var i =0;i < goods_kill.data.length;i++){ %>
+		<div class="det_panels">
+			<div class="dets">
+				<p class="p1">
+					<span class="spL">秒杀<em id="nums"><%= goods_kill.data[i].count %></em>件&nbsp;&nbsp;订单<em id="order_nums"><%= goods_kill.data[i].pay_sn%></em></span>
+					<span class="spR">￥<%= goods_kill.data[i].order_amount %></span>
+				</p>
+				<p class="p2">
+					<span class="spL"><%= goods_kill.data[i].add_time %></span>
+					<span class="spR"><%= goods_kill.data[i].miaomi_amount %>秒米</span>
+				</p>
+			</div>
+		</div>
+		<% } %>
+		<% }else{ %>
+			<div class="det_panels noData">暂无数据</div>
+		<% } %>
+	</div>
+	</script>
+	
+	<!--代售模版-->
+	<script type="text/html" id="goods_sale_list">
+	<div class="det_panel">
+		<% if (goods_sale.data.length > 0) { %>
+		<% for (var i =0;i < goods_sale.data.length;i++){ %>
+		<div class="det_panels">
+			<div class="dets">
+				<p class="p1">
+					<span class="spL">秒杀<em id="nums"><%= goods_sale.data[i].count %></em>件&nbsp;&nbsp;订单<em id="order_nums"><%= goods_sale.data[i].order_sn %></em></span>
+					<span class="spR">￥<%= goods_sale.data[i].goods_price %></span>
+				</p>
+				<p class="p2">
+					<span class="spL"><%= goods_sale.data[i].created_at %></span>
+					<span class="spR">银行手续费:-<%= goods_sale.data[i].service_fee %></span>
+				</p>
+			</div>
+		</div>
+		<% } %>
+		<% }else{ %>
+			<div class="det_panels noData">暂无数据</div>
+		<% } %>
+	</div>
+	</script>
+
+</div>
+
+
+<div id="goods_kill"></div>
+
+<div id="goods_sale"></div>
+
+<script type="text/javascript" src="../js/zepto.min.js"></script>
+<script type="text/javascript" src="../js/config.js"></script>
+<script type="text/javascript" src="../js/template.js"></script>
+<script type="text/javascript" src="../js/swipe.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript" src="../js/iscroll.js"></script>
+<script type="text/javascript" src="../js/simple-plugin.js"></script>
+<script type="text/javascript" src="../js/footer.js"></script>
+<script type="text/javascript" src="../js/fly/requestAnimationFrame.js"></script>
+<script type="text/javascript" src="../js/fly/zepto.fly.min.js"></script>
+<script type="text/javascript" src="js/product_spike_detail.js"></script>
+<script type="text/javascript" src="lang/product_detail.js"></script>
+<script type="text/javascript" src="../js/lang.js"></script>
+</body>
+</html>
