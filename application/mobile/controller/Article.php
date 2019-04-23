@@ -17,7 +17,6 @@ class Article extends MobileHome
      */
     public function article_list()
     {
-        $arr = [];
         $article_model = model('article');
         $condition = array();
         $condition['article_show'] = '1';
@@ -31,7 +30,7 @@ class Article extends MobileHome
                 $article_list[$k]['article_time'] = date('Y-m-d', $v['article_time']);
                 $article_list[$k]['article_content'] = strip_tags($v['article_content']);
             }
-            $arr = $article_list[0];
+            $arr[] = $article_list[0];
             //修复赋值不生效
             foreach ($article_list as $k => $v) {
                 if ($v['article_time'] == $date) {
