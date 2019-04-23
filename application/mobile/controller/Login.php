@@ -48,6 +48,7 @@ class Login extends MobileMall
         if ($member_info['member_state'] == 0) {
             ds_json_encode(10001, '您的账户被禁用!请联系平台处理');
         }
+
         if (is_array($member_info) && !empty($member_info)) {
             $token = $member_model->getBuyerToken($member_info['member_id'], $member_info['member_name'], $client);
             if ($token) {
