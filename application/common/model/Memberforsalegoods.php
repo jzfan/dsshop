@@ -15,6 +15,7 @@ class Memberforsalegoods extends Model
 {
 
     public $page_info;
+
     public function freezeMemberForsaleGoods($goods_id, $goods_number)
     {
         $queue = model("forsalequeue");
@@ -49,7 +50,10 @@ class Memberforsalegoods extends Model
 
         return $goods_info;
     }
-    public function getlist($condition = array(), $pagesize = '', $fields = '*', $order = '', $limit = ''){
+
+
+    public function getlist($condition = array(), $pagesize = '', $fields = '*', $order = '', $limit = '')
+    {
         if ($pagesize) {
             $pdlog_list_paginate = db('memberforsalegoods')->where($condition)->field($fields)->order($order)->paginate($pagesize, false, ['query' => request()->param()]);
             $this->page_info = $pdlog_list_paginate;
@@ -59,6 +63,8 @@ class Memberforsalegoods extends Model
             return $pdlog_list_paginate;
         }
     }
+
+
     public function getgoodsinfo($goods_common_id)
     {
         $model = db('goodscommon')->where('goods_commonid', $goods_common_id)->find();
@@ -77,6 +83,7 @@ class Memberforsalegoods extends Model
 
     }
 
+
     public function getname($id)
     {
         $model = db('goods')->where('goods_id', $id)->find();
@@ -86,30 +93,71 @@ class Memberforsalegoods extends Model
             return '';
         }
     }
-    public function getpic($id){
-        $model=db('goods')->where('goods_id',$id)->find();
-        if (!empty($model)){
+
+
+    public function getpic($id)
+    {
+        $model = db('goods')->where('goods_id',$id)->find();
+        if (!empty($model)) {
             return UPLOAD_SITE_URL.'/'.ATTACH_GOODS.'/'.$model['goods_image'];
-        }else{
+        } else {
             return '';
         }
     }
-    public function getStatus($status){
-        if ($status==0){
+
+
+    public function getStatus($status)
+    {
+        if ($status == 0) {
             return '等待挂售';
-        }elseif ($status==1){
+        } elseif ($status==1) {
             return '挂售中';
-        }else{
+        } else {
             return '挂售完成';
         }
     }
 
-    public function getNum($order_sn){
+
+    public function getNum($order_sn)
+    {
         $model = db('memberforsaleorder')->where('order_sn', $order_sn)->find();
-        if (!empty($model)){
+        if (!empty($model)) {
             return $model['goods_number'];
-        }else{
+        } else {
             return '';
         }
     }
+
+
+    public function addOrUpdateForsaleGoods($data)
+    {
+        $common_id  = $data['common_id'];
+        $count = count($data['goods_id']);
+        $insert_data = array();
+        for($i=0; $i < $count; ++$i) {
+            $insert_data[] = array(
+                "goods_commonid" =>  $common_id,
+                "goods_id" => $data['goods_id'][$i],
+                "goods_price" => $data['goods_price'][$i],
+                "goods_number" => $data['goods_storage'][$i],
+                "left_number" => $data['goods_storage'][$i],
+                "sale_number" => 0,
+                "goods_state" => 1,
+                "freeze_number" => 0,
+                "created_at"  => date('Y-m-d H:i:s',time()),
+                "updated_at"  => date('Y-m-d H:i:s',time()),
+            );
+        }
+        //商品已经存在就更新
+        foreach ($insert_data as $insert_datum) {
+            $pointgoods = self::get(['goods_id'=>$insert_datum['goods_id']]);
+            if($pointgoods) {
+                unset($insert_datum['created_at']);
+                $pointgoods->save($insert_datum);
+            } else {
+                self::create($insert_datum);
+            }
+        }
+    }
+
 }
