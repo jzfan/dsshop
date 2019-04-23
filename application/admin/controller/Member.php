@@ -215,7 +215,6 @@ class Member extends AdminControl
                 $data['member_paypwd'] = md5(input('post.member_paypwd'));
             }
 
-
             //验证数据  BEGIN
             $rule = [
                 ['member_email', 'email|unique:member,member_email,' . $member_id, '邮箱格式错误|邮箱已存在'],
