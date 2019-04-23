@@ -21,14 +21,18 @@ class Article extends MobileHome
         $condition = array();
         $condition['article_show'] = '1';
         $last = strtotime(date('Y-m-d', strtotime('- 1 month')));
-        $now = strtotime(date('Y-m-d', time()));
+        $now = time();
+        $date = date('Y-m-d', time());
         $condition['article_time'] = ['between', array($last, $now)];
         $article_list = $article_model->getArticleList($condition, $this->pagesize, 'article_time');
         if (!empty($article_list)) {
             foreach ($article_list as $k => $v) {
                 $article_list[$k]['article_time'] = date('Y-m-d', $v['article_time']);
                 $article_list[$k]['article_content'] = strip_tags($v['article_content']);
-                if ($v['article_time'] == $now) {
+            }
+            //修复赋值不生效
+            foreach ($article_list as $k => $v) {
+                if ($v['article_time'] == $date) {
                     $article_list[$k]['is_hot'] = 1;
 
                 } else {
