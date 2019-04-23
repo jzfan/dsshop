@@ -86,21 +86,19 @@ class SeckillGoods extends Model
         ];
     }
 
-    public function push($job_id, $n=null)
+    public function push($n=null)
     {
         $n = $n ?? $this->qty;
         foreach (range(1, $n) as $i) {
-            $this->redis->lpush("seckill:{$job_id}:good:{$this->goods_id}", $i);
+            $this->redis->lpush($this->listKey(), $i);
         }
     }
 
-    public function pop($job_id, $n)
+    public function pop($n)
     {
-        $arr = [];
         for ($n;$n--;) {
-            $arr[] = $this->redis->rpop("seckill:{$job_id}:good:{$this->goods_id}");
+            $this->redis->rpop($this->listKey());
         }
-        return $arr;
     }
 
     public function getGoodsInfoAndPromotionById($goods_id)
@@ -130,13 +128,68 @@ class SeckillGoods extends Model
         return array();
     }
 
+    public function incrLimit($num, $member_id)
+    {
+        $key = $this->limitKey($member_id);
+        $ex = $this->job->duration();
+
+        $this->redis->incr($key, $num);
+        $this->redis->setTimeout($key, $ex);
+    }
+
+    /**
+     * 判断用户是否达到秒杀商品购买限额
+     * @param int $member_id 购买者ID
+     * @return bool
+     */
     public function isMemberOverLimit($member_id)
     {
-        $purchased = $this->redis->get("seckill:{$this->job->id}_goods:{$this->goods_id}_member:{$member_id}");
+        $purchased = $this->redis->get($this->limitKey($member_id));
         if (!$purchased) {
-            return true;
+            return false;
         }
         return $purchased >= $this->limit();
+    }
+
+    protected function limitKey($member_id)
+    {
+        return "seckill:{$this->job_id}_goods:{$this->goods_id}_member:{$member_id}";
+    }
+
+    protected function listKey()
+    {
+        return "seckill:{$this->job_id}:good:{$this->goods_id}";
+    }
+
+    protected function lockKey()
+    {
+        return "lock_job:{$this->job_id}_good:{$this->goods_id}";
+    }
+
+    /**
+    * 上锁出队，如果库存不足抛出异常
+    */
+    public function lockForPop($num)
+    {
+        $key = $this->lockKey();
+
+        $this->redis->setLock($key);
+
+        if (!$this->isQtyEnough($num)) {
+            $this->redis->releaseLock($key);
+            exception("秒杀商品数量不足");
+        }
+
+        $this->pop($num);
+        $this->redis->releaseLock($key);
+    }
+
+    /**
+    * 判断库存是否足够
+    */
+    protected function isQtyEnough($num)
+    {
+        return $this->redis->llen($this->listKey()) >= $num;
     }
 
     /**

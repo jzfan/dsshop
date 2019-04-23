@@ -2,6 +2,7 @@
 
 namespace app\common\logic;
 use think\Model;
+use app\common\model\SeckillGoods;
 
 class Buy extends Model
 {
@@ -274,6 +275,8 @@ class Buy extends Model
 
         } catch (\think\Exception $e) {
             $this->rollback();
+            // redis 秒杀队列回滚
+
             return ds_callback(false, $e->getMessage());
         }
 
@@ -690,9 +693,9 @@ class Buy extends Model
             exception("会员积分不足");
         }
 
-        //检查秒杀商品用户限额
+        //检查秒杀商品用户限额，商品出队列
         if ($cart_list[0]['goods_type'] == 40) {
-            $this->checkSeckillLimit($cart_list,$this->_member_info['member_id']);
+            $this->checkSeckillLimit($cart_list, $this->_member_info['member_id']);
         }
 
         //商品金额计算(分别对每个商品/优惠套装小计、每个店铺小计)
@@ -1254,10 +1257,16 @@ class Buy extends Model
     private function checkSeckillLimit($cart_list, $member_id)
     {
         $goods_id = $cart_list[0]['goods_id'];
+        $number = $cart_list[0]['goods_num'];
+        $sg = (new SeckillGoods)->byGoodsId($goods_id);
 
-        if ((new \app\common\model\SeckillGoods)->byGoodsId($goods_id)->isMemberOverLimit($member_id)) {
+        if ($sg->isMemberOverLimit($member_id)) {
             exception("秒杀商品数量超过定额");
         }
+        // 记录用户秒杀商品下单数量
+        $sg->incrLimit($number, $member_id);
+        // redis 商品出队列
+        $sg->lockForPop($number);
     }
 
 
