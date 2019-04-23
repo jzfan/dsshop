@@ -1,15 +1,33 @@
+var curpage = 1;
+var hasMore = true;
 $(function() {
-
-        $.ajax({
-            url: ApiUrl + "/Articleclass/index.html",
-            type: 'get',
-            jsonp: 'callback',
-            dataType: 'jsonp',
-            success: function(result) {
-                var data = result.result;
-                data.WapSiteUrl = WapSiteUrl;
-                var html = template('article-class', data);
-                $("#article-content").html(html);
-            }
-        });
+	
+	get_list();
+	
+	function get_list(){
+		if(hasMore){
+		    $.ajax({
+		        url: ApiUrl + "/Article/article_list?page=" + curpage + "&pagesize=" + pagesize,
+		        type: 'get',
+		        dataType: 'json',
+		        success: function(e) {
+		        	console.log(e)
+		        	curpage++;
+		        	hasMore = e.result.hasmore;
+		            var data = e.result;
+		            
+		            var html = template('article-class', data);
+		            $("#article-contents").append(html);
+		            
+		        }
+		    });
+	   	}
+   	}
+	
+    //下拉加载
+    $(window).scroll(function(){
+        if(($(window).scrollTop() + $(window).height() > $(document).height()-1)){
+            get_list();
+        }
+    });
 });

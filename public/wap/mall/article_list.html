@@ -13,10 +13,16 @@
 	<link rel="stylesheet" type="text/css" href="../css/base.css">
 </head>
 <body>
-	<header id="header"></header>
-	<div id="article-content">
-	</div>
-	<div id="footer"></div>
+<header id="header" class="dstouch-product-header fixed">
+  <div class="header-wrap">
+    <div class="header-l"> <a href="javascript:history.go(-1)"> <i class="back iconfont"></i> </a> </div>
+    <div class="header-inp"> <i class="icon"></i> <span class="search-input" id="keyword"><lang data-id="input_keywords"></lang></span> </div>
+    <div class="header-r"> <a href="product_first_categroy.html" class="categroy"><i class="iconfont"></i>
+      </a> <a id="header-nav" href="javascript:void(0);"><i class="more iconfont"></i><sup></sup></a> </div>
+  </div>
+</header>
+<div id="article-content"></div>
+<div id="footer"></div>
 </body>
 <script type="text/html" id="article-list">
 	<div class="article_type"><%=article_type_name%></div>
