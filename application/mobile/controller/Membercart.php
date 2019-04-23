@@ -23,13 +23,12 @@ class Membercart extends MobileMember {
         // 购物车列表 [得到最新商品属性及促销信息]
         $cart_list = model('buy_1','logic')->getGoodsCartList($cart_list);
         $goods_model = model('goods');
-
         $sum = 0;
         $cart_a = array();
         $k=0;
         foreach ($cart_list as $key => $val) {
 //            $goods_data = $goods_model->getGoodsOnlineInfoForShare($val['goods_id']);
-
+            $cart_a[0]['goods'][$key]['goods_id'] = $val['goods_id'];
             $cart_a[0]['goods'][$key]['cart_id'] = $val['cart_id'];
             $cart_a[0]['goods'][$key]['goods_type'] = $val['goods_type'];
             $cart_a[0]['goods'][$key]['goods_point'] = isset($val['goods_point']) ? $val['goods_point'] : 0;
