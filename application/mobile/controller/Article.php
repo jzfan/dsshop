@@ -17,7 +17,6 @@ class Article extends MobileHome
      */
     public function article_list()
     {
-
         $article_model = model('article');
         $condition = array();
         $condition['article_show'] = '1';
@@ -33,7 +32,7 @@ class Article extends MobileHome
                     $article_list[$k]['is_hot'] = 1;
 
                 } else {
-                    $article_list[$k]['is_hot'] =0;
+                    $article_list[$k]['is_hot'] = 0;
                 }
             }
         }
@@ -101,7 +100,6 @@ class Article extends MobileHome
                 "created_at" => date('Y-m-d H:i:s')
             ));
         }
-
     }
 
     protected function isLogin()
