@@ -21,7 +21,22 @@ class Article extends MobileHome
         $article_model = model('article');
         $condition = array();
         $condition['article_show'] = '1';
-        $article_list = $article_model->getArticleList($condition, $this->pagesize);
+        $last = strtotime(date('Y-m-d', strtotime('- 4 week')));
+        $now = strtotime(date('Y-m-d', time()));
+        $condition['article_time'] = ['between', array($last, $now)];
+        $article_list = $article_model->getArticleList($condition, $this->pagesize, 'article_time');
+        if (!empty($article_list)) {
+            foreach ($article_list as $k => $v) {
+                $article_list[$k]['article_time'] = date('Y-m-d', $v['article_time']);
+                $article_list[$k]['article_content'] = strip_tags($v['article_content']);
+                if ($v['article_time'] == $now) {
+                    $article_list[$k]['is_hot'] = 1;
+
+                } else {
+                    $article_list[$k]['is_hot'] =0;
+                }
+            }
+        }
         $result = array_merge(array('article_list' => $article_list), mobile_page(is_object($article_model->page_info) ? $article_model->page_info : ''));
         ds_json_encode(10000, '', $result);
 
@@ -53,6 +68,7 @@ class Article extends MobileHome
             $condition['article_id'] = $article_id;
             $article = $article_model->getOneArticle($condition);
             $article['article_time'] = date('Y-m-d H:i:s', $article['article_time']);
+            $article['article_content'] = strip_tags($article['article_content']);
             if (empty($article)) {
                 ds_json_encode(10001, '文章不存在');
             } else {
@@ -115,5 +131,6 @@ class Article extends MobileHome
             }
         }
     }
+
 
 }
