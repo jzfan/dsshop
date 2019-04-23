@@ -17,28 +17,14 @@ class Article extends MobileHome
      */
     public function article_list()
     {
-        if (input('param.ac_id') && intval(input('param.ac_id')) > 0) {
-            $articleclass_model = model('articleclass');
-            $article_model = model('article');
-            $condition = array();
-            $child_class_list = $articleclass_model->getChildClass(intval(input('param.ac_id')));
-            $ac_ids = array();
-            if (!empty($child_class_list) && is_array($child_class_list)) {
-                foreach ($child_class_list as $v) {
-                    $ac_ids[] = $v['ac_id'];
-                }
-            }
-            $ac_ids = implode(',', $ac_ids);
-            $condition['ac_id'] = array('in', $ac_ids);
-            $condition['article_show'] = '1';
-            $article_list = $article_model->getArticleList($condition, $this->pagesize);
-            $article_type_name = $this->article_type_name($ac_ids);
-            $result = array_merge(array('article_list' => $article_list), mobile_page(is_object($article_model->page_info) ? $article_model->page_info : ''));
-            $result['article_type_name'] = $article_type_name;
-            ds_json_encode(10000, '', $result);
-        } else {
-            ds_json_encode(10001, '缺少参数:文章类别编号');
-        }
+
+        $article_model = model('article');
+        $condition = array();
+        $condition['article_show'] = '1';
+        $article_list = $article_model->getArticleList($condition, $this->pagesize);
+        $result = array_merge(array('article_list' => $article_list), mobile_page(is_object($article_model->page_info) ? $article_model->page_info : ''));
+        ds_json_encode(10000, '', $result);
+
     }
 
     /**
