@@ -38,7 +38,7 @@ class Member extends MobileMember
 
     public function my_asset()
     {
-        $fields_arr = array('miaomi','point', 'predepoit', 'available_rc_balance', 'voucher');
+        $fields_arr = array('miaomi', 'point', 'predepoit', 'available_rc_balance', 'voucher');
         $fields_str = trim(input('fields'));
         if ($fields_str) {
             $fields_arr = explode(',', $fields_str);
@@ -70,7 +70,7 @@ class Member extends MobileMember
         $member_model = model('member');
         $condition['member_id'] = $this->member_info['member_id'];
         $member_info = $member_model->getMemberInfo($condition);
-        $member_info['member_birthday']=date('Y-m-d',$member_info['member_birthday']);
+        $member_info['member_birthday'] = date('Y-m-d', $member_info['member_birthday']);
         $member_info['member_avatar'] = get_member_avatar_for_id($member_info['member_id']);
         ds_json_encode(10000, '', $member_info);
     }
@@ -114,35 +114,38 @@ class Member extends MobileMember
             ds_json_encode(10001, $file->getError());
         }
     }
+
     /*
      * 秒米明细
      * */
-    public function get_member_miao() {
+    public function get_member_miao()
+    {
         $condition['lg_member_id'] = $this->member_info['member_id'];
-        $meter_log=model('meterlog');
+        $meter_log = model('meterlog');
         $list_log = $meter_log->getLogList($condition, $this->pagesize);
-        foreach ($list_log as $k=>$v ){
-            $list_log[$k]['lg_addtime']=date('Y-m-d H:i:s',$v['lg_addtime']);
+        foreach ($list_log as $k => $v) {
+            $list_log[$k]['lg_addtime'] = date('Y-m-d H:i:s', $v['lg_addtime']);
         }
-        $result= array_merge(array('log' => $list_log), mobile_page(is_object($meter_log->page_info)?$meter_log->page_info:''));
-        ds_json_encode(10000, '获取成功',$result);
+        $result = array_merge(array('log' => $list_log), mobile_page(is_object($meter_log->page_info) ? $meter_log->page_info : ''));
+        ds_json_encode(10000, '获取成功', $result);
     }
 
     /*
      * 获取二维码
     */
-    public function get_inviter_code(){
+    public function get_inviter_code()
+    {
         $member_id = $this->member_info['member_id'];
         $qrcode_path = BASE_UPLOAD_PATH . '/' . ATTACH_INVITER . '/' . $member_id . '.png';
         if (!file_exists($qrcode_path)) {
             import('qrcode.phpqrcode', EXTEND_PATH);
             \QRcode::png(WAP_SITE_URL . '/member/register.html?inviter_id=' . $member_id, $qrcode_path);
         }
-        $arr['qcode_url']=WAP_SITE_URL. '/public/uploads/' . ATTACH_INVITER . '/' . $member_id . '.png';
-        $arr['title']='扫码即送100积分';
-        $arr['uid']=$member_id;
-        $arr['points']=intval(config('points_invite'));
-        ds_json_encode(10000, '获取成功',$arr);
+        $arr['qcode_url'] = WAP_SITE_URL . '/public/uploads/' . ATTACH_INVITER . '/' . $member_id . '.png';
+        $arr['title'] = '扫码即送100积分';
+        $arr['uid'] = $member_id;
+        $arr['points'] = intval(config('points_invite'));
+        ds_json_encode(10000, '获取成功', $arr);
     }
 
 }
