@@ -164,16 +164,16 @@ class Forsalegoods extends AdminControl
         }
 
         if (request()->isPost()) {
-            $pointgoods_model = model("Pointgoods");
+            $forsalegoods_model = model("Forsalegoods");
             $pointgoods_validate = validate('Pointgoods');
             $params = input("param.");
             if (!$pointgoods_validate->scene("add_pointgoods")->check($params)) {
-                $this->error($pointgoods_validate->getError());
+                //$this->error($pointgoods_validate->getError());
             }
             \think\Db::startTrans();
             try{
                 //添加或者更新91购商品
-                $pointgoods_model->addOrUpdateForsaleGoods($params);
+                $forsalegoods_model->addOrUpdateForsaleGoods($params);
                 //增加挂售商品
                 model("Memberforsalegoods")->addOrUpdateForsaleGoods($params);
 
@@ -189,12 +189,12 @@ class Forsalegoods extends AdminControl
     }
 
 
-    public function edit_pointgoods()
+    public function edit_forsalegoods()
     {
         $common_id = input("param.common_id");
         //检测商品
-        $goods_model = model("Pointgoods");
-        $goods_list = $goods_model->getGoodsList(array("goods_commonid"=>$common_id,"goods_state"=>1));
+        $forsalegoods_model = model("Forsalegoods");
+        $goods_list = $forsalegoods_model->getGoodsList(array("goods_commonid"=>$common_id,"goods_state"=>1));
         if (!$goods_list) {
             //商品不存在或已下架
             $this->error("商品不存在或以下架");
@@ -209,9 +209,10 @@ class Forsalegoods extends AdminControl
             }
             \think\Db::startTrans();
             try{
-                //添加或者更新积分商品
-                $pointgoods_model->addOrUpdatePointGoods($params);
-                // 扣除商品库库存
+                //添加或者更新91购商品
+                $forsalegoods_model->addOrUpdateForsaleGoods($params);
+                //增加挂售商品
+                model("Memberforsalegoods")->addOrUpdateForsaleGoods($params);
 
                 \think\Db::commit();
                 dsLayerOpenSuccess("添加成功");

@@ -43,7 +43,7 @@ class Forsalegoods extends Model
 
     public function getGoodsList($condition, $field = '*', $page = 0, $order = 'goods_id desc', $limit = 0, $group = '', $lock = false, $count = 0)
     {
-        $condition['goods_id'] = array("in", $this->getPointGoodsId());
+        $condition['goods_id'] = array("in", $this->getGoodsId());
         $goods_model = model("goods");
 
         $goods_list = $goods_model->getGoodsList($condition, $field, $group, $order, $limit, $page, $lock, $count);
@@ -119,7 +119,6 @@ class Forsalegoods extends Model
             $goods['goods_storage'] = $pointGoods->goods_storage;
             $goods['goods_type'] = $pointGoods->goods_type;
             $goods['goods_promotion_price'] = $pointGoods->goods_price;
-            $goods['goods_point'] = $pointGoods->goods_point;
             $goods['goods_salenum'] = $pointGoods->sale_number;
         }
         return $goodsList;
