@@ -105,7 +105,7 @@ class Membercart extends MobileMember {
         $param['goods_name'] = $goods_info['goods_name'];
         $param['goods_price'] = $goods_info['goods_price'];
         $param['goods_image'] = $goods_info['goods_image'];
-        $param['goods_type'] = $goods_info['goods_type'];
+        $param['goods_type'] = isset($goods_info['goods_type']) ? $goods_info['goods_type'] : 1;
 
         $result = $cart_model->addCart($param, isset($this->member_info)?'db':'cookie', $quantity);
         if ($result) {

@@ -93,6 +93,7 @@ class Cart extends Model {
         $condition = array();
         $condition['goods_id'] = $goods_info['goods_id'];
         $condition['buyer_id'] = $goods_info['buyer_id'];
+        $condition['goods_type'] = $goods_info['goods_type'];
         if (isset($goods_info['bl_id'])) {
             $condition['bl_id'] = $goods_info['bl_id'];
         } else {
