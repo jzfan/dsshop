@@ -17,6 +17,7 @@ class Article extends MobileHome
      */
     public function article_list()
     {
+        $arr = [];
         $article_model = model('article');
         $condition = array();
         $condition['article_show'] = '1';
@@ -30,6 +31,7 @@ class Article extends MobileHome
                 $article_list[$k]['article_time'] = date('Y-m-d', $v['article_time']);
                 $article_list[$k]['article_content'] = strip_tags($v['article_content']);
             }
+            $arr = $article_list[0];
             //修复赋值不生效
             foreach ($article_list as $k => $v) {
                 if ($v['article_time'] == $date) {
@@ -38,15 +40,12 @@ class Article extends MobileHome
                 } else {
                     $article_list[$k]['is_hot'] = 0;
                 }
-                if ($k==0){
-                    $article_list[$k]['new'] = 1;//前端分页展示 默认第一条
-                }
-                if($k>0){
-                    $article_list[$k]['new'] = 2;
-                }
+                unset($article_list[0]);
             }
+//            $article_list=array_values($article_list);
         }
         $result = array_merge(array('article_list' => $article_list), mobile_page(is_object($article_model->page_info) ? $article_model->page_info : ''));
+        $result['frist_list'] = $arr;
         ds_json_encode(10000, '', $result);
 
     }
