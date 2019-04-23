@@ -17,7 +17,7 @@ class Article extends MobileHome
      */
     public function article_list()
     {
-        $page=input('param.page');
+        $page = input('param.page');
         $article_model = model('article');
         $condition = array();
         $condition['article_show'] = '1';
@@ -31,10 +31,10 @@ class Article extends MobileHome
                 $article_list[$k]['article_time'] = date('Y-m-d', $v['article_time']);
                 $article_list[$k]['article_content'] = strip_tags($v['article_content']);
             }
-            if ($page==1){
+            if ($page == 1) {
                 $arr[] = $article_list[0];
-            }else{
-                $arr=[];
+            } else {
+                $arr = [];
             }
             //修复赋值不生效
             foreach ($article_list as $k => $v) {
@@ -45,10 +45,12 @@ class Article extends MobileHome
                 }
                 unset($article_list[0]);
             }
-            $article_list=array_values($article_list);
-        }else{
-            $result['frist_list']=['article_id'=>'','article_url'=>'','article_title'=>'','article_content'=>'','article_time'=>'','amount'=>0];
-            $result['article_list']=[];$result['hasmore']=false;$result['page_total']=1;
+            $article_list = array_values($article_list);
+        } else {
+            $result['frist_list'] = ['article_id' => '', 'article_url' => '', 'article_title' => '', 'article_content' => '', 'article_time' => '', 'amount' => 0];
+            $result['article_list'] = [];
+            $result['hasmore'] = false;
+            $result['page_total'] = 1;
             ds_json_encode(10001, '暂时没有文章', $result);
         }
         $result = array_merge(array('article_list' => $article_list), mobile_page(is_object($article_model->page_info) ? $article_model->page_info : ''));
@@ -82,7 +84,6 @@ class Article extends MobileHome
             $condition['article_id'] = $article_id;
             $article = $article_model->getOneArticle($condition);
             $article['article_time'] = date('Y-m-d H:i:s', $article['article_time']);
-            $article['article_content'] = strip_tags($article['article_content']);
             if (empty($article)) {
                 ds_json_encode(10001, '文章不存在');
             } else {
