@@ -24,6 +24,7 @@ class Membercart extends MobileMember {
         $cart_list = model('buy_1','logic')->getGoodsCartList($cart_list);
         $goods_model = model('goods');
         $sum = 0;
+        $point = 0;
         $cart_a = array();
         $k=0;
         foreach ($cart_list as $key => $val) {
@@ -42,6 +43,7 @@ class Membercart extends MobileMember {
             $cart_a[0]['goods'][$key]['gift_list'] = isset($val['gift_list'])?$val['gift_list']:'';
             $cart_list[$key]['goods_sum'] = ds_price_format($val['goods_price'] * $val['goods_num']);
             $sum += $cart_list[$key]['goods_sum'];
+            $point += $cart_a[0]['goods'][$key]['goods_point'];
             $k++;
         }
         
@@ -56,7 +58,7 @@ class Membercart extends MobileMember {
             $cart_b=array();
         }
 
-        ds_json_encode(10000, '',array('cart_list' => $cart_a, 'sum' => ds_price_format($sum), 'cart_count' => count($cart_list),'cart_val'=>$cart_b));
+        ds_json_encode(10000, '',array('cart_list' => $cart_a, 'sum' => ds_price_format($sum), 'point' => ds_price_format($point), 'cart_count' => count($cart_list),'cart_val'=>$cart_b));
     }
 
     /**
