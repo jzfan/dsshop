@@ -6,10 +6,11 @@
 
 namespace app\common\model;
 
-use think\Model;
 use think\Db;
+use think\Model;
 
-class Points extends Model {
+class Points extends Model
+{
 
     public $page_info;
 
@@ -22,7 +23,8 @@ class Points extends Model {
      * @param  bool $if_repeat 是否可以重复记录的信息,true可以重复记录，false不可以重复记录，默认为true
      * @return bool
      */
-    function savePointslog($stage, $insertarr, $if_repeat = true) {
+    function savePointslog($stage, $insertarr, $if_repeat = true)
+    {
         if (!$insertarr['pl_memberid']) {
             return false;
         }
@@ -67,7 +69,7 @@ class Points extends Model {
                 //订单添加赠送积分列
                 $obj_order = model('order');
                 $data = array();
-                $data['order_pointscount'] = Db::raw('order_pointscount+'.$insertarr['pl_points']);
+                $data['order_pointscount'] = Db::raw('order_pointscount+' . $insertarr['pl_points']);
                 $obj_order->editOrdercommon($data, array('order_id' => $insertarr['order_id']));
                 break;
             case 'system':
@@ -137,7 +139,7 @@ class Points extends Model {
             //更新member内容
             $obj_member = model('member');
             $upmember_array = array();
-            $upmember_array['member_points'] = Db::raw('member_points+'.$insertarr['pl_points']);
+            $upmember_array['member_points'] = Db::raw('member_points+' . $insertarr['pl_points']);
             $obj_member->editMember(array('member_id' => $insertarr['pl_memberid']), $upmember_array);
             return true;
         } else {
@@ -152,7 +154,8 @@ class Points extends Model {
      * @param type $data 数据
      * @return boolean
      */
-    public function addPointslog($data) {
+    public function addPointslog($data)
+    {
         if (empty($data)) {
             return false;
         }
@@ -169,10 +172,11 @@ class Points extends Model {
      * @param type $field
      * @return type
      */
-    public function getPointslogList($condition, $page = '', $field = '*') {
+    public function getPointslogList($condition, $page = '', $field = '*')
+    {
         $order = isset($condition['order']) ? $condition['order'] : 'pl_id desc';
         if ($page) {
-            $result = db('pointslog')->where($condition)->field($field)->order($order)->paginate($page,false,['query' => request()->param()]);
+            $result = db('pointslog')->where($condition)->field($field)->order($order)->paginate($page, false, ['query' => request()->param()]);
             $this->page_info = $result;
             return $result->items();
         } else {
@@ -188,7 +192,8 @@ class Points extends Model {
      * @param type $field
      * @return type
      */
-    public function getPointsInfo($condition, $field = '*') {
+    public function getPointsInfo($condition, $field = '*')
+    {
         //得到条件语句
         return db('pointslog')->field($field)->where($condition)->find();
     }

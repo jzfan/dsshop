@@ -451,29 +451,6 @@ class Memberorder extends MobileMember
         return $name;
     }
 
-    //首页获取所有代售订单
-    public function getmemberallsaleorder()
-    {
-        $wheere['goods_state'] = 2;
-        $res = model('memberforsalegoods');
-        $member_info = $res->getlist($wheere, $this->pagesize);
-        if (!empty($member_info)) {
-            foreach ($member_info as $k => $value) {
-                $member_info[$k]['good_img'] = $res->getpic($value['goods_id']);
-                $member_info[$k]['goods_name'] = $res->getname($value['goods_id']);
-                $member_info[$k]['specs'] = $res->getgoodsinfo($value['goods_commonid']);//规格
-                $member_info[$k]['goods_state'] = $res->getStatus($value['goods_state']);//状态
-                $member_info[$k]['goods_type'] = '代售商品';
-            }
-            $result = array_merge(array('orderlist' => $member_info), mobile_page(is_object($res->page_info) ? $res->page_info : ''));
-            ds_json_encode(10000, '获取成功', $result);
-        } else {
-            $result['orderlist'] = [];
-            $result['page_total'] = 1;
-            $result['hasmore'] = false;
-            ds_json_encode(10001, '暂时无代售订单', $result);
-        }
-    }
 
     //得到代售订单
     public function getmemberforsaleorder()
@@ -578,7 +555,7 @@ class Memberorder extends MobileMember
             $result['page_total'] = 1;
             $result['hasmore'] = false;
             $result['data'] = [];
-            ds_json_encode(10001, '该用户没有秒杀记录',$result);
+            ds_json_encode(10001, '该用户没有秒杀记录', $result);
         }
     }
 
@@ -598,7 +575,7 @@ class Memberorder extends MobileMember
             $result['page_total'] = 1;
             $result['hasmore'] = false;
             $result['data'] = [];
-            ds_json_encode(10001, '该用户没有挂售记录',$result);
+            ds_json_encode(10001, '该用户没有挂售记录', $result);
         }
     }
 }
