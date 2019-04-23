@@ -181,10 +181,10 @@ class Member extends AdminControl
                 if (empty($member)) {
                     $this->error('该推荐人不是我们平台会员,暂时无法添加！');
                 } else {
-                    $m_id['inviter_id'] = $member['member_id'];
+                    $inviter_id = $member['member_id'];
                 }
             } else {
-                $m_id['inviter_id'] = '';
+                $inviter_id = '';
             }
             //判断是否上传
             if (empty($_FILES['face_card']['tmp_name']) && empty($_FILES['back_card']['tmp_name'])) {
@@ -193,6 +193,7 @@ class Member extends AdminControl
             } else {
                 $m_id['face_card'] = $this->upload_face_card();
                 $m_id['back_card'] = $this->upload_back_card();
+               model('member')->where('member_id', $member_id)->update($m_id);
             }
             $data = array(
                 'member_email' => input('post.member_email'),
@@ -211,6 +212,7 @@ class Member extends AdminControl
                 'member_mobile' => input('post.member_mobile'),
                 'member_emailbind' => input('post.memberemailbind'),
                 'member_mobilebind' => input('post.membermobilebind'),
+                'inviter_id' => $inviter_id,
             );
             if (input('post.member_password')) {
                 $data['member_password'] = md5(input('post.member_password'));
@@ -230,9 +232,8 @@ class Member extends AdminControl
                 $this->error($validate->getError());
             }
             //验证数据  END
-            $a = model('member')->where('member_id', $member_id)->update($m_id);
             $result = $member_model->editMember(array('member_id' => intval($member_id)), $data);
-            if ($result >= 0 && $a >= 0) {
+            if ($result >= 0 ) {
                 dsLayerOpenSuccess(lang('ds_common_op_succ'));
 //                $this->success(lang('ds_common_op_succ'), 'Member/member');
             } else {
@@ -381,7 +382,8 @@ class Member extends AdminControl
         if ($member_array['inviter_id'] == '') {
             $member_array['inviter_name'] = '';
         } else {
-            $inviter = $member_model->getMemberInfo($member_array['inviter_id']);
+            $con['member_id']=$member_array['inviter_id'];
+            $inviter = $member_model->getMemberInfo($con);
             $member_array['inviter_name'] = $inviter['member_name'];
         }
         $this->assign('member_array', $member_array);
