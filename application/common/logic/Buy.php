@@ -275,8 +275,6 @@ class Buy extends Model
 
         } catch (\think\Exception $e) {
             $this->rollback();
-            // redis 秒杀队列回滚
-
             return ds_callback(false, $e->getMessage());
         }
 
@@ -541,7 +539,7 @@ class Buy extends Model
 
         //是否开增值税发票
         $input_if_vat = $this->buyDecrypt($post['vat_hash'], $this->_member_info['member_id']);
-        if ($post['goods_type'] == 40) {
+        if ($post['goods_type'] == 40 || $post['goods_type'] == 41) {
             $input_if_vat = 'deny_vat';
         }
         if (!in_array($input_if_vat, array('allow_vat', 'deny_vat'))) {
@@ -694,7 +692,7 @@ class Buy extends Model
         }
 
         //检查秒杀商品用户限额，商品出队列
-        if ($cart_list[0]['goods_type'] == 40) {
+        if ($cart_list[0]['goods_type'] == 40 || $cart_list[0]['goods_type'] == 41) {
             $this->checkSeckillLimit($cart_list, $this->_member_info['member_id']);
         }
 

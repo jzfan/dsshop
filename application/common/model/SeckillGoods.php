@@ -2,6 +2,7 @@
 
 namespace app\common\model;
 
+use think\Db;
 use think\Model;
 use app\common\DsRedis;
 use app\common\ModelTrait;
@@ -190,6 +191,17 @@ class SeckillGoods extends Model
     protected function isQtyEnough($num)
     {
         return $this->redis->llen($this->listKey()) >= $num;
+    }
+
+    // 卖出后减少库存，增加销量
+    public static function sold($good_id, $number)
+    {
+        Db::transaction(function () use ($good_id, $number) {
+            $good = self::where('goods_id', $goods_id)->find();
+            $good->qty -= $number;
+            $good->sold += $number;
+            $good->save();
+        });
     }
 
     /**

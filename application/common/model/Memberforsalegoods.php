@@ -10,10 +10,12 @@ namespace app\common\model;
 
 
 use think\Model;
+use app\common\ModelTrait;
 
 class Memberforsalegoods extends Model
 {
-
+    use ModelTrait;
+    
     public $page_info;
 
     public function freezeMemberForsaleGoods($goods_id, $goods_number)
@@ -158,6 +160,14 @@ class Memberforsalegoods extends Model
                 self::create($insert_datum);
             }
         }
+    }
+
+
+    public static function add($data)
+    {
+        return self::updateOrCreate([
+            'goods_id' => $data['goods_id']
+        ], $data);
     }
 
 }

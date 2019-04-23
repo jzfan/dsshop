@@ -7,6 +7,7 @@ namespace app\admin\controller;
 
 use think\Db;
 use app\common\JsonException;
+use app\common\model\SeckillGoods;
 use app\admin\controller\AdminControl;
 
 class Seckillgoods extends AdminControl
@@ -52,7 +53,7 @@ class Seckillgoods extends AdminControl
             $this->checkStorage($skuGood, $seckillGood, $data['qty']);
 
             $skuGood->save();
-            $this->model->updateOrCreate(['goods_id' => $data['goods_id']], $data);
+            SeckillGoods::updateOrCreate(['goods_id' => $data['goods_id']], $data);
             return $skuGood->goods_storage;
         });
     }

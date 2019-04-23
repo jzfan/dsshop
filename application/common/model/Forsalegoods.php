@@ -10,9 +10,12 @@ namespace app\common\model;
 
 
 use think\Model;
+use app\common\ModelTrait;
 
 class Forsalegoods extends Model
 {
+    use ModelTrait;
+    
     public $page_info;
 
     public function getGoodsInfoAndPromotionById($goods_id)
@@ -162,5 +165,13 @@ class Forsalegoods extends Model
         $pointgoods->goods_storage -= $goods_number;
         $pointgoods->sale_number += $goods_number;
         return $pointgoods->save();
+    }
+
+    public static function add($data)
+    {
+        return self::updateOrCreate(
+            [
+                'goods_id' => $data['goods_id']
+            ], $data);
     }
 }

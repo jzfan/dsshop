@@ -4,6 +4,9 @@ namespace app\common\logic;
 
 
 use think\Model;
+use app\common\model\Forsalegoods;
+use app\common\model\SeckillGoods;
+use app\common\model\Memberforsalegoods;
 
 class Payment extends Model
 {
@@ -277,6 +280,22 @@ class Payment extends Model
 
 
 
+    }
+
+    public function updateSeckillForSelf()
+    {
+        SeckillGoods::sold($good_id, $number);
+    }
+
+    // 成功支付后对代售商品处理
+    // 1. 更新forsale
+    // 2. 更新forsale_member
+    // 3. seckill_goods 销量 ++, 库存--
+    public function updateSeckillForSale($data)
+    {
+        Forsalegoods::add($data);
+        Memberforsalegoods::add($data);
+        SeckillGoods::sold($good_id, $number);
     }
 
 

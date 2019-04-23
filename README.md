@@ -137,7 +137,9 @@ CREATE TABLE `ds_meterlog` (
   `lg_freeze_amount` decimal(10,0) DEFAULT '0' COMMENT '冻结秒米',
   PRIMARY KEY (`lg_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='秒米变更日志表';
+
+
 ## TODO
 
-1. 计划任务
-2. 代售表
+1. 订单超时处理
+2. 秒杀挂售处理
