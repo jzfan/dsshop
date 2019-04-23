@@ -1180,7 +1180,7 @@ class Goods extends Model {
      * @param int $goods_type 商品类型
      * @return array
      */
-    public function getGoodsDetail($goods_id, $goods_type = 0) {
+    public function getGoodsDetail($goods_id, $goods_type = 20) {
         if ($goods_id <= 0) {
             return null;
         }

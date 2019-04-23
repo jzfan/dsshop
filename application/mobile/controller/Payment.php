@@ -54,4 +54,9 @@ class Payment extends MobileMall {
     }
 
 
+    public function notify()
+    {
+        $payment_logic = model("payment",'logic');
+        $payment_logic->_updateOrder();
+    }
 }

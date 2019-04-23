@@ -16,12 +16,13 @@ class Forsalequeue extends Model
 
     public function getForsaleGoods($goods_id)
     {
-        return self::alias('q')->field("g.*")->join('ds_memberforsalegoods g on q.forsale_id=g.id')
+        return self::alias('q')->field("g.*")->join('ds_memberforsalegoods g',' q.forsale_id=g.id')
             ->where("g.goods_id",$goods_id)->where('g.goods_state',1)
             ->where('(g.left_number-g.freeze_number)','gt',0)
             ->order('q.sortable asc,q.id asc')
             ->find();
     }
+
 
 
 }

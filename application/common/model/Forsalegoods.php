@@ -21,14 +21,14 @@ class Forsalegoods extends Model
     public function getGoodsInfoAndPromotionById($goods_id)
     {
         $goods = db('goods')->where("goods_id",$goods_id)->find();
-        $point_goods = db('pointgoods')->where("goods_id",$goods_id)->find();
+        $point_goods = db('forsalegoods')->where("goods_id",$goods_id)->find();
 
         if ($point_goods) {
             $goods['goods_price'] = $point_goods['goods_price'];
             $goods['goods_storage'] = $point_goods['goods_storage'];
             $goods['goods_type'] = $point_goods['goods_type'];
             $goods['goods_promotion_price'] = $point_goods['goods_price'];
-            $goods['goods_point'] = $point_goods['goods_point'];
+            $goods['goods_miaomi'] = $point_goods['goods_miaomi'];
             $goods['goods_salenum'] = $point_goods['sale_number'];
 
             return $goods;

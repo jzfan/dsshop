@@ -21,29 +21,31 @@ class Memberforsalegoods extends Model
     public function freezeMemberForsaleGoods($goods_id, $goods_number)
     {
         $queue = model("forsalequeue");
+        $memberforsalegoods_model = model("memberforsalegoods");
         $goods_info = array();
         while (true) {
             $forsalegoods = $queue->getForsaleGoods($goods_id);
             #当前商品真实剩余库存
             $goods_storage = $forsalegoods->left_number - $forsalegoods->freeze_number;
+
             if ($goods_storage < $goods_number) {
-                $forsalegoods->freeze_number += $goods_storage;
+                $update_data['freeze_number'] = $forsalegoods->freeze_number + $goods_storage;
                 $goods_number -= $goods_storage;
                 $goods_info[] = array(
                     "member_id" => $forsalegoods->member_id,
                     "goods_number" => $goods_storage,
-                    "goods_price" => $forsalegoods->goods_storage,
+                    "goods_price" => $forsalegoods->goods_price,
                 );
             } else {
-                $forsalegoods->freeze_number += $goods_number;
+                $update_data['freeze_number'] = $forsalegoods->freeze_number + $goods_number;
                 $goods_info[] = array(
                     "member_id" => $forsalegoods->member_id,
                     "goods_number" => $goods_number,
-                    "goods_price" => $forsalegoods->goods_storage,
+                    "goods_price" => $forsalegoods->goods_price,
                 );
                 $goods_number = 0;
             }
-            $forsalegoods->save();
+            $memberforsalegoods_model->update($update_data,['id'=>$forsalegoods->id]);
 
             if ($goods_number == 0) {
                 break;
@@ -51,6 +53,16 @@ class Memberforsalegoods extends Model
         }
 
         return $goods_info;
+    }
+
+
+    public function unfreezeMemberForsaleGoods($goods_id, $goods_number, $member_id)
+    {
+        $forsalegoods = self::where('goods_id',$goods_id)->where('member_id',$member_id)->find();
+        $forsalegoods->sale_number += $goods_number;
+        $forsalegoods->left_number -= $goods_number;
+        $forsalegoods->freeze_number -= $goods_number;
+        $forsalegoods->save();
     }
 
 

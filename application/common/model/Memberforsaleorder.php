@@ -14,6 +14,7 @@ use think\Model;
 class Memberforsaleorder extends Model
 {
     public $page_info;
+
     public function createMemberForsaleOrder($order_id, $order_sn, $buyer_id,$memberforsalegoods)
     {
         $insert_data = array();
@@ -31,7 +32,9 @@ class Memberforsaleorder extends Model
         return self::saveAll($insert_data);
     }
 
-    public function getmemberforsaleorder($condition = array(), $pagesize = '', $fields = '*', $order = '', $limit = ''){
+
+    public function getmemberforsaleorder($condition = array(), $pagesize = '', $fields = '*', $order = '', $limit = '')
+    {
         if ($pagesize) {
             $pdlog_list_paginate = db('memberforsaleorder')->where($condition)->field($fields)->order($order)->paginate($pagesize, false, ['query' => request()->param()]);
             $this->page_info = $pdlog_list_paginate;
@@ -41,4 +44,11 @@ class Memberforsaleorder extends Model
             return $pdlog_list_paginate;
         }
     }
+
+
+    public function updateForsaleOrder($condition,$data)
+    {
+        return self::update($data,$condition);
+    }
+
 }
