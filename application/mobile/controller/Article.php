@@ -36,7 +36,6 @@ class Article extends MobileHome
             foreach ($article_list as $k => $v) {
                 if ($v['article_time'] == $date) {
                     $article_list[$k]['is_hot'] = 1;
-
                 } else {
                     $article_list[$k]['is_hot'] = 0;
                 }
