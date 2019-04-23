@@ -178,9 +178,13 @@ class Member extends AdminControl
             $member_inviter = input('post.member_inviter');
             if ($member_inviter != '') {
                 $member = $member_model->where('member_name', $member_inviter)->find();
-                $m_id['inviter_id'] = $member['member_id'];
+                if (empty($member)) {
+                    $this->error('该推荐人不是我们平台会员,暂时无法添加！');
+                } else {
+                    $m_id['inviter_id'] = $member['member_id'];
+                }
             } else {
-                $this->error('该推荐人不是我们平台会员,暂时无法添加！');
+                $m_id['inviter_id'] = null;
             }
             //判断是否上传
             if (empty($_FILES['face_card']['tmp_name']) && empty($_FILES['back_card']['tmp_name'])) {
@@ -277,6 +281,7 @@ class Member extends AdminControl
                     exit;
                 }
                 break;
+
         }
     }
 
