@@ -20,7 +20,7 @@ class Article extends MobileHome
         $article_model = model('article');
         $condition = array();
         $condition['article_show'] = '1';
-        $last = strtotime(date('Y-m-d', strtotime('- 4 week')));
+        $last = strtotime(date('Y-m-d', strtotime('- 1 month')));
         $now = strtotime(date('Y-m-d', time()));
         $condition['article_time'] = ['between', array($last, $now)];
         $article_list = $article_model->getArticleList($condition, $this->pagesize, 'article_time');
