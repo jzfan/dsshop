@@ -67,4 +67,10 @@ class SeckillJobs extends Model
             $good->push($this->id);
         }
     }
+
+    public function duration($now=true)
+    {
+        $start = $now ? time() : strtotime($this->start);
+        return strtotime($this->end) - $start;
+    }
 }

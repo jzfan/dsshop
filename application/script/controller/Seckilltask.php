@@ -51,9 +51,12 @@ class Seckilltask extends Controller
 				'job_id' => $job->id,
 				'mi' => rand(1, 10) * 100,
 				'price' =>  $good['goods_price'],
-				'qty' => rand(1, $good['goods_storage'])
+				'qty' => rand(1, $good['goods_storage']),
+				'limit' => rand(1, 5)
 			]);
 		}
+		echo 'seeded';
+		exit;
 	}
 
 }
