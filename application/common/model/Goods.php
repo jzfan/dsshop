@@ -1305,7 +1305,7 @@ class Goods extends Model {
         // 加入购物车按钮
         $goods_info['cart'] = true;
         //虚拟、F码、预售不显示加入购物车
-        if ($goods_info['is_virtual'] == 1 || $goods_info['is_goodsfcode'] == 1 || $goods_info['is_presell'] == 1) {
+        if ($goods_info['is_virtual'] == 1 || $goods_info['is_goodsfcode'] == 1 || $goods_info['is_presell'] == 1 || $goods_type == 30) {
             $goods_info['cart'] = false;
         }
 

@@ -113,6 +113,7 @@ class Cart extends Model {
             $array['goods_price'] = $goods_info['goods_price'];
             $array['goods_num'] = $quantity;
             $array['goods_image'] = $goods_info['goods_image'];
+            $array['goods_type'] = $goods_info['goods_type'];
             $array['bl_id'] = isset($goods_info['bl_id']) ? $goods_info['bl_id'] : 0;
             return db('cart')->insertGetId($array);
         }

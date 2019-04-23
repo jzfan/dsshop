@@ -70,7 +70,7 @@ class Membercart extends MobileMember {
         $goods_id = intval(input('post.goods_id'));
         $quantity = intval(input('post.quantity'));
 
-        $goods_type = intval(input('post.goods_type'),20);
+        $goods_type = input('post.goods_type',20);
 
         if ($goods_id <= 0 || $quantity <= 0) {
             ds_json_encode(10001,'参数错误');

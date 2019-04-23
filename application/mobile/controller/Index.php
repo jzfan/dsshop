@@ -39,8 +39,13 @@ class Index extends MobileMall {
             $datas['promotion_list'] = $promotion_list;
 
 
-            $datas['forsalegoods_list'] = model('goods')->_getGoodsList(30, array(), '*', 0, 'goods_commend desc,goods_id desc', 5, 'goods_commonid');
-        
+            //91购商品
+            $forsalegoods_list = model('goods')->_getGoodsList(30, array(), '*', 0, 'goods_commend desc,goods_id desc', 5, 'goods_commonid');
+            foreach ($forsalegoods_list as $k => $val) {
+                $forsalegoods_list[$k]['goods_image'] = goods_cthumb($val['goods_image'], 240);
+            }
+            $datas['forsalegoods_list'] = $forsalegoods_list;
+
         
             $extral = array();
             //一级分类
