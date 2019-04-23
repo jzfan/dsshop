@@ -103,6 +103,9 @@ class Member extends AdminControl
                 if ($id != '') {
                     $member_model = model('member');
                     $member = $member_model->where('member_name', $id)->find();
+                    if (empty($member)) {
+                        $this->error('该推荐人不是我们平台会员,暂时无法添加！');
+                    }
                     $member_id = $member['member_id'];
                 }
                 //判断是否有上传文件
