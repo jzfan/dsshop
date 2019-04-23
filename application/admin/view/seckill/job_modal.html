@@ -1,4 +1,4 @@
-<div class="modal fade" id="jobModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div style='display: none; padding: 15px' class="modal fade" id="jobModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <table class="ds-default-table">
@@ -22,9 +22,7 @@
 </div>
 <script>
 function initJob(id) {
-
     $.get(`/mobile/api.seckilljobs/find?id=${id}`, function(res) {
-        console.log(res)
         $('#job_name').html(res.job.name)
         $('#job_start').html(res.job.start)
         $('#job_end').html(res.job.end)
@@ -35,7 +33,7 @@ function initJob(id) {
 }
 
 function showGood(data) {
-    $('#jobModal tbody').append(`
+    $('#jobModal tbody').show().append(`
             <tr>
                 <td>商品名</td>
                 <td>${data.name}</td>

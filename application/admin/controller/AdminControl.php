@@ -618,6 +618,11 @@ class AdminControl extends Controller
                         'text' => lang('91购商品'),
                         'args' => 'index,Forsalegoods,operation',
                     ),
+                    'seckill_jobs' => [
+                        'ico' => '&#xe65a;',
+                        'text' => '秒杀',
+                        'args' => 'index,SeckillJobs,seckill',
+                    ],
                 ),
             ),
             'stat' => array(
@@ -711,23 +716,6 @@ class AdminControl extends Controller
                     ),
                 ),
             ),
-
-            'seckill' => [
-                'name' => 'seckill',
-                'text' => '秒杀',
-                'children' => [
-                    // 'seckill_goods' => [
-                    //     'ico'=>'&#xe65a;',
-                    //     'text' => '商品',
-                    //     'args' => 'index,SeckillGoods,seckill',
-                    // ],
-                    'seckill_jobs' => [
-                        'ico' => '&#xe65a;',
-                        'text' => '活动',
-                        'args' => 'index,SeckillJobs,seckill',
-                    ],
-                ],
-            ],
         );
     }
 
