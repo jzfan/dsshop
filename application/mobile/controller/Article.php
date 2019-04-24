@@ -26,9 +26,10 @@ class Article extends MobileHome
         $last = strtotime(date('Y-m-d', strtotime('- 1 month')));
         $now = time();
         $date = date('Y-m-d', time());
-        $condition['article_time'] = ['between', array($last, $now)];
-        if ($ac_id==1){
-            $condition['ac_id']=1;
+        if ($ac_id == 1) {
+            $condition['ac_id'] = 1;
+        } else {
+            $condition['article_time'] = ['between', array($last, $now)];
         }
         $article_list = $article_model->getArticleList($condition, $this->pagesize, 'article_time');
         if (!empty($article_list)) {
