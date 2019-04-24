@@ -23,10 +23,15 @@ class Memberforsaleorder extends Model
                 "order_id"  =>  $order_id,
                 "order_sn"  =>  $order_sn,
                 "buyer_id"  =>  $buyer_id,
+                "goods_id"  =>  $value['goods_id'],
                 "goods_number" => $value['goods_number'],
                 "goods_price" => $value['goods_price'],
                 "member_id" => $value['member_id'],
+                "goods_amount" => $value['goods_price'] * $value['goods_number'],
+                "service_fee" => $value['service_fee'] * $value['goods_number'],
                 "order_state" => 0,
+                "created_at" => date('Y-m-d H:i:s'),
+                "updated_at" => date('Y-m-d H:i:s'),
             );
         }
         return self::saveAll($insert_data);

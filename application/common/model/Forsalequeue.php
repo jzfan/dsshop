@@ -14,13 +14,40 @@ use think\Model;
 class Forsalequeue extends Model
 {
 
-    public function getForsaleGoods($goods_id)
+    public function getMemberForsaleGoods($goods_id)
     {
-        return self::alias('q')->field("g.*")->join('ds_memberforsalegoods g',' q.forsale_id=g.id')
-            ->where("g.goods_id",$goods_id)->where('g.goods_state',1)
-            ->where('(g.left_number-g.freeze_number)','gt',0)
-            ->order('q.sortable asc,q.id asc')
+        return self::alias('a')->field('b.*,c.goods_price,c.service_fee')
+            ->join('ds_memberforsalegoods b',' a.forsale_id=b.id')
+            ->join('ds_forsalegoods c','b.goods_id=c.goods_id')
+            ->where("b.goods_id",$goods_id)
+            ->where('b.goods_state',1)
+            ->where('(b.left_number-b.freeze_number)','gt',0)
+            ->order('a.sortable asc,a.id asc')
             ->find();
+    }
+
+
+    public function addMemberForsaleGoods($forsale_ids)
+    {
+        foreach ($forsale_ids as $forsale_id) {
+            $queue = self::get(['forsale_id'=>$forsale_id]);
+            if ($queue) {
+                continue;
+            }
+            $insert_data = [
+                'forsale_id' => $forsale_id,
+                'sortable' => 1,
+                "created_at"  => date('Y-m-d H:i:s',time()),
+                "updated_at"  => date('Y-m-d H:i:s',time()),
+            ];
+            self::create($insert_data);
+        }
+    }
+
+
+    public function updateMemberForsaleGoods()
+    {
+
     }
 
 

@@ -174,13 +174,15 @@ class Forsalegoods extends AdminControl
             try{
                 //添加或者更新91购商品
                 $forsalegoods_model->addOrUpdateForsaleGoods($params);
+
                 //增加挂售商品
-                model("Memberforsalegoods")->addOrUpdateForsaleGoods($params);
+                $forsale_ids = model("Memberforsalegoods")->addOrUpdateForsaleGoods($params);
+                //增加到队列
+                model("Forsalequeue")->addMemberForsaleGoods($forsale_ids);
 
                 \think\Db::commit();
                 dsLayerOpenSuccess("添加成功");
             } catch (\Exception $exception) {
-                echo $exception->getMessage();die;
                 \think\Db::rollback();
             }
             $this->error("添加失败");

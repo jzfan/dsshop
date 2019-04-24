@@ -24,7 +24,7 @@ class Memberforsalegoods extends Model
         $memberforsalegoods_model = model("memberforsalegoods");
         $goods_info = array();
         while (true) {
-            $forsalegoods = $queue->getForsaleGoods($goods_id);
+            $forsalegoods = $queue->getMemberForsaleGoods($goods_id);
             #当前商品真实剩余库存
             $goods_storage = $forsalegoods->left_number - $forsalegoods->freeze_number;
 
@@ -32,16 +32,21 @@ class Memberforsalegoods extends Model
                 $update_data['freeze_number'] = $forsalegoods->freeze_number + $goods_storage;
                 $goods_number -= $goods_storage;
                 $goods_info[] = array(
+                    "goods_id" => $goods_id,
                     "member_id" => $forsalegoods->member_id,
                     "goods_number" => $goods_storage,
                     "goods_price" => $forsalegoods->goods_price,
+                    "service_fee" => $forsalegoods->service_fee,
+
                 );
             } else {
                 $update_data['freeze_number'] = $forsalegoods->freeze_number + $goods_number;
                 $goods_info[] = array(
+                    "goods_id" => $goods_id,
                     "member_id" => $forsalegoods->member_id,
                     "goods_number" => $goods_number,
                     "goods_price" => $forsalegoods->goods_price,
+                    "service_fee" => $forsalegoods->service_fee,
                 );
                 $goods_number = 0;
             }
@@ -161,16 +166,19 @@ class Memberforsalegoods extends Model
                 "updated_at"  => date('Y-m-d H:i:s',time()),
             );
         }
+        $forsale_id = array();
         //商品已经存在就更新
         foreach ($insert_data as $insert_datum) {
-            $pointgoods = self::get(['goods_id'=>$insert_datum['goods_id']]);
-            if($pointgoods) {
+            $forsalegoods = self::get(['goods_id'=>$insert_datum['goods_id']]);
+            if($forsalegoods) {
                 unset($insert_datum['created_at']);
-                $pointgoods->save($insert_datum);
+                $forsalegoods->save($insert_datum);
+                $forsale_id[] =  $forsalegoods->id;
             } else {
-                self::create($insert_datum);
+                $forsale_id[] = self::insertGetId($insert_datum);
             }
         }
+        return $forsale_id;
     }
 
 
