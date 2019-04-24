@@ -602,6 +602,7 @@ class Buy extends Model
         $this->_order_data['input_invoice_info'] = $input_invoice_info;
         $this->_order_data['input_voucher_list'] = $input_voucher_list;
         $this->_order_data['order_from'] = $post['order_from'] == 2 ? 2 : 1;
+        $this->_order_data['order_type'] = $post['goods_type'];
 
     }
 
@@ -818,6 +819,7 @@ class Buy extends Model
             $order['goods_amount'] = $order['order_amount'] - $order['shipping_fee'];
             $order['order_from'] = $order_from;
             $order['points_amount'] = $this->calculateGoodsPoint($cart_list);
+            $order['order_type'] = $order_type;
 
             //如果支持方式为空时，默认为货到付款
             if ($order['payment_code'] == "") {
