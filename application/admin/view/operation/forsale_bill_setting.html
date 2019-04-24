@@ -1,0 +1,71 @@
+{include file="public/header" /}
+
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>91购分账设置</h3>
+                <h5></h5>
+            </div>
+            {include file="public/admin_items" /}
+        </div>
+    </div>
+
+    <form method="post" name="settingForm" id="settingForm">
+        <table class="ds-default-table">
+            <tbody>
+            <tr class="hover">
+                <td class="w200">平台分账比例：</td>
+                <td><input id="forsale_bill_platform_rate" name="forsale_bill_platform_rate" value="{$list_setting.forsale_bill_platform_rate|default=30}" class="txt w100" type="text" style="width:150px;"></td>
+            </tr>
+            <tr class="hover">
+                <td class="w200">客户分账比例：</td>
+                <td><input id="forsale_bill_member_rate" name="forsale_bill_member_rate" value="{$list_setting.forsale_bill_member_rate|default=70}" class="txt w100" type="text" style="width:150px;"></td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr class="tfoot">
+                <td colspan="2"><a href="JavaScript:void(0);" class="btn" id="submitBtn"><span>{$Think.lang.ds_submit}</span></a></td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
+</div>
+
+<script>
+
+    $(function(){$("#submitBtn").click(function(){
+        if($("#settingForm").valid()){
+            $("#settingForm").submit();
+        }
+    });
+    });
+    //
+    $(document).ready(function(){
+        $("#settingForm").validate({
+            errorPlacement: function(error, element){
+                error.appendTo(element.parent().parent().find('td:last'));
+            },
+            rules : {
+                forsale_bill_platform:{
+                    number:true,
+                    min:0
+                },
+                forsale_bill_member :{
+                    number:true,
+                    min:0
+                },
+            },
+            messages : {
+                forsale_bill_platform:{
+                    number:'请输入数字',
+                    min:'输入值不能小于0'
+                },
+                forsale_bill_member :{
+                    number:'请输入数字',
+                    min:'输入值不能小于0'
+                },
+            }
+        });
+    });
+</script>

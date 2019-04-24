@@ -1,36 +1,48 @@
 {include file="public/header" /}
 
 <div class="page">
-
+    <div class="explanation" id="explanation">
+        <div class="title" id="checkZoom">
+            <h4 title="{$Think.lang.ds_explanation_tip}">{$Think.lang.ds_explanation}</h4>
+            <span id="explanationZoom" title="{$Think.lang.ds_explanation_close}" class="arrow"></span>
+        </div>
+        <ul>
+            <li>商品市场价格、商品秒杀价格、商品收益率三者确定赠送秒米赠送数量</li>
+        </ul>
+    </div>
     <form id="user_form" enctype="multipart/form-data" method="post" >
         <table class="ds-default-table">
             <thead>
             <tr class="thead">
                 <th class="w100">商品名称</th>
                 <th class="w100">商品价格（元）</th>
-                <th class="w60">商品库存</th>
-                <th class="w100">商品赠送秒米</th>
+                <th class="w100">秒杀价格（元）</th>
+                <th class="w100">商品库存</th>
+                <th class="w100">商品收益率</th>
             </tr>
             <tbody>
-                {notempty name="goods_list"}
-                {foreach name="goods_list" item="v"}
-                <tr class="hover edit">
-                    <input name="goods_id[]" value="{$v.goods_id}" type="hidden" class="text w100" />
-                    <td>
-                        {$v.goods_name}
-                    </td>
-                    <td>
-                        <input name="goods_price[]" value="{$v.goods_price}" type="text" class="text w100" />
-                    </td>
-                    <td>
-                        <input name="goods_storage[]" value="{$v.goods_storage}" type="text" class="text w100" />
-                    </td>
-                    <td>
-                        <input name="goods_point[]" value="{$v.goods_point|default=0}" type="text" class="text w100" />
-                    </td>
-                </tr>
-                {/foreach}
-                {/notempty}
+            {notempty name="goods_list"}
+            {foreach name="goods_list" item="v"}
+            <tr class="hover edit">
+                <input name="goods_id[]" value="{$v.goods_id}" type="hidden" class="text w100" />
+                <td>
+                    {$v.goods_name}
+                </td>
+                <td>
+                    <input name="goods_price[]" value="{$v.goods_price}" type="text" class="text w100" />
+                </td>
+                <td>
+                    <input name="goods_seckprice[]" value="{$v.goods_price * 0.1}" type="text" class="text w100" />
+                </td>
+                <td>
+                    <input name="goods_storage[]" value="{$v.goods_storage}" type="text" class="text w100" />
+                </td>
+                <td>
+                    <input name="profit_rate[]" value="{$v.profit_rate|default=0}" type="text" class="text w100" />
+                </td>
+            </tr>
+            {/foreach}
+            {/notempty}
             </tbody>
             <tfoot>
                 <tr class="tfoot">

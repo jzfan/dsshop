@@ -222,7 +222,7 @@ class Goods extends MobileMall {
         //$goods_list = $goods_model->getGoodsContract(array(0=>$goods_detail['goods_info']));
         //$goods_detail['goods_info'] = $goods_list[0];
         //推荐商品
-        $hot_sales = $goods_model->getGoodsCommendList(6);
+        $hot_sales = $goods_model->_getGoodsCommendList($goods_type, 6);
         $goodsid_array = array();
         foreach ($hot_sales as $value) {
             $goodsid_array[] = $value['goods_id'];
@@ -234,6 +234,9 @@ class Goods extends MobileMall {
             $goods_commend['goods_name'] = $value['goods_name'];
             $goods_commend['goods_price'] = $value['goods_price'];
             $goods_commend['goods_promotion_price'] = $value['goods_promotion_price'];
+            $goods_commend['goods_type'] = isset($value['goods_type']) ? $value['goods_type'] : 1;
+            $goods_commend['goods_point'] = isset($value['goods_point']) ? $value['goods_point'] : 0;
+            $goods_commend['goods_miaomi'] = isset($value['goods_miaomi']) ? $value['goods_miaomi'] : 0;
             $goods_commend['goods_image_url'] = goods_cthumb($value['goods_image'], 240);
             $goods_commend_list[] = $goods_commend;
         }

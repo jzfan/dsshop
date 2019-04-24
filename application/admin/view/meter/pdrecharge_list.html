@@ -19,15 +19,12 @@
             </dl>
             <dl>
                 <dt>{$Think.lang.admin_predeposit_maketime}</dt>
-                <dd><input type="text" id="stime" name="stime" class="txt date" value="{$Request.param.stime}" >
+                <dd><input type="text" id="stime" name="stime" class="txt date" value="{$Request.param.stime}">
                     ~
-                    <input type="text" id="etime" name="etime" class="txt date" value="{$Request.param.etime}" >
+                    <input type="text" id="etime" name="etime" class="txt date" value="{$Request.param.etime}">
                 </dd>
             </dl>
-            <dl>
-                <dt>{$Think.lang.admin_predeposit_adminname}</dt>
-                <dd><input type="text" name="aname" class="txt" value='{$Request.param.aname}'></dd>
-            </dl>
+
             <div class="btn_group">
                 <a href="javascript:document.formSearch.submit();" class="btn " title="{$Think.lang.ds_query}">{$Think.lang.ds_query}</a>
                 {if $filtered}
@@ -53,11 +50,15 @@
         {foreach name="list_log" item="v" key="k" }
         <tr class="hover">
             <td>{$v.lg_member_name}</td>
-            <td class="nowarp align-center">{notempty name="$v.lg_addtime"}{$v.lg_addtime|date='Y-m-d H:i:s',###}{/notempty}</td>
-            <td><?php echo floatval($v['lg_av_amount']) ? (floatval($v['lg_av_amount']) > 0 ? '+' : null ).$v['lg_av_amount'] : null;?></td>
+            <td class="nowarp align-center">{notempty name="$v.lg_addtime"}{$v.lg_addtime|date='Y-m-d
+                H:i:s',###}{/notempty}
+            </td>
+            <td><?php echo floatval($v['lg_av_amount']) ? (floatval($v['lg_av_amount']) > 0 ? '+' : null
+                ).$v['lg_av_amount'] : null;?>
+            </td>
             <td>{$v.lg_desc}
                 {notempty name="$v.lg_admin_name"}
-                ( {$Think.lang.admin_predeposit_adminname} {$v.lg_admin_name}  )
+                ( {$Think.lang.admin_predeposit_adminname} {$v.lg_admin_name} )
                 {/notempty}
             </td>
         </tr>
@@ -74,7 +75,7 @@
 </div>
 
 <script language="javascript">
-    $(function() {
+    $(function () {
         $('#stime').datepicker({dateFormat: 'yy-mm-dd'});
         $('#etime').datepicker({dateFormat: 'yy-mm-dd'});
     });

@@ -43,33 +43,28 @@
 </script> 
 
 <script type="text/html" id="list_model">
-    <% if(log.length >10){%>
-    	
-    <% for (var k in log) { var v = log[k]; %>
-        <li>
-        	<dl>
-        		<dt><%=v.lg_type;%></dt>
-            <dd><%=v.lg_desc;%></dd>
-						</dl>
-            <% if(v.lg_av_amount >0){%>
-            <div class="money add">+<%=v.lg_av_amount;%></div>
-            <%}else{%>
-            <div class="money reduce"><%=v.lg_av_amount;%></div>
-            <%}%>
-            <time class="date"><%=v.lg_addtime;%></time>
-        </li>
-    <%}%>
-    <li class="loading"><div class="spinner"><i></i></div><%=lang('data_reading')%></li>
-    <%
-    }else {
-    %>
-    <div class="dstouch-norecord signin noData" style="top: 40%;">
-    	<img src="../images/noData_pic.png" />
-    	<p>您当前没有任何<%=langConf('miaomi') %>的变动哦～</p>
-    </div>
-    <%
-    }
-    %>
+    <% if(log.length >0){%>
+	    <% for (var k in log) { var v = log[k]; %>
+	        <li>
+	        	<dl>
+	        		<dt><%=v.lg_type;%></dt>
+	            <dd><%=v.lg_desc;%></dd>
+							</dl>
+	            <% if(v.lg_av_amount >0){%>
+	            <div class="money add">+<%=v.lg_av_amount;%></div>
+	            <%}else{%>
+	            <div class="money reduce"><%=v.lg_av_amount;%></div>
+	            <%}%>
+	            <time class="date"><%=v.lg_addtime;%></time>
+	        </li>
+	    <%}%>
+	    <li class="loading"><div class="spinner"><i></i></div><%=lang('data_reading')%></li>
+    <% }else { %>
+	    <div class="dstouch-norecord signin noData" style="top: 40%;">
+	    	<img src="../images/noData_pic.png" />
+	    	<p>您当前没有任何<%=langConf('miaomi') %>的变动哦～</p>
+	    </div>
+    <% } %>
 </script>
 
 <script type="text/javascript" src="../js/config.js"></script>

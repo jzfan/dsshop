@@ -152,7 +152,6 @@ class Memberforsalegoods extends Model
             $insert_data[] = array(
                 "goods_commonid" =>  $common_id,
                 "goods_id" => $data['goods_id'][$i],
-                "goods_price" => $data['goods_price'][$i],
                 "goods_number" => $data['goods_storage'][$i],
                 "left_number" => $data['goods_storage'][$i],
                 "sale_number" => 0,

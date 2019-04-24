@@ -180,6 +180,7 @@ class Forsalegoods extends AdminControl
                 \think\Db::commit();
                 dsLayerOpenSuccess("添加成功");
             } catch (\Exception $exception) {
+                echo $exception->getMessage();die;
                 \think\Db::rollback();
             }
             $this->error("添加失败");

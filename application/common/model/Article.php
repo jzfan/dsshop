@@ -1,10 +1,13 @@
 <?php
+
 namespace app\common\model;
+
 use think\Model;
 
 class Article extends Model
 {
     public $page_info;
+
     /**
      * 获取文章列表
      * @access public
@@ -14,7 +17,8 @@ class Article extends Model
      * @param type $order
      * @return type
      */
-    public function getArticleList($condition,$page='',$order='article_sort asc,article_time desc'){
+    public function getArticleList($condition, $page = '', $order = 'article_sort asc,article_time desc')
+    {
         if ($page) {
             $result = db('article')->where($condition)->order($order)->paginate($page, false, ['query' => request()->param()]);
             $this->page_info = $result;
@@ -34,8 +38,9 @@ class Article extends Model
      * @param type $order
      * @return type
      */
-    public function getJoinArticleList($where,$limit=0,$field='*',$order='article.article_sort'){
-        $result = db('article')->alias('article')->join('__ARTICLECLASS__ article_class','article.ac_id=article_class.ac_id','LEFT')->field($field)->where($where)->limit($limit)->order($order)->select();
+    public function getJoinArticleList($where, $limit = 0, $field = '*', $order = 'article.article_sort')
+    {
+        $result = db('article')->alias('article')->join('__ARTICLECLASS__ article_class', 'article.ac_id=article_class.ac_id', 'LEFT')->field($field)->where($where)->limit($limit)->order($order)->select();
         return $result;
     }
 
@@ -47,7 +52,8 @@ class Article extends Model
      * @param int $condition
      * @return array 数组类型的返回结果
      */
-    public function getOneArticle($condition){
+    public function getOneArticle($condition)
+    {
         $result = db('article')->where($condition)->find();
         return $result;
     }
@@ -59,7 +65,8 @@ class Article extends Model
      * @param array $data 参数内容
      * @return bool 布尔类型的返回结果
      */
-    public function addArticle($data){
+    public function addArticle($data)
+    {
         $result = db('article')->insertGetId($data);
         return $result;
     }
@@ -71,8 +78,9 @@ class Article extends Model
      * @param array $data 更新数据
      * @return bool 布尔类型的返回结果
      */
-    public function editArticle($data,$article_id){
-        $result = db('article')->where("article_id=".$article_id)->update($data);
+    public function editArticle($data, $article_id)
+    {
+        $result = db('article')->where("article_id=" . $article_id)->update($data);
         return $result;
     }
 
@@ -83,7 +91,8 @@ class Article extends Model
      * @param int $id 记录ID
      * @return bool 布尔类型的返回结果
      */
-    public function delArticle($id){
-        return db('article')->where("article_id=".$id)->delete();
+    public function delArticle($id)
+    {
+        return db('article')->where("article_id=" . $id)->delete();
     }
 }

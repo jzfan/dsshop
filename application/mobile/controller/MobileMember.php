@@ -19,7 +19,6 @@ class MobileMember extends MobileHome {
             $member_model = model('member');
             $this->member_info = $member_model->getMemberInfoByID($mb_user_token_info['member_id']);
             $meter_second=model('member')->where('member_id',$mb_user_token_info['member_id'])->find();
-
             if (empty($this->member_info)) {
                 ds_json_encode(10001,'参数错误', array('login' => '0'));
             } else {
@@ -38,9 +37,12 @@ class MobileMember extends MobileHome {
         }
     }
 
+
+
     public function getOpenId() {
         return $this->member_info['member_openid'];
     }
+
 
     public function setOpenId($openId) {
         $this->member_info['member_openid'] = $openId;
