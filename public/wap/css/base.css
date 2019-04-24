@@ -453,6 +453,7 @@ to {  width: 100%;}
 
 /*新功能修复CSS  2019年1月4日 21:09:53*/
 .new-header-tab a{padding: 0 0.5rem;}
+textarea:disabled, input:disabled {background: #fff;}
 
 /*成为VIP会员页面CSS*/
 /*<!-- 购买会员**TP会员-->*/

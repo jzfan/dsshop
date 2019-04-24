@@ -5,6 +5,7 @@ ds_lang={
     'general_registration':'普通注册',
     'mobile_registration':'手机注册',
     'user_name':'用&nbsp;户&nbsp;名',
+    'lead_id':'推&nbsp;荐&nbsp;码',
     'set_the_password':'设置密码',
     'confirm_password':'确认密码',
     'mailbox':'邮&#12288;&#12288;箱',
