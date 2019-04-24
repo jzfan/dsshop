@@ -199,8 +199,8 @@ class SeckillGoods extends Model
     // 订单取消，超时后，增加库存，减少销量
     public function unSold($num)
     {
-        Db::transaction(function () {
-            $this->lock(true);
+        Db::transaction(function () use ($num) {
+            $this->lock(true)->find();
             $this->qty += $num;
             $this->sold -= $num;
             $this->save();
@@ -211,8 +211,8 @@ class SeckillGoods extends Model
     // 下单后减少库存，增加销量
     public function sold($num)
     {
-        Db::transaction(function () {
-            $this->lock(true);
+        Db::transaction(function () use ($num) {
+            $this->lock(true)->find();
             $this->qty -= $num;
             $this->sold += $num;
             $this->save();
