@@ -68,6 +68,11 @@ class Message extends MobileHome
         foreach ($message_list as $k => $v) {
             $message_list[$k]['message_time'] = date('Y-m-d H:i:s', $v['message_time']);
             $message_list[$k]['message_update_time'] = date('Y-m-d H:i:s', $v['message_update_time']);
+            if($v['message_state']==3){
+                $message_list[$k]['is_read']=1;
+            }else{
+                $message_list[$k]['is_read']=0;
+            }
             unset($message_list[$k]['message_parent_id']);
             unset($message_list[$k]['message_open']);
             unset($message_list[$k]['del_member_id']);
@@ -83,6 +88,11 @@ class Message extends MobileHome
         $message = model('message');
         $con['message_id'] = input('param.message_id');
         $res = $message->where('message_id', $con['message_id'])->find();
+        if($res['message_state']==3){
+            $res['is_read']=1;
+        }else{
+            $res['is_read']=0;
+        }
         $res['message_time'] = date('Y-m-d H:i:s', $res['message_time']);
         if (!empty($res)) {
 

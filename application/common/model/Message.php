@@ -20,7 +20,7 @@ class Message extends Model
     {
         //得到条件语句
         $where = $this->getCondition($condition,false);
-        $order = 'message_id DESC';
+        $order = 'message_state ASC';
         $message_list= db('message')->where($where)->order($order)->paginate($page,false,['query' => request()->param()]);
         $this->page_info=$message_list;
         $message=$message_list->items();
