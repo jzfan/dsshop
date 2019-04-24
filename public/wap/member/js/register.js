@@ -1,5 +1,11 @@
 $(function() {
     var e = getCookie("key");
+    var inviter_id = getQueryString("inviter_id");
+    if(inviter_id != ""){
+    	$("#lead_id").val(inviter_id);
+    	$("#lead_id").attr("disabled","disabled");
+    }
+    
     if (e) {
         window.location.href = WapSiteUrl + "/member/member.html";
         return
