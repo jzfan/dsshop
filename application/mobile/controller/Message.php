@@ -15,7 +15,7 @@ class Message extends MobileHome
 {
     public function index()
     {
-        $result=array();
+        $result = array();
         $key = input('param.key');
         //消息
         if ($key != '') {
@@ -27,7 +27,7 @@ class Message extends MobileHome
             foreach ($article_list as $k => $item) {
                 $article_list[$k]['article_time'] = date('Y-m-d H:i:s', $item['article_time']);
             }
-            $result['article']= array_merge(array('article_list' => $article_list, 'article_list_name' => '商城公告'), mobile_page(is_object($article_model->page_info) ? $article_model->page_info : ''));
+            $result['article'] = array_merge(array('article_list' => $article_list, 'article_list_name' => '商城公告'), mobile_page(is_object($article_model->page_info) ? $article_model->page_info : ''));
             $this->isLogin();//判断是否登录
             $con['to_member_id'] = $this->member_info['member_id'];
             $con['message_state'] = 0;
@@ -42,9 +42,9 @@ class Message extends MobileHome
                 unset($message_list[$k]['del_member_id']);
                 unset($message_list[$k]['message_ismore']);
             }
-            $name=$message_list[0]['message_title'];
-            $result['message'] = array_merge(array('message_list' => $message_list,'message_list_name'=>$name), mobile_page(is_object($message->page_info) ? $message->page_info : ''));
-        }else{
+            $name = $message_list[0]['message_title'];
+            $result['message'] = array_merge(array('message_list' => $message_list, 'message_list_name' => $name), mobile_page(is_object($message->page_info) ? $message->page_info : ''));
+        } else {
             //公告
             $article_model = model('article');
             $condition = array();
@@ -57,6 +57,21 @@ class Message extends MobileHome
             $result = array_merge(array('notice' => $article_list, 'notice_name' => '商城公告'), mobile_page(is_object($article_model->page_info) ? $article_model->page_info : ''));
         }
         ds_json_encode(10000, '获取成功', $result);
+    }
+
+    public function getdetail()
+    {
+        $this->isLogin();
+        $message = model('message');
+        $con['message_id'] = input('param.message_id');
+        $res = $message->where('message_id', $con['message_id'])->find();
+        $res['message_time'] = date('Y-m-d H:i:s', $res['message_time']);
+        if (!empty($res)) {
+
+            ds_json_encode(10000, '获取成功', $res);
+        } else {
+            ds_json_encode(10001, '获取失败');
+        }
     }
 
     public function updatestatus()

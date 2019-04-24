@@ -21,6 +21,7 @@ class Article extends MobileHome
         $article_model = model('article');
         $condition = array();
         $condition['article_show'] = '1';
+        $condition['ac_id'] = ['not in', '1'];
         $last = strtotime(date('Y-m-d', strtotime('- 1 month')));
         $now = time();
         $date = date('Y-m-d', time());
@@ -29,7 +30,7 @@ class Article extends MobileHome
         if (!empty($article_list)) {
             foreach ($article_list as $k => $v) {
                 $article_list[$k]['article_time'] = date('Y-m-d', $v['article_time']);
-                $article_list[$k]['article_content'] = strip_tags($v['article_content']);
+                //$article_list[$k]['article_content'] = strip_tags($v['article_content']);
             }
             if ($page == 1) {
                 $arr[] = $article_list[0];
@@ -79,9 +80,13 @@ class Article extends MobileHome
     {
         $article_model = model('article');
         $article_id = intval(input('param.article_id'));
+        $ac_id = intval(input('param.ac_id'));
         if ($article_id > 0) {
             $condition = array();
             $condition['article_id'] = $article_id;
+            if ($ac_id == 1) {
+                $condition['ac_id'] = 1;
+            }
             $article = $article_model->getOneArticle($condition);
             $article['article_time'] = date('Y-m-d H:i:s', $article['article_time']);
             if (empty($article)) {
