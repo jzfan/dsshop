@@ -1524,4 +1524,30 @@ class Goods extends Model {
         return $update_result;
     }
 
+
+    public function _getGoodsCommendList($goods_type, $limit = 5) {
+        $model = null;
+        $goods = array();
+        switch ($goods_type)  {
+            case 1:
+                $model = model('goods');
+                break;
+            case 20:
+                $model = model("Pointgoods");
+                break;
+            case 30:
+                $model= model("Forsalegoods");
+                break;
+            case 40:
+                $model= model("SeckillGoods");
+                break;
+        }
+        if (is_null($model)) {
+            return $goods;
+        }
+        $goods = $model->getGoodsCommendList($limit);
+
+        return $goods;
+    }
+
 }

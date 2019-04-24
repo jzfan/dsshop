@@ -173,4 +173,16 @@ class Pointgoods extends Model
         return $pointgoods->save();
     }
 
+
+    public function getGoodsCommendList($limit = 5) {
+        $goods_commend_list = $this->getGoodsOnlineList(array('goods_commend' => 1), 'goods_id,goods_name,goods_advword,goods_image,goods_promotion_price,goods_price', 0, '', $limit, 'goods_commonid');
+        if (!empty($goods_id_list)) {
+            $tmp = array();
+            foreach ($goods_id_list as $v) {
+                $tmp[] = $v['goods_id'];
+            }
+            $goods_commend_list = $this->getGoodsOnlineList(array('goods_id' => array('in', $tmp)), 'goods_id,goods_name,goods_advword,goods_image,goods_promotion_price', 0, '', $limit);
+        }
+        return $goods_commend_list;
+    }
 }
