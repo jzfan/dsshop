@@ -17,6 +17,7 @@ class Article extends MobileHome
      */
     public function article_list()
     {
+        $ac_id = intval(input('param.ac_id'));
         $page = input('param.page');
         $article_model = model('article');
         $condition = array();
@@ -26,6 +27,9 @@ class Article extends MobileHome
         $now = time();
         $date = date('Y-m-d', time());
         $condition['article_time'] = ['between', array($last, $now)];
+        if ($ac_id==1){
+            $condition['ac_id']=1;
+        }
         $article_list = $article_model->getArticleList($condition, $this->pagesize, 'article_time');
         if (!empty($article_list)) {
             foreach ($article_list as $k => $v) {
@@ -80,13 +84,9 @@ class Article extends MobileHome
     {
         $article_model = model('article');
         $article_id = intval(input('param.article_id'));
-        $ac_id = intval(input('param.ac_id'));
         if ($article_id > 0) {
             $condition = array();
             $condition['article_id'] = $article_id;
-            if ($ac_id == 1) {
-                $condition['ac_id'] = 1;
-            }
             $article = $article_model->getOneArticle($condition);
             $article['article_time'] = date('Y-m-d H:i:s', $article['article_time']);
             if (empty($article)) {
