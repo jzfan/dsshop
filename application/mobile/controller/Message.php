@@ -59,11 +59,10 @@ class Message extends MobileHome
         ds_json_encode(10000, '获取成功', $result);
     }
 
-    public function getmessagelist(){
+    public function getmessagelist()
+    {
         $this->isLogin();
         $con['to_member_id'] = $this->member_info['member_id'];
-        $con['message_state'] = 0;
-        $con['message_type'] = 0;
         $message = model('message');
         $message_list = $message->getMessageList($con, $this->pagesize);
         foreach ($message_list as $k => $v) {
@@ -74,8 +73,8 @@ class Message extends MobileHome
             unset($message_list[$k]['del_member_id']);
             unset($message_list[$k]['message_ismore']);
         }
-            $name = $message_list[0]['message_title'];
-            $result['message'] = array_merge(array('message_list' => $message_list, 'message_list_name' => $name), mobile_page(is_object($message->page_info) ? $message->page_info : ''));
+        $result = array_merge(array('list' => $message_list), mobile_page(is_object($message->page_info) ? $message->page_info : ''));
+        ds_json_encode(10000, '获取成功', $result);
     }
 
     public function getdetail()
