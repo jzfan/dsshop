@@ -19,6 +19,8 @@ class Ordergoods extends Model
     public function returnWareHouse($order_type)
     {
         $class = self::TYPE[$order_type];
-        (new $class)->addStock($this->goods_num);
+        $num = $this->goods_num;
+        (new $class)->unSold($num)
+        			->push($num);
     }
 }

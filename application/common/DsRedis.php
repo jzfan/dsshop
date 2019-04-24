@@ -2,7 +2,7 @@
 
 namespace app\common;
 
-class DsRedis
+class DsRedis extends \Redis
 {
 	const HOST = '47.110.235.2';
 	const PORT = 6379;
@@ -18,7 +18,7 @@ class DsRedis
 	public static function getInstance()
 	{
 		if (self::$instance === null) {
-			self::$instance = new \Redis;
+			self::$instance = new self;
 			self::$instance->connect(self::HOST, self::PORT);
 			self::$instance->auth(self::PASSWD);
 		}

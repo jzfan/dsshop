@@ -93,6 +93,7 @@ class SeckillGoods extends Model
         foreach (range(1, $n) as $i) {
             $this->redis->lpush($this->listKey(), $i);
         }
+        return $this;
     }
 
     public function pop($n)
@@ -129,13 +130,14 @@ class SeckillGoods extends Model
         return array();
     }
 
-    public function incrLimit($num, $member_id)
+    public function incrMemberLimit($num, $member_id)
     {
         $key = $this->limitKey($member_id);
         $ex = $this->job->duration();
 
         $this->redis->incr($key, $num);
         $this->redis->setTimeout($key, $ex);
+        return $this;
     }
 
     /**
@@ -183,6 +185,7 @@ class SeckillGoods extends Model
 
         $this->pop($num);
         $this->redis->releaseLock($key);
+        return $this;
     }
 
     /**
@@ -193,22 +196,29 @@ class SeckillGoods extends Model
         return $this->redis->llen($this->listKey()) >= $num;
     }
 
-    // 卖出后减少库存，增加销量
-    public static function sold($good_id, $number)
+    // 订单取消，超时后，增加库存，减少销量
+    public function unSold($num)
     {
-        Db::transaction(function () use ($good_id, $number) {
-            $good = self::where('goods_id', $goods_id)->find();
-            $good->qty -= $number;
-            $good->sold += $number;
-            $good->save();
+        Db::transaction(function () {
+            $this->lock(true);
+            $this->qty += $num;
+            $this->sold -= $num;
+            $this->save();
         });
+        return $this;
     }
 
-    public function addStock($num)
+    // 下单后减少库存，增加销量
+    public function sold($num)
     {
-        $this->push($num);
+        Db::transaction(function () {
+            $this->lock(true);
+            $this->qty -= $num;
+            $this->sold += $num;
+            $this->save();
+        });
+        return $this;
     }
-
     /**
      * 查询出售中的商品详细信息及其促销信息
      * @access public

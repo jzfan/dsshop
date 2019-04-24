@@ -1264,9 +1264,10 @@ class Buy extends Model
             exception("秒杀商品数量超过定额");
         }
         // 记录用户秒杀商品下单数量
-        $sg->incrLimit($number, $member_id);
-        // redis 商品出队列
-        $sg->lockForPop($number);
+        $sg->incrMemberLimit($number, $member_id)
+            ->lockForPop($number) // redis 商品出队列
+            ->unSold($number); // 减少库存，增加销量
+        
     }
 
 

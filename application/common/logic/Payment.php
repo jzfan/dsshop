@@ -295,7 +295,8 @@ class Payment extends Model
 
     public function updateSeckillForSelf()
     {
-        SeckillGoods::sold($good_id, $number);
+        // (new SeckillGoods)->byGoodsId($good_id)
+        //                 ->sold($number);
     }
 
     // 成功支付后对代售商品处理
@@ -306,7 +307,6 @@ class Payment extends Model
     {
         Forsalegoods::add($data);
         Memberforsalegoods::add($data);
-        SeckillGoods::sold($good_id, $number);
     }
 
 
