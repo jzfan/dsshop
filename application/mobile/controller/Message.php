@@ -42,7 +42,8 @@ class Message extends MobileHome
                 unset($message_list[$k]['del_member_id']);
                 unset($message_list[$k]['message_ismore']);
             }
-            $result['message'] = array_merge(array('message_list' => $message_list), mobile_page(is_object($message->page_info) ? $message->page_info : ''));
+            $name=$message_list[0]['message_title'];
+            $result['message'] = array_merge(array('message_list' => $message_list,'message_list_name'=>$name), mobile_page(is_object($message->page_info) ? $message->page_info : ''));
         }else{
             //公告
             $article_model = model('article');
