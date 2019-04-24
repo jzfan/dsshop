@@ -162,3 +162,21 @@ body { background-color: #F9F9F9;}
 .pxianshi .content .item .price_info{white-space: nowrap;overflow: hidden;text-overflow:ellipsis;margin-top: .2rem;font-size: .5rem}
 .pxianshi .content .item .price_info .now_price{color:#f23030}
 .pxianshi .content .item .price_info del{color:#999}
+
+/*首页新添加91go模块css*/
+.newGoods{height: 9rem;}
+.newGoods .newGoodsTip{width: 100%;line-height: 2rem;text-align: center;font-size: 0.8rem;color: #EA5514;}
+.newGoods .newGoodsTip .ngd_icon{vertical-align: sub;margin-right: 0.2rem;}
+.newGoods .category-nav{top: 2rem;right: 0rem;}
+.newGoods .category-nav .category-item{margin-left: 0.5rem;}
+.home-category .category-nav .category-item .ngds{width: 5rem;height: 7rem;overflow: hidden;}
+.category-item .ngds .ngds_pic{width: 5rem;height: 5rem;border-radius: 4px;overflow: hidden;}
+.category-item .ngds .ngds_pic img{width: 100%;}
+.category-item .ngds .ngds_price{width: 100%;height: 1.5rem;line-height: 1.5rem;}
+.category-item .ngds .ngds_price span{background: #F68619;color: #fff;font-size: 0.5rem;padding: 1px 2px;border-radius: 4px;float: right;line-height: 0.8rem;margin-top: 0.3rem;}
+
+
+
+
+
+

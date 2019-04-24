@@ -3,6 +3,7 @@ var hasmore = true;
 var footer = false;
 var keyword = decodeURIComponent(getQueryString("keyword"));
 var gc_id = getQueryString("gc_id");
+var goods_type = getQueryString("goods_type");
 var b_id = getQueryString("b_id");
 var key = getQueryString("key");
 var order = getQueryString("order");
@@ -18,6 +19,13 @@ var ci = getQueryString("ci");
 var myDate = new Date;
 var searchTimes = myDate.getTime();
 $(function () {
+	if(goods_type == 30){
+		$(".header-title h1").text("91购");
+	}else if(goods_type == 20){
+		$(".header-title h1").text("积分优选");
+	}else{
+		$(".header-title h1").text("商品中心");
+	}
     $.animationLeft({valve: "#search_adv", wrapper: ".dstouch-full-mask", scroll: "#list-items-scroll"});
     $("#header").on("click", ".header-inp", function () {
         location.href = WapSiteUrl + "/mall/search.html?keyword=" + keyword

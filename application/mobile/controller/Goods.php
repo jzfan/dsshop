@@ -222,7 +222,7 @@ class Goods extends MobileMall {
         //$goods_list = $goods_model->getGoodsContract(array(0=>$goods_detail['goods_info']));
         //$goods_detail['goods_info'] = $goods_list[0];
         //推荐商品
-        $hot_sales = $goods_model->getGoodsCommendList(6);
+        $hot_sales = $goods_model->_getGoodsCommendList($goods_type, 6);
         $goodsid_array = array();
         foreach ($hot_sales as $value) {
             $goodsid_array[] = $value['goods_id'];

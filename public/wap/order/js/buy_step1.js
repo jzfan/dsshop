@@ -1,6 +1,7 @@
 var local;
 var map;
 var key = getCookie("key");
+var goods_type = getQueryString("goods_type");
 var ifcart = getQueryString("ifcart");
 var pintuangroup_id = getQueryString("pintuangroup_id");
 var pintuan_id = getQueryString("pintuan_id");
@@ -132,6 +133,7 @@ $(function() {
                 cart_id: cart_id,
                 ifcart: ifcart,
                 address_id: e,
+                goods_type:goods_type,
                 pintuangroup_id: pintuangroup_id,
                 pintuan_id: pintuan_id,
             },
@@ -550,6 +552,7 @@ $(function() {
                 invoice_id: invoice_id,
                 voucher: voucher,
                 pd_pay: pd_pay,
+                goods_type: goods_type,
                 password: password,
                 fcode: fcode,
                 rcb_pay: rcb_pay,

@@ -912,7 +912,8 @@ class Buy_1 extends Model {
         $goods_online_list = $goods_model->_getGoodsOnlineListAndPromotionByIdArray($goods_id_array);
         $goods_online_array = array();
         foreach ($goods_online_list as $goods) {
-            $goods_online_array[$goods['goods_id']] = $goods;
+            $goods['goods_type'] = isset($goods['goods_type']) ? $goods['goods_type'] : 1;
+            $goods_online_array[$goods['goods_id'] . "_" . $goods['goods_type']] = $goods;
         }
 
         foreach ((array) $cart_list as $key => $cart_info) {
@@ -920,8 +921,9 @@ class Buy_1 extends Model {
                 continue;
             $cart_list[$key]['state'] = true;
             $cart_list[$key]['storage_state'] = true;
-            if (in_array($cart_info['goods_id'], array_keys($goods_online_array))) {
-                $goods_online_info = $goods_online_array[$cart_info['goods_id']];
+            $_keys = $cart_info['goods_id'] . "_" . $cart_info['goods_type'];
+            if (in_array($_keys, array_keys($goods_online_array))) {
+                $goods_online_info = $goods_online_array[$_keys];
                 $cart_list[$key]['goods_commonid'] = $goods_online_info['goods_commonid'];
                 $cart_list[$key]['goods_name'] = $goods_online_info['goods_name'];
                 $cart_list[$key]['gc_id'] = $goods_online_info['gc_id'];

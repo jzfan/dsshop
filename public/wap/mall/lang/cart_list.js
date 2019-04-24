@@ -25,7 +25,7 @@ ds_lang={
     'pre_use':'前使用',
     'receive':'领取',
     'total_selection':'全选',
-    'total_sum':'合计总金额',
+    'total_sum':'总金额',
     'confirmation_of_information':'确认信息',
     'login':'登录',
     'register':'注册',

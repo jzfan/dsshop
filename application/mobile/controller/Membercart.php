@@ -23,13 +23,13 @@ class Membercart extends MobileMember {
         // 购物车列表 [得到最新商品属性及促销信息]
         $cart_list = model('buy_1','logic')->getGoodsCartList($cart_list);
         $goods_model = model('goods');
-
         $sum = 0;
+        $point = 0;
         $cart_a = array();
         $k=0;
         foreach ($cart_list as $key => $val) {
 //            $goods_data = $goods_model->getGoodsOnlineInfoForShare($val['goods_id']);
-
+            $cart_a[0]['goods'][$key]['goods_id'] = $val['goods_id'];
             $cart_a[0]['goods'][$key]['cart_id'] = $val['cart_id'];
             $cart_a[0]['goods'][$key]['goods_type'] = $val['goods_type'];
             $cart_a[0]['goods'][$key]['goods_point'] = isset($val['goods_point']) ? $val['goods_point'] : 0;
@@ -43,6 +43,7 @@ class Membercart extends MobileMember {
             $cart_a[0]['goods'][$key]['gift_list'] = isset($val['gift_list'])?$val['gift_list']:'';
             $cart_list[$key]['goods_sum'] = ds_price_format($val['goods_price'] * $val['goods_num']);
             $sum += $cart_list[$key]['goods_sum'];
+            $point += $cart_a[0]['goods'][$key]['goods_point'];
             $k++;
         }
         
@@ -57,7 +58,7 @@ class Membercart extends MobileMember {
             $cart_b=array();
         }
 
-        ds_json_encode(10000, '',array('cart_list' => $cart_a, 'sum' => ds_price_format($sum), 'cart_count' => count($cart_list),'cart_val'=>$cart_b));
+        ds_json_encode(10000, '',array('cart_list' => $cart_a, 'sum' => ds_price_format($sum), 'point' => ds_price_format($point), 'cart_count' => count($cart_list),'cart_val'=>$cart_b));
     }
 
     /**
@@ -106,7 +107,7 @@ class Membercart extends MobileMember {
         $param['goods_name'] = $goods_info['goods_name'];
         $param['goods_price'] = $goods_info['goods_price'];
         $param['goods_image'] = $goods_info['goods_image'];
-        $param['goods_type'] = $goods_info['goods_type'];
+        $param['goods_type'] = isset($goods_info['goods_type']) ? $goods_info['goods_type'] : 1;
 
         $result = $cart_model->addCart($param, isset($this->member_info)?'db':'cookie', $quantity);
         if ($result) {
