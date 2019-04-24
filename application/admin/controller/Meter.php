@@ -15,6 +15,7 @@ use think\Lang;
 class Meter extends AdminControl
 {
     public $page_info;
+
     public function _initialize()
     {
 
@@ -22,7 +23,8 @@ class Meter extends AdminControl
         Lang::load(APP_PATH . 'admin/lang/' . config('default_lang') . '/predeposit.lang.php');
     }
 
-    public function pdrecharge_list() {
+    public function pdrecharge_list()
+    {
         $condition = array();
         $stime = input('get.stime');
         $etime = input('get.etime');
@@ -35,11 +37,7 @@ class Meter extends AdminControl
         }
         $mname = input('get.mname');
         if (!empty($mname)) {
-            $condition['lg_member_name'] = $mname;
-        }
-        $aname = input('get.aname');
-        if (!empty($aname)) {
-            $condition['lg_admin_name'] = $aname;
+            $condition['lg_member_name'] = ['like','%'.$mname.'%'];
         }
         $predeposit_model = model('meterlog');
         $list_log = $predeposit_model->getPdLogList($condition, 10, '*', 'lg_id desc');
@@ -52,7 +50,36 @@ class Meter extends AdminControl
         return $this->fetch();
     }
 
-    protected function getAdminItemList() {
+    public function pdlog_list()
+    {
+        $condition = array();
+        $stime = input('get.stime');
+        $etime = input('get.etime');
+        $if_start_date = preg_match('/^20\d{2}-\d{2}-\d{2}$/', $stime);
+        $if_end_date = preg_match('/^20\d{2}-\d{2}-\d{2}$/', $etime);
+        $start_unixtime = $if_start_date ? strtotime($stime) : null;
+        $end_unixtime = $if_end_date ? strtotime($etime) : null;
+        if ($start_unixtime || $end_unixtime) {
+            $condition['lg_addtime'] = array('between', array($start_unixtime, $end_unixtime));
+        }
+        $mname = input('get.mname');
+        if (!empty($mname)) {
+            $condition['lg_member_name'] = ['like','%'.$mname.'%'];
+        }
+        $predeposit_model = model('meterlog');
+        $list_log = $predeposit_model->getPdLogList($condition, 10, '*', 'lg_id desc');
+        $this->assign('show_page', $predeposit_model->page_info->render());
+        $this->assign('list_log', $list_log);
+
+        $this->assign('filtered', $condition ? 1 : 0); //是否有查询条件
+
+        $this->setAdminCurItem('pdrecharge_list');
+        return $this->fetch();
+
+    }
+
+    protected function getAdminItemList()
+    {
         $menu_array = array(
             array(
                 'name' => 'index',
@@ -62,7 +89,7 @@ class Meter extends AdminControl
             array(
                 'name' => 'miao_add',
                 'text' => '秒米调整',
-                'url' => "javascript:dsLayerOpen('".url('Predeposit/miao_add')."','秒米调整')"
+                'url' => "javascript:dsLayerOpen('" . url('Predeposit/miao_add') . "','秒米调整')"
             )
         );
         return $menu_array;

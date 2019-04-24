@@ -172,7 +172,7 @@ class Member extends AdminControl
             if ($member_array['inviter_id'] == '') {
                 $member_array['inviter_name'] = '';
             } else {
-                $inviter = $member_model->getMemberInfo($member_array['inviter_id']);
+                $inviter = $member_model->where('member_id',$member_array['inviter_id'])->find();
                 $member_array['inviter_name'] = $inviter['member_name'];
             }
             $this->assign('member_array', $member_array);
