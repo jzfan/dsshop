@@ -558,11 +558,11 @@ class AdminControl extends Controller
                         'text' => lang('ds_operation_set'),
                         'args' => 'setting,Operation,operation',
                     ),
-                    'Inviter' => array(
-                        'ico' => '&#xe662;',
-                        'text' => lang('ds_inviter_set'),
-                        'args' => 'setting,Inviter,operation',
-                    ),
+//                    'Inviter' => array(
+//                        'ico' => '&#xe662;',
+//                        'text' => lang('ds_inviter_set'),
+//                        'args' => 'setting,Inviter,operation',
+//                    ),
 //                    'Groupbuy' => array(
 //                        'ico'=>'&#xe668;',
 //                        'text' => lang('ds_groupbuy'),
