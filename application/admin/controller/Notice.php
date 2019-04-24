@@ -1,5 +1,7 @@
 <?php
+
 namespace app\admin\controller;
+
 use app\common\model\Member;
 use think\Lang;
 
@@ -8,7 +10,7 @@ class Notice extends AdminControl
     public function _initialize()
     {
         parent::_initialize();
-        Lang::load(APP_PATH.'admin/lang/'.config('default_lang').'/notice.lang.php');
+        Lang::load(APP_PATH . 'admin/lang/' . config('default_lang') . '/notice.lang.php');
     }
 
     /**
@@ -19,9 +21,9 @@ class Notice extends AdminControl
         $condition = array();
         $condition['message_type'] = 1;
         $message_model = model('message');
-        $message_list = $message_model->getMessageList($condition,10);
-        foreach ($message_list as $k=>$v){
-            $message_list[$k]['member_name']=Member::getNameById($v['to_member_id']);
+        $message_list = $message_model->getMessageList($condition, 10);
+        foreach ($message_list as $k => $v) {
+            $message_list[$k]['member_name'] = Member::getNameById($v['to_member_id']);
         }
         $this->assign('message_list', $message_list);
         $this->assign('show_page', $message_model->page_info->render());
@@ -32,7 +34,8 @@ class Notice extends AdminControl
     /**
      * 会员通知
      */
-    public function notice(){
+    public function notice()
+    {
         //提交
         if (request()->isPost()) {
             $notice_validate = validate('notice');
@@ -112,14 +115,15 @@ class Notice extends AdminControl
             return $this->fetch('notice_add');
         }
     }
+
     protected function getAdminItemList()
     {
-        $menu_array=array(
+        $menu_array = array(
             array(
-                'name'=>'index','text'=>'消息通知','url'=>url('Notice/index')
+                'name' => 'index', 'text' => '消息通知', 'url' => url('Notice/index')
             ),
             array(
-                'name'=>'notice','text'=>'发送消息','url'=>"javascript:dsLayerOpen('".url('Notice/notice')."','新增用户')"
+                'name' => 'notice', 'text' => '发送消息', 'url' => "javascript:dsLayerOpen('" . url('Notice/notice') . "','发送消息')"
             )
         );
         return $menu_array;

@@ -21,7 +21,7 @@ $lang['notice_index_message'] = '发送站内信';
 $lang['notice_index_email'] = '发送邮件';
 $lang['notice_index_title'] = '通知标题';
 $lang['notice_index_content'] = '通知内容';
-$lang['notice_index_member_error'] = '指定会员发送，会员名不能为空且一行一个会员名';
+$lang['notice_index_member_error'] = '会员信息有误，请核对填写';
 
 $lang['message_body'] = '通知内容';
 $lang['to_member_id'] = '通知会员';
