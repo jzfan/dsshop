@@ -73,33 +73,40 @@
 							<input type="checkbox" checked name="cart_id" value="<%=goods.cart_id%>" />
 						</div>
 						<div class="goods-pic">
-							<a href="<%=WapSiteUrl%>/mall/product_detail.html?goods_id=<%=goods.goods_id%>">
+							<a href="<%=WapSiteUrl%>/mall/product_detail.html?goods_id=<%=goods.goods_id%>&goods_type=<%=goods.goods_type%>">
 								<img src="<%=goods.goods_image_url%>"/>
 							</a>
 						</div>
 						<dl class="goods-info">
-							<dt class="goods-name"> <a href="<%=WapSiteUrl%>/mall/product_detail.html?goods_id=<%=goods.goods_id%>"> <%=goods.goods_name%> </a></dt>
+							<dt class="goods-name">
+								<a href="<%=WapSiteUrl%>/mall/product_detail.html?goods_id=<%=goods.goods_id%>&goods_type=<%=goods.goods_type%>"> <%=goods.goods_name%> </a>
+							</dt>
 						</dl>
 						<div class="goods-del" cart_id="<%=goods.cart_id%>"><a href="javascript:void(0);"></a></div>
-                                                <div class="goods-subtotal"> <span class="goods-price">￥<em><%=goods.goods_price%></em></span>
-                                                    <span class="goods-sale">
-                                                        <% if (!isEmpty(goods.groupbuy_info))
-                                                        {%><em><%=lang('rush_to_buy')%></em><% }
-                                                        else if (!isEmpty(goods.xianshi_info))
-                                                        { %><em><%=lang('discount')%></em><% }%>
-                                                    </span>
-                                                    <div class="value-box">
-                                                        <span class="minus">
-                                                            <a href="javascript:void(0);">&nbsp;</a>
-                                                        </span>
-                                                        <span>
-                                                            <input type="text" pattern="[0-9]*" readonly class="buy-num buynum" value="<%=goods.goods_num%>"/>
-                                                        </span>
-                                                        <span class="add">
-                                                            <a href="javascript:void(0);">&nbsp;</a>
-                                                        </span>
-                                                    </div>
-                                                </div>
+	            <div class="goods-subtotal">
+	            	<% if (goods.goods_type == 20) { %>
+	            		<span class="goods-price">￥<em><%=goods.goods_price%></em>+<%=goods.goods_point%>积分</span>
+	            	<% }else{%>
+	            		<span class="goods-price">￥<em><%=goods.goods_price%></em></span>
+	            	<% } %>
+	                <span class="goods-sale">
+	                    <% if (!isEmpty(goods.groupbuy_info))
+	                    {%><em><%=lang('rush_to_buy')%></em><% }
+	                    else if (!isEmpty(goods.xianshi_info))
+	                    { %><em><%=lang('discount')%></em><% }%>
+	                </span>
+	                <div class="value-box">
+	                    <span class="minus">
+	                        <a href="javascript:void(0);">&nbsp;</a>
+	                    </span>
+	                    <span>
+	                        <input type="text" pattern="[0-9]*" readonly class="buy-num buynum" value="<%=goods.goods_num%>"/>
+	                    </span>
+	                    <span class="add">
+	                        <a href="javascript:void(0);">&nbsp;</a>
+	                    </span>
+	                </div>
+	            </div>
 						<% if (goods.gift_list && goods.gift_list.length > 0) { %>
 							<div class="goods-gift">
 							<% for (var a=0; a<goods.gift_list.length; a++) { var gift = goods.gift_list[k]%>
@@ -142,24 +149,32 @@
 						</div>
 						<% } %>
 					</div>
-                <%}%>
+          <%}%>
 				<% if (check_out === true) {%>
-                                <div class="dstouch-cart-bottom">
-                                    <div class="all-check"><label><input class="all_checkbox" type="checkbox" checked><%=lang('total_selection')%></label></div>
-                                    <div class="total">
-                                        <dl class="total-money"><dt><%=lang('total_sum')%>：</dt><dd>￥<em><%=sum%></em></dd></dl>
-                                    </div>
-                                    <div class="check-out ok">
-                                        <a href="javascript:void(0)"><%=lang('confirmation_of_information')%></a>
-                                    </div>
-                                </div>
+        <div class="dstouch-cart-bottom">
+            <div class="all-check"><label><input class="all_checkbox" type="checkbox" checked><%=lang('total_selection')%></label></div>
+            <div class="total">
+                <dl class="total-money">
+                	<dt><%=lang('total_sum')%>：</dt>
+                	<dd>
+                		￥<em><%=sum%></em>
+                		
+                		<span>+<b><%=point%></b>积分</span>
+                		
+                	</dd>
+                </dl>
+            </div>
+            <div class="check-out ok">
+                <a href="javascript:void(0)"><%=lang('confirmation_of_information')%></a>
+            </div>
+        </div>
 				<% } else { %>
-                                <div class="dstouch-cart-bottom no-login">
-                                    <div class="cart-nologin-tip"><%=lang('login_notice')%></div>
-                                    <div class="cart-nologin-btn"><a href="../member/login.html" class="btn"><%=lang('login')%></a>
-                                        <a href="../member/register.html" class="btn"><%=lang('register')%></a>
-                                    </div>
-                                </div>
+        <div class="dstouch-cart-bottom no-login">
+            <div class="cart-nologin-tip"><%=lang('login_notice')%></div>
+            <div class="cart-nologin-btn"><a href="../member/login.html" class="btn"><%=lang('login')%></a>
+                <a href="../member/register.html" class="btn"><%=lang('register')%></a>
+            </div>
+        </div>
 				<% } %>
             <%}else{%>
             <div class="dstouch-norecord cart">

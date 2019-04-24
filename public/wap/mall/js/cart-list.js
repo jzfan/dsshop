@@ -117,53 +117,53 @@ $(function() {
     } else {
         function p() {
             $.ajax({url: ApiUrl + "/Membercart/cart_list.html", type: "post", dataType: "json", data: {key: t}, success: function(t) {
-                    if (checkLogin(t.login)) {
-                        if (t.code == 10000) {
-                            if (t.result.cart_list.length == 0) {
-                                addCookie("cart_count", 0)
-                            }
-                            var a = t.result;
-                            a.WapSiteUrl = WapSiteUrl;
-                            a.check_out = true;
-                            template.helper("$getLocalTime", function(t) {
-                                var a = new Date(parseInt(t) * 1e3);
-                                var e = "";
-                                e += a.getFullYear() + "年";
-                                e += a.getMonth() + 1 + "月";
-                                e += a.getDate() + "日 ";
-                                return e
-                            });
-                            var e = template("cart-list", a);
-                            if (a.cart_list.length == 0) {
-                                get_footer()
-                            }
-                            $("#cart-list-wp").html(e);
-                            $(".goods-del").click(function() {
-                                var t = $(this).attr("cart_id");
-                                layer.open({
-                                    content: '确认删除吗？'
-                                    , btn: ['确定', '取消']
-                                    , yes: function (index) {
-                                        f(t)
-                                        layer.close(index);
-                                    }
-                                });
-                            });
-                            $(".minus").click(h);
-                            $(".add").click(g);
-                            $(".buynum").blur(m);
-                            $.animationUp();
-                            $(".dstouch-voucher-list").on("click", ".btn", function() {
-                                getFreeVoucher($(this).attr("data-tid"))
-                            });
-                            $(".store-activity").click(function() {
-                                $(this).css("height", "auto")
-                            })
-                        } else {
-                            alert(t.message)
-                        }
-                    }
-                }})
+	            if (checkLogin(t.login)) {
+	                if (t.code == 10000) {
+	                    if (t.result.cart_list.length == 0) {
+	                        addCookie("cart_count", 0)
+	                    }
+	                    var a = t.result;
+	                    a.WapSiteUrl = WapSiteUrl;
+	                    a.check_out = true;
+	                    template.helper("$getLocalTime", function(t) {
+	                        var a = new Date(parseInt(t) * 1e3);
+	                        var e = "";
+	                        e += a.getFullYear() + "年";
+	                        e += a.getMonth() + 1 + "月";
+	                        e += a.getDate() + "日 ";
+	                        return e
+	                    });
+	                    var e = template("cart-list", a);
+	                    if (a.cart_list.length == 0) {
+	                        get_footer()
+	                    }
+	                    $("#cart-list-wp").html(e);
+	                    $(".goods-del").click(function() {
+	                        var t = $(this).attr("cart_id");
+	                        layer.open({
+	                            content: '确认删除吗？'
+	                            , btn: ['确定', '取消']
+	                            , yes: function (index) {
+	                                f(t)
+	                                layer.close(index);
+	                            }
+	                        });
+	                    });
+	                    $(".minus").click(h);
+	                    $(".add").click(g);
+	                    $(".buynum").blur(m);
+	                    $.animationUp();
+	                    $(".dstouch-voucher-list").on("click", ".btn", function() {
+	                        getFreeVoucher($(this).attr("data-tid"))
+	                    });
+	                    $(".store-activity").click(function() {
+	                        $(this).css("height", "auto")
+	                    })
+	                } else {
+	                    alert(t.message)
+	                }
+	            }
+	        }})
         }
         p();
         function f(a) {
@@ -191,7 +191,7 @@ $(function() {
             var r = $(a).parents(".cart-litemw-cnt");
             var o = r.attr("cart_id");
             var i = r.find(".buy-num");
-            var n = r.find(".goods-price");
+            var n = r.find(".goods-price em");
             var c = parseInt(i.val());
             var s = 1;
             if (e == "add") {
@@ -205,17 +205,17 @@ $(function() {
             }
             $(".pre-loading").removeClass("hide");
             $.ajax({url: ApiUrl + "/Membercart/cart_edit_quantity.html", type: "post", data: {key: t, cart_id: o, quantity: s}, dataType: "json", success: function(t) {
-                    if (checkLogin(t.login)) {
-                        if (t.code == 10000) {
-                            i.val(s);
-                            n.html("￥<em>" + t.result.goods_price + "</em>");
-                            calculateTotalPrice()
-                        } else {
-                            layer.open({content: t.message, btn: '我知道了'});
-                        }
-                        $(".pre-loading").addClass("hide")
+                if (checkLogin(t.login)) {
+                    if (t.code == 10000) {
+                        i.val(s);
+                        n.html("" + t.result.goods_price + "");
+                        calculateTotalPrice()
+                    } else {
+                        layer.open({content: t.message, btn: '我知道了'});
                     }
-                }})
+                    $(".pre-loading").addClass("hide")
+                }
+            }})
         }
         $("#cart-list-wp").on("click", ".check-out > a", function() {
             if (!$(this).parent().hasClass("ok")) {

@@ -24,20 +24,37 @@ $(function() {
             for(var i in data.extral.goodsclass_list){
                 $('#header .category-nav').append('<a class="category-item" href="mall/product_list.html?gc_id='+data.extral.goodsclass_list[i].gc_id+'">'+data.extral.goodsclass_list[i].gc_name+'</a>');
             }
+            //首页91go新品链接
+//          for(var i in data.extral.promotion_list){
+//              $('.newGoods .category-nav').append('<a class="category-item" href="mall/product_list.html?gc_id='+data.extral.goodsclass_list[i].gc_id+'">'+data.extral.goodsclass_list[i].gc_name+'</a>');
+            	
+//          	<a class="category-item" href="mall/product_list.html?gc_id=1">
+//		        	<div class="ngds">
+//		        		<div class="ngds_pic"><img src="http://www.shop.com/uploads/home/store/goods/1_2017092901284880537.jpg" /></div>
+//		        		<div class="ngds_price">￥<em class="n_price">5455</em><span>送<em>5</em>积分</span></div>
+//		        	</div>
+//		        </a>
+		        
+//          }
+            
+            
             var html = '';
             $.each(data,function(k, v) {
-                    switch (k) {
-                        case 'nav_list':
-                            $("#main-navlist").html(template(k, data));
-                            break;
-                        case 'adv_list':
-                            $("#main-container1").html(template(k, data));
-                            break;
-                        case 'extral':
-                            break;
-                        default:
-                            html += template(k, data);
-                    }
+                switch (k) {
+                    case 'nav_list':
+                        $("#main-navlist").html(template(k, data));
+                        break;
+                    case 'adv_list':
+                        $("#main-container1").html(template(k, data));
+                        break;
+                    case 'forsalegoods_list':
+                        $("#forsalegoods_list1").html(template(k, data));
+                        break;
+                    case 'extral':
+                        break;
+                    default:
+                        html += template(k, data);
+                }
             });
 
             $("#main-container2").html(html);

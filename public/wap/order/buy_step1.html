@@ -293,23 +293,25 @@
       <% for (var l in cart_list.goods_list) { var v1 = cart_list.goods_list[l]%>
       <li class="buy-item">
         <div class="goods-pic">
-          <a href="<%=WapSiteUrl%>/mall/product_detail.html?goods_id=<%=v1.goods_id%>&v1.goods_type=<%=v1.goods_type%>">
+          <a href="<%=WapSiteUrl%>/mall/product_detail.html?goods_id=<%=v1.goods_id%>&goods_type=<%=v1.goods_type%>">
             <img src="<%=v1.goods_image_url%>"/>
           </a>
         </div>
         <dl class="goods-info">
-          <dt class="goods-name"><a href="<%=WapSiteUrl%>/mall/product_detail.html?goods_id=<%=v1.goods_id%>&v1.goods_type=<%=v1.goods_type%>"><%=v1.goods_name%></a></dt>
+          <dt class="goods-name"><a href="<%=WapSiteUrl%>/mall/product_detail.html?goods_id=<%=v1.goods_id%>&goods_type=<%=v1.goods_type%>"><%=v1.goods_name%></a></dt>
           <dd class="goods-type"><%=v1.goods_spec%></dd>
         </dl>
         <div class="goods-subtotal">
         	<% if (v1.gift_list) { %>
 	        <span class="goods-price">￥<em><%=v1.goods_price%></em></span>
           <%}else{%>
-          	<% if (v1.goods_type ==20) { %>
+          	<% if (v1.goods_type == 20) { %>
 	          <span class="goods-price">￥<em><%=v1.goods_price%></em>+<em><%=v1.goods_point%>积分</em></span>
-	          <%}else{%>
-          	<span class="goods-price">￥<em><%=v1.goods_price%></em></span>
-           <%}%>
+	          <%}else if (v1.goods_type == 30) {%>
+          	<span class="goods-price">￥<em><%=v1.goods_price%></em>+<em><%=v1.goods_miaomi%>秒米</em></span>
+            <%}else{%>
+            	<span class="goods-price">￥<em><%=v1.goods_price%></em></span>
+            <%}%>
           <%}%>
         </div>
         <div class="goods-num">

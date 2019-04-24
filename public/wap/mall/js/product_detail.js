@@ -1,4 +1,5 @@
 var goods_id = getQueryString("goods_id");
+var goods_type = getQueryString("goods_type");
 var pintuangroup_share_id = getQueryString("pintuangroup_share_id");
 var map_list = [];
 var map_index_id = "";
@@ -111,6 +112,7 @@ $(function() {
             data: {
                 goods_id: r,
                 key: e,
+                goods_type: goods_type,
                 pintuangroup_share_id:pintuangroup_share_id
             },
             dataType: "json",
@@ -285,6 +287,7 @@ $(function() {
                             data: {
                                 key: e,
                                 goods_id: r,
+                                goods_type: goods_type,
                                 quantity: t
                             },
                             type: "post",
@@ -354,7 +357,7 @@ $(function() {
                                     if (e.code!=10000) {
                                         layer.open({content: e.message,skin: 'msg',time: 2});
                                     } else {
-                                        location.href = WapSiteUrl + "/order/vr_buy_step1.html?goods_id=" + r + "&quantity=" + t
+                                        location.href = WapSiteUrl + "/order/vr_buy_step1.html?goods_id=" + r + "&quantity=" + t +"&goods_type=" + goods_type;
                                     }
                                 }
                             })
@@ -392,7 +395,7 @@ $(function() {
                                             layer.open({content: e.message,skin: 'msg',time: 2});
                                         } else {
                                             //带参，跳转到收银台页面
-                                            location.href = WapSiteUrl + "/order/buy_step1.html?goods_id=" + r + "&buynum=" + t
+                                            location.href = WapSiteUrl + "/order/buy_step1.html?goods_id=" + r + "&buynum=" + t +"&goods_type=" + goods_type;
                                         }
                                     }
                                 })

@@ -101,10 +101,12 @@
             <% } else { %>
             <dl>
             	<% if (goods_info.goods_type == 20) { %>
-                <dt>￥<em><%=goods_info.goods_price %></em>+<em><%=goods_info.goods_point %></em>积分</dt>
-                <% } else { %>
-                <dt>￥<em><%=goods_info.goods_price %></em></dt>	
-             	<% } %>
+                <dt>￥<em><%=goods_info.goods_price %></em>&nbsp;+&nbsp;<em><%=goods_info.goods_point %></em>积分</dt>
+                <% } else if (goods_info.goods_type == 30) { %>
+                <dt>￥<em><%=goods_info.goods_price %></em>&nbsp;&nbsp;赠送<em><%=goods_info.goods_miaomi %></em>秒米</dt>	
+             	<% } else { %>
+         		<dt>￥<em><%=goods_info.goods_price %></em></dt>	
+         		<% } %>
             </dl>
             <% } %>
             <% if (inviter_amount > 0){ %>
@@ -433,14 +435,20 @@
                     case 'xianshi': promo = '限时折扣'; break;
                     case 'sole': promo = '手机专享'; break;}
                     %>
-                    ￥<em><%=goods_info.promotion_price%></em>
+ 
                     <span class="activity">
                         <% if (promo) { %>
                         <%= promo %>
                         <% } %>
                     </span>
                     <% } else { %>
-                    ￥<em><%=goods_info.goods_price%></em>
+                    	<% if ( goods_info.goods_type == 30) { %>
+                    		￥<em><%=goods_info.goods_price%></em>&nbsp;&nbsp;赠送<em><%=goods_info.goods_miaomi%></em>秒米
+                    	<% }else if ( goods_info.goods_type == 20) { %>
+                    		￥<em><%=goods_info.goods_price%></em>&nbsp;+&nbsp;<em><%=goods_info.goods_point%></em>积分
+	                    <% }else{ %>
+	                    	￥<em><%=goods_info.goods_price%></em>
+                    	<% } %>
                     <% } %>
                     <!--<span class="vip_price">￥<em><%=goods_info.goods_tpprice%></em><i>PLUS</i></span>-->
                     <span class="goods-storage"><%=lang('stock')%>：<%=goods_info.goods_storage%><%=lang('piece')%></span>
@@ -488,7 +496,7 @@
                         <dd><a href="javascript:void(0);" class="current"><%=lang('from_now_on')%><%=
                             goods_info.virtual_indate_str %></a>
                             <% if (goods_info.buyLimitation && goods_info.buyLimitation > 0) { %>
-                            （<%=lang('home_purchase_restrictions')%> <%= goods_info.buyLimitation %> <%=lang('piece')%>）
+                            	（<%=lang('home_purchase_restrictions')%> <%= goods_info.buyLimitation %> <%=lang('piece')%>）
                             <% } %>
                         </dd>
                     </dl>

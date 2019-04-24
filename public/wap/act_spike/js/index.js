@@ -34,7 +34,7 @@ $(function () {
 $(".spike_close img").on("click",function(){
 	$(".spike_rule").hide();
 });
-$(".show_rules").on("click",function(){
+$(".head_pic").on("click",function(){
 	$(".spike_rule").show();
 });
 
