@@ -41,7 +41,7 @@ $(function () {
     });
     $("#header-nav").click(function () {
         if ($("#keyword").val() == "") {
-            window.location.href = buildUrl("keyword", getCookie("deft_key_value") ? getCookie("deft_key_value") : "")
+            window.location.href = buildUrl("keyword", getCookie("deft_key_value") ? getCookie("deft_key_value") : "")+"&goods_type=20";
         } else {
             window.location.href = buildUrl("keyword", $("#keyword").val())
         }

@@ -142,7 +142,7 @@ class Memberbuy extends MobileMember {
         $param['pintuangroup_id'] = input('post.pintuangroup_id');
 
         //商品类型
-        $param['goods_type'] = input('post.goods_type',30);
+        $param['goods_type'] = input('post.goods_type',20);
 
         //处理代金券
         $voucher = array();

@@ -579,8 +579,7 @@ class Order extends Model
 
             //买家取消订单
             case 'buyer_cancel':
-                $state = ($order_info['order_state'] == ORDER_STATE_NEW) ||
-                    ($order_info['payment_code'] == 'offline' && $order_info['order_state'] == ORDER_STATE_PAY);
+                $state = ($order_info['order_state'] == ORDER_STATE_NEW) || ($order_info['payment_code'] == 'offline' && $order_info['order_state'] == ORDER_STATE_PAY);
                 break;
 
             //申请退款
@@ -595,17 +594,16 @@ class Order extends Model
 
             //平台取消订单
             case 'system_cancel':
-                $state = ($order_info['order_state'] == ORDER_STATE_NEW) ||
-                    ($order_info['payment_code'] == 'offline' && $order_info['order_state'] == ORDER_STATE_PAY);
+                $state = (($order_info['order_state'] == ORDER_STATE_NEW) || ($order_info['payment_code'] == 'offline' && $order_info['order_state'] == ORDER_STATE_PAY));
                 break;
 
             //平台收款
             case 'system_receive_pay':
-                $state = $order_info['order_state'] == ORDER_STATE_NEW && $order_info['payment_code'] == 'online';
+                $state = ($order_info['order_state'] == ORDER_STATE_NEW && $order_info['payment_code'] == 'online');
                 break;
 
             case 'payment':
-                $state = $order_info['order_state'] == ORDER_STATE_NEW && $order_info['payment_code'] == 'online';
+                $state = ($order_info['order_state'] == ORDER_STATE_NEW && $order_info['payment_code'] == 'online');
                 break;
 
             //调整运费
@@ -724,5 +722,6 @@ class Order extends Model
         }
 
     }
+
 
 }

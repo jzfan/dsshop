@@ -16,9 +16,9 @@ class Activity extends Model
      * @param type $order       排序
      * @return type
      */
-    public function getActivityList($condition, $page = '', $order = 'activity_sort asc') {
+    public function getActivityList($condition, $page = '', $group,$order = 'activity_sort asc') {
         if ($page) {
-            $res = db('activity')->where($condition)->order($order)->paginate($page, false, ['query' => request()->param()]);
+            $res = db('activity')->where($condition)->order($order)->whereBetween()->group($group)->paginate($page, false, ['query' => request()->param()]);
             $this->page_info = $res;
             return $res->items();
         } else {

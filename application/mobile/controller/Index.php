@@ -123,6 +123,8 @@ class Index extends MobileMall {
     public function get_baidu_ak() {
         ds_json_encode(10000, '',array('baidu_ak' => config('baidu_ak')));
     }
+
+
 }
 
 ?>
