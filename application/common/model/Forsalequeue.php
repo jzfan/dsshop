@@ -27,15 +27,16 @@ class Forsalequeue extends Model
     }
 
 
-    public function addMemberForsaleGoods($forsale_ids)
+    public function addMemberForsaleGoods($forsale_goods)
     {
-        foreach ($forsale_ids as $forsale_id) {
-            $queue = self::get(['forsale_id'=>$forsale_id]);
+        foreach ($forsale_goods as $value) {
+            $queue = self::get(['forsale_id'=>$value['forsale_id']]);
             if ($queue) {
                 continue;
             }
             $insert_data = [
-                'forsale_id' => $forsale_id,
+                'forsale_id' => $value['forsale_id'],
+                'goods_commonid' => $value['goods_commonid'],
                 'sortable' => 1,
                 "created_at"  => date('Y-m-d H:i:s',time()),
                 "updated_at"  => date('Y-m-d H:i:s',time()),

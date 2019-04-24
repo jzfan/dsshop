@@ -166,19 +166,23 @@ class Memberforsalegoods extends Model
                 "updated_at"  => date('Y-m-d H:i:s',time()),
             );
         }
-        $forsale_id = array();
+        $forsale_goods = array();
         //商品已经存在就更新
         foreach ($insert_data as $insert_datum) {
             $forsalegoods = self::get(['goods_id'=>$insert_datum['goods_id']]);
             if($forsalegoods) {
                 unset($insert_datum['created_at']);
                 $forsalegoods->save($insert_datum);
-                $forsale_id[] =  $forsalegoods->id;
+                $forsale_id =  $forsalegoods->id;
             } else {
-                $forsale_id[] = self::insertGetId($insert_datum);
+                $forsale_id = self::insertGetId($insert_datum);
             }
+            $forsale_goods[] = [
+                'forsale_id' => $forsale_id,
+                'goods_commonid' => $common_id,
+            ];
         }
-        return $forsale_id;
+        return $forsale_goods;
     }
 
 

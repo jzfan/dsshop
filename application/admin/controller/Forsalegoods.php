@@ -176,9 +176,10 @@ class Forsalegoods extends AdminControl
                 $forsalegoods_model->addOrUpdateForsaleGoods($params);
 
                 //增加挂售商品
-                $forsale_ids = model("Memberforsalegoods")->addOrUpdateForsaleGoods($params);
+                $forsale_goods = model("Memberforsalegoods")->addOrUpdateForsaleGoods($params);
+
                 //增加到队列
-                model("Forsalequeue")->addMemberForsaleGoods($forsale_ids);
+                model("Forsalequeue")->addMemberForsaleGoods($forsale_goods);
 
                 \think\Db::commit();
                 dsLayerOpenSuccess("添加成功");
