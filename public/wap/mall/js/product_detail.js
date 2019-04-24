@@ -348,6 +348,7 @@ $(function() {
                             o.key = e;
                             o.cart_id = r;
                             o.quantity = t;
+                            o.goods_type = goods_type;
                             $.ajax({
                                 type: "post",
                                 url: ApiUrl + "/Membervrbuy/buy_step1.html",
@@ -384,6 +385,7 @@ $(function() {
                                 var o = {};
                                 o.key = e;
                                 o.cart_id = r + "|" + t;
+                                o.goods_type = goods_type;
                                 $.ajax({
                                     type: "post",
                                     url: ApiUrl + "/Memberbuy/buy_step1.html",

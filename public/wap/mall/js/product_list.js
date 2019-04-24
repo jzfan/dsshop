@@ -80,6 +80,7 @@ function get_list() {
     }
     param = {};
     param.page = curpage;
+    param.goods_type = 20;
     param.pagesize = pagesize;
     if (gc_id != "") {
         param.gc_id = gc_id;

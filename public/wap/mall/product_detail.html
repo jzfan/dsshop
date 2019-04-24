@@ -365,23 +365,28 @@
                 <%}%>
                 <div class='more wait'><%=lang('view_more')%><span class='iconfont'>&#xe63f;</span></div>
         </div>
-
+		
+		<!--推荐商品-->
         <div class="goods-detail-recom">
             <h4><%=lang('store_recommendation')%></h4>
             <ul>
-                <%for (var i = 0;i
-                <goods_commend_list.length
-                        ;i++){%>
+                <%for (var i = 0;i < goods_commend_list.length;i++ ){%>
                     <li>
-                        <a href="product_detail.html?goods_id=<%=goods_commend_list[i].goods_id%>">
+                        <a href="product_detail.html?goods_id=<%=goods_commend_list[i].goods_id%>&goods_type=<%=goods_commend_list[i].goods_type%>">
                             <div class="pic"><img src="<%=goods_commend_list[i].goods_image_url%>"></div>
                             <dl>
                                 <dt><%=goods_commend_list[i].goods_name%></dt>
-                                <dd>￥<em><%=goods_commend_list[i].goods_promotion_price%></em></dd>
+                                <%if(goods_commend_list[i].goods_type == 20){%>
+                                <dd>￥<em><%=goods_commend_list[i].goods_promotion_price%></em>&nbsp;&nbsp;送<em><%=goods_commend_list[i].goods_point%></em>积分</dd>
+                                <%} else if(goods_commend_list[i].goods_type == 30){%>
+                                <dd>￥<em><%=goods_commend_list[i].goods_promotion_price%></em>&nbsp;&nbsp;送<em><%=goods_commend_list[i].goods_miaomi%></em>秒米</dd>	
+                                <%} else {%>
+                                <dd>￥<em><%=goods_commend_list[i].goods_promotion_price%></em></dd>	
+                                <%} %>	
                             </dl>
                         </a>
                     </li>
-                    <%}%>
+                <%}%>
             </ul>
             <div class="v-line l1"></div>
             <div class="v-line l2"></div>
