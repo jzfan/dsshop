@@ -27,7 +27,7 @@ class SeckillJobs extends Model
     public function isOver()
     {
         if (strtotime($this->end) < time()) {
-            $this->status = 3;
+            $this->status = 2;
             $this->save();
             return true;
         }

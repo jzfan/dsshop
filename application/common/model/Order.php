@@ -2,12 +2,43 @@
 
 namespace app\common\model;
 
+use think\Db;
 use think\Model;
 
 class Order extends Model
 {
     public $page_info;
 
+    public function items()
+    {
+        return $this->hasMany(Ordergoods::class, 'order_id', 'order_id');
+    }
+
+    public function log()
+    {
+        return $this->hasMany(Orderlog::class, 'order_id', 'order_id');
+    }
+
+    public function cancel()
+    {
+        $this->order_state = ORDER_STATE_CANCEL;
+        $this->pd_amount = 0;
+        Db::transaction(function () {
+            if (!$this->save()) {
+                exception('保存失败');
+            }
+            foreach ($this->items as $item) {
+                $item->returnWareHouse($this->order_type);
+            }
+            $this->log()->write([
+                // 'order_id' => $order->order_id,
+                'log_msg' => '取消了订单',
+                'log_orderstate' => ORDER_STATE_CANCEL,
+            ]);
+
+        });
+        return $this;
+    }
 
     /**
      * 取单条订单信息

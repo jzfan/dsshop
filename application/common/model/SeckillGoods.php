@@ -2,11 +2,11 @@
 
 namespace app\common\model;
 
-use think\Db;
-use think\Model;
 use app\common\DsRedis;
 use app\common\ModelTrait;
 use app\common\model\SeckillJobs;
+use think\Db;
+use think\Model;
 
 class SeckillGoods extends Model
 {
@@ -49,7 +49,7 @@ class SeckillGoods extends Model
 
     public function checkLimit($log, $num)
     {
-        if(!$log) {
+        if (!$log) {
             if ($num > $this->limit) {
                 throw new JsonException("购买商品数量超过限制", 422);
             }
@@ -72,7 +72,7 @@ class SeckillGoods extends Model
 
     public function format()
     {
-    	$images = $this->images();
+        $images = $this->images();
         return [
             'id' => $this->id,
             'goods_id' => $this->goods_id,
@@ -87,7 +87,7 @@ class SeckillGoods extends Model
         ];
     }
 
-    public function push($n=null)
+    public function push($n = null)
     {
         $n = $n ?? $this->qty;
         foreach (range(1, $n) as $i) {
@@ -97,7 +97,7 @@ class SeckillGoods extends Model
 
     public function pop($n)
     {
-        for ($n;$n--;) {
+        for ($n; $n--;) {
             $this->redis->rpop($this->listKey());
         }
     }
@@ -105,10 +105,10 @@ class SeckillGoods extends Model
     public function getGoodsInfoAndPromotionById($goods_id)
     {
         // $goods = db('goods')->where("goods_id",$goods_id)->find();
-        $seckill_good = self::where("goods_id",$goods_id)->find();
+        $seckill_good = self::where("goods_id", $goods_id)->find();
         $sku = $seckill_good->sku;
         if ($seckill_good) {
-            return array_merge($seckill_good->toArray(),[
+            return array_merge($seckill_good->toArray(), [
                 'goods_type' => 40,
                 'is_goodsfcode' => 1,
                 'goods_commonid' => $sku->goods_commonid,
@@ -168,8 +168,8 @@ class SeckillGoods extends Model
     }
 
     /**
-    * 上锁出队，如果库存不足抛出异常
-    */
+     * 上锁出队，如果库存不足抛出异常
+     */
     public function lockForPop($num)
     {
         $key = $this->lockKey();
@@ -186,8 +186,8 @@ class SeckillGoods extends Model
     }
 
     /**
-    * 判断库存是否足够
-    */
+     * 判断库存是否足够
+     */
     protected function isQtyEnough($num)
     {
         return $this->redis->llen($this->listKey()) >= $num;
@@ -202,6 +202,11 @@ class SeckillGoods extends Model
             $good->sold += $number;
             $good->save();
         });
+    }
+
+    public function addStock($num)
+    {
+        $this->push($num);
     }
 
     /**
@@ -220,10 +225,11 @@ class SeckillGoods extends Model
      * 取得商品最新的属性及促销[立即购买]
      * @param type $goods_id
      * @param type $quantity
-     * @param type $extra  
+     * @param type $extra
      * @return array
      */
-    public function getGoodsOnlineInfo($goods_id, $quantity, $extra = array()) {
+    public function getGoodsOnlineInfo($goods_id, $quantity, $extra = array())
+    {
         return $this->getGoodsInfoAndPromotionById($goods_id);
     }
 

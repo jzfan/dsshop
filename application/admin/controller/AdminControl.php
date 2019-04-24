@@ -618,10 +618,10 @@ class AdminControl extends Controller
                         'text' => lang('91购商品'),
                         'args' => 'index,Forsalegoods,operation',
                     ),
-                    'seckill_jobs' => [
+                    'seckilljobs' => [
                         'ico' => '&#xe65a;',
                         'text' => '秒杀',
-                        'args' => 'index,SeckillJobs,seckill',
+                        'args' => 'index,Seckilljobs,operation',
                     ],
                 ),
             ),

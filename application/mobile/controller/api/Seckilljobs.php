@@ -17,6 +17,10 @@ class Seckilljobs extends BaseController
 			$goods = $job->formatGoods();
 			return json(compact('job', 'goods'));
 		}
+		return json([
+			'job' => [],
+			'goods' => []
+		]);
 	}
 
 	public function next()
