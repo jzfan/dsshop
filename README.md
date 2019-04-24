@@ -144,9 +144,9 @@ CREATE TABLE `ds_meterlog` (
 
 14.membe 会员表 增加meter_second,face_card,back_card字段
 ALTER TABLE `ds_memeber` 
-ADD COLUMN `meter_second` int(11)  NOT NULL DEFAULT 0 COMMENT '秒米' ,
-ADD COLUMN `face_card` varchar(25)  DEFAULT NULL COMMENT '秒米' 身份证正面 `身份证正面`,
-ADD COLUMN `back_card` varchar(35)  DEFAULT NULL COMMENT '秒米' 身份证正面 `身份证反面`,
+ADD COLUMN `meter_second` int(11)  NOT NULL DEFAULT 0 COMMENT '秒米',
+ADD COLUMN `face_card` varchar(25)  DEFAULT NULL COMMENT '身份证正面',
+ADD COLUMN `back_card` varchar(35)  DEFAULT NULL COMMENT '身份证反面',
 ## TODO
 
 1. 订单超时处理
