@@ -15,13 +15,13 @@ use app\common\ModelTrait;
 class Forsalegoods extends Model
 {
     use ModelTrait;
-    
+
     public $page_info;
 
     public function getGoodsInfoAndPromotionById($goods_id)
     {
-        $goods = db('goods')->where("goods_id",$goods_id)->find();
-        $point_goods = db('forsalegoods')->where("goods_id",$goods_id)->find();
+        $goods = db('goods')->where("goods_id", $goods_id)->find();
+        $point_goods = db('forsalegoods')->where("goods_id", $goods_id)->find();
 
         if ($point_goods) {
             $goods['goods_price'] = $point_goods['goods_price'];
@@ -61,7 +61,7 @@ class Forsalegoods extends Model
         $goods_model = model("goods");
         $condition['goods_commonid'] = array("in", $this->getGoodsCommonId());
 
-        $goodscommon_list = $goods_model->getGoodsCommonList($condition,$field,$page, $order);
+        $goodscommon_list = $goods_model->getGoodsCommonList($condition, $field, $page, $order);
         $this->page_info = $goods_model->page_info;
 
         return $goodscommon_list;
@@ -116,7 +116,7 @@ class Forsalegoods extends Model
     public function parseGoodsList($goodsList)
     {
         foreach ($goodsList as &$goods) {
-            $pointGoods = self::get(['goods_id'=>$goods['goods_id']]);
+            $pointGoods = self::get(['goods_id' => $goods['goods_id']]);
 
             $goods['goods_price'] = $pointGoods->goods_price;
             $goods['goods_storage'] = $pointGoods->goods_storage;
@@ -131,26 +131,30 @@ class Forsalegoods extends Model
 
     public function addOrUpdateForsaleGoods($data)
     {
-        $common_id  = $data['common_id'];
+        $common_id = $data['common_id'];
         $count = count($data['goods_id']);
         $insert_data = array();
-        for($i=0; $i < $count; ++$i) {
+        for ($i = 0; $i < $count; ++$i) {
             $insert_data[] = array(
-                "goods_commonid" =>  $common_id,
+                "goods_commonid" => $common_id,
                 "goods_id" => $data['goods_id'][$i],
                 "goods_price" => $data['goods_price'][$i],
                 "goods_storage" => $data['goods_storage'][$i],
-                "goods_miaomi" => $data['goods_miaomi'][$i],
+                "goods_seckprice" => $data['goods_seckprice'][$i],
+                "profit_rate" => $data['profit_rate'][$i],
+                "service_fee" => $this->calculateServiceFee($data['goods_price'][$i], $data['goods_seckprice'][$i], $data['profit_rate'][$i]),
+                "goods_miaomi" => $this->calculateGoodsMiaomi($data['goods_price'][$i], $data['goods_seckprice'][$i], $data['profit_rate'][$i]),
                 "goods_state" => 1,
                 "sale_number" => 0,
-                "created_at"  => date('Y-m-d H:i:s',time()),
-                "updated_at"  => date('Y-m-d H:i:s',time()),
+                "created_at" => date('Y-m-d H:i:s', time()),
+                "updated_at" => date('Y-m-d H:i:s', time()),
             );
         }
+
         //商品已经存在就更新
         foreach ($insert_data as $insert_datum) {
-            $pointgoods = self::get(['goods_id'=>$insert_datum['goods_id']]);
-            if($pointgoods) {
+            $pointgoods = self::get(['goods_id' => $insert_datum['goods_id']]);
+            if ($pointgoods) {
                 unset($insert_datum['created_at']);
                 $pointgoods->save($insert_datum);
             } else {
@@ -159,6 +163,30 @@ class Forsalegoods extends Model
         }
     }
 
+
+    public function calculateGoodsMiaomi($goods_price,$goods_seckprice,$profit_rate)
+    {
+        $service_fee = $this->calculateServiceFee($goods_price,$goods_seckprice,$profit_rate);
+        $profit_rate = (float)$profit_rate;
+
+        return $service_fee * (1 + $profit_rate/100);
+    }
+
+
+    public function calculateServiceFee($goods_price,$goods_seckprice,$profit_rate)
+    {
+        $config_model = model("Config");
+        $forsale_bill_platform_rate = $config_model->getOneConfigByCode('forsale_bill_platform_rate');
+        $forsale_bill_member_rate = $config_model->getOneConfigByCode('forsale_bill_member_rate');
+
+        $platform_rate = (float)$forsale_bill_platform_rate['value'];
+        $member_rate = (float)$forsale_bill_member_rate['value'];
+        $goods_price = (float)$goods_price;
+        $goods_seckprice = (float)$goods_seckprice;
+        $profit_rate = (float)$profit_rate;
+
+        return ($goods_price * $member_rate/100 - $goods_seckprice - $goods_seckprice * $profit_rate/100) * $platform_rate/100;
+    }
 
     public function updateGoodsStorageAndSell($goods_id, $goods_number)
     {

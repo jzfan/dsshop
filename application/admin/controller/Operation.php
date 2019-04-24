@@ -64,7 +64,35 @@ public function _initialize()
                 'text' => '基本设置',
                 'url' => url('Operation/setting')
             ),
+            array(
+                'name' => 'forsaleBillSetting',
+                'text' => '91购分账设置',
+                'url' => url('Operation/forsaleBillSetting')
+            ),
         );
         return $menu_array;
+    }
+
+
+    public function forsaleBillSetting()
+    {
+        $config_model = model('config');
+        if(request()->isPost()) {
+            $update_array = array();
+            $update_array['forsale_bill_platform'] = intval(input('post.forsale_bill_platform'));
+            $update_array['forsale_bill_member'] = intval(input('post.forsale_bill_member'));
+            $result = $config_model->editConfig($update_array);
+            if ($result === true) {
+                $this->log(lang('ds_edit') . lang('ds_operation') . lang('ds_operation_set'), 1);
+                $this->success(lang('ds_common_save_succ'));
+            } else {
+                $this->error(lang('ds_common_save_fail'));
+            }
+        }
+
+        $list_setting = $config_model->getConfigList();
+        $this->assign('list_setting', $list_setting);
+        $this->setAdminCurItem('forsaleBillSetting');
+        return $this->fetch();
     }
 }
