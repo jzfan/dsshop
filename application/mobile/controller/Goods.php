@@ -234,6 +234,9 @@ class Goods extends MobileMall {
             $goods_commend['goods_name'] = $value['goods_name'];
             $goods_commend['goods_price'] = $value['goods_price'];
             $goods_commend['goods_promotion_price'] = $value['goods_promotion_price'];
+            $goods_commend['goods_type'] = isset($value['goods_type']) ? $value['goods_type'] : 1;
+            $goods_commend['goods_point'] = isset($value['goods_point']) ? $value['goods_point'] : 0;
+            $goods_commend['goods_miaomi'] = isset($value['goods_miaomi']) ? $value['goods_miaomi'] : 0;
             $goods_commend['goods_image_url'] = goods_cthumb($value['goods_image'], 240);
             $goods_commend_list[] = $goods_commend;
         }
