@@ -165,23 +165,63 @@ class Deliverset extends AdminControl
      */
     public function free_freight()
     {
-        if (!request()->isPost()) {
-            $this->assign('free_price', config('free_price'));
-            $this->assign('free_time', config('free_time'));
-
-            $this->setAdminCurItem('free_freight');
-            return $this->fetch('free_freight');
-        } else {
-            $config_model = model('config');
-            $update_array['free_price'] = floatval(abs(input('post.free_price')));
-            $update_array['free_time'] = input('post.free_time');
-            $result = $config_model->editConfig($update_array);
-            if ($result) {
-                ds_json_encode(10000, lang('ds_common_save_succ'));
+        $shop = session('is_shop');
+        if ($shop == 1) {
+            //平台
+            if (!request()->isPost()) {
+                $this->assign('free_price', config('free_price'));
+                $this->assign('free_time', config('free_time'));
+                $this->setAdminCurItem('free_freight');
+                return $this->fetch('free_freight');
             } else {
-                ds_json_encode(10001, lang('ds_common_save_fail'));
+                $config_model = model('config');
+                $update_array['free_price'] = floatval(abs(input('post.free_price')));
+                $update_array['free_time'] = input('post.free_time');
+                $result = $config_model->editConfig($update_array);
+                if ($result) {
+                    ds_json_encode(10000, lang('ds_common_save_succ'));
+                } else {
+                    ds_json_encode(10001, lang('ds_common_save_fail'));
+                }
+            }
+        } else {
+            //商户
+            $shop_id = session('admin_id');
+            if (!request()->isPost()) {
+                $shopconfig = db('shopconfig')->where('shop_id', $shop_id)->find();
+                if (!empty($shopconfig)) {
+                    $this->assign('free_price', $shopconfig['free_price']);
+                    $this->assign('free_time', $shopconfig['free_time']);
+                } else {
+                    $this->assign('free_price', 0);
+                    $this->assign('free_time', 0);
+                }
+                $this->setAdminCurItem('free_freight');
+                return $this->fetch('free_freight');
+            } else {
+                $update_array['free_price'] = floatval(abs(input('post.free_price')));
+                $update_array['free_time'] = input('post.free_time');
+                $shopconfig = db('shopconfig')->where('shop_id', $shop_id)->find();
+                if (!empty($shopconfig)) {
+                    $result = db('shopconfig')->where('shop_id', $shopconfig['shop_id'])->update($update_array);
+                    if ($result) {
+                        ds_json_encode(10000, lang('ds_common_save_succ'));
+                    } else {
+                        ds_json_encode(10001, lang('ds_common_save_fail'));
+                    }
+                } else {
+                    $update_array['shop_id'] = $shop_id;
+                    $result = db('shopconfig')->insert($update_array);
+                    if ($result) {
+                        ds_json_encode(10000, lang('ds_common_save_succ'));
+                    } else {
+                        ds_json_encode(10001, lang('ds_common_save_fail'));
+                    }
+                }
+
             }
         }
+
     }
 
     /**
@@ -189,26 +229,62 @@ class Deliverset extends AdminControl
      */
     public function deliver_region()
     {
-        if (!request()->isPost()) {
-            $deliver_region = array(
-                '', ''
-            );
-            if (strpos(config('deliver_region'), '|')) {
-                $deliver_region = explode('|', config('deliver_region'));
-            }
-            $this->assign('deliver_region', $deliver_region);
-            $this->setAdminCurItem('deliver_region');
-            return $this->fetch('deliver_region');
-        } else {
-            $config_model = model('config');
-            $update_array['deliver_region'] = $_POST['area_ids'] . '|' . $_POST['region'];
-            $result = $config_model->editConfig($update_array);
-            if ($result) {
-                ds_json_encode(10000, lang('ds_common_save_succ'));
+        $shop = session('is_shop');
+        if ($shop == 1) {
+            if (!request()->isPost()) {
+                $deliver_region = array(
+                    '', ''
+                );
+                if (strpos(config('deliver_region'), '|')) {
+                    $deliver_region = explode('|', config('deliver_region'));
+                }
+                $this->assign('deliver_region', $deliver_region);
+                $this->setAdminCurItem('deliver_region');
+                return $this->fetch('deliver_region');
             } else {
-                ds_json_encode(10001, lang('ds_common_save_fail'));
+                $config_model = model('config');
+                $update_array['deliver_region'] = $_POST['area_ids'] . '|' . $_POST['region'];
+                $result = $config_model->editConfig($update_array);
+                if ($result) {
+                    ds_json_encode(10000, lang('ds_common_save_succ'));
+                } else {
+                    ds_json_encode(10001, lang('ds_common_save_fail'));
+                }
+            }
+        } else {
+            $shop_id = session('admin_id');
+            if (!request()->isPost()) {
+                $shopconfig = db('shopconfig')->where('shop_id', $shop_id)->find();
+                if (!empty($shopconfig['deliver_region'])) {
+                    $deliver_region = explode('|', $shopconfig['deliver_region']);
+                } else {
+                    $deliver_region = array(
+                        '', ''
+                    );
+                    if (strpos(config('deliver_region'), '|')) {
+                        $deliver_region = explode('|', $deliver_region);
+                    }
+                }
+                $this->assign('deliver_region', $deliver_region);
+                $this->setAdminCurItem('deliver_region');
+                return $this->fetch('deliver_region');
+            } else {
+                $shopconfig = db('shopconfig')->where('shop_id', $shop_id)->find();
+                $update_array['deliver_region'] = $_POST['area_ids'] . '|' . $_POST['region'];
+                if (!empty($shopconfig)) {
+                    $result = db('shopconfig')->where('shop_id', $shopconfig['shop_id'])->update($update_array);
+                } else {
+                    $update_array['shop_id'] = $shop_id;
+                    $result = db('shopconfig')->insert($update_array);
+                }
+                if ($result) {
+                    ds_json_encode(10000, lang('ds_common_save_succ'));
+                } else {
+                    ds_json_encode(10001, lang('ds_common_save_fail'));
+                }
             }
         }
+
     }
 
     /**
@@ -216,43 +292,101 @@ class Deliverset extends AdminControl
      */
     public function print_set()
     {
-
-        if (!request()->isPost()) {
-            $this->assign('seal_printexplain', config('seal_printexplain'));
-            $this->assign('seal_img', config('seal_img'));
-            $this->setAdminCurItem('print_set');
-            return $this->fetch('print_set');
-        } else {
-            $data = array(
-                'seal_printexplain' => input('seal_printexplain')
-            );
-            $deliverset_validate = validate('deliverset');
-            if (!$deliverset_validate->scene('print_set')->check($data)) {
-                $this->error($deliverset_validate->getError());
-            }
-            $update_arr = array();
-            //上传认证文件
-            if ($_FILES['seal_img']['name'] != '') {
-                $default_dir = BASE_UPLOAD_PATH . DS . DIR_ADMIN;
-                $file_name = date('YmdHis') . rand(10000, 99999);
-                $upload = request()->file('seal_img');
-                $result = $upload->validate(['ext' => ALLOW_IMG_EXT])->move($default_dir, $file_name);
-                if ($result) {
-                    $update_arr['seal_img'] = $result->getFilename();
-                    //删除旧认证图片
-                    if (!empty(config('seal_img'))) {
-                        @unlink(BASE_UPLOAD_PATH . DS . DIR_ADMIN . DS . config('seal_img'));
+        $shop = session('is_shop');
+        if ($shop == 1) {
+            if (!request()->isPost()) {
+                $this->assign('seal_printexplain', config('seal_printexplain'));
+                $this->assign('seal_img', config('seal_img'));
+                $this->setAdminCurItem('print_set');
+                return $this->fetch('print_set');
+            } else {
+                $data = array(
+                    'seal_printexplain' => input('seal_printexplain')
+                );
+                $deliverset_validate = validate('deliverset');
+                if (!$deliverset_validate->scene('print_set')->check($data)) {
+                    $this->error($deliverset_validate->getError());
+                }
+                $update_arr = array();
+                //上传认证文件
+                if ($_FILES['seal_img']['name'] != '') {
+                    $default_dir = BASE_UPLOAD_PATH . DS . DIR_ADMIN;
+                    $file_name = date('YmdHis') . rand(10000, 99999);
+                    $upload = request()->file('seal_img');
+                    $result = $upload->validate(['ext' => ALLOW_IMG_EXT])->move($default_dir, $file_name);
+                    if ($result) {
+                        $update_arr['seal_img'] = $result->getFilename();
+                        //删除旧认证图片
+                        if (!empty(config('seal_img'))) {
+                            @unlink(BASE_UPLOAD_PATH . DS . DIR_ADMIN . DS . config('seal_img'));
+                        }
                     }
                 }
-            }
 
-            $config_model = model('config');
-            $update_arr['seal_printexplain'] = $_POST['seal_printexplain'];
-            $result = $config_model->editConfig($update_arr);
-            if ($result) {
-                $this->success(lang('ds_common_save_succ'));
+                $config_model = model('config');
+                $update_arr['seal_printexplain'] = $_POST['seal_printexplain'];
+                $result = $config_model->editConfig($update_arr);
+                if ($result) {
+                    $this->success(lang('ds_common_save_succ'));
+                } else {
+                    $this->error(lang('ds_common_save_fail'));
+                }
+            }
+        } else {
+            $shop_id = session('admin_id');
+            if (!request()->isPost()) {
+                $shopconfig = db('shopconfig')->where('shop_id', $shop_id)->find();
+                if (!empty($shopconfig['seal_printexplain']) && !empty($shopconfig['seal_img'])) {
+                    $seal_printexplain = $shopconfig['seal_printexplain'];
+                    $seal_img = $shopconfig['seal_img'];
+                } else {
+                    $seal_printexplain = '';
+                    $seal_img = '';
+                }
+                $this->assign('seal_printexplain', $seal_printexplain);
+                $this->assign('seal_img', $seal_img);
+                $this->setAdminCurItem('print_set');
+                return $this->fetch('print_set');
             } else {
-                $this->error(lang('ds_common_save_fail'));
+                $shopconfig = db('shopconfig')->where('shop_id', $shop_id)->find();
+                if (!empty($shopconfig)) {
+                    $update_arr = array();
+                    $update_arr['seal_printexplain'] = $_POST['seal_printexplain'];
+                    //上传认证文件
+                    if ($_FILES['seal_img']['name'] != '') {
+                        $default_dir = BASE_UPLOAD_PATH . DS . DIR_ADMIN;
+                        $file_name = date('YmdHis') . rand(10000, 99999);
+                        $upload = request()->file('seal_img');
+                        $result = $upload->validate(['ext' => ALLOW_IMG_EXT])->move($default_dir, $file_name);
+                        if ($result) {
+                            $update_arr['seal_img'] = $result->getFilename();
+                            //删除旧认证图片
+                            if (!empty($shopconfig['seal_img'])) {
+                                @unlink(BASE_UPLOAD_PATH . DS . DIR_ADMIN . DS . $shopconfig['seal_img']);
+                            }
+                        }
+                    }
+                    $result = db('shopconfig')->where('shop_id', $shopconfig['shop_id'])->update($update_arr);
+                } else {
+                    $update_arr = array();
+                    $update_arr['seal_printexplain'] = $_POST['seal_printexplain'];
+                    if ($_FILES['seal_img']['name'] != '') {
+                        $default_dir = BASE_UPLOAD_PATH . DS . DIR_ADMIN;
+                        $file_name = date('YmdHis') . rand(10000, 99999);
+                        $upload = request()->file('seal_img');
+                        $result = $upload->validate(['ext' => ALLOW_IMG_EXT])->move($default_dir, $file_name);
+                        if ($result) {
+                            $update_arr['seal_img'] = $result->getFilename();
+                        }
+                        $update_array['shop_id'] = $shop_id;
+                        $result = db('shopconfig')->insert($update_array);
+                    }
+                }
+                if ($result) {
+                    $this->success(lang('ds_common_save_succ'));
+                } else {
+                    $this->error(lang('ds_common_save_fail'));
+                }
             }
         }
     }
