@@ -47,7 +47,7 @@ function setInputVal(gid) {
         if (res != '') {
             $('#number-input').val(res.qty)
             $('#price-input').val(res.price)
-            $('#mi-input').val(res.mi)
+            $('#return_rate-input').val(res.return_rate)
             $('#commend-input').val(res.commend)
         }
     })
@@ -56,6 +56,9 @@ function setInputVal(gid) {
 function submitGoodForm(e) {
     e.preventDefault()
     $.post('/admin/seckillgoods/store', $('#modal-form').serialize(), function(res) {
+        if (res.error !== undefined) {
+            $('#error-span').html(res.error)
+        }
         if (res > 0) {
             // $('.modal').modal('hide')
             window.location.reload()

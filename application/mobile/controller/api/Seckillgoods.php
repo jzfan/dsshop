@@ -19,9 +19,9 @@ class Seckillgoods extends BaseController
 	public function get()
 	{
 		$data = checkInput([
-			'id' => 'require|number'
+			'goods_id' => 'require|number'
 		]);
-	    return json($this->model->byGoodsId($data['id'])->format());
+	    return json($this->model->byGoodsId($data['goods_id'])->format());
 	}
 
 	public function buy()
