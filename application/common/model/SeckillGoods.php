@@ -65,21 +65,20 @@ class SeckillGoods extends Model
         return $this->sku->goods_commonid;
     }
 
-    public function images()
-    {
-        return db('goodsimages')->where('goods_commonid', $this->commonId())->order('goodsimage_isdefault,goodsimage_sort')->column('goodsimage_url');
-    }
+    // public function images()
+    // {
+    //     return db('goodsimages')->where('goods_commonid', $this->commonId())->order('goodsimage_isdefault,goodsimage_sort')->column('goodsimage_url');
+    // }
 
     public function format()
     {
-        $images = empty($this->images()) ? [$this->info->goods_image] : $this->images();
+        // $images = empty($this->images()) ? [$this->info->goods_image] : $this->images();
         return [
             'id' => $this->id,
             'goods_id' => $this->goods_id,
             'name' => $this->info->goods_name,
             'goods_advword' => $this->info->goods_advword,
-            'default_image' => array_shift($images),
-            'images' => join(',', $images),
+            'image' => $this->info->goods_image,
             'price' => $this->price,
             'mi' => $this->mi,
             'qty' => $this->qty,
