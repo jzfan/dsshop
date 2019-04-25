@@ -112,11 +112,12 @@ class SeckillGoods extends Model
         if ($seckill_good) {
             return array_merge($seckill_good->toArray(), [
                 'goods_type' => 40,
-                'is_goodsfcode' => 1,
+                'is_goodsfcode' => 0,
                 'goods_commonid' => $sku->goods_commonid,
                 'gc_id' => $sku->gc_id,
                 'goods_name' => $sku->goods_name,
                 'goods_price' => $seckill_good->price,
+                'mi' => $seckill_good->mi,
                 'goods_image' => $sku->goods_image,
                 'transport_id' => $sku->transport_id,
                 'goods_freight' => $sku->goods_freight,

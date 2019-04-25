@@ -23,6 +23,11 @@ class Config extends Model
         }
         return false;
     }
+
+    public static function getValue($key)
+    {
+        return self::where('code', $key)->value('value');
+    }
   
     /**
      * 读取系统设置列表
