@@ -654,5 +654,23 @@ class Member extends Model
     }
 
 
+    function getUserInviterIds($member_id)
+    {
+        static $parent_array = [];
+
+        $member = self::get($member_id);
+
+        if ($member) {
+            if (in_array($member->inviter_id,$parent_array)) {
+                return $parent_array;
+            }
+            $parent_array[] = $member->inviter_id;
+
+            $this->getUserInviterIds($member->inviter_id);
+        }
+        return $parent_array;
+    }
+
+
 
 }

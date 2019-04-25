@@ -66,8 +66,13 @@ public function _initialize()
             ),
             array(
                 'name' => 'forsaleBillSetting',
-                'text' => '91购分账设置',
+                'text' => '分账设置',
                 'url' => url('Operation/forsaleBillSetting')
+            ),
+            array(
+                'name' => 'forsaleRedSetting',
+                'text' => '秒米红包设置',
+                'url' => url('Operation/forsaleRedSetting')
             ),
         );
         return $menu_array;
@@ -93,6 +98,29 @@ public function _initialize()
         $list_setting = $config_model->getConfigList();
         $this->assign('list_setting', $list_setting);
         $this->setAdminCurItem('forsaleBillSetting');
+        return $this->fetch();
+    }
+
+
+    public function forsaleRedSetting()
+    {
+        $config_model = model('config');
+        if(request()->isPost()) {
+            $update_array = array();
+            $update_array['first_forsale_red_jackpot'] = input('post.first_forsale_red_jackpot');
+            $update_array['last_forsale_red_jackpot'] = input('post.last_forsale_red_jackpot');
+            $result = $config_model->editConfig($update_array);
+            if ($result === true) {
+                $this->log(lang('ds_edit') . lang('ds_operation') . lang('ds_operation_set'), 1);
+                $this->success(lang('ds_common_save_succ'));
+            } else {
+                $this->error(lang('ds_common_save_fail'));
+            }
+        }
+
+        $list_setting = $config_model->getConfigList();
+        $this->assign('list_setting', $list_setting);
+        $this->setAdminCurItem('forsaleRedSetting');
         return $this->fetch();
     }
 }
