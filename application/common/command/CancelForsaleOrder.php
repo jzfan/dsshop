@@ -29,7 +29,7 @@ class CancelForsaleOrder extends Command
         $time = 0;
         Db::startTrans();
         try {
-            Db::name('order')->where('order_state', 10)->where('order_type', 20)->chunk(100, function ($orders) use ($time) {
+            Db::name('order')->where('order_state', 10)->where('order_type', 30)->chunk(100, function ($orders) use ($time) {
                 foreach ($orders as $order) {
                     if ($order['add_time'] >= $time) {
                         // 第一步：更新订单状态为已取消
