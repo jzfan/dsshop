@@ -3,7 +3,7 @@
 namespace app\admin\controller;
 
 use think\Lang;
-use think\Db;
+
 class Order extends AdminControl
 {
 
@@ -24,19 +24,19 @@ class Order extends AdminControl
         if ($order_sn) {
             $condition['order_sn'] = $order_sn;
         }
-        $is_shop=session('is_shop');
-        $id=session('admin_id');
-        if ($is_shop!='1'){
-            $goods_id=db('goods')->where('supplier',$id)->column('goods_id');
-            $where=db('ordergoods')->whereIn('goods_id',$goods_id)->column('order_id');
-            $condition=[['order_id','in',$where]];
-        }else{
-            $goods_id=db('goods')->where('is_platform',0)->column('goods_id');
-            $where=db('ordergoods')->whereIn('goods_id',$goods_id)->column('order_id');
-               $condition['order_id']=['in',$where];
+        $is_shop = session('is_shop');
+        $id = session('admin_id');
+        if ($is_shop != '1') {
+            $goods_id = db('goods')->where('supplier', $id)->column('goods_id');
+            $where = db('ordergoods')->whereIn('goods_id', $goods_id)->column('order_id');
+            $condition = [['order_id', 'in', $where]];
+        } else {
+            $goods_id = db('goods')->where('is_platform', 0)->column('goods_id');
+            $where = db('ordergoods')->whereIn('goods_id', $goods_id)->column('order_id');
+            $condition['order_id'] = ['in', $where];
         }
         $order_state = input('param.order_state');
-        if (in_array($order_state, array('0', '10', '20', '30', '40','50'))) {
+        if (in_array($order_state, array('0', '10', '20', '30', '40', '50'))) {
             $condition['order_state'] = $order_state;
         }
         $payment_code = input('param.payment_code');
@@ -56,7 +56,7 @@ class Order extends AdminControl
         if ($start_unixtime || $end_unixtime) {
             $condition['add_time'] = array('between', array($start_unixtime, $end_unixtime));
         }
-        $condition['order_type']=20;
+        $condition['order_type'] = 20;
         $order_list = $order_model->getOrderList($condition, 10);
         $this->assign('show_page', $order_model->page_info->render());
 
@@ -76,7 +76,7 @@ class Order extends AdminControl
         $payment_list = model('payment')->getPaymentOpenList();
         $this->assign('payment_list', $payment_list);
         $this->assign('order_list', $order_list);
-
+        $this->assign('type', 0);
         $this->assign('filtered', $condition ? 1 : 0); //是否有查询条件
         $this->setAdminCurItem('add');
         return $this->fetch('index');
@@ -94,6 +94,7 @@ class Order extends AdminControl
         $order_model = model('order');
         $condition['order_id'] = $order_id;
         $order_info = $order_model->getOrderInfo($condition, array('order_common', 'order_goods'));
+        //print_r($order_info);die;
         if (empty($order_info)) {
             $this->error(lang('member_printorder_ordererror'));
         }
@@ -150,7 +151,7 @@ class Order extends AdminControl
         $state_type = input('param.type_state');
         if ($state_type == 'cancel') {
             $result = $this->_order_cancel($order_info);
-            if ($result['code']){
+            if ($result['code']) {
                 ds_json_encode(10000, $result['msg']);
             }
         } elseif ($state_type == 'spay_price') {
@@ -219,7 +220,7 @@ class Order extends AdminControl
             if (!$if_allow) {
                 return ds_callback(false, '无权操作');
             }
-            return $logic_order->changeOrderSpayPrice($order_info, 'admin', session('member_name'), $post['goods_amount']);
+            return $logic_order->changeOrderPrice($order_info, 'admin', session('member_name'), $post['goods_amount']);
         }
     }
 
@@ -492,19 +493,19 @@ class Order extends AdminControl
         if ($order_sn) {
             $condition['order_sn'] = $order_sn;
         }
-        $is_shop=session('is_shop');
-        $id=session('admin_id');
-        if ($is_shop!='1'){
-            $goods_id=db('goods')->where('supplier',$id)->column('goods_id');
-            $where=db('ordergoods')->whereIn('goods_id',$goods_id)->column('order_id');
-            $condition=[['order_id','in',$where]];
-        }else{
-            $goods_id=db('goods')->where('is_platform',0)->column('goods_id');
-            $where=db('ordergoods')->whereIn('goods_id',$goods_id)->column('order_id');
-            $condition['order_id']=['in',$where];
+        $is_shop = session('is_shop');
+        $id = session('admin_id');
+        if ($is_shop != '1') {
+            $goods_id = db('goods')->where('supplier', $id)->column('goods_id');
+            $where = db('ordergoods')->whereIn('goods_id', $goods_id)->column('order_id');
+            $condition = [['order_id', 'in', $where]];
+        } else {
+            $goods_id = db('goods')->where('is_platform', 0)->column('goods_id');
+            $where = db('ordergoods')->whereIn('goods_id', $goods_id)->column('order_id');
+            $condition['order_id'] = ['in', $where];
         }
         $order_state = input('param.order_state');
-        if (in_array($order_state, array('0', '10', '20', '30', '40','50'))) {
+        if (in_array($order_state, array('0', '10', '20', '30', '40', '50'))) {
             $condition['order_state'] = $order_state;
         }
         $payment_code = input('param.payment_code');
@@ -524,8 +525,16 @@ class Order extends AdminControl
         if ($start_unixtime || $end_unixtime) {
             $condition['add_time'] = array('between', array($start_unixtime, $end_unixtime));
         }
-        $condition['order_type']=40;
+        $condition['order_type'] = ['in','40,41'];
         $order_list = $order_model->getOrderList($condition, 10);
+        foreach ($order_list as $k=>$v){
+            if ($v['order_type']==40){
+                $order_list[$k]['order_type_name']='秒杀自购商品';
+            }
+            if ($v['order_type']==41){
+                $order_list[$k]['order_type_name']='秒杀商品';
+            }
+        }
         $this->assign('show_page', $order_model->page_info->render());
 
         foreach ($order_list as $order_id => $order_info) {
@@ -544,7 +553,7 @@ class Order extends AdminControl
         $payment_list = model('payment')->getPaymentOpenList();
         $this->assign('payment_list', $payment_list);
         $this->assign('order_list', $order_list);
-
+        $this->assign('type', 1);
         $this->assign('filtered', $condition ? 1 : 0); //是否有查询条件
         $this->setAdminCurItem('add');
         return $this->fetch('index');
@@ -559,19 +568,19 @@ class Order extends AdminControl
         if ($order_sn) {
             $condition['order_sn'] = $order_sn;
         }
-        $is_shop=session('is_shop');
-        $id=session('admin_id');
-        if ($is_shop!='1'){
-            $goods_id=db('goods')->where('supplier',$id)->column('goods_id');
-            $where=db('ordergoods')->whereIn('goods_id',$goods_id)->column('order_id');
-            $condition=[['order_id','in',$where]];
-        }else{
-            $goods_id=db('goods')->where('is_platform',0)->column('goods_id');
-            $where=db('ordergoods')->whereIn('goods_id',$goods_id)->column('order_id');
-            $condition['order_id']=['in',$where];
+        $is_shop = session('is_shop');
+        $id = session('admin_id');
+        if ($is_shop != '1') {
+            $goods_id = db('goods')->where('supplier', $id)->column('goods_id');
+            $where = db('ordergoods')->whereIn('goods_id', $goods_id)->column('order_id');
+            $condition = [['order_id', 'in', $where]];
+        } else {
+            $goods_id = db('goods')->where('is_platform', 0)->column('goods_id');
+            $where = db('ordergoods')->whereIn('goods_id', $goods_id)->column('order_id');
+            $condition['order_id'] = ['in', $where];
         }
         $order_state = input('param.order_state');
-        if (in_array($order_state, array('0', '10', '20', '30', '40','50'))) {
+        if (in_array($order_state, array('0', '10', '20', '30', '40', '50'))) {
             $condition['order_state'] = $order_state;
         }
         $payment_code = input('param.payment_code');
@@ -591,7 +600,7 @@ class Order extends AdminControl
         if ($start_unixtime || $end_unixtime) {
             $condition['add_time'] = array('between', array($start_unixtime, $end_unixtime));
         }
-        $condition['order_type']=30;
+        $condition['order_type'] = 30;
         $order_list = $order_model->getOrderList($condition, 10);
         $this->assign('show_page', $order_model->page_info->render());
 
@@ -611,7 +620,7 @@ class Order extends AdminControl
         $payment_list = model('payment')->getPaymentOpenList();
         $this->assign('payment_list', $payment_list);
         $this->assign('order_list', $order_list);
-
+        $this->assign('type', 0);
         $this->assign('filtered', $condition ? 1 : 0); //是否有查询条件
         $this->setAdminCurItem('add');
         return $this->fetch('index');

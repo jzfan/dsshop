@@ -78,6 +78,9 @@
                 <th>{$Think.lang.payment}</th>
                 <th>{$Think.lang.order_state}</th>
                 <th>订单来源</th>
+                {if condition="$type eq 1"}
+                <th>订单类别</th>
+                {/if}
                 <th>{$Think.lang.ds_handle}</th>
             </tr>
         </thead>
@@ -98,19 +101,22 @@
                 <td>{:get_order_payment_name($order['payment_code'])}</td>
                 <td>{:get_order_state($order)}</td>
                 <td>{:get_order_from_name($order['order_from'])}</td>
+                {if condition="$type eq 1"}
+                <td>{$order.order_type_name}</td>
+                {/if}
                 <td>
-                    <a href="javascript:dsLayerOpen('{:url('Order/show_order',['order_id'=>$order.order_id])}','查看实物订单-{$order.order_sn}')" class="dsui-btn-view"><i class="fa"></i>{$Think.lang.ds_view}</a>
+                    <a href="javascript:dsLayerOpen('{:url('Order/show_order',['order_id'=>$order.order_id])}','订单-{$order.order_sn}')" class="dsui-btn-view"><i class="fa"></i>{$Think.lang.ds_view}</a>
                     {if condition="$order.if_cancel"}
                     <a href="javascript:dsLayerConfirm('{:url('Order/change_state',['type_state'=>'cancel','order_id'=>$order.order_id])}','{$Think.lang.order_confirm_cancel}')" class="dsui-btn-del"><i class="fa"></i>{$Think.lang.ds_cancel}</a>
                     {/if}
                     {if condition="$order.if_system_receive_pay"}
-                    <a href="javascript:dsLayerOpen('{:url('Order/change_state',['type_state'=>'receive_pay','order_id'=>$order.order_id])}','实物订单-{$order.order_sn}')" class="dsui-btn-edit"><i class="fa"></i>{$Think.lang.order_change_received}</a>
+                    <a href="javascript:dsLayerOpen('{:url('Order/change_state',['type_state'=>'receive_pay','order_id'=>$order.order_id])}','订单-{$order.order_sn}')" class="dsui-btn-edit"><i class="fa"></i>{$Think.lang.order_change_received}</a>
                     {/if}
                     {if isset($order.pintuanorder_state)}
                     <p>{$order.pintuanorder_state_text}</p>
                     {/if}
                     {if isset($order.if_spay_price)}
-                    <a href="javascript:dsLayerOpen('{:url('Order/change_state',['type_state'=>'spay_price','order_id'=>$order.order_id])}','实物订单-{$order.order_sn}')" class="dsui-btn-edit"><i class="fa"></i>{$Think.lang.order_revise_price}</a>
+                    <a href="javascript:dsLayerOpen('{:url('Order/change_state',['type_state'=>'spay_price','order_id'=>$order.order_id])}','订单-{$order.order_sn}')" class="dsui-btn-edit"><i class="fa"></i>{$Think.lang.order_revise_price}</a>
                     {/if}
                 </td>
             </tr>
