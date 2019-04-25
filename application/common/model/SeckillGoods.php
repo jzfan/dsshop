@@ -77,6 +77,7 @@ class SeckillGoods extends Model
             'id' => $this->id,
             'goods_id' => $this->goods_id,
             'name' => $this->info->goods_name,
+            'goods_advword' => $this->info->goods_advword,
             'default_image' => array_shift($images),
             'images' => join(',', $images),
             'price' => $this->price,
