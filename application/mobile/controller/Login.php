@@ -1,9 +1,8 @@
 <?php
 
 namespace app\mobile\controller;
-
 use think\Lang;
-
+use think\Cache;
 class Login extends MobileMall
 {
 
@@ -78,7 +77,11 @@ class Login extends MobileMall
      */
     public function register()
     {
+        $code=input('param.code');
         $username = input('param.username');
+        if (!preg_match('/^0?(13|15|17|18|14)[0-9]{9}$/i', $username)) {
+            ds_json_encode(10001, '请输入正确的手机号!');
+        }
         $password = input('param.password');
         $password_confirm = input('param.password_confirm');
         $email = input('param.email');
@@ -89,14 +92,19 @@ class Login extends MobileMall
         }
         $member_model = model('member');
         $register_info = array();
-        $register_info['member_name'] = $username;
+        $register_info['member_name'] = $this->getstr();
+        $register_info['member_mobile'] = $username;
+        $cache_code=Cache::get($username);
+        if ($cache_code!=$code){
+            ds_json_encode(10001, '验证码填写错误');
+        }
         $register_info['member_password'] = $password;
         $register_info['email'] = $email;
+        $register_info['member_mobilebind'] = 1;
         //添加奖励积分
         if ($inviter_id) {
             $register_info['inviter_id'] = $inviter_id;
         }
-
         $member_info = $member_model->register($register_info);
         if (!isset($member_info['error'])) {
             $token = $member_model->getBuyerToken($member_info['member_id'], $member_info['member_name'], $client);
@@ -111,6 +119,25 @@ class Login extends MobileMall
             }
         } else {
             ds_json_encode(10001, $member_info['error']);
+        }
+    }
+
+    protected function getstr()
+    {
+        $strs = "QWERTYUIOPASDFGHJKLZXCVBNM1234567890qwertyuiopasdfghjklzxcvbnm";
+        $name = substr(str_shuffle($strs), mt_rand(0, strlen($strs) - 11), 8);
+        return $name;
+    }
+
+ //获取验证码
+    public function getcode()
+    {
+       $model=model('sms');
+        $phone = input('param.username');
+        if(Cache::get($phone)){
+            ds_json_encode(10001, '请勿多次获取验证码');
+        }else{
+            $model->send($phone);
         }
     }
 }
