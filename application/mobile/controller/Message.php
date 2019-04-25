@@ -111,7 +111,7 @@ class Message extends MobileHome
         $data['read_member_id'] = $con['to_member_id'];
         $data['message_state'] = 3;
         $data['message_update_time'] = time();
-        $res = $message->editCommonMessage($data,$con);
+        $res = $message->editCommonMessage($data, $con);
         if ($res > 0) {
             ds_json_encode(10000, '更新成功');
         } else {
