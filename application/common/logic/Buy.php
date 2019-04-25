@@ -698,7 +698,7 @@ class Buy extends Model
         }
 
         //商品金额计算(分别对每个商品/优惠套装小计、每个店铺小计)
-        list($cart_list, $goods_total) = $this->_logic_buy_1->calcCartList($cart_list);
+        list($cart_list, $goods_total, $mi_total) = $this->_logic_buy_1->calcCartList($cart_list);
 
         //取得店铺优惠 - 满即送(赠品列表，店铺满送规则列表)
         list($premiums_list, $mansong_rule_list) = $this->_logic_buy_1->getMansongruleCartListByTotal($goods_total);
@@ -738,6 +738,7 @@ class Buy extends Model
 
         //保存数据
         $this->_order_data['goods_total'] = $goods_total;
+        $this->_order_data['miaomi_amount'] = $mi_total;
         $this->_order_data['final_order_total'] = $final_order_total;
         $this->_order_data['freight_total'] = $freight_total;
         $this->_order_data['promotion_total'] = $promotion_total;
@@ -817,6 +818,7 @@ class Buy extends Model
             $order['order_amount'] = $final_order_total;
             $order['shipping_fee'] = $freight_total;
             $order['goods_amount'] = $order['order_amount'] - $order['shipping_fee'];
+            $order['miaomi_amount'] = $miaomi_amount;
             $order['order_from'] = $order_from;
             $order['points_amount'] = $this->calculateGoodsPoint($cart_list);
             $order['order_type'] = $order_type;
@@ -877,6 +879,7 @@ class Buy extends Model
                     $order_goods[$i]['goods_id'] = $goods_info['goods_id'];
                     $order_goods[$i]['goods_name'] = $goods_info['goods_name'];
                     $order_goods[$i]['goods_price'] = $goods_info['goods_price'];
+                    $order_goods[$i]['mi'] = $goods_info['mi'];
                     $order_goods[$i]['goods_num'] = $goods_info['goods_num'];
                     $order_goods[$i]['goods_image'] = $goods_info['goods_image'];
                     $order_goods[$i]['buyer_id'] = $member_id;

@@ -55,8 +55,12 @@ class Deliver extends AdminControl
         $query_end_date = input('query_end_date');
         $if_start_date = preg_match('/^20\d{2}-\d{2}-\d{2}$/', $query_start_date);
         $if_end_date = preg_match('/^20\d{2}-\d{2}-\d{2}$/', $query_end_date);
-        $start_unixtime = $if_start_date ? strtotime($query_start_date) : null;
+        $start_unixtime = $if_start_date ? strtotime($query_start_date) : null; //1556035200
         $end_unixtime = $if_end_date ? strtotime($query_end_date) : null;
+        if ($start_unixtime!=null&&$end_unixtime!=null&&$start_unixtime==$end_unixtime){
+            $end_unixtime=$start_unixtime+86400;
+                $condition['add_time'] = array('between', array($start_unixtime, $end_unixtime));
+        }
         if ($start_unixtime || $end_unixtime) {
             $condition['add_time'] = array('between', array($start_unixtime, $end_unixtime));
         }

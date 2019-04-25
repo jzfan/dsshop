@@ -65,21 +65,20 @@ class SeckillGoods extends Model
         return $this->sku->goods_commonid;
     }
 
-    public function images()
-    {
-        return db('goodsimages')->where('goods_commonid', $this->commonId())->order('goodsimage_isdefault,goodsimage_sort')->column('goodsimage_url');
-    }
+    // public function images()
+    // {
+    //     return db('goodsimages')->where('goods_commonid', $this->commonId())->order('goodsimage_isdefault,goodsimage_sort')->column('goodsimage_url');
+    // }
 
     public function format()
     {
-        $images = $this->images();
+        // $images = empty($this->images()) ? [$this->info->goods_image] : $this->images();
         return [
             'id' => $this->id,
             'goods_id' => $this->goods_id,
             'name' => $this->info->goods_name,
             'goods_advword' => $this->info->goods_advword,
-            'default_image' => array_shift($images),
-            'images' => join(',', $images),
+            'image' => $this->info->goods_image,
             'price' => $this->price,
             'mi' => $this->mi,
             'qty' => $this->qty,
@@ -112,11 +111,12 @@ class SeckillGoods extends Model
         if ($seckill_good) {
             return array_merge($seckill_good->toArray(), [
                 'goods_type' => 40,
-                'is_goodsfcode' => 1,
+                'is_goodsfcode' => 0,
                 'goods_commonid' => $sku->goods_commonid,
                 'gc_id' => $sku->gc_id,
                 'goods_name' => $sku->goods_name,
                 'goods_price' => $seckill_good->price,
+                'mi' => $seckill_good->mi,
                 'goods_image' => $sku->goods_image,
                 'transport_id' => $sku->transport_id,
                 'goods_freight' => $sku->goods_freight,

@@ -65,14 +65,17 @@ class Buy_1 extends Model {
         $order_goods_total = 0;
 
         $tmp_amount = 0;
+        $mi_total = 0;
         foreach ($cart_list as $key => $cart_info) {
             $cart_list[$key]['goods_total'] = ds_price_format($cart_info['goods_price'] * $cart_info['goods_num']);
+            $cart_list[$key]['goods_mi_total'] = ds_price_format($cart_info['mi'] * $cart_info['goods_num']);
             $cart_list[$key]['goods_image_url'] = goods_cthumb($cart_info['goods_image']);
             $tmp_amount += $cart_list[$key]['goods_total'];
+            $mi_total += $cart_list[$key]['goods_mi_total'];
         }
         $goods_total = ds_price_format($tmp_amount);
 
-        return array($cart_list, $goods_total);
+        return array($cart_list, $goods_total, $mi_total);
     }
 
     /**
@@ -831,6 +834,8 @@ class Buy_1 extends Model {
         //cart_id=goods_id,优惠套装目前只能进购物车,不能立即购买
         $new_array['cart_id'] = $goods_id;
         $new_array['bl_id'] = 0;
+
+        $new_array['mi'] = $goods_info['mi'] ?? 0;
 
 
         return $new_array;

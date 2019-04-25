@@ -13,7 +13,7 @@ trait ModelTrait
 
 	public static function updateOrCreate($attr, $parms)
 	{
-		return Db::transaction(function () {
+		return Db::transaction(function () use ($attr, $parms) {
 			$find = self::where($attr)->lock(true)->find();
 			if ($find) {
 				return $find->save($parms);

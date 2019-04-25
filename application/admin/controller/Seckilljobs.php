@@ -32,8 +32,6 @@ class Seckilljobs extends AdminControl
             session('job_name', $job->name);
         }
         $this->assignGoods();
-        // $this->redirect('/admin/seckilljobs/goods');
-
         return $this->fetch('seckill/add_job_goods');
     }
 

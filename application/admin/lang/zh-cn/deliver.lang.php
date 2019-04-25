@@ -137,7 +137,7 @@ $lang['guidelines_distribution_areas'] = '此处设置的地区将作为商品�
 
 $lang['printsetup_stampimg'] = '印章图片';
 $lang['printsetup_tip2'] = '印章图片将出现在打印订单的右下角位置，请选择120x120px大小<br/>透明GIF/PNG格式图片上传作为您店铺的电子印章使用。';
-$lang['printsetup_tip1'] = '打印备注信息将出现在打印订单的下方位置，用于注明简介或发货、<br/>退换货相关规则等；<span class="orange">内容不要超过100字。</span>';
+$lang['printsetup_tip1'] = '打印备注信息将出现在打印订单的下方位置，用于注明简介或发货、<br/>退换货相关规则等。';
 $lang['printsetup_desc_error'] = '备注信息长度为1到100个字符之间';
 $lang['printsetup_desc'] = '备注信息';
 
