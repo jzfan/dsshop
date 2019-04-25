@@ -8,7 +8,6 @@ namespace app\admin\controller;
 use think\Db;
 use app\common\Formula;
 use app\common\JsonException;
-use app\common\model\SeckillGoods as SeckillGoodsModel;
 use app\admin\controller\AdminControl;
 
 class Seckillgoods extends AdminControl
@@ -58,8 +57,7 @@ class Seckillgoods extends AdminControl
             $skuGood->save();
 
             unset($data['return_rate']);
-            SeckillGoodsModel::updateOrCreate(['goods_id' => $data['goods_id']], $data);
-            return $skuGood->goods_storage;
+            return $this->model->create($data);
         });
     }
 
