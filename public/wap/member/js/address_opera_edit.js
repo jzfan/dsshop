@@ -1,5 +1,7 @@
 var local;
 var map;
+var fromTo = getQueryString("fromTo");
+var goods_id = getQueryString("goods_id");
 $(function() {
     var a = getQueryString("address_id");
     var e = getCookie("key");
@@ -38,12 +40,17 @@ $(function() {
             var lat = $("#latitude").val();
             var lng = $("#longitude").val();
             $.ajax({type: "post", url: ApiUrl + "/Memberaddress/address_edit.html", data: {key: e, true_name: r, mob_phone: d, city_id: s, area_id: t, address: i, area_info: n, is_default: o, address_id: a,latitude:lat,longitude:lng}, dataType: "json", success: function(a) {
-                    if (a.code == 10000) {
-                        location.href = WapSiteUrl + "/member/address_list.html"
-                    } else {
-                        alert(a.message);
-                    }
-                }})
+                if (a.code == 10000) {
+                	//特殊处理。处理秒杀编辑地址功能
+                	if(fromTo == "spike"){
+                    	location.href = WapSiteUrl + "/member/address_list.html?fromTo=spike&goods_id="+goods_id;
+                   	}else{
+                   		location.href = WapSiteUrl + "/member/address_list.html"
+                   	}
+                } else {
+                    alert(a.message);
+                }
+            }})
         }
     });
     $("#area_info").on("click", function() {
