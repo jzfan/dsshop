@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>消息中心</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-touch-fullscreen" content="yes" />
+<meta name="format-detection" content="telephone=no"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="msapplication-tap-highlight" content="no" />
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1" />
+<link rel="stylesheet" type="text/css" href="../css/reset.css">
+<link rel="stylesheet" type="text/css" href="../css/main.css">
+<link rel="stylesheet" type="text/css" href="../css/child.css">
+<link rel="stylesheet" type="text/css" href="../css/base.css">
+</head>
+<body style="background: #fff;">
+<header id="header">
+  <div class="header-wrap">
+    <div class="header-l"><a href="javascript:history.go(-1)"><i class="back iconfont"></i></a></div>
+    <div class="header-title">
+      <h1>平台消息</h1>
+    </div>
+    <div class="header-r"></div>
+  </div>
+</header>
+<style>
+.msg .arts{height: 1rem;line-height: 1rem;}
+.msg .artL .p1{height: 1rem;line-height: 1rem;margin: 0;}
+</style>
+<div id="article-contents" style="margin-top: 2rem;"></div>
+<div id="footer"></div>
+
+<script type="text/html" id="article-class">
+	<div class="art msg">
+		<% if( article_list.length > 0){ %>
+			
+		<% for (var i = 0;i < article_list.length;i++){ %>
+			<a href="article_show.html?article_id=<%= article_list[i].article_id %>">	
+			<div class="arts">
+				<div class="artL">
+					<p class="p1"><%= article_list[i].article_title %></p>
+				</div>
+			</div>
+			</a>
+		<% } %>	
+		
+		<% } else { %>
+    	<div class="no-record m10">暂无数据~</div>
+    <% } %>
+	    
+	</div>
+</script>
+
+
+</body>
+<script type="text/javascript" src="../js/config.js"></script>
+<script type="text/javascript" src="../js/zepto.min.js"></script>
+<script type="text/javascript" src="../js/template.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript" src="js/msg_system_class.js"></script>
+<script type="text/javascript" src="../js/footer.js"></script>
+<script type="text/javascript" src="../js/lang.js"></script>
+</html>

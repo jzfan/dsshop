@@ -264,7 +264,7 @@ footer { display: block; position: relative; z-index: 1; bottom: 0; left: 0; rig
 .dstouch-default-list li a { display: block; overflow: hidden; font-size: 0.65rem; color: #000; }
 .dstouch-default-list li h4 { float: left; margin-left: 0.3rem; font-size: 0.7rem; line-height: 1rem; color: #333; }
 .dstouch-default-list li h4 i { display: inline-block; vertical-align: top; margin-right: 0.2rem; width: 0.9rem; height: 0.9rem; opacity: 0.5; background-position: 50% 50%; background-repeat: no-repeat; background-size: 80%; }
-.dstouch-default-list li h6 { float: left; clear: both; margin-left: 0.3rem; font-size: 0.55rem; line-height: 1rem; color: #888;}
+.dstouch-default-list li h6 {float: left;width: 90%;clear: both;margin-left: 0.3rem;font-size: 0.55rem;line-height: 1rem;color: #888;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
 .dstouch-default-list li span.num { float: right; margin-right: 1.2rem; font-size: 0.6rem; line-height: 1rem;}
 .dstouch-default-list li span.tip { position: absolute; z-index: 1; top: 50%; right: 1.2rem; height: 0.9rem; margin-top: -0.4rem; font-size: 0.6rem; line-height: 0.9rem; color: #111;}
 .dstouch-default-list li span.arrow-r { position: absolute; z-index: 1; top: 50%; right: 0.5rem; display: block; width: 0.6rem; height: 0.6rem; margin-top: -0.3rem; background-image: url(../images/arrow_right_b.png); background-repeat: 50% 50%; background-repeat: no-repeat; background-size: 90%; opacity: 0.65; }
