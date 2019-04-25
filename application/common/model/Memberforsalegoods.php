@@ -20,11 +20,9 @@ class Memberforsalegoods extends Model
 
     public function freezeMemberForsaleGoods($goods_id, $goods_number)
     {
-        $queue = model("forsalequeue");
-        $memberforsalegoods_model = model("memberforsalegoods");
         $goods_info = array();
         while (true) {
-            $forsalegoods = $queue->getMemberForsaleGoods($goods_id);
+            $forsalegoods = $this->getMemberForsaleGoodsInfo($goods_id);
             #当前商品真实剩余库存
             $goods_storage = $forsalegoods->left_number - $forsalegoods->freeze_number;
 
@@ -50,7 +48,7 @@ class Memberforsalegoods extends Model
                 );
                 $goods_number = 0;
             }
-            $memberforsalegoods_model->update($update_data,['id'=>$forsalegoods->id]);
+            $this->update($update_data,['id'=>$forsalegoods->id]);
 
             if ($goods_number == 0) {
                 break;
@@ -71,6 +69,18 @@ class Memberforsalegoods extends Model
     }
 
 
+    public function getMemberForsaleGoodsInfo($goods_id)
+    {
+        return self::alias('a')->field('a.*,b.goods_price,b.service_fee')
+            ->join('ds_forsalegoods b','a.goods_id=b.goods_id')
+            ->where("a.goods_id",$goods_id)
+            ->where('a.goods_state',1)
+            ->where('(a.left_number-a.freeze_number)','gt',0)
+            ->order('a.sortable asc,a.id asc')
+            ->find();
+    }
+
+
     public function getlist($condition = array(), $pagesize = '', $fields = '*', $order = '', $limit = '')
     {
         if ($pagesize) {
@@ -81,6 +91,49 @@ class Memberforsalegoods extends Model
             $pdlog_list_paginate = db('memberforsalegoods')->where($condition)->field($fields)->order($order)->limit($limit)->select();
             return $pdlog_list_paginate;
         }
+    }
+
+
+    public function getMemberForsaleGoodsList($condition = array(), $pagesize = '', $fields = '*', $order = '', $limit = '')
+    {
+        $goods_list = $this->getlist($condition,$pagesize,$fields,$order,$limit);
+
+        foreach ($goods_list as &$goods_info) {
+            $forsalegoods = model('forsalegoods')->get(['goods_id'=>$goods_info['goods_id']]);
+            $goods_info['goods_price'] = $forsalegoods->goods_price;
+        }
+
+        return $goods_list;
+    }
+
+
+    public function updateMemberForsaleGoodsSortable($forsale_id, $step)
+    {
+        self::startTrans();
+        try {
+            $queue = self::get(['id' => $forsale_id]);
+            if ($queue->sortable > $step) {
+                // 上移
+                self::where('goods_commonid', $queue->goods_commonid)->where('sortable', 'egt', $step)
+                    ->where('sortable', 'lt', $queue->sortable)
+                    ->setDec('sortable', 1);
+            } else {
+                // 下移
+                self::where('goods_commonid', $queue->goods_commonid)->where('sortable', 'elt', $step)
+                    ->where('sortable', 'gt', $queue->sortable)
+                    ->setInc('sortable', 1);
+            }
+
+            // 更新当前商品位置
+            self::update(['sortable' => $step], ['id' => $forsale_id]);
+
+            self::commit();
+            return true;
+        }catch (\Exception $e) {
+            echo $e->getMessage();die;
+            self::rollback();
+        }
+        return false;
     }
 
 
@@ -148,41 +201,42 @@ class Memberforsalegoods extends Model
     }
 
 
-    public function addOrUpdateForsaleGoods($data)
+    /**
+     * 说明：管理后台增加91购商品
+     * @param $data
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public function addMemberForsaleGoods($data)
     {
         $common_id  = $data['common_id'];
         $count = count($data['goods_id']);
-        $insert_data = array();
+
         for($i=0; $i < $count; ++$i) {
-            $insert_data[] = array(
-                "goods_commonid" =>  $common_id,
-                "goods_id" => $data['goods_id'][$i],
-                "goods_number" => $data['goods_storage'][$i],
-                "left_number" => $data['goods_storage'][$i],
-                "sale_number" => 0,
-                "goods_state" => 1,
-                "freeze_number" => 0,
-                "created_at"  => date('Y-m-d H:i:s',time()),
-                "updated_at"  => date('Y-m-d H:i:s',time()),
+            $insert_data = array(
+                "goods_commonid"    =>  $common_id,
+                "goods_id"          =>  $data['goods_id'][$i],
+                "goods_name"        =>  $data['goods_name'][$i],
+                "goods_number"      =>  $data['goods_storage'][$i],
+                "left_number"       =>  $data['goods_storage'][$i],
+                "sale_number"       =>  0,
+                "goods_state"       =>  1,
+                "freeze_number"     =>  0,
+                "created_at"        =>  date('Y-m-d H:i:s',time()),
+                "updated_at"        =>  date('Y-m-d H:i:s',time()),
             );
-        }
-        $forsale_goods = array();
-        //商品已经存在就更新
-        foreach ($insert_data as $insert_datum) {
-            $forsalegoods = self::get(['goods_id'=>$insert_datum['goods_id']]);
-            if($forsalegoods) {
-                unset($insert_datum['created_at']);
-                $forsalegoods->save($insert_datum);
-                $forsale_id =  $forsalegoods->id;
-            } else {
-                $forsale_id = self::insertGetId($insert_datum);
+
+            #需要默认添加的同商品最末端
+            $last = self::where("goods_commonid",$common_id)->order('sortable','desc')->find();
+            $sortable = 1;
+            if (!is_null($last)) {
+                $sortable = $last->sortable + 1;
             }
-            $forsale_goods[] = [
-                'forsale_id' => $forsale_id,
-                'goods_commonid' => $common_id,
-            ];
+            $insert_data['sortable'] = $sortable;
+
+            self::create($insert_data);
         }
-        return $forsale_goods;
     }
 
 
@@ -192,5 +246,6 @@ class Memberforsalegoods extends Model
             'goods_id' => $data['goods_id']
         ], $data);
     }
+
 
 }

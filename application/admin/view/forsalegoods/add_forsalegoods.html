@@ -7,10 +7,11 @@
             <span id="explanationZoom" title="{$Think.lang.ds_explanation_close}" class="arrow"></span>
         </div>
         <ul>
-            <li>商品市场价格、商品秒杀价格、商品收益率三者确定赠送秒米赠送数量</li>
+            <li>商品市场价格、商品秒杀价格、商品收益率三者确定商品手续费</li>
+            <li>赠送秒米默认是市场价的30%,可以做调整</li>
         </ul>
     </div>
-    <form id="user_form" enctype="multipart/form-data" method="post" >
+    <form id="forsalegoods_form" enctype="multipart/form-data" method="post" >
         <table class="ds-default-table">
             <thead>
             <tr class="thead">
@@ -19,12 +20,14 @@
                 <th class="w100">秒杀价格（元）</th>
                 <th class="w100">商品库存</th>
                 <th class="w100">商品收益率</th>
+                <th class="w100">赠送秒米</th>
             </tr>
             <tbody>
                 {notempty name="goods_list"}
                 {foreach name="goods_list" item="v"}
                 <tr class="hover edit">
                     <input name="goods_id[]" value="{$v.goods_id}" type="hidden" class="text w100" />
+                    <input name="goods_name[]" value="{$v.goods_name}" type="hidden" class="text w100" />
                     <td>
                         {$v.goods_name}
                     </td>
@@ -39,6 +42,9 @@
                     </td>
                     <td>
                         <input name="profit_rate[]" value="{$v.profit_rate|default=0}" type="text" class="text w100" />
+                    </td>
+                    <td>
+                        <input name="goods_miaomi[]" value="{$v.goods_price * 0.3}" type="text" class="text w100" />
                     </td>
                 </tr>
                 {/foreach}
@@ -56,8 +62,8 @@
     $(function() {
         //按钮先执行验证再提交表单
         $("#sub").click(function() {
-            if ($("#user_form").valid()) {
-                $("#user_form").submit();
+            if ($("#forsalegoods_form").valid()) {
+                $("#forsalegoods_form").submit();
             }
         });
         $('#user_form').validate({
@@ -68,13 +74,16 @@
                 goods_price: {
                     required: true,
                 },
-                goods_point: {
+                goods_seckprice: {
                     required: true,
                 },
                 goods_storage: {
                     required: true,
                 },
-                goods_state: {
+                profit_rate: {
+                    required: true,
+                },
+                goods_miaomi: {
                     required: true,
                 },
             },
@@ -82,15 +91,18 @@
                 goods_price: {
                     required: '商品价格不能为空',
                 },
-                goods_point: {
-                    required: '密码不能为空',
+                goods_seckprice: {
+                    required: '秒杀价格不能为空',
                 },
                 goods_storage: {
                     required: '商品库存不能为空',
                 },
-                goods_state: {
-                    digits: '请选择商品状态',
-                }
+                profit_rate: {
+                    required: '收益比例不能为空',
+                },
+                goods_miaomi: {
+                    required: '赠送秒米不能为空',
+                },
             }
         });
     });

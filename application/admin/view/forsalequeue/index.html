@@ -1,0 +1,113 @@
+{include file="public/header" /}
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>挂售商品列表</h3>
+                <h5></h5>
+            </div>
+            {include file="public/admin_items" /}
+        </div>
+    </div>
+    <div class="fixed-empty"></div>
+    <div class="explanation" id="explanation">
+        <div class="title" id="checkZoom">
+            <h4 title="提示相关设置操作时应注意的要点">{$Think.lang.ds_explanation}</h4>
+            <span id="explanationZoom" title="收起提示" class="arrow"></span>
+        </div>
+        <ul>
+            <li>提示内容</li>
+        </ul>
+    </div>
+    <form method="get" name="formSearch" id="formSearch">
+        <div class="ds-search-form">
+            <dl>
+                <dt>{$Think.lang.ds_goods_name}</dt>
+                <dd><input type="text" value="{$Request.get.search_goods_name|default=''}" name="search_goods_name" id="search_goods_name" class="txt"></dd>
+            </dl>
+            <dl>
+                <dt>平台货号</dt>
+                <dd><input type="text" value="{$Request.get.search_commonid|default=''}" name="search_commonid" id="search_commonid" class="txt" /></dd>
+            </dl>
+            <dl>
+                <dt>会员电话</dt>
+                <dd><input type="text" value="{$Request.get.search_member_phone|default=''}" name="search_member_phone" id="search_member_phone" class="txt" /></dd>
+            </dl>
+
+            <a href="javascript:void(0);" id="dssubmit" class="btn " title="{$Think.lang.ds_query}">{$Think.lang.ds_query}</a>
+            <a href="{:url('Goods/index')}" class="btn btn-default" title="{$Think.lang.ds_cancel}">{$Think.lang.ds_cancel}</a>
+        </div>
+    </form>
+    <form method='post' id="form_goods" action="">
+        <table class="ds-default-table">
+            <thead>
+                <tr class="thead">
+                    <th>平台货号</th>
+                    <th>挂售会员</th>
+                    <th>商品名称</th>
+                    <th>商品价格(元)</th>
+                    <th>商品库存</th>
+                    <th>已售库存</th>
+                    <th>剩余库存</th>
+                    <th>商品排序</th>
+                    <th>商品状态</th>
+                    <th class="w200 align-center">{$Think.lang.ds_handle}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {notempty name="goods_list"}
+                {foreach name="goods_list" item="v"}
+                <tr class="hover edit">
+                    <td>{$v.goods_commonid}</td>
+                    <td>{$v.member_phone}</td>
+                    <td>{$v.goods_name}</td>
+                    <td>{$v.goods_price}</td>
+                    <td>{$v.goods_number}</td>
+                    <td>{$v.sale_number}</td>
+                    <td>{$v.left_number}</td>
+                    <td>{$v.sortable}</td>
+                    <td>{$v.goods_state}</td>
+                    <td>
+                        <a onclick='move("{$v.id}","{$v.sortable}",1)' class="dsui-btn-edit">⬆️上移</a>
+                        <a onclick='move("{$v.id}","{$v.sortable}",-1)' class="dsui-btn-edit">⬇️下移</a>
+                        <a onclick='move("{$v.id}","{$v.sortable}",0)' class="dsui-btn-del">置顶</a>
+                    </td>
+                </tr>
+                {/foreach}
+                {else /}
+                <tr class="no_data">
+                    <td colspan="15">{$Think.lang.ds_no_record}</td>
+                </tr>
+                {/notempty}
+            </tbody>
+        </table>
+
+    </form>
+</div>
+<script type="text/javascript" src="{$Think.PLUGINS_SITE_ROOT}/js/dialog/dialog.js" id="dialog_js" charset="utf-8"></script>
+<script type="text/javascript" src="{$Think.PLUGINS_SITE_ROOT}/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="{$Think.PLUGINS_SITE_ROOT}/mlselection.js" charset="utf-8"></script>
+<script type="text/javascript">
+var HOMESITEURL = "{$Think.HOME_SITE_URL}";
+// $(function() {
+    function move(forsale_id, from, type)
+    {
+        var step = from;
+        if (type == 1) { //上移一位
+            step = from - 1;
+        } else if (type == -1) { //下移一位
+            step = from + 1;
+        } else { // 置顶
+            step = 1;
+        }
+        if (step <= 0) {
+            layer.msg("编辑失败");
+            return false;
+        }
+        $.getJSON('{:url("Forsalequeue/store")}', { forsale_id: forsale_id,step: step }, function(date) {
+            layer.msg(date.msg);
+        });
+    }
+// });
+</script>
+{include file="public/footer" /}

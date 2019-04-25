@@ -176,14 +176,12 @@ class Forsalegoods extends AdminControl
                 $forsalegoods_model->addOrUpdateForsaleGoods($params);
 
                 //增加挂售商品
-                $forsale_goods = model("Memberforsalegoods")->addOrUpdateForsaleGoods($params);
-
-                //增加到队列
-                model("Forsalequeue")->addMemberForsaleGoods($forsale_goods);
+                model("Memberforsalegoods")->addMemberForsaleGoods($params);
 
                 \think\Db::commit();
                 dsLayerOpenSuccess("添加成功");
             } catch (\Exception $exception) {
+                echo $exception->getMessage();die;
                 \think\Db::rollback();
             }
             $this->error("添加失败");
@@ -205,18 +203,15 @@ class Forsalegoods extends AdminControl
         }
 
         if(request()->isPost()) {
-            $pointgoods_model = model("Pointgoods");
             $pointgoods_validate = validate('Pointgoods');
             $params = input("param.");
             if (!$pointgoods_validate->scene("add_pointgoods")->check($params)) {
-                $this->error($pointgoods_validate->getError());
+                //$this->error($pointgoods_validate->getError());
             }
             \think\Db::startTrans();
             try{
-                //添加或者更新91购商品
+                //更新91购商品
                 $forsalegoods_model->addOrUpdateForsaleGoods($params);
-                //增加挂售商品
-                model("Memberforsalegoods")->addOrUpdateForsaleGoods($params);
 
                 \think\Db::commit();
                 dsLayerOpenSuccess("添加成功");

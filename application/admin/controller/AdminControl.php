@@ -618,6 +618,11 @@ class AdminControl extends Controller
                         'text' => lang('91购商品'),
                         'args' => 'index,Forsalegoods,operation',
                     ),
+                    'Forsalequeue' => array(
+                        'ico' => '&#xe643;',
+                        'text' => lang('挂售列表'),
+                        'args' => 'index,Forsalequeue,operation',
+                    ),
                     'seckilljobs' => [
                         'ico' => '&#xe65a;',
                         'text' => '秒杀',
@@ -791,6 +796,7 @@ class AdminControl extends Controller
                 array('name' => lang('ds_rechargecard'), 'action' => null, 'controller' => 'Rechargecard'),
                 array('name' => lang('积分商品'), 'action' => null, 'controller' => 'Pointgoods'),
                 array('name' => lang('91购商品'), 'action' => null, 'controller' => 'Forsalegoods'),
+                array('name' => lang('挂售列表'), 'action' => null, 'controller' => 'Forsalequeue'),
             )),
             array('name' => lang('ds_stat'), 'child' => array(
                 array('name' => lang('ds_statgeneral'), 'action' => null, 'controller' => 'Statgeneral'),

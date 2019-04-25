@@ -116,14 +116,16 @@ class Forsalegoods extends Model
     public function parseGoodsList($goodsList)
     {
         foreach ($goodsList as &$goods) {
-            $pointGoods = self::get(['goods_id' => $goods['goods_id']]);
+            $forsalegoods = self::get(['goods_id' => $goods['goods_id']]);
 
-            $goods['goods_price'] = $pointGoods->goods_price;
-            $goods['goods_storage'] = $pointGoods->goods_storage;
-            $goods['goods_type'] = $pointGoods->goods_type;
-            $goods['goods_promotion_price'] = $pointGoods->goods_price;
-            $goods['goods_salenum'] = $pointGoods->sale_number;
-            $goods['goods_miaomi'] = $pointGoods->goods_miaomi;
+            $goods['goods_price'] = $forsalegoods->goods_price;
+            $goods['goods_storage'] = $forsalegoods->goods_storage;
+            $goods['goods_type'] = $forsalegoods->goods_type;
+            $goods['goods_promotion_price'] = $forsalegoods->goods_price;
+            $goods['goods_salenum'] = $forsalegoods->sale_number;
+            $goods['goods_miaomi'] = $forsalegoods->goods_miaomi;
+            $goods['goods_seckprice'] = $forsalegoods->goods_seckprice;
+            $goods['profit_rate'] = $forsalegoods->profit_rate;
         }
         return $goodsList;
     }
@@ -133,32 +135,37 @@ class Forsalegoods extends Model
     {
         $common_id = $data['common_id'];
         $count = count($data['goods_id']);
-        $insert_data = array();
+
         for ($i = 0; $i < $count; ++$i) {
-            $insert_data[] = array(
+            $insert_data = array(
                 "goods_commonid" => $common_id,
                 "goods_id" => $data['goods_id'][$i],
+                "goods_name" => $data['goods_name'][$i],
                 "goods_price" => $data['goods_price'][$i],
                 "goods_storage" => $data['goods_storage'][$i],
                 "goods_seckprice" => $data['goods_seckprice'][$i],
                 "profit_rate" => $data['profit_rate'][$i],
                 "service_fee" => $this->calculateServiceFee($data['goods_price'][$i], $data['goods_seckprice'][$i], $data['profit_rate'][$i]),
-                "goods_miaomi" => $this->calculateGoodsMiaomi($data['goods_price'][$i], $data['goods_seckprice'][$i], $data['profit_rate'][$i]),
+                "goods_miaomi" => $data['goods_miaomi'][$i],
                 "goods_state" => 1,
                 "sale_number" => 0,
                 "created_at" => date('Y-m-d H:i:s', time()),
                 "updated_at" => date('Y-m-d H:i:s', time()),
             );
-        }
 
-        //商品已经存在就更新
-        foreach ($insert_data as $insert_datum) {
-            $pointgoods = self::get(['goods_id' => $insert_datum['goods_id']]);
-            if ($pointgoods) {
-                unset($insert_datum['created_at']);
-                $pointgoods->save($insert_datum);
+            $forsalegoods = self::get(['goods_id' => $insert_data['goods_id']]);
+            if ($forsalegoods) {
+                # 如果商品存在就更新商品信息
+                $forsalegoods->goods_price = $insert_data['goods_price'];
+                $forsalegoods->goods_seckprice = $insert_data['goods_seckprice'];
+                $forsalegoods->profit_rate = $insert_data['profit_rate'];
+                $forsalegoods->service_fee = $insert_data['service_fee'];
+                $forsalegoods->goods_miaomi = $insert_data['goods_miaomi'];
+                $forsalegoods->goods_storage += $insert_data['goods_storage'];
+                $forsalegoods->save();
             } else {
-                self::create($insert_datum);
+                # 添加商品
+                self::create($insert_data);
             }
         }
     }
@@ -187,6 +194,7 @@ class Forsalegoods extends Model
 
         return ($goods_price * $member_rate/100 - $goods_seckprice - $goods_seckprice * $profit_rate/100) * $platform_rate/100;
     }
+
 
     public function updateGoodsStorageAndSell($goods_id, $goods_number)
     {
