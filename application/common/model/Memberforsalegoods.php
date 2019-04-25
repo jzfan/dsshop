@@ -81,6 +81,12 @@ class Memberforsalegoods extends Model
     }
 
 
+    public function getMemberForsaleGoodsInfoByGoodsName($search_goods_name)
+    {
+        return self::where('goods_name','like', '%' . $search_goods_name . '%')->find();
+    }
+
+
     public function getlist($condition = array(), $pagesize = '', $fields = '*', $order = '', $limit = '')
     {
         if ($pagesize) {
@@ -116,12 +122,13 @@ class Memberforsalegoods extends Model
                 // 上移
                 self::where('goods_commonid', $queue->goods_commonid)->where('sortable', 'egt', $step)
                     ->where('sortable', 'lt', $queue->sortable)
-                    ->setDec('sortable', 1);
+                    ->setInc('sortable', 1);
+                //交换位置
             } else {
                 // 下移
                 self::where('goods_commonid', $queue->goods_commonid)->where('sortable', 'elt', $step)
                     ->where('sortable', 'gt', $queue->sortable)
-                    ->setInc('sortable', 1);
+                    ->setDec('sortable', 1);
             }
 
             // 更新当前商品位置

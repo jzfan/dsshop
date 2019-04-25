@@ -10,6 +10,7 @@
         </div>
     </div>
     <div class="fixed-empty"></div>
+
     <div class="explanation" id="explanation">
         <div class="title" id="checkZoom">
             <h4 title="提示相关设置操作时应注意的要点">{$Think.lang.ds_explanation}</h4>
@@ -33,7 +34,7 @@
             <dl>
                 <dt>{$Think.lang.ds_class}</dt>
                 <dd id="searchgc_td"></dd>
-                <input type="hidden" id="choose_gcid" name="choose_gcid" value="0" />
+                <input type="hidden" id="choose_gcid" name="choose_gcid" value="0"/>
             </dl>
             <dl>
                 <dt>{$Think.lang.goods_index_brand}</dt>
@@ -77,13 +78,13 @@
                                         <li><a href="javascript:void(0);" data-letter="0-9">其他</a></li>
                                     </ul>
                                 </div>
-                                <div class="search" dstype="search"><input name="search_brand_keyword" id="search_brand_keyword" type="text" class="text" placeholder="品牌名称关键字查找" /><a href="javascript:void(0);" class="dssc-btn-mini" style="vertical-align: top;">Go</a></div>
+                                <div class="search" dstype="search"><input name="search_brand_keyword" id="search_brand_keyword" type="text" class="text" placeholder="品牌名称关键字查找"/><a href="javascript:void(0);" class="dssc-btn-mini" style="vertical-align: top;">Go</a></div>
                             </div>
                             <div class="brand-list" dstype="brandList">
                                 <ul dstype="brand_list">
                                     {notempty name="brand_list"}
                                     {foreach name="brand_list" item="val"}
-                                    <li data-id='{$val.brand_id}' data-name='{$val.brand_name}'><em>{$val.brand_initial}</em>{$val.brand_name}</li>
+                                    <li data-id='{$val.brand_id}'data-name='{$val.brand_name}'><em>{$val.brand_initial}</em>{$val.brand_name}</li>
                                     {/foreach}
                                     {/notempty}
                                 </ul>
@@ -99,15 +100,22 @@
                     <select name="goods_state">
                         <option value="">{$Think.lang.ds_please_choose}...</option>
                         {foreach name="state" item="val" key="key" }
-                        <option value="{$key}" {if isset($search['goods_state']) && $search['goods_state']==$key }selected{/if}>{$val} </option> {/foreach} </select> </dd> </dl> <div class="btn_group">
-                            <a href="javascript:void(0);" id="dssubmit" class="btn " title="{$Think.lang.ds_query}">{$Think.lang.ds_query}</a>
-                            <a href="{:url('Goods/index')}" class="btn btn-default" title="{$Think.lang.ds_cancel}">{$Think.lang.ds_cancel}</a>
+                        <option value="{$key}" {if isset($search['goods_state']) &&  $search['goods_state'] == $key }selected{/if}>{$val}</option>
+                        {/foreach}
+                    </select>
+                </dd>
+            </dl>
+            <div class="btn_group">
+                <a href="javascript:void(0);" id="dssubmit" class="btn " title="{$Think.lang.ds_query}">{$Think.lang.ds_query}</a>
+                <a href="{:url('Goods/index')}" class="btn btn-default" title="{$Think.lang.ds_cancel}">{$Think.lang.ds_cancel}</a>
+            </div>
         </div>
-</div>
-</form>
-<form method='post' id="form_goods" action="{:url('Goods/goods_del')}">
-    <table class="ds-default-table">
-        <thead>
+    </form>
+
+
+    <form method='post' id="form_goods" action="{:url('Goods/goods_del')}">
+        <table class="ds-default-table">
+            <thead>
             <tr class="thead">
                 <th class="w24"></th>
                 <th class="w24"></th>
@@ -117,19 +125,17 @@
                 <th class="w72 align-center">价格(元)</th>
                 <th class="w72 align-center">库存</th>
                 <th class="w72 align-center">商品状态</th>
-                <th class="w200 align-center">{$Think.lang.ds_handle}</th>
+                <th class="w200 align-center" >{$Think.lang.ds_handle}</th>
             </tr>
-        </thead>
-        <tbody>
+            </thead>
+            <tbody>
             {notempty name="goods_list"}
             {foreach name="goods_list" item="v"}
             <tr class="hover edit">
                 <td><input type="checkbox" name="id[]" value="{$v.goods_commonid}" class="checkitem"></td>
-                <td><i class="fa fa-plus-square" status="open" style="cursor: pointer;" dstype="ajaxGoodsList" data-comminid="{$v.goods_commonid}" title="点击展开查看此商品全部规格；规格值过多时请横向拖动区域内的滚动条进行浏览。"></i></td>
+                <td><i class="fa fa-plus-square" status="open"  style="cursor: pointer;" dstype="ajaxGoodsList" data-comminid="{$v.goods_commonid}" title="点击展开查看此商品全部规格；规格值过多时请横向拖动区域内的滚动条进行浏览。"></i></td>
                 <td class="align-center">{$v.goods_commonid}</td>
-                <td class="w60 picture">
-                    <div class="size-56x56"><span class="thumb size-56x56"><i></i><img src="{:goods_thumb($v, 240)}" onload="javascript:ResizeImage(this,56,56);" /></span></div>
-                </td>
+                <td class="w60 picture"><div class="size-56x56"><span class="thumb size-56x56"><i></i><img src="{:goods_thumb($v, 240)}" onload="javascript:ResizeImage(this,56,56);"/></span></div></td>
                 <td>
                     <dl class="goods-info"><dt class="goods-name">{$v.goods_name}</dt>
                         <dd class="goods-type">
@@ -147,7 +153,8 @@
                     <p class="goods-brand">品牌：{$v.brand_name}</p>
                 </td>
                 <td class="align-center">{$v.goods_price}</td>
-                <td class="align-center" {if $storage_array[$v['goods_commonid']]['alarm'] eq true}style="color:red" {/if}>{$storage_array[$v['goods_commonid']]['sum']} </td> <td class="align-center">{$state[$v['goods_state']]}</td>
+                <td class="align-center" {if $storage_array[$v['goods_commonid']]['alarm'] eq true}style="color:red"{/if}>{$storage_array[$v['goods_commonid']]['sum']}</td>
+                <td class="align-center">{$state[$v['goods_state']]}</td>
                 <td class="align-center">
                     <a href="{:url('/home/goods/index',['goods_id' =>$storage_array[$v['goods_commonid']]['goods_id']])}" target="_blank" class="dsui-btn-view"><i class="fa"></i>{$Think.lang.ds_view}</a>
                     <a href="{:url('Goods/edit_goods',['commonid' =>$v.goods_commonid])}" class="dsui-btn-edit"><i class="fa"></i>{$Think.lang.ds_edit}</a>
@@ -155,9 +162,7 @@
                 </td>
             </tr>
             <tr style="display:none;">
-                <td colspan="20">
-                    <div class="dssc-goods-sku ps-container"></div>
-                </td>
+                <td colspan="20"><div class="dssc-goods-sku ps-container"></div></td>
             </tr>
             {/foreach}
             {else /}
@@ -165,101 +170,110 @@
                 <td colspan="15">{$Think.lang.ds_no_record}</td>
             </tr>
             {/notempty}
-        </tbody>
-        <tfoot>
+            </tbody>
+            <tfoot>
             <tr class="tfoot">
                 &nbsp;&nbsp;
                 <td><input type="checkbox" class="checkall" id="checkallBottom"></td>
                 <td colspan="16"><label for="checkallBottom">{$Think.lang.ds_select_all}</label>
-                    <a href="JavaScript:void(0);" class="btn btn-small"><span>存入仓库</span></a>
+                    <a href="JavaScript:void(0);" class="btn btn-small" ><span>存入仓库</span></a>
                 </td>
             </tr>
-        </tfoot>
-    </table>
-    {$show_page}
-</form>
+            </tfoot>
+        </table>
+        {$show_page}
+    </form>
 </div>
 <script type="text/javascript" src="{$Think.PLUGINS_SITE_ROOT}/js/dialog/dialog.js" id="dialog_js" charset="utf-8"></script>
 <script type="text/javascript" src="{$Think.PLUGINS_SITE_ROOT}/jquery.mousewheel.js"></script>
 <script type="text/javascript" src="{$Think.PLUGINS_SITE_ROOT}/mlselection.js" charset="utf-8"></script>
+
 <script type="text/javascript">
-var HOMESITEURL = "{$Think.HOME_SITE_URL}";
-$(function() {
-    //商品分类
-    init_gcselect({ $gc_choose_json }, { $gc_json });
-    /* AJAX选择品牌 */
-    $("#ajax_brand").brandinit();
+    var HOMESITEURL = "{$Think.HOME_SITE_URL}";
+    $(function(){
+        //商品分类
+        init_gcselect({$gc_choose_json},{$gc_json});
+        /* AJAX选择品牌 */
+        $("#ajax_brand").brandinit();
 
-    $('#dssubmit').click(function() {
-        $('#formSearch').submit();
-    });
-
-    // 删除
-    $('a[dstype="del_batch"]').click(function() {
-        layer.confirm("{$Think.lang.ds_ensure_del}", {
-            btn: ['确定', '取消'],
-            title: false,
-        }, function() {
-            ajaxget($(this).attr('uri'));
+        $('#dssubmit').click(function(){
+            $('#formSearch').submit();
         });
-    });
+
+        // 删除
+        $('a[dstype="del_batch"]').click(function(){
+            layer.confirm("{$Think.lang.ds_ensure_del}", {
+                btn: ['确定', '取消'],
+                title: false,
+            }, function () {
+                ajaxget($(this).attr('uri'));
+            });
+        });
 
 
-    // ajax获取商品列表
-    $('i[dstype="ajaxGoodsList"]').click(
-        function() {
+        // ajax获取商品列表
+        $('i[dstype="ajaxGoodsList"]').click(
+            function(){
 
-            var status = $(this).attr("status");
-            if (status == 'open') {
-                $(this).attr('status', 'close');
-                $(this).removeClass('fa-plus-square').addClass('fa-minus-circle');
-                var _parenttr = $(this).parents('tr');
-                var _commonid = $(this).attr('data-comminid');
-                var _div = _parenttr.next().find('.dssc-goods-sku');
-                if (_div.html() == '') {
-                    $.getJSON('{:url("Goods/get_goods_list_ajax")}', { commonid: _commonid }, function(date) {
-                        if (date != 'false') {
-                            var _ul = $('<ul class="dssc-goods-sku-list"></ul>');
-                            var res = eval('(' + date + ')');
-                            for (var i = 0; i < res.length; i++) {
-                                $('<li><div class="goods-thumb" title="商家货号：' + res[i].goods_serial + '"><a href="' + res[i].url + '" target="_blank"><image src="' + res[i].goods_image + '" ></a></div>' + res[i].goods_spec + '<div class="goods-price">价格：<em title="￥' + res[i].goods_price + '">￥' + res[i].goods_price + '</em></div><div class="goods-storage">库存：<em title="' + res[i].goods_storage + '">' + res[i].goods_storage + '</em></div><a href="' + res[i].url + '" target="_blank" class="dssc-btn-mini">查看商品详情</a></li>').appendTo(_ul);
-                                _ul.appendTo(_div);
-                                _parenttr.next().show();
+                var status = $(this).attr("status");
+                if (status == 'open') {
+                    $(this).attr('status', 'close');
+                    $(this).removeClass('fa-plus-square').addClass('fa-minus-circle');
+                    var _parenttr = $(this).parents('tr');
+                    var _commonid = $(this).attr('data-comminid');
+                    var _div = _parenttr.next().find('.dssc-goods-sku');
+                    if (_div.html() == '') {
+                        $.getJSON('{:url("Goods/get_goods_list_ajax")}' , {commonid : _commonid}, function(date){
+                            if (date != 'false') {
+                                var _ul = $('<ul class="dssc-goods-sku-list"></ul>');
+                                var res = eval('(' + date + ')');
+                                for (var i = 0; i < res.length; i++)
+                                {
+                                    $('<li><div class="goods-thumb" title="商家货号：' + res[i].goods_serial + '"><a href="' + res[i].url + '" target="_blank"><image src="' + res[i].goods_image + '" ></a></div>' + res[i].goods_spec + '<div class="goods-price">价格：<em title="￥' + res[i].goods_price + '">￥' + res[i].goods_price + '</em></div><div class="goods-storage">库存：<em title="' + res[i].goods_storage + '">' + res[i].goods_storage + '</em></div><a href="' + res[i].url + '" target="_blank" class="dssc-btn-mini">查看商品详情</a></li>').appendTo(_ul);
+                                    _ul.appendTo(_div);
+                                    _parenttr.next().show();
+                                }
+
+                                // 计算div的宽度
+                                _div.css('width', document.body.clientWidth-54);
+
+//                        _div.perfectScrollbar();
                             }
-
-                            // 计算div的宽度
-                            _div.css('width', document.body.clientWidth - 54);
-
-                            //                        _div.perfectScrollbar();
-                        }
-                    });
-                } else {
-                    _parenttr.next().show()
+                        });
+                    } else {
+                        _parenttr.next().show()
+                    }
+                }else{
+                    $(this).attr('status', 'open');
+                    $(this).removeClass('fa-minus-circle').addClass('fa-plus-square');
+                    $(this).parents('tr').next().hide();
                 }
-            } else {
-                $(this).attr('status', 'open');
-                $(this).removeClass('fa-minus-circle').addClass('fa-plus-square');
-                $(this).parents('tr').next().hide();
+
             }
-
-        }
-    );
-});
-
-// 获得选中ID
-function getId() {
-    var str = '';
-    $('#form_goods').find('input[name="id[]"]:checked').each(function() {
-        id = parseInt($(this).val());
-        if (!isNaN(id)) {
-            str += id + ',';
-        }
+        );
     });
-    if (str == '') {
-        return false;
+
+    // 获得选中ID
+    function getId() {
+        var str = '';
+        $('#form_goods').find('input[name="id[]"]:checked').each(function(){
+            id = parseInt($(this).val());
+            if (!isNaN(id)) {
+                str += id + ',';
+            }
+        });
+        if (str == '') {
+            return false;
+        }
+        str = str.substr(0, (str.length - 1));
+        return str;
     }
-    str = str.substr(0, (str.length - 1));
-    return str;
-}
+
+
 </script>
+
+
+
+
+
 {include file="public/footer" /}

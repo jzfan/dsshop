@@ -413,11 +413,6 @@ class AdminControl extends Controller
                         'text' => lang('ds_goods_manage'),
                         'args' => 'index,Goods,goods',
                     ),
-                    'Goodsadd' => array(
-                        'ico' => '&#xe661;',
-                        'text' => lang('ds_goods_add'),
-                        'args' => 'index,Goodsadd,goods',
-                    ),
                     'Type' => array(
                         'ico' => '&#xe659;',
                         'text' => lang('ds_type'),
