@@ -35,12 +35,20 @@
                 0 => '等待开始',
                 1 => '秒杀中',
                 2 => '结束',
-                3 => '过期'
+                3 => '停止'
                 ][$job->status];
                 ?>
             </td>
             <td class="yes-onoff align-center">
                 <button class="btn btn-primary">查看</button>
+                {switch $job.status}
+                    {case 0}
+                    <button class="btn btn-red">删除</button>
+                    {/case}
+                    {case 1}
+                    <button class="btn btn-black">停止</button>
+                    {/case}
+                {/switch}
             </td>
         </tr>
         {/foreach}
@@ -53,3 +61,24 @@
 </table>
 {notempty name="jobs"}
 {/notempty}
+
+<script>
+$('#jobs-table tr .btn-primary').on('click', function() {
+    layer.open({
+        type: 1,
+        title: $(this).find('.group').html(),
+        area: ['600px', '360px'],
+        shadeClose: true, //点击遮罩关闭
+        content: $('#jobModal')
+    });
+    initJob($(this).data('id'))
+});
+
+$('#jobs-table tr .btn-red').on('click', function(e) {
+    window.location = '/admin/seckilljobs/delete?id=' + $(e.target).parents('tr').data('id')
+});
+
+$('#jobs-table tr .btn-black').on('click', function(e) {
+    window.location = '/admin/seckilljobs/stop?id=' + $(e.target).parents('tr').data('id')
+});
+</script>

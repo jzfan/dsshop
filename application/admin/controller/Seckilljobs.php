@@ -42,6 +42,24 @@ class Seckilljobs extends AdminControl
 
     }
 
+    public function delete()
+    {
+        $data = checkInput([
+            'id' => 'require|number'
+        ]);
+        model('seckillJobs')->find($data['id'])->delete();
+        return $this->index();
+    }
+
+    public function stop()
+    {
+        $data = checkInput([
+            'id' => 'require|number'
+        ]);
+        model('seckillJobs')->find($data['id'])->stop();
+        return $this->index();
+    }
+
     protected function assignGoods()
     {
         $this->assign('goods', $this->getGoodsByInput());

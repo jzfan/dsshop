@@ -11,15 +11,3 @@
     {include file='seckill/jobs_table' /}
     {include file='seckill/job_modal' /}
 </div>
-<script>
-$('#jobs-table tr').on('click', function() {
-    layer.open({
-        type: 1,
-        title: $(this).find('.group').html(),
-        area: ['600px', '360px'],
-        shadeClose: true, //点击遮罩关闭
-        content: $('#jobModal')
-    });
-    initJob($(this).data('id'))
-});
-</script>

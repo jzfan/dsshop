@@ -12,7 +12,6 @@ use app\admin\controller\AdminControl;
 
 class Seckillgoods extends AdminControl
 {
-
     public function getModel()
     {
         return model('SeckillGoods');
@@ -26,22 +25,16 @@ class Seckillgoods extends AdminControl
         return $this->fetch('seckill/goods');
     }
 
-    // public function add()
-    // {
-    //     $categories = db('goodsclass')->where('gc_parent_id', 0)->select();
-    //     return $this->fetch('seckill/add_good', compact('categories'));
-    // }
-
     public function store()
     {
         $data = checkInput([
             'goods_id' => 'require|number|gt:0',
             'job_id' => 'require|number|gt:0',
-            'qty' => 'require|number|gt:0',
-            'price' => 'require|number|gt:0',
+            'qty|数量' => 'require|number|gt:0',
+            'price|价格' => 'require|number|gt:0',
             // 'mi' => 'require|number',
             'commend' => 'require|number',
-            'return_rate' => 'require|number|gt:0'
+            'return_rate|收益率' => 'require|number|gt:0'
         ]);
         $data['mi'] = Formula::miByInput($data);
         return Db::transaction(function () use ($data){
@@ -55,29 +48,9 @@ class Seckillgoods extends AdminControl
             $this->checkStorage($skuGood, $seckillGood, $data['qty']);
 
             $skuGood->save();
-
-            unset($data['return_rate']);
             return $this->model->create($data);
         });
     }
-
-    // public function store()
-    // {
-    //     $data = checkInput([
-    //         'goods_id' => 'require|number',
-    //         'qty' => 'require|number',
-    //         'mi' => 'require|number',
-    //         'price' => 'require|number',
-    //     ]);
-    //     $item = db('seckill_goods')->where('goods_id', $data['goods_id'])->find();
-    //     if (!empty($item)) {
-    //         db('seckill_goods')->where('goods_id', $data['goods_id'])
-    //                         ->update($data);
-    //         return redirect()->back();
-    //     }
-    //     db('seckill_goods')->insert($data);
-    //     return $this->success('success');
-    // }
 
     protected function checkStorage($skuGood, $seckillGood, $qty)
     {

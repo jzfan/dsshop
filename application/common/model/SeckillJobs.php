@@ -2,8 +2,9 @@
 
 namespace app\common\model;
 
-use app\common\ModelTrait;
+use think\Db;
 use think\Model;
+use app\common\ModelTrait;
 
 class SeckillJobs extends Model
 {
@@ -72,5 +73,14 @@ class SeckillJobs extends Model
     {
         $start = $now ? time() : strtotime($this->start);
         return strtotime($this->end) - $start;
+    }
+
+    public function stop()
+    {
+        $this->status = 3;
+        $this->save();
+        foreach ($this->goods as $good) {
+            $good->offShelve();
+        }
     }
 }

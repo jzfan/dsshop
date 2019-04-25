@@ -55,13 +55,18 @@ function setInputVal(gid) {
 
 function submitGoodForm(e) {
     e.preventDefault()
-    $.post('/admin/seckillgoods/store', $('#modal-form').serialize(), function(res) {
-        if (res.error !== undefined) {
-            $('#error-span').html(res.error)
-        }
-        if (res > 0) {
-            // $('.modal').modal('hide')
+    $.ajax({
+        url: '/admin/seckillgoods/store', 
+        type: 'post',
+        dataType:'json',
+        data: $('#modal-form').serialize(),
+        success: function(res) {
             window.location.reload()
+        },
+        error: function (err) {
+            console.log(err.responseText)
+            let json = JSON.parse(err.responseText)
+            parent.layer.msg(json.error, {shade: 0.3})
         }
     })
     return false

@@ -103,6 +103,11 @@ class SeckillGoods extends Model
         }
     }
 
+    public function offShelve()
+    {
+        $this->delete($this->listKey());
+    }
+
     public function getGoodsInfoAndPromotionById($goods_id)
     {
         // $goods = db('goods')->where("goods_id",$goods_id)->find();
