@@ -6,6 +6,7 @@
 namespace app\admin\controller;
 
 use think\Db;
+use app\common\Formula;
 use app\common\JsonException;
 use app\common\model\SeckillGoods;
 use app\admin\controller\AdminControl;
@@ -39,16 +40,17 @@ class Seckillgoods extends AdminControl
             'job_id' => 'require|number',
             'qty' => 'require|number',
             'price' => 'require|number',
-            'mi' => 'require|number',
+            // 'mi' => 'require|number',
             'commend' => 'require|number',
         ]);
+        $data['mi'] = Formula::miByInput($data);
         return Db::transaction(function () use ($data){
             $skuGood = model('goods')->where('goods_id', $data['goods_id'])->lock(true)->find();
             if (empty($skuGood)) {
                 throw new JsonException("商品ID错误", 422);
             }
 
-            $seckillGood = $this->model->where('goods_id', $data['goods_id'])->find();
+            $seckillGood = $this->model->byGoodsId($data['goods_id']);
 
             $this->checkStorage($skuGood, $seckillGood, $data['qty']);
 

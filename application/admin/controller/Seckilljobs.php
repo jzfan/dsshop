@@ -62,13 +62,12 @@ class Seckilljobs extends AdminControl
 
     protected function getAdminItemList()
     {
-        $menu_array = [
+        return [
             [
                 'name' => 'index',
                 'text' => lang('秒杀'),
                 'url' => url('Seckilljobs/index'),
             ],
         ];
-        return $menu_array;
     }
 }

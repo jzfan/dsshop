@@ -32,7 +32,7 @@ class SeckillGoods extends Model
 
     public function info()
     {
-        return $this->belongsTo(Goods::class, 'goods_id', 'goods_id')->field('goods_id,goods_commonid,goods_name,goods_image');
+        return $this->belongsTo(Goods::class, 'goods_id', 'goods_id')->field('goods_id,goods_commonid,goods_name,goods_image,goods_advword');
     }
 
     public function limit()
