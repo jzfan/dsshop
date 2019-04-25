@@ -37,27 +37,17 @@ $(function() {
 		    			address = e.result.address_list[i].address_id;
 		    			$(".uname").text(e.result.address_list[i].address_mob_phone);
 				    	$(".uphone").text(e.result.address_list[i].address_realname);
-		    			$(".show_address").text(e.result.address_list[i].address_detail)
+		    			$(".show_address").text(e.result.address_list[i].area_info);
 		    		}else{
 			    		address = e.result.address_list[0].address_id;
-			    		$(".uname").text(e.result.address_list[0].address_mob_phone);
-				    	$(".uphone").text(e.result.address_list[0].address_realname);
-		    			$(".show_address").text(e.result.address_list[0].address_detail)
+			    		$(".uname").text(e.result.address_list[0].address_realname);
+				    	$(".uphone").text(e.result.address_list[0].address_mob_phone);
+		    			$(".show_address").text(e.result.address_list[0].area_info);
 			    	}
 		    	}
 	    	}
 	    });
 		
-		
-	
-	    //获取用户其他信息
-	    $.getJSON(ApiUrl + '/Member/index.html', { 'key': key}, function(e){
-	    	$(".uname").text(e.result.member_info.member_name);
-	    	$(".uphone").text(e.result.member_info.member_mobile);
-	    	uname = e.result.member_info.member_name;
-	    	uphone = e.result.member_info.member_mobile;
-	    });
-	    
     }
     
 
@@ -322,10 +312,10 @@ $(function() {
                 
 				//编辑用户选择地址功能
 				$(".getUadsNo").on("click",function(){
-					window.location.href = WapSiteUrl + "/member/address_list.html?id="+goods_id+"&fromTo=spike&goods_id="+goods_id;
+					window.location.href = WapSiteUrl + "/member/address_list.html?fromTo=spike&goods_id="+goods_id;
 				});
 				$(".other_ads").on("click",function(){
-					window.location.href = WapSiteUrl + "/member/address_list.html?id="+goods_id+"&fromTo=spike&goods_id="+goods_id;
+					window.location.href = WapSiteUrl + "/member/address_list.html?fromTo=spike&goods_id="+goods_id;
 				});
 				
 				

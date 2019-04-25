@@ -30,7 +30,11 @@ $(function() {
             });
             
             //特殊处理 -- 秒杀功能单独处理 
-            $(".btn").attr("href","address_opera.html?fromTo=spike&id="+goods_id);
+            $(".btn").attr("href","address_opera.html?fromTo=spike&goods_id="+goods_id);
+            $(".editaddress").each(function(i){
+            	$(".editaddress").eq(i).attr("href","address_opera_edit.html?fromTo=spike&address_id="+$(".editaddress").eq(i).parents("li").attr("value")+"&goods_id="+goods_id);
+            })
+            
             
             if(fromTo == "spike"){
             	$(".spike_chose_address").show();
@@ -43,7 +47,7 @@ $(function() {
             		sessionStorage.setItem("spike_userName",userName);
             		sessionStorage.setItem("spike_userphone",userphone);
             		sessionStorage.setItem("spike_address_info",address_info);
-            		window.location.href = WapSiteUrl + "/act_spike/product_detail.html?id="+goods_id+"&fromTo=spike&goods_id="+goods_id;
+            		window.location.href = WapSiteUrl + "/act_spike/product_detail.html?fromTo=spike&goods_id="+goods_id;
             	});
             }
             
