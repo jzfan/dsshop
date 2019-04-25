@@ -41,7 +41,9 @@
         <tr class="thead">
             <th>{$Think.lang.admin_predeposit_membername}</th>
             <th class="align-center">{$Think.lang.admin_predeposit_changetime}</th>
-            <th>秒米值</th>
+            <th class="align-center">变更前秒米值</th>
+            <th>秒米更新值</th>
+            <th>变更后秒米值</th>
             <th>{$Think.lang.admin_predeposit_log_desc}</th>
         </tr>
         </thead>
@@ -53,10 +55,19 @@
             <td class="nowarp align-center">{notempty name="$v.lg_addtime"}{$v.lg_addtime|date='Y-m-d
                 H:i:s',###}{/notempty}
             </td>
-            <td><?php echo floatval($v['lg_av_amount']) ? (floatval($v['lg_av_amount']) > 0 ? '+' : null
+            <td class="nowarp align-center"><?php echo floatval($v['lg_meter']) ? (floatval($v['lg_meter']) > 0 ?'':
+                null
+                ).$v['lg_meter'] : null;?>
+            </td>
+            <td class="nowarp align-center"><?php echo floatval($v['lg_av_amount']) ? (floatval($v['lg_av_amount']) > 0
+                ? '+' : null
                 ).$v['lg_av_amount'] : null;?>
             </td>
-            <td>{$v.lg_desc}
+            <td class="nowarp align-center"><?php echo floatval($v['lg_meter_after']) ? (floatval($v['lg_meter_after']) >
+                0 ? '' : null
+                ).$v['lg_meter_after'] : null;?>
+            </td>
+            <td class="nowarp align-center">{$v.lg_desc}
                 {notempty name="$v.lg_admin_name"}
                 ( {$Think.lang.admin_predeposit_adminname} {$v.lg_admin_name} )
                 {/notempty}
