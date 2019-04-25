@@ -14,7 +14,6 @@ use think\Model;
 class Memberorderstatistics extends Model
 {
 
-
     public function updateOrCreateMemberOrderStatistics($data,$condition)
     {
         $memberorderstatistics = self::get($condition);
