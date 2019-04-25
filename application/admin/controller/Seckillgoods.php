@@ -8,7 +8,7 @@ namespace app\admin\controller;
 use think\Db;
 use app\common\Formula;
 use app\common\JsonException;
-use app\common\model\SeckillGoods;
+use app\common\model\SeckillGoods as SeckillGoodsModel;
 use app\admin\controller\AdminControl;
 
 class Seckillgoods extends AdminControl
@@ -36,12 +36,13 @@ class Seckillgoods extends AdminControl
     public function store()
     {
         $data = checkInput([
-            'goods_id' => 'require|number',
-            'job_id' => 'require|number',
-            'qty' => 'require|number',
-            'price' => 'require|number',
+            'goods_id' => 'require|number|gt:0',
+            'job_id' => 'require|number|gt:0',
+            'qty' => 'require|number|gt:0',
+            'price' => 'require|number|gt:0',
             // 'mi' => 'require|number',
             'commend' => 'require|number',
+            'return_rate' => 'require|number|gt:0'
         ]);
         $data['mi'] = Formula::miByInput($data);
         return Db::transaction(function () use ($data){
@@ -55,7 +56,9 @@ class Seckillgoods extends AdminControl
             $this->checkStorage($skuGood, $seckillGood, $data['qty']);
 
             $skuGood->save();
-            SeckillGoods::updateOrCreate(['goods_id' => $data['goods_id']], $data);
+
+            unset($data['return_rate']);
+            SeckillGoodsModel::updateOrCreate(['goods_id' => $data['goods_id']], $data);
             return $skuGood->goods_storage;
         });
     }

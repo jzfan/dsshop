@@ -1,14 +1,16 @@
 var goods_id = getQueryString("goods_id");
+var fromTo = getQueryString("fromTo");
+console.log(fromTo);
 var pintuangroup_share_id = getQueryString("pintuangroup_share_id");
 var map_list = [];
 var map_index_id = "";
 var tuan_sku;
 var goodsid;
 var isOne = true;
-var miammi = 0;
+var miaomi = 0;
 var needMiammi = 0;
 var e = getCookie("key");
-var address = 0;
+var address = sessionStorage.getItem("spike_address_id");
 var uname = "";
 var uphone = "";
 $(function() {
@@ -22,20 +24,27 @@ $(function() {
 	        miaomi = es.result.miaomi;
 	        $("#my_miaomi").text(miaomi);
 	    });
-		
-		//获取我的默认地址
-	    $.getJSON(ApiUrl + '/Memberaddress/address_list.html', { 'key': key}, function(e){
-	    	//获取默认地址ID
-	    	for (var i=0;i < e.result.address_list.length; i++) {
-	    		if(e.result.address_list[i].address_is_default == "1"){
-	    			address = e.result.address_list[i].address_id;
-	    			$(".show_address").text(e.result.address_list[i].address_detail)
-	    		}else{
-		    		address = e.result.address_list[0].address_id;
-		    		$(".show_address").text(e.result.address_list[0].address_detail)
+	    
+	    //获取我的默认地址
+		if(fromTo){
+		    $.getJSON(ApiUrl + '/Memberaddress/address_list.html', { 'key': key}, function(e){
+		    	//获取默认地址ID
+		    	for (var i=0;i < e.result.address_list.length; i++) {
+		    		if(e.result.address_list[i].address_is_default == "1"){
+		    			address = e.result.address_list[i].address_id;
+		    			$(".uname").text(e.result.address_list[i].address_realname);
+				    	$(".uphone").text(e.result.address_list[i].address_mob_phone);
+		    			$(".show_address").text(e.result.address_list[i].address_detail)
+		    		}else{
+			    		address = e.result.address_list[0].address_id;
+			    		$(".uname").text(e.result.address_list[0].address_realname);
+				    	$(".uphone").text(e.result.address_list[0].address_mob_phone);
+		    			$(".show_address").text(e.result.address_list[0].address_detail)
+			    	}
 		    	}
-	    	}
-	    });
+		    });
+		}
+		
 	
 	    //获取用户其他信息
 	    $.getJSON(ApiUrl + '/Member/index.html', { 'key': key}, function(e){
@@ -187,9 +196,6 @@ $(function() {
                     $(".fastnum").val(3);
                 }
 				
-				// 页面初始化
-                initNew();
-
 
                 if (getCookie("cart_count")) {
                     if (getCookie("cart_count") > 0) {
@@ -300,9 +306,20 @@ $(function() {
                                 $(".getUads_infos").show();
                             }
                         }
-                        initNew();
                     });
                 });
+                
+				//编辑用户选择地址功能
+				$(".getUadsNo").on("click",function(){
+					window.location.href = WapSiteUrl + "/member/address_list.html?id="+goods_id+"&fromTo=spike&goods_id="+goods_id;
+				});
+				$(".other_ads").on("click",function(){
+					window.location.href = WapSiteUrl + "/member/address_list.html?id="+goods_id+"&fromTo=spike&goods_id="+goods_id;
+				});
+				
+				
+				
+                
                 //增加&&减少
                 $(".f_numAdd").on("click", function() {
                     $(".f_nums").removeClass("f_numsON");
@@ -350,38 +367,30 @@ $(function() {
                     getFreeVoucher($(this).attr("data-tid"))
                 });
 
-
+				// 页面初始化
+                initNew();
 
             }
         });
     }
 
     //这里修改成用户创建新地址
-    $(".getUadsNo").on("click", function() {
-        console.log(e);
-        $.areaSelected({
-            success: function(e) {
-                //默认已经选择好了地址
-                console.log(e);
-                $(".getUads_infos").empty();
-                $(".getUadsNo").hide();
-                $(".getUads_infos").show();
-                $(".getUads_infos").append('<div class="u_infos"><span style="margin: 0 0.2rem;" class="uname">'+uname+'</span><span style="margin: 0 0.2rem;" class="uphone">'+uphone+'</span></div>');
-                $(".getUads_infos").append('<div class="addre">' + e.area_info + '</div>');
-                $(".getUads_infos").append('<div class="addre"><input type="text" class="newAdd" placeholder="请输入详细地址" /><span class="add_btns">确定</span></div>');
-                //              
-            }
-        })
-    });
-
-    $("body").on("click", "#goodsBody,#goodsBody1", function() {
-        window.location.href = WapSiteUrl + "/mall/product_info.html?goods_id=" + goods_id
-    });
-
-    $("body").on("click", "#goodsEvaluation,#goodsEvaluation1", function() {
-        window.location.href = WapSiteUrl + "/mall/product_eval_list.html?goods_id=" + goods_id
-    });
-
+//  $(".getUadsNo").on("click", function() {
+//      console.log(e);
+//      $.areaSelected({
+//          success: function(e) {
+//              //默认已经选择好了地址
+//              console.log(e);
+//              $(".getUads_infos").empty();
+//              $(".getUadsNo").hide();
+//              $(".getUads_infos").show();
+//              $(".getUads_infos").append('<div class="u_infos"><span style="margin: 0 0.2rem;" class="uname">'+uname+'</span><span style="margin: 0 0.2rem;" class="uphone">'+uphone+'</span></div>');
+//              $(".getUads_infos").append('<div class="addre">' + e.area_info + '</div>');
+//              $(".getUads_infos").append('<div class="addre"><input type="text" class="newAdd" placeholder="请输入详细地址" /><span class="add_btns">确定</span></div>');
+//              //              
+//          }
+//      })
+//  });
 
 });
 
@@ -423,5 +432,14 @@ function initNew() {
     	$(".buy-now").addClass("no");
     }else{
     	$(".buy-now").removeClass("no");
+    }
+    //特殊处理，自用商品
+    if(fromTo == "spike"){
+    	$(".fast_types").removeClass("fast_typeON");
+    	$(".fast_types").eq(1).addClass("fast_typeON");
+    	$(".getUads").show();
+    	$(".uname").text(sessionStorage.getItem("spike_userName"));
+    	$(".uphone").text(sessionStorage.getItem("spike_userphone"));
+    	$(".show_address").text(sessionStorage.getItem("spike_address_info"));
     }
 }

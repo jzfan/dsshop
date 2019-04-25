@@ -270,6 +270,9 @@ class Payment extends Model
             case 'point_order':
                 $result = $this->updatePointOrder($out_trade_no,$trade_no,$payment_code);
                 break;
+            case 'seckill_forsale':
+                $result = $this->updateSeckillForSale();
+                break;
         }
     }
 
@@ -293,20 +296,18 @@ class Payment extends Model
         return model('order','logic')->updatePointOrder($order_info['data']['order_list'], 'system', '系统', $post);
     }
 
-    public function updateSeckillForSelf()
-    {
-        // (new SeckillGoods)->byGoodsId($good_id)
-        //                 ->sold($number);
-    }
-
     // 成功支付后对代售商品处理
     // 1. 更新forsale
     // 2. 更新forsale_member
-    // 3. seckill_goods 销量 ++, 库存--
-    public function updateSeckillForSale($data)
+    // 3. 更新日志
+    public function updateSeckillForSale()
     {
-        Forsalegoods::add($data);
-        Memberforsalegoods::add($data);
+        $order_info = $this->getRealOrderInfo(input('out_trade_no'));
+dd($order_info);
+        // return model('order','logic')->updatePointOrder($order_info['data']['order_list'], 'system', '系统', $post);
+
+        Forsalegoods::add($order_info);
+        Memberforsalegoods::add($order_info);
     }
 
 

@@ -3,6 +3,7 @@
 namespace app\script\controller;
 
 use think\Controller;
+use app\common\DsRedis;
 use app\common\Formula;
 
 class Test extends Controller
@@ -34,10 +35,19 @@ class Test extends Controller
 		foreach ($data as $item) {
 			$fo = new Formula($item['marketPrice'], $item['seckillPrice'], $item['returnRate'] );
 			echo 'name: ' . $item['name'] . "\n";
-			echo 'payClient: ' . $fo->payClient() . "\n";
-			echo 'fee: ' . $fo->fee() . "\n";
-			echo 'mi: ' . $fo->mi() . "\n";
+			echo 'payClient: ' . $fo->payClient . "\n";
+			echo 'fee: ' . $fo->fee . "\n";
+			echo 'mi: ' . $fo->mi . "\n";
 		}
+	}
+
+	public function redis()
+	{
+		$redis = DsRedis::getInstance();
+		$redis->setLock('test lock');
+		$redis->releaseLock('test lock');
+		echo 'done';
+		exit;
 	}
 
 }
