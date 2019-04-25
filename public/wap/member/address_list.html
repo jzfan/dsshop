@@ -15,9 +15,13 @@
 <link rel="stylesheet" type="text/css" href="../css/dstouch_member.css">
 </head>
 <body>
+<style>
+/*特殊处理——————地址列表页面单独处理秒杀地址选择*/
+.dstouch-address-list li .handle span.spike_chose_address{float: left;position: static;border: 1px solid #f37801;color: #f37801;padding: 0 0.5rem;border-radius: 4px;display: none;}	
+</style>	
 <header id="header">
   <div class="header-wrap">
-    <div class="header-l"> <a href="member.html"> <i class="back iconfont"></i> </a> </div>
+    <div class="header-l"> <a href="javascript:history.go(-1)"> <i class="back iconfont"></i> </a> </div>
     <div class="header-title">
       <h1><lang data-id="address_management"></lang></h1>
     </div>
@@ -32,21 +36,27 @@
 <%if(address_list.length>0){%>
 	<ul>
 	<%for(var i=0;i<address_list.length;i++){%>
-        <li>
+        <li value="<%=address_list[i].address_id %>">
             <dl>
                 <dt>
-					<span class="name"><%=address_list[i].address_realname %></span>
-					<span class="phone"><%=address_list[i].address_mob_phone %></span>
-				</dt>
+									<span class="name"><%=address_list[i].address_realname %></span>
+									<span class="phone"><%=address_list[i].address_mob_phone %></span>
+								</dt>
                 <dd><%=address_list[i].area_info %>&nbsp;<%=address_list[i].address_detail %></dd>
             </dl>
             <div class="handle">
-				<% if (address_list[i].address_is_default == 1) { %>
-				<%=lang('default_address')%>
-				<% } %>
-           		<span>
-					<a href="address_opera_edit.html?address_id=<%=address_list[i].address_id %>"><i class="edit"></i><%=lang('edit')%></a><a href="javascript:;" address_id="<%=address_list[i].address_id %>" class="deladdress"><i class="del"></i><%=lang('delete')%></a>
-				</span>
+							<% if (address_list[i].address_is_default == 1) { %>
+							<%=lang('default_address')%>
+							<% } %>
+							<span class="spike_chose_address">确定</span>
+	           	<span>
+									<a href="address_opera_edit.html?address_id=<%=address_list[i].address_id %>">
+										<i class="edit"></i><%=lang('edit')%>
+									</a>
+									<a href="javascript:;" address_id="<%=address_list[i].address_id %>" class="deladdress">
+										<i class="del"></i><%=lang('delete')%>
+									</a>
+							</span>
             </div>
         </li>
 	<%}%>
