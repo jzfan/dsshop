@@ -529,22 +529,13 @@ class Predeposit extends AdminControl {
             switch ($operatetype) {
                 case 1:
                     $admin_act = "sys_add_meter_second";
-                    $log_msg = "管理员【" . $admininfo['admin_name'] . "】操作会员【" . $member_info['member_name'] . "】秒米【增加】，数量为" . $money . ",编号为" . $order_sn;
+                    $meter=$available_predeposit+$money;
+                    $log_msg = "管理员【" . $admininfo['admin_name'] . "】操作会员【" . $member_info['member_name'] . "】增加秒米数量为" . $money . ",改动前秒米数为.$available_predeposit,修改后为.$meter,编号为" . $order_sn;
                     break;
                 case 2:
                     $admin_act = "sys_del_meter_second";
-                    $log_msg = "管理员【" . $admininfo['admin_name'] . "】操作会员【" . $member_info['member_name'] . "】秒米【减少】，数量为" . $money . ",编号为" . $order_sn;
-                    break;
-                case 3:
-                    $admin_act = "sys_freeze_meter_second";
-                    $log_msg = "管理员【" . $admininfo['admin_name'] . "】操作会员【" . $member_info['member_name'] . "】秒米【冻结】，数量为" . $money . ",编号为" . $order_sn;
-                    break;
-                case 4:
-                    $admin_act = "sys_unfreeze_meter_second";
-                    $log_msg = "管理员【" . $admininfo['admin_name'] . "】操作会员【" . $member_info['member_name'] . "】秒米【解冻】，数量为" . $money . ",编号为" . $order_sn;
-                    break;
-                default:
-                    $this->error(lang('ds_common_op_fail'), 'Predeposit/pdlog_list');
+                    $meter=$available_predeposit-$money;
+                    $log_msg = "管理员【" . $admininfo['admin_name'] . "】操作会员【" . $member_info['member_name'] . "】减少秒米数量为" . $money . ",改动前秒米数为.$available_predeposit,修改后为.$meter,编号为" . $order_sn;
                     break;
             }
             try {
@@ -558,6 +549,8 @@ class Predeposit extends AdminControl {
                 $data['admin_name'] = $admininfo['admin_name'];
                 $data['pdr_sn'] = $order_sn;
                 $data['lg_desc'] = $memo;
+                $data['lg_meter'] = $available_predeposit;
+                $data['lg_meter_after'] = $meter;
                 $predeposit_model->changeMd($admin_act, $data);
                 $predeposit_model->commit();
                 $this->log($log_msg, 1);

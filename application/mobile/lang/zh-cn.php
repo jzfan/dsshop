@@ -19,3 +19,4 @@ $lang['order_log_pay'] = '完成了付款';
 $lang['order_log_send'] = '发出了货物 ( 编辑了发货信息 )';
 $lang['order_log_success'] = '签收了货物';
 $lang['order_log_eval'] = '评价了交易';
+
