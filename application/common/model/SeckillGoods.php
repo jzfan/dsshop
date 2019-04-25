@@ -72,7 +72,7 @@ class SeckillGoods extends Model
 
     public function format()
     {
-        $images = $this->images();
+        $images = empty($this->images()) ? [$this->info->goods_image] : $this->images();
         return [
             'id' => $this->id,
             'goods_id' => $this->goods_id,
