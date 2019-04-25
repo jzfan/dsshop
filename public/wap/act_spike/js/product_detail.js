@@ -9,43 +9,43 @@ var miammi = 0;
 var needMiammi = 0;
 var e = getCookie("key");
 var address = 0;
+var uname = "";
+var uphone = "";
 $(function() {
-
-    //记录浏览历史
-    $.get(ApiUrl + "/Goods/addbrowse/gid/" + getQueryString("goods_id"));
-    if (!e) {
-        $(".getUadsNo").text("尚未登录");
-    }
-
-    //获取我的总积分
-    $.getJSON(ApiUrl + '/Member/my_asset.html', { 'key': key, 'fields': 'miaomi' }, function(es) {
-        miammi = es.result.miaomi;
-	    if (e) {
-	        $("#my_miaomi").text(miammi);
-	    }
-	    
-	    initNew();
-    });
-	
-	//获取我的默认地址
-    $.getJSON(ApiUrl + '/Memberaddress/address_list.html', { 'key': key}, function(e){
-    	//获取默认地址ID
-    	for (var i=0;i < e.result.address_list.length; i++) {
-    		if(e.result.address_list[i].address_is_default == "1"){
-    			address = e.result.address_list[i].address_id;
-    			$(".show_address").text(e.result.address_list[i].address_detail)
-    		}else{
-	    		address = e.result.address_list[0].address_id;
-	    		$(".show_address").text(e.result.address_list[0].address_detail)
+	//判断用户是否登录
+	if(!e){
+		//尚未登录
+		$(".buy-now").addClass("no");
+	}else{
+	    //获取我的总积分
+	    $.getJSON(ApiUrl + '/Member/my_asset.html', { 'key': e, 'fields': 'miaomi' }, function(es) {
+	        miaomi = es.result.miaomi;
+	        $("#my_miaomi").text(miaomi);
+	    });
+		
+		//获取我的默认地址
+	    $.getJSON(ApiUrl + '/Memberaddress/address_list.html', { 'key': key}, function(e){
+	    	//获取默认地址ID
+	    	for (var i=0;i < e.result.address_list.length; i++) {
+	    		if(e.result.address_list[i].address_is_default == "1"){
+	    			address = e.result.address_list[i].address_id;
+	    			$(".show_address").text(e.result.address_list[i].address_detail)
+	    		}else{
+		    		address = e.result.address_list[0].address_id;
+		    		$(".show_address").text(e.result.address_list[0].address_detail)
+		    	}
 	    	}
-    	}
-    });
-    
-    //获取其他信息
-    $.getJSON(ApiUrl + '/Member/index.html', { 'key': key}, function(e){
-    	$(".uname").text(e.result.member_info.member_name);
-    	$(".uphone").text(e.result.member_info.member_mobile);
-    });
+	    });
+	
+	    //获取用户其他信息
+	    $.getJSON(ApiUrl + '/Member/index.html', { 'key': key}, function(e){
+	    	$(".uname").text(e.result.member_info.member_name);
+	    	$(".uphone").text(e.result.member_info.member_mobile);
+	    	uname = e.result.member_info.member_name;
+	    	uphone = e.result.member_info.member_mobile;
+	    });
+	    
+    }
     
 
     var t = function(e, t) {
@@ -152,10 +152,8 @@ $(function() {
             },
             dataType: "json",
             success: function(e) {
-                console.log(e)
-                //数据重置，判断重写  2019年4月18日 16:49:37
-                //if (e.code==10000) {
-
+//              console.log(e);
+                
                 var d = e.images.split(",");
                 if (d.length > 1) {
                     for (var i = 0; i < d.length; i++) {
@@ -226,9 +224,9 @@ $(function() {
 
                 //立刻购买事件
                 $(".buy-now").click(function() {
+                	var e = getCookie("key");
                     //判断当前是否可以下单
-//                  if ($(this).hasClass("no")) {
-                        var e = getCookie("key");
+                    if ($(this).hasClass("no")) {
                         if (!e) {
                             layer.open({
                                 content: "请先登录~",
@@ -238,8 +236,11 @@ $(function() {
                                     window.location.href = WapSiteUrl + "/member/login.html";
                                 }
                             });
+                        }else if(parseFloat($("#good_miaomi").text()) > parseFloat($("#my_miaomi").text())){
+                        	layer.open({ content: "抱歉，当前用户秒米不足所选商品", skin: 'msg', time: 2 });
+                        	return false;
                         }
-						
+					}else{	
 						//获取用户信息
                         var o = {};
                         o.key = e;
@@ -267,7 +268,7 @@ $(function() {
                                 }
                             }
                         })
-//                  }
+                    }
                 })
 
 					
@@ -285,18 +286,19 @@ $(function() {
                 $(".fast_types").each(function(i) {
                     $(".fast_types").eq(i).on("click", function() {
                         $(this).addClass("fast_typeON").siblings().removeClass("fast_typeON");
-                        if (i == 1) {    //自用
+                        if (i == 0) {   //自用
+                            $(".getUads").hide();
+                        } else {
                             $(".getUads").show();
                             //如果没有默认地址，将出现选择地址，点击创建新地址
                             if (address == 0) {
                                 $(".getUadsNo").show();
+                                $(".getUadsNo").text("选择地址");
                                 $(".getUads_infos").hide();
                             } else {
                                 $(".getUadsNo").hide();
                                 $(".getUads_infos").show();
                             }
-                        } else {
-                            $(".getUads").show();
                         }
                         initNew();
                     });
@@ -360,11 +362,11 @@ $(function() {
         $.areaSelected({
             success: function(e) {
                 //默认已经选择好了地址
-                console.log(e.area_info)
+                console.log(e);
                 $(".getUads_infos").empty();
                 $(".getUadsNo").hide();
                 $(".getUads_infos").show();
-                $(".getUads_infos").append('<div class="u_infos"><span style="margin: 0 0.2rem;" class="uname">黄帅</span><span style="margin: 0 0.2rem;" class="uphone">17092555555</span></div>');
+                $(".getUads_infos").append('<div class="u_infos"><span style="margin: 0 0.2rem;" class="uname">'+uname+'</span><span style="margin: 0 0.2rem;" class="uphone">'+uphone+'</span></div>');
                 $(".getUads_infos").append('<div class="addre">' + e.area_info + '</div>');
                 $(".getUads_infos").append('<div class="addre"><input type="text" class="newAdd" placeholder="请输入详细地址" /><span class="add_btns">确定</span></div>');
                 //              
@@ -416,7 +418,10 @@ function initNew() {
     $(".order_show_infos .gdType").text(good_goto);
     $(".order_show_infos .gdPrice").text(good_price * good_nums);
     $(".order_show_infos .gdMiaomi").text(good_miaomi * good_nums);
-    if(miammi != 0){
+    //判断秒米是否支持本次活动
+    if(parseFloat($("#good_miaomi").text()) > miaomi){
+    	$(".buy-now").addClass("no");
+    }else{
     	$(".buy-now").removeClass("no");
     }
 }
