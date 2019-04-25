@@ -6,6 +6,7 @@ $(function() {
     if (!e) {
         location.href = "login.html"
     }
+    
     function s() {
         $.ajax({type: "post", url: ApiUrl + "/Memberaddress/address_list.html", data: {key: e}, dataType: "json", success: function(e) {
             checkLogin(e.login);
@@ -28,7 +29,9 @@ $(function() {
                 });
             });
             
-            //特殊处理 -- 秒杀功能单独处理 666秒杀
+            //特殊处理 -- 秒杀功能单独处理 
+            $(".btn").attr("href","address_opera.html?fromTo=spike&id="+goods_id);
+            
             if(fromTo == "spike"){
             	$(".spike_chose_address").show();
             	$(".spike_chose_address").on("click",function(){
@@ -53,6 +56,10 @@ $(function() {
             if (e) {
                 s()
             }
-        }})
+        }});
+        sessionStorage.removeItem("spike_address_id");
+        sessionStorage.removeItem("spike_userName");
+        sessionStorage.removeItem("spike_userphone");
+        sessionStorage.removeItem("spike_address_info");
     }}
 );

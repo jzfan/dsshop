@@ -1,6 +1,5 @@
 var goods_id = getQueryString("goods_id");
 var fromTo = getQueryString("fromTo");
-console.log(fromTo);
 var pintuangroup_share_id = getQueryString("pintuangroup_share_id");
 var map_list = [];
 var map_index_id = "";
@@ -26,24 +25,29 @@ $(function() {
 	    });
 	    
 	    //获取我的默认地址
-		if(fromTo){
-		    $.getJSON(ApiUrl + '/Memberaddress/address_list.html', { 'key': key}, function(e){
+	    $.getJSON(ApiUrl + '/Memberaddress/address_list.html', { 'key': key}, function(e){
+	    	if(e.result.address_list.length == 0){
+	    		$(".getUads_infos").hide();
+	    		$(".getUadsNo").show();
+	    		$(".getUadsNo").text("选择地址");
+	    	}else{
 		    	//获取默认地址ID
 		    	for (var i=0;i < e.result.address_list.length; i++) {
 		    		if(e.result.address_list[i].address_is_default == "1"){
 		    			address = e.result.address_list[i].address_id;
-		    			$(".uname").text(e.result.address_list[i].address_realname);
-				    	$(".uphone").text(e.result.address_list[i].address_mob_phone);
+		    			$(".uname").text(e.result.address_list[i].address_mob_phone);
+				    	$(".uphone").text(e.result.address_list[i].address_realname);
 		    			$(".show_address").text(e.result.address_list[i].address_detail)
 		    		}else{
 			    		address = e.result.address_list[0].address_id;
-			    		$(".uname").text(e.result.address_list[0].address_realname);
-				    	$(".uphone").text(e.result.address_list[0].address_mob_phone);
+			    		$(".uname").text(e.result.address_list[0].address_mob_phone);
+				    	$(".uphone").text(e.result.address_list[0].address_realname);
 		    			$(".show_address").text(e.result.address_list[0].address_detail)
 			    	}
 		    	}
-		    });
-		}
+	    	}
+	    });
+		
 		
 	
 	    //获取用户其他信息
@@ -155,7 +159,7 @@ $(function() {
             url: ApiUrl + "/api.seckillgoods/get/",
             type: "get",
             data: {
-                id: r,
+                goods_id: r,
                 key: e,
                 pintuangroup_share_id: pintuangroup_share_id
             },
@@ -163,7 +167,7 @@ $(function() {
             success: function(e) {
 //              console.log(e);
                 
-                var d = e.images.split(",");
+                var d = e.image.split(",");
                 if (d.length > 1) {
                     for (var i = 0; i < d.length; i++) {
                         $("#mySwipe ul").append('<li><img src="' + d[i] + '" onerror="imgError(this)"/></li>');
@@ -178,13 +182,12 @@ $(function() {
                 
                 needMiammi = e.mi;
                 $(".good_name").text(e.name);
-                $(".good_advword").text(); //商品介绍
+                $(".goods_advword").text(e.goods_advword); //商品介绍
                 $("#good_price").text(e.price);
                 $("#good_miaomi").text(e.mi);
                 $(".gdPrice").text(e.price);
                 $(".miaomi").text(e.mi);
                 $(".nowNum").text(e.qty - e.sold);
-                
                 
                 
 				
@@ -291,20 +294,28 @@ $(function() {
                 //快速选择事件
                 $(".fast_types").each(function(i) {
                     $(".fast_types").eq(i).on("click", function() {
+                    	console.log(address);
                         $(this).addClass("fast_typeON").siblings().removeClass("fast_typeON");
-                        if (i == 0) {   //自用
-                            $(".getUads").hide();
-                        } else {
-                            $(".getUads").show();
-                            //如果没有默认地址，将出现选择地址，点击创建新地址
-                            if (address == 0) {
-                                $(".getUadsNo").show();
-                                $(".getUadsNo").text("选择地址");
-                                $(".getUads_infos").hide();
-                            } else {
-                                $(".getUadsNo").hide();
-                                $(".getUads_infos").show();
-                            }
+                        //未登录
+                        if(!getCookie("key")){
+                        	$(".getUads").show();
+                        	$(".getUadsNo").show();
+                        	$(".getUads_infos").hide();
+                        }else{
+	                        if (i == 0) {   //自用
+	                            $(".getUads").hide();
+	                        } else {
+	                            $(".getUads").show();
+	                            //判断当前用户是否存在地址
+	                            if (!address) {
+	                                $(".getUadsNo").show();
+	                                $(".getUadsNo").text("选择地址");
+	                                $(".getUads_infos").hide();
+	                            } else {
+	                                $(".getUadsNo").hide();
+	                                $(".getUads_infos").show();
+	                            }
+	                        }
                         }
                     });
                 });

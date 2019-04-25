@@ -1,16 +1,18 @@
 var local;
 var map;
+var fromTo = getQueryString("fromTo");
+var id = getQueryString("id");
 $(function() {
     var a = getCookie("key");
     $.sValid.init({rules: {true_name: "required", mob_phone: "required", area_info: "required", address: "required"}, messages: {true_name: "姓名必填！", mob_phone: "手机号必填！", area_info: "地区必填！", address: "街道必填！"}, callback: function(a, e, r) {
-            if (a.length > 0) {
-                var i = "";
-                $.map(e, function(a, e) {
-                    i += "<p>" + a + "</p>"
-                });
-                layer.open({content: i, skin: 'msg', time: 2});
-            }
-        }});
+        if (a.length > 0) {
+            var i = "";
+            $.map(e, function(a, e) {
+                i += "<p>" + a + "</p>"
+            });
+            layer.open({content: i, skin: 'msg', time: 2});
+        }
+    }});
     $("#header-nav").click(function() {
         $(".btn").click()
     });
@@ -26,12 +28,20 @@ $(function() {
             var lat = $("#latitude").val();
             var lng = $("#longitude").val();
             $.ajax({type: "post", url: ApiUrl + "/Memberaddress/address_add.html", data: {key: a, true_name: e, mob_phone: r, city_id: d, area_id: t, address: i, area_info: n, is_default: o,latitude:lat,longitude:lng}, dataType: "json", success: function(a) {
-                    if (a) {
-                        location.href = WapSiteUrl + "/member/address_list.html"
-                    } else {
-                        location.href = WapSiteUrl
-                    }
-                }})
+                if(fromTo == "spike"){
+                	if (a) {
+	                    location.href = WapSiteUrl + "/member/address_list.html?fromTo=spike"+"&id="+id;
+	                } else {
+	                    location.href = WapSiteUrl
+	                }
+                }else{
+	                if (a) {
+	                    location.href = WapSiteUrl + "/member/address_list.html"
+	                } else {
+	                    location.href = WapSiteUrl
+	                }
+                }
+            }})
         }
     });
     $("#area_info").on("click", function() {
