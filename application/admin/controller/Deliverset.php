@@ -2,6 +2,7 @@
 /**
  * 发货设置
  */
+
 namespace app\admin\controller;
 
 use think\Lang;
@@ -22,14 +23,14 @@ class Deliverset extends AdminControl
     {
         $daddress_model = model('daddress');
         $condition = array();
-        $is_shop=session('is_shop');
-        $admin_id=session('admin_id');
-       if ($is_shop==1){
-           $condition['is_platform'] = 0;
-       }else{
-           $condition['is_platform'] = 1;
-           $condition['supplier'] = $admin_id;
-       }
+        $is_shop = session('is_shop');
+        $admin_id = session('admin_id');
+        if ($is_shop == 1) {
+            $condition['is_platform'] = 0;
+        } else {
+            $condition['is_platform'] = 1;
+            $condition['supplier'] = $admin_id;
+        }
         $address_list = $daddress_model->getAddressList($condition, '*', '', 20);
         $this->assign('address_list', $address_list);
         $this->setAdminCurItem('list');
@@ -39,15 +40,16 @@ class Deliverset extends AdminControl
     /**
      * 新增/编辑发货地址
      */
-    public function daddress_add() {
-        $is_shop=session('is_shop');
-        $admin_id=session('admin_id');
-        if ($is_shop==1){
-            $supplier=0;
-            $is_platform=0;
-        }else{
-            $supplier=$admin_id;
-            $is_platform=1;
+    public function daddress_add()
+    {
+        $is_shop = session('is_shop');
+        $admin_id = session('admin_id');
+        if ($is_shop == 1) {
+            $supplier = 0;
+            $is_platform = 0;
+        } else {
+            $supplier = $admin_id;
+            $is_platform = 1;
         }
         $address_id = intval(input('param.address_id'));
         if ($address_id > 0) {
@@ -56,30 +58,35 @@ class Deliverset extends AdminControl
             if (!request()->isPost()) {
                 $address_info = $daddress_mod->getAddressInfo(array('daddress_id' => $address_id));
                 $this->assign('address_info', $address_info);
-                return $this->fetch( 'add');
+                return $this->fetch('add');
             } else {
-                $data = array(
-                    'seller_name' => input('post.seller_name'),
-                    'area_id' => input('post.area_id'),
-                    'city_id' => input('post.city_id'),
-                    'area_info' => input('post.region'),
-                    'daddress_detail' => input('post.daddress_detail'),
-                    'daddress_telphone' => input('post.daddress_telphone'),
-                    'daddress_company' => input('post.daddress_company'),
-                    'supplier' => $supplier,
-                    'is_platform' => $is_platform,
-                );
-                //验证数据  BEGIN
-                $deliverset_validate = validate('deliverset');
-                if (!$deliverset_validate->scene('daddress_add')->check($data)) {
-                    ds_json_encode(10001, $deliverset_validate->getError());
-                }
-                //验证数据  END
-                $result = $daddress_mod->editDaddress($data, array('daddress_id' => $address_id));
-                if ($result) {
-                    ds_json_encode(10000, lang('修改成功'));
+                $phone = input('post.daddress_telphone');
+                if (!preg_match('/^0?(13|15|17|18|14)[0-9]{9}$/i', $phone)) {
+                    ds_json_encode(10001, lang('请填写正确手机号!'));
                 } else {
-                    ds_json_encode(10001, lang('修改失败'));
+                    $data = array(
+                        'seller_name' => input('post.seller_name'),
+                        'area_id' => input('post.area_id'),
+                        'city_id' => input('post.city_id'),
+                        'area_info' => input('post.region'),
+                        'daddress_detail' => input('post.daddress_detail'),
+                        'daddress_telphone' => $phone,
+                        'daddress_company' => input('post.daddress_company'),
+                        'supplier' => $supplier,
+                        'is_platform' => $is_platform,
+                    );
+                    //验证数据  BEGIN
+                    $deliverset_validate = validate('deliverset');
+                    if (!$deliverset_validate->scene('daddress_add')->check($data)) {
+                        ds_json_encode(10001, $deliverset_validate->getError());
+                    }
+                    //验证数据  END
+                    $result = $daddress_mod->editDaddress($data, array('daddress_id' => $address_id));
+                    if ($result) {
+                        ds_json_encode(10000, lang('修改成功'));
+                    } else {
+                        ds_json_encode(10001, lang('修改失败'));
+                    }
                 }
             }
         } else {
@@ -122,7 +129,8 @@ class Deliverset extends AdminControl
     /**
      * 删除发货地址
      */
-    public function daddress_del() {
+    public function daddress_del()
+    {
         $address_id = intval(input('param.address_id'));
         if ($address_id <= 0) {
             ds_show_dialog(lang('daddress_del_fail'), '', 'error');
@@ -140,7 +148,8 @@ class Deliverset extends AdminControl
     /**
      * 设置默认发货地址
      */
-    public function daddress_default_set() {
+    public function daddress_default_set()
+    {
         $address_id = intval(input('get.address_id'));
         if ($address_id <= 0)
             return false;
@@ -152,9 +161,10 @@ class Deliverset extends AdminControl
     }
 
     /**
-    * 免运费额度设置
-    */
-    public function free_freight() {
+     * 免运费额度设置
+     */
+    public function free_freight()
+    {
         if (!request()->isPost()) {
             $this->assign('free_price', config('free_price'));
             $this->assign('free_time', config('free_time'));
@@ -167,9 +177,9 @@ class Deliverset extends AdminControl
             $update_array['free_time'] = input('post.free_time');
             $result = $config_model->editConfig($update_array);
             if ($result) {
-                ds_json_encode(10000,lang('ds_common_save_succ'));
+                ds_json_encode(10000, lang('ds_common_save_succ'));
             } else {
-                ds_json_encode(10001,lang('ds_common_save_fail'));
+                ds_json_encode(10001, lang('ds_common_save_fail'));
             }
         }
     }
@@ -177,7 +187,8 @@ class Deliverset extends AdminControl
     /**
      * 默认配送区域设置
      */
-    public function deliver_region() {
+    public function deliver_region()
+    {
         if (!request()->isPost()) {
             $deliver_region = array(
                 '', ''
@@ -193,9 +204,9 @@ class Deliverset extends AdminControl
             $update_array['deliver_region'] = $_POST['area_ids'] . '|' . $_POST['region'];
             $result = $config_model->editConfig($update_array);
             if ($result) {
-                ds_json_encode(10000,lang('ds_common_save_succ'));
+                ds_json_encode(10000, lang('ds_common_save_succ'));
             } else {
-                ds_json_encode(10001,lang('ds_common_save_fail'));
+                ds_json_encode(10001, lang('ds_common_save_fail'));
             }
         }
     }
@@ -203,7 +214,8 @@ class Deliverset extends AdminControl
     /**
      * 发货单打印设置
      */
-    public function print_set() {
+    public function print_set()
+    {
 
         if (!request()->isPost()) {
             $this->assign('seal_printexplain', config('seal_printexplain'));
@@ -271,7 +283,7 @@ class Deliverset extends AdminControl
             array(
                 'name' => 'add',
                 'text' => '新增地址',
-                'url' => "javascript:dsLayerOpen('".url('Deliverset/daddress_add')."','新增地址')"
+                'url' => "javascript:dsLayerOpen('" . url('Deliverset/daddress_add') . "','新增地址')"
             ),
         );
         return $menu_array;

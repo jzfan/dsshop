@@ -521,7 +521,6 @@ class Memberorder extends MobileMember
                 $result['goods_kill']['hasmore'] = false;
                 ds_json_encode(10001, '该用户没有秒杀记录');
             }
-
             //代售记录
             $memberforsaleorder = model('memberforsaleorder');
             $condition['member_id'] = $this->member_info['member_id'];
@@ -567,9 +566,6 @@ class Memberorder extends MobileMember
         $condition['member_id'] = $this->member_info['member_id'];
         $sale = $memberforsaleorder->getmemberforsaleorder($condition, $this->pagesize, '');
         if (!empty($sale)) {
-            foreach ($sale as $k => $v) {
-                $sale[$k]['service_fee'] = 100;
-            }
             ds_json_encode(10000, '获取成功', $sale);
         } else {
             $result['page_total'] = 1;

@@ -1,8 +1,10 @@
 <?php
+
 namespace app\common\logic;
 use app\common\model\Memberforsaleorder;
 use think\Model;
 use think\Db;
+
 
 class Order extends Model
 {
@@ -18,7 +20,7 @@ class Order extends Model
      * @param boolean $if_pay 是否已经支付,已经支付则全部退回支付金额
      * @return array
      */
-    public function changeOrderStateCancel($order_info, $role, $user = '', $msg = '', $if_update_account = true, $if_quque = true,$if_pay=false)
+    public function changeOrderStateCancel($order_info, $role, $user = '', $msg = '', $if_update_account = true, $if_quque = true, $if_pay = false)
     {
         try {
             $order_model = model('order');
@@ -33,9 +35,8 @@ class Order extends Model
             }
             if ($if_quque) {
                 \mall\queue\QueueClient::push('cancelOrderUpdateStorage', $data);
-            }
-            else {
-                \model('queue','logic')->cancelOrderUpdateStorage($data);
+            } else {
+                \model('queue', 'logic')->cancelOrderUpdateStorage($data);
             }
 
             if ($if_update_account) {
@@ -50,10 +51,10 @@ class Order extends Model
                     $data_pd['order_sn'] = $order_info['order_sn'];
                     $predeposit_model->changeRcb('order_cancel', $data_pd);
                 }
-                
+
                 //注意：当用户全额使用预存款进行支付,并不会冻结, 当用户使用部分预存款进行支付,支付的预存款则会冻结.也就是支付成功之后不会有冻结资金,当未支付成功,使用的预付款变为冻结资金。
-                
-                if($order_info['order_state'] == ORDER_STATE_NEW){
+
+                if ($order_info['order_state'] == ORDER_STATE_NEW) {
                     //当是已下单,未支付(可能包含部分款项使用预存款,预存款在冻结资金),则退还预存款,取消订单
                     $pd_amount = floatval($order_info['pd_amount']);
                     if ($pd_amount > 0) {
@@ -65,8 +66,8 @@ class Order extends Model
                         $predeposit_model->changePd('order_cancel', $data_pd);
                     }
                 }
-                
-                if($order_info['order_state'] == ORDER_STATE_PAY){
+
+                if ($order_info['order_state'] == ORDER_STATE_PAY) {
                     //当是已付款,未发货状态,则直接取消订单, 订单金额减去充值卡  表示为支付的总金额(预存款部分支付,以及直接支付),已付款预存款部分支付的金额已被取消冻结了.
                     $payment_amount = $order_info['order_amount'] - $rcb_amount;
                     if ($payment_amount > 0) {
@@ -78,7 +79,7 @@ class Order extends Model
                         $predeposit_model->changePd('refund', $data_pd);
                     }
                 }
-                
+
             }
 
             //更新订单信息
@@ -163,7 +164,7 @@ class Order extends Model
             ), true);
             //邀请人获得返利积分
             $inviter_id = ds_getvalue_byname('member', 'member_id', $member_id, 'inviter_id');
-            if(!empty($inviter_id)) {
+            if (!empty($inviter_id)) {
                 $inviter_name = ds_getvalue_byname('member', 'member_id', $inviter_id['inviter_id'], 'member_name');
                 $rebate_amount = ceil(0.01 * $order_info['order_amount'] * config('points_rebate'));
                 model('points')->savePointslog('rebate', array(
@@ -194,7 +195,7 @@ class Order extends Model
 
             $data = array();
             $data['shipping_fee'] = abs(floatval($price));
-            $data['order_amount'] = Db::raw('goods_amount+'.$data['shipping_fee']);
+            $data['order_amount'] = Db::raw('goods_amount+' . $data['shipping_fee']);
             $update = $order_model->editOrder($data, array('order_id' => $order_id));
             if (!$update) {
                 exception('保存失败');
@@ -206,6 +207,40 @@ class Order extends Model
             $data['log_user'] = $user;
             $data['log_msg'] = '修改了运费' . '( ' . $price . ' )';;
             $data['log_orderstate'] = $order_info['payment_code'] == 'offline' ? ORDER_STATE_PAY : ORDER_STATE_NEW;
+            $order_model->addOrderlog($data);
+            return ds_callback(true, '操作成功');
+        } catch (Exception $e) {
+            return ds_callback(false, '操作失败');
+        }
+    }
+
+    /**
+     * 更改订单价格
+     * @param array $order_info
+     * @param string $role 操作角色 buyer、admin、system 分别代表买家、管理员、系统
+     * @param string $user 操作人
+     * @param float $price 运费
+     * @return array
+     */
+    public function changeOrderPrice($order_info, $role, $user = '', $price)
+    {
+        try {
+            $order_id = $order_info['order_id'];
+            $order_model = model('order');
+            $data = array();
+            $data['goods_amount'] = abs(floatval($price));
+            $data['order_amount'] = Db::raw('shipping_fee+' . $data['goods_amount']);
+            $update = $order_model->editOrder($data, array('order_id' => $order_id));
+            if (!$update) {
+                return ds_callback(false, '操作失败');
+            }
+            //记录订单日志
+            $data = array();
+            $data['order_id'] = $order_id;
+            $data['log_role'] = $role;
+            $data['log_user'] = $user;
+            $data['log_msg'] = '修改了价格为' . '( ' . $price . ' )';;
+            $data['log_orderstate'] = $order_info['payment_code'] == 'offline' ? ORDER_STATE_NEW : ORDER_STATE_PAY;
             $order_model->addOrderlog($data);
             return ds_callback(true, '操作成功');
         } catch (Exception $e) {
@@ -230,7 +265,7 @@ class Order extends Model
 
             $data = array();
             $data['goods_amount'] = abs(floatval($price));
-            $data['order_amount'] = Db::raw('shipping_fee+'.$data['goods_amount']);
+            $data['order_amount'] = Db::raw('shipping_fee+' . $data['goods_amount']);
             $update = $order_model->editOrder($data, array('order_id' => $order_id));
             if (!$update) {
                 exception('保存失败');
@@ -267,8 +302,7 @@ class Order extends Model
         $update = $order_model->editOrder(array('delete_state' => $state), array('order_id' => $order_id));
         if (!$update) {
             return ds_callback(false, '操作失败');
-        }
-        else {
+        } else {
             return ds_callback(true, '操作成功');
         }
     }
@@ -284,7 +318,7 @@ class Order extends Model
     {
         $order_id = $order_info['order_id'];
         $order_model = model('order');
-        
+
         //查看是否为拼团订单
         $condition = array();
         $condition['order_id'] = $order_id;
@@ -311,7 +345,7 @@ class Order extends Model
             }
 
             $data = array();
-            $data['shipping_code'] = isset($post['shipping_code'])?$post['shipping_code']:'';
+            $data['shipping_code'] = isset($post['shipping_code']) ? $post['shipping_code'] : '';
             $data['order_state'] = ORDER_STATE_SEND;
             $data['delay_time'] = TIMESTAMP;
             $update = $order_model->editOrder($data, $condition);
@@ -342,7 +376,7 @@ class Order extends Model
             'order_sn' => $order_info['order_sn'],
             'order_url' => url('home/Memberorder/show_order', array('order_id' => $order_id))
         );
-         \mall\queue\QueueClient::push('sendMemberMsg', $param);
+        \mall\queue\QueueClient::push('sendMemberMsg', $param);
         return ds_callback(true, '操作成功');
     }
 
@@ -365,7 +399,7 @@ class Order extends Model
 
             $update = $order_model->editOrderpay($data, array('pay_sn' => $order_list[0]['pay_sn']));
             if (!$update) {
-                 Exception('更新支付单状态失败');
+                Exception('更新支付单状态失败');
             }
 
             $predeposit_model = model('predeposit');
@@ -426,7 +460,7 @@ class Order extends Model
                 'order_sn' => $order_info['order_sn'],
                 'order_url' => url('home/Memberorder/show_order', array('order_id' => $order_info['order_id']))
             );
-             \mall\queue\QueueClient::push('sendMemberMsg', $param);
+            \mall\queue\QueueClient::push('sendMemberMsg', $param);
 
 
             //添加订单日志
@@ -479,11 +513,11 @@ class Order extends Model
                     exception('操作失败');
                 }
 
-                $condition = array('order_id'=>$order_info['order_id']);
+                $condition = array('order_id' => $order_info['order_id']);
                 $forsaleorder_list = $forsaleorder_model->getmemberforsaleorder($condition);
                 foreach ($forsaleorder_list as $item) {
                     // 解冻商品库存
-                    $forsalegoods_model->unfreezeMemberForsaleGoods($item['goods_id'],$item['goods_number'],$item['member_id']);
+                    $forsalegoods_model->unfreezeMemberForsaleGoods($item['goods_id'], $item['goods_number'], $item['member_id']);
                 }
 
                 // 更新挂售订单
@@ -504,7 +538,6 @@ class Order extends Model
                 continue;
             }
             $order_id = $order_info['order_id'];
-
 
 
             //添加订单日志
@@ -555,7 +588,7 @@ class Order extends Model
                 }
 
                 // 扣除用户积分
-                $member_info = model("member")->getMemberInfo(['member_id'=>$order_info['member_id']]);
+                $member_info = model("member")->getMemberInfo(['member_id' => $order_info['member_id']]);
                 $insert_data = array();
                 $insert_data['pl_memberid'] = $member_info['member_id'];
                 $insert_data['pl_membername'] = $member_info['member_name'];
