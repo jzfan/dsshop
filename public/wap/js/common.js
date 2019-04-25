@@ -781,7 +781,7 @@ function loadScript(url, callback) {
 }
 //爆炸图片处理
 function imgError(img){
-	$(img).attr("src","http://www.shop.com/wap/act_spike/img/spike_headBg.png");
+	$(img).attr("src","../images/good_default.png");
 }
 
 
