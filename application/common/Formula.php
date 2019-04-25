@@ -2,6 +2,7 @@
 
 namespace app\common;
 
+use app\common\model\Goods;
 use app\common\model\Config;
 
 class Formula
@@ -44,7 +45,7 @@ class Formula
 
 	public static function miByInput($input)
 	{
-		$marketPrice = Goods::where('goods_id', $input['goods_id'])->find();
+		$marketPrice = Goods::where('goods_id', $input['goods_id'])->find()->goods_marketprice;
 		$fo = new self($marketPrice, $input['price'], $input['return_rate']/100);
 		return $fo->mi();
 	}
