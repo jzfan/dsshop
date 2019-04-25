@@ -263,7 +263,8 @@ $(function() {
                                     layer.open({ content: e.message, skin: 'msg', time: 2 });
                                 } else {
                                     //带参，跳转到收银台页面
-                                    location.href = WapSiteUrl + "/order/buy_step1.html?goods_id=" + r + "&buynum=" + t
+                                    location.href = WapSiteUrl + "/order/buy_step1.html?goods_id=" + r + "&buynum=" + t;
+//                                  toPay(e.result.pay_sn, "memberbuy", "pay");
                                 }
                             }
                         })
