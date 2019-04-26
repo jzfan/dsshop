@@ -621,7 +621,7 @@ class AdminControl extends Controller
                     'seckilljobs' => [
                         'ico' => '&#xe65a;',
                         'text' => '秒杀',
-                        'args' => 'index,Seckilljobs,operation',
+                        'args' => 'index,seckill.Jobs,operation',
                     ],
                 ),
             ),

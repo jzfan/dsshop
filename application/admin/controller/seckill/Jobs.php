@@ -1,27 +1,41 @@
 <?php
 
-namespace app\admin\controller;
+namespace app\admin\controller\seckill;
 
-class Seckilljobs extends AdminControl
+use app\admin\controller\AdminControl;
+
+class Jobs extends AdminControl
 {
     public function getModel()
     {
         return model('SeckillJobs');
     }
 
-    public function index()
+    public function index($jobs=null)
     {
-        $jobs = $this->model->with('goods')->order('id desc')->select();
-        // dd($jobs[0]->toArray());
+        $jobs = $jobs ?? $this->model->with('goods')->order('id desc')->select();
         $this->assign('jobs', $jobs);
         $this->setAdminCurItem('index');
-        return $this->fetch('seckill/jobs');
+        return $this->fetch('seckill/job/all');
+    }
+
+    public function search()
+    {
+        if (input('?status')) {
+            $jobs = $this->model->where('status', input('status'))->order('id desc')->select();
+            return $this->index($jobs);
+        }
+        if (input('?days')) {
+            $jobs = $this->model->whereTime('start', input('days'))->order('id desc')->select();
+            return $this->index($jobs);
+        }
+        return $this->index();
     }
 
     public function form()
     {
         $this->assign('goods', model('SeckillGoods')->with('info')->order('id desc')->select());
-        return $this->fetch('seckill/job_form');
+        return $this->fetch('seckill/job/form');
     }
 
     public function store()
@@ -37,13 +51,13 @@ class Seckilljobs extends AdminControl
             session('job_name', $job->name);
         }
         $this->assignGoods();
-        return $this->fetch('seckill/add_job_goods');
+        return $this->fetch('seckill/good/add');
     }
 
     public function goods()
     {
         $this->assignGoods();
-        return $this->fetch('seckill/add_job_goods');
+        return $this->fetch('seckill/good/add');
 
     }
 
@@ -72,7 +86,7 @@ class Seckilljobs extends AdminControl
         ]);
         $job = $this->model->with('goods.info')->find($data['id']);
         $this->assign('job', $job);
-        return $this->fetch('seckill/show_job');
+        return $this->fetch('seckill/job/show');
     }
 
     protected function assignGoods()

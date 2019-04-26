@@ -3,14 +3,14 @@
  * 秒米商品控制器
  */
 
-namespace app\admin\controller;
+namespace app\admin\controller\seckill;
 
 use think\Db;
 use app\common\Formula;
 use app\common\JsonException;
 use app\admin\controller\AdminControl;
 
-class Seckillgoods extends AdminControl
+class Goods extends AdminControl
 {
     public function getModel()
     {
