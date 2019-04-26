@@ -104,7 +104,6 @@ class Login extends MobileMall
         $register_info['member_cityid'] = input('param.cityid');
         $register_info['member_areainfo']=input('param.provincename').''.input('param.cityname');;
         $register_info['member_password'] = $password;
-        $register_info['email'] = $email;
         $register_info['member_mobilebind'] = 1;
         //添加奖励积分
         if ($inviter_id!=''){
