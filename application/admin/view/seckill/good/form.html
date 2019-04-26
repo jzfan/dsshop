@@ -11,9 +11,15 @@
                     </td>
                 </tr>
                 <tr class="noborder" style="background: rgb(255, 255, 255);">
-                    <td class="required w120" aria-required="true"><label>价格(元):</label></td>
+                    <td class="required w120" aria-required="true"><label>秒杀价格(元):</label></td>
                     <td class="vatop rowform">
                         <input type="number" class="w300 text" id='price-input' name='price' value="0" min:0>
+                    </td>
+                </tr>
+                <tr class="noborder" style="background: rgb(255, 255, 255);">
+                    <td class="required w120" aria-required="true"><label>代售价格(元):</label></td>
+                    <td class="vatop rowform">
+                        <input type="number" class="w300 text" id='forsale-price-input' name='forsale_price' value="0" min:0>
                     </td>
                 </tr>
                 <tr class="noborder" style="background: rgb(255, 255, 255);">
@@ -47,6 +53,7 @@ function setInputVal(gid) {
         if (res != '') {
             $('#number-input').val(res.qty)
             $('#price-input').val(res.price)
+            $('#forsale-price-input').val(res.forsale_price)
             $('#return_rate-input').val(res.return_rate)
             $('#commend-input').val(res.commend)
         }

@@ -66,7 +66,11 @@ class Jobs extends AdminControl
         $data = checkInput([
             'id' => 'require|number'
         ]);
-        $this->model->find($data['id'])->delete();
+        Db::transaction(function () {
+            $job = $this->model->lock(true)->find($data['id']);
+            $job->goods()->delete();
+            $job->delete();
+        });
         return $this->index();
     }
 
@@ -85,6 +89,7 @@ class Jobs extends AdminControl
             'id' => 'require|number'
         ]);
         $job = $this->model->with('goods.info')->find($data['id']);
+        dd($job->goods);
         $this->assign('job', $job);
         return $this->fetch('seckill/job/show');
     }

@@ -10,11 +10,9 @@ namespace app\common\model;
 
 
 use think\Model;
-use app\common\ModelTrait;
 
 class Forsalegoods extends Model
 {
-    use ModelTrait;
 
     public $page_info;
 
@@ -207,10 +205,13 @@ class Forsalegoods extends Model
 
     public static function add($data)
     {
-        return self::updateOrCreate(
-            [
-                'goods_id' => $data['goods_id']
-            ], $data);
+        Db::transaction(function () {
+            $good = self::where('goods_id', $data['goods_id'])->lock(true)->find();
+            if (!$good) {
+                return self::create($data);
+            }
+            $good->setInc('goods_storage', $data['goods_num']);
+        });
     }
 
 

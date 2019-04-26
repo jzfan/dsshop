@@ -2,14 +2,11 @@
 
 namespace app\common\model;
 
-use app\common\ModelTrait;
 use think\Db;
 use think\Model;
 
 class SeckillJobs extends Model
 {
-    use ModelTrait;
-
     public function goods()
     {
         return $this->hasMany(SeckillGoods::class, 'job_id');

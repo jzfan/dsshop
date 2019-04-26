@@ -3,15 +3,12 @@
 namespace app\common\model;
 
 use app\common\DsRedis;
-use app\common\ModelTrait;
 use app\common\model\SeckillJobs;
 use think\Db;
 use think\Model;
 
 class SeckillGoods extends Model
 {
-    use ModelTrait;
-
     protected $redis;
 
     public function initialize()

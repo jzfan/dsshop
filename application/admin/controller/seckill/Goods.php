@@ -2,7 +2,6 @@
 /**
  * 秒米商品控制器
  */
-
 namespace app\admin\controller\seckill;
 
 use think\Db;
@@ -31,8 +30,8 @@ class Goods extends AdminControl
             'goods_id' => 'require|number|gt:0',
             'job_id' => 'require|number|gt:0',
             'qty|数量' => 'require|number|gt:0',
-            'price|价格' => 'require|number|gt:0',
-            // 'mi' => 'require|number',
+            'price|秒杀价格' => 'require|number|gt:0',
+            'forsale_price|代售价格' => 'require|number|gt:0',
             'commend' => 'require|number',
             'return_rate|收益率' => 'require|number|gt:0'
         ]);

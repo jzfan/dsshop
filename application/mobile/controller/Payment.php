@@ -57,6 +57,6 @@ class Payment extends MobileMall {
     public function notify()
     {
         $payment_logic = model("payment",'logic');
-        return json($payment_logic->_updateOrder(1, 2, 'seckill_forsale', 4));
+        return json($payment_logic->_updateOrder('19042610523529653013', 2, 'seckill_forsale', 4));
     }
 }

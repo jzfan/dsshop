@@ -50,4 +50,20 @@ class Test extends Controller
 		exit;
 	}
 
+	public function goods()
+	{
+		$job = \app\common\model\SeckillJobs::find(204);
+		print_r($job->goods[0]->toArray());
+		exit;
+	}
+
+	public function job()
+	{
+		$job = \app\common\model\SeckillJobs::find(232);
+		var_dump($job->end);
+		var_dump(strtotime($job->end));
+		var_dump(time());
+		dd(strtotime($job->end) < time());
+	}
+
 }
