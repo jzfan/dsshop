@@ -438,6 +438,7 @@ class Memberorder extends MobileMember
         $res = iconv("GB2312", "utf-8//IGNORE", $res);
         try {
             $obj = simplexml_load_string(str_replace('GB2312', 'UTF-8', $res));
+            print_r($obj);die;
             $jsonStr = json_encode($obj);
             $arr = json_decode($jsonStr, true);
             if (!isset($arr['track']['detail'])) {
