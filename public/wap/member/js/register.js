@@ -102,6 +102,7 @@ $(function() {
 	    }
 	})
     
+    
     $("#registerbtn").click(function() {
     	var username = $("#username").val();
     	var msgcode = $("#msgcode").val();
