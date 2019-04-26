@@ -15,7 +15,7 @@ class Forsalequeue extends AdminControl
     public function index()
     {
         $memberforsalegoods_model = model('memberforsalegoods');
-        $where = array();
+        $where['goods_state'] = 1;
         $search_goods_name = trim(input('param.search_goods_name'));
         if ($search_goods_name != '') {
             $memberforsalegoods = $memberforsalegoods_model->getMemberForsaleGoodsInfoByGoodsName($search_goods_name);

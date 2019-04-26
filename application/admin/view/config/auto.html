@@ -23,19 +23,40 @@
                 </td>
                 <td class="vatop tips">已发货订单，自动确认收货的天数,自动确认收货时间设置区间为1-100数值</td>
             </tr>
-            <tr class="noborder">
-                <td class="w150"><label for="order_auto_cancel_day">{$Think.lang.order_auto_cancel_day}:</label></td>
-                <td class="vatop rowform">
-                    <input id="order_auto_cancel_day" name="order_auto_cancel_day" value="{$list_config.order_auto_cancel_day|default=''}" min="1" max="50" type="text"> 天
-                </td>
-                <td class="vatop tips">未付款订单，自动取消订单的天数,自动取消订单时间设置区间为1-50数值</td>
+            <!--<tr class="noborder">-->
+                <!--<td class="w150"><label for="order_auto_cancel_day">{$Think.lang.order_auto_cancel_day}:</label></td>-->
+                <!--<td class="vatop rowform">-->
+                    <!--<input id="order_auto_cancel_day" name="order_auto_cancel_day" value="{$list_config.order_auto_cancel_day|default=''}" min="1" max="50" type="text"> 天-->
+                <!--</td>-->
+                <!--<td class="vatop tips">未付款订单，自动取消订单的天数,自动取消订单时间设置区间为1-50数值</td>-->
+            <!--</tr>-->
+            <!--<tr class="noborder">-->
+                <!--<td class="w150"><label for="code_invalid_refund">{$Think.lang.code_invalid_refund}:</label></td>-->
+                <!--<td class="vatop rowform">-->
+                    <!--<input id="code_invalid_refund" name="code_invalid_refund" value="{$list_config.code_invalid_refund|default=''}" min="1" max="100" type="text"> 天-->
+                <!--</td>-->
+                <!--<td class="vatop tips">兑换码未使用，兑换码过期自动退款时间设置区间为1-100数值</td>-->
             </tr>
             <tr class="noborder">
-                <td class="w150"><label for="code_invalid_refund">{$Think.lang.code_invalid_refund}:</label></td>
+                <td class="w150"><label for="forsale_order_auto_cancel_time">91购订单自动取消:</label></td>
                 <td class="vatop rowform">
-                    <input id="code_invalid_refund" name="code_invalid_refund" value="{$list_config.code_invalid_refund|default=''}" min="1" max="100" type="text"> 天
+                    <input id="forsale_order_auto_cancel_time" name="forsale_order_auto_cancel_time" value="{$list_config.forsale_order_auto_cancel_time|default=''}" min="1" max="1000" type="text"> 分钟
                 </td>
-                <td class="vatop tips">兑换码未使用，兑换码过期自动退款时间设置区间为1-100数值</td>
+                <td class="vatop tips"></td>
+            </tr>
+            <tr class="noborder">
+                <td class="w150"><label for="point_order_auto_cancel_time">积分商城自动取消:</label></td>
+                <td class="vatop rowform">
+                    <input id="point_order_auto_cancel_time" name="point_order_auto_cancel_time" value="{$list_config.point_order_auto_cancel_time|default=''}" min="1" max="1000" type="text"> 分钟
+                </td>
+                <td class="vatop tips"></td>
+            </tr>
+            <tr class="noborder">
+                <td class="w150"><label for="secondkill_order_auto_forsale">秒杀订单自动挂售:</label></td>
+                <td class="vatop rowform">
+                    <input id="secondkill_order_auto_forsale" name="secondkill_order_auto_forsale" value="{$list_config.secondkill_order_auto_forsale|default=''}" min="1" max="1000" type="text"> 分钟
+                </td>
+                <td class="vatop tips"></td>
             </tr>
             </tbody>
             <tfoot>

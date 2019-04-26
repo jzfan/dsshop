@@ -9,4 +9,8 @@
 // | Author: yunwuxin <448901948@qq.com>
 // +----------------------------------------------------------------------
 
-return [];
+return [
+    'app\common\command\CancelForsaleOrder',
+    'app\common\command\CancelPointOrder',
+    'app\common\command\MemberForsaleGoods',
+];

@@ -135,20 +135,26 @@ class Config extends AdminControl {
             return $this->fetch();
         } else {
             $order_auto_receive_day = intval(input('post.order_auto_receive_day'));
-            $order_auto_cancel_day = intval(input('post.order_auto_cancel_day'));
-            $code_invalid_refund = intval(input('post.code_invalid_refund'));
+//            $order_auto_cancel_day = intval(input('post.order_auto_cancel_day'));
+//            $code_invalid_refund = intval(input('post.code_invalid_refund'));
+            $forsale_order_auto_cancel_time = intval(input('post.forsale_order_auto_cancel_time'));
+            $point_order_auto_cancel_time = intval(input('post.point_order_auto_cancel_time'));
+            $secondkill_order_auto_forsale = intval(input('post.secondkill_order_auto_forsale'));
             if($order_auto_receive_day < 1 || $order_auto_receive_day>100){
                 $this->error(lang('automatic_confirmation_receipt').'1-100'.lang('numerical'));
             }
-            if($order_auto_cancel_day < 1 || $order_auto_cancel_day>50){
-                $this->error(lang('automatic_confirmation_receipt').'1-50'.lang('numerical'));
-            }
-            if($code_invalid_refund < 1 || $code_invalid_refund>100){
-                $this->error(lang('exchange_code_refunded_automatically').'1-100'.lang('numerical'));
-            }
+//            if($order_auto_cancel_day < 1 || $order_auto_cancel_day>50){
+//                $this->error(lang('automatic_confirmation_receipt').'1-50'.lang('numerical'));
+//            }
+//            if($code_invalid_refund < 1 || $code_invalid_refund>100){
+//                $this->error(lang('exchange_code_refunded_automatically').'1-100'.lang('numerical'));
+//            }
             $update_array['order_auto_receive_day'] = $order_auto_receive_day;
-            $update_array['order_auto_cancel_day'] = $order_auto_cancel_day;
-            $update_array['code_invalid_refund'] = $code_invalid_refund;
+//            $update_array['order_auto_cancel_day'] = $order_auto_cancel_day;
+//            $update_array['code_invalid_refund'] = $code_invalid_refund;
+            $update_array['forsale_order_auto_cancel_time'] = $forsale_order_auto_cancel_time;
+            $update_array['point_order_auto_cancel_time'] = $point_order_auto_cancel_time;
+            $update_array['secondkill_order_auto_forsale'] = $secondkill_order_auto_forsale;
             $result = $config_model->editConfig($update_array);
             if ($result) {
                 $this->log(lang('ds_edit').lang('auto_set'),1);

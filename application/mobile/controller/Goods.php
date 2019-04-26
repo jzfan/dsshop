@@ -119,7 +119,7 @@ class Goods extends MobileMall {
                 $condition['is_virtual'] = 1;
             }
 
-            $goods_list = $goods_model->_getGoodsList($goods_type,$condition, $fieldstr, $this->pagesize, $order);
+            $goods_list = $goods_model->_getGoodsList($goods_type,$condition, $fieldstr, $this->pagesize, $order, 0, 'goods_commonid');
         }
         //处理商品列表(抢购、限时折扣、商品图片)
         $goods_list = $this->_goods_list_extend($goods_list);
