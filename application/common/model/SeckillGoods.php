@@ -103,9 +103,21 @@ class SeckillGoods extends Model
         }
     }
 
+    // 商品下架
     public function offShelve()
     {
         $this->delete($this->listKey());
+        $this->returnSku();
+    }
+
+    // 退回单品，库存调整
+    protected function returnSku()
+    {
+        $this->sku()->lock(true)->find();
+        $this->sku->goods_storage += $this->qty;
+        $this->sku->save();
+        $this->qty = 0;
+        $this->save();
     }
 
     public function getGoodsInfoAndPromotionById($goods_id)
@@ -129,13 +141,13 @@ class SeckillGoods extends Model
                 'goods_storage' => $seckill_good->qty,
                 'goods_storage_alarm' => 0,
                 'is_have_gift' => 0,
-
             ]);
         }
 
         return array();
     }
 
+    // 增加用户购买量
     public function incrMemberLimit($num, $member_id)
     {
         $key = $this->limitKey($member_id);
@@ -194,12 +206,17 @@ class SeckillGoods extends Model
         return $this;
     }
 
+    protected function listLength()
+    {
+        return $this->redis->llen($this->listKey());
+    }
+
     /**
      * 判断库存是否足够
      */
     protected function isQtyEnough($num)
     {
-        return $this->redis->llen($this->listKey()) >= $num;
+        return $this->listLength() >= $num;
     }
 
     // 订单取消，超时后，增加库存，减少销量

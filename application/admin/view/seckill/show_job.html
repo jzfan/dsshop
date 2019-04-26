@@ -1,0 +1,66 @@
+{include file="public/header" /}
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <div class="subject">
+                <h3>秒杀 {$job.name}</h3>
+            </div>
+            <a class="btn btn-primary" href="/index.php/admin/seckilljobs">返回</a>
+        </div>
+    </div>
+<table class="ds-default-table" id=jobs-table>
+    <thead>
+        <tr class="thead">
+            <th class="align-center">ID</th>
+            <th class="align-center">活动名称</th>
+            <th class="align-center">{$Think.lang.start_time}</th>
+            <th class="align-center">{$Think.lang.end_time}</th>
+            <!-- <th class="align-center" width="80">商品数量</th> -->
+            <th class="align-center">状态</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{$job.id}</td>
+            <td>{$job.name}</td>
+            <td>{$job.start}</td>
+            <td>{$job.end}</td>
+            <td>
+                <?php
+                echo [
+                0 => '等待开始',
+                1 => '秒杀中',
+                2 => '结束',
+                3 => '停止'
+                ][$job->status];
+                ?>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br>
+<h3>商品</h3>
+<table class="ds-default-table" id=jobs-table>
+    <thead>
+        <tr class="thead">
+            <th class="align-center">ID</th>
+            <th class="align-center">商品名</th>
+            <th class="align-center">价格(元)</th>
+            <th class="align-center">秒米</th>
+            <th class="align-center">库存</th>
+        </tr>
+    </thead>
+    <tbody>
+        {foreach $job.goods as $good}
+        <tr>
+            <td>{$good.goods_id}</td>
+            <td>{$good.info.goods_name}</td>
+            <td>{$good.price}</td>
+            <td>{$good.mi}</td>
+            <td>{$good.qty}</td>
+        </tr>
+            
+        {/foreach}
+    </tbody>
+</table>
+</div>

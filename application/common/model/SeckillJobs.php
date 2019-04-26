@@ -77,10 +77,12 @@ class SeckillJobs extends Model
 
     public function stop()
     {
-        $this->status = 3;
-        $this->save();
-        foreach ($this->goods as $good) {
-            $good->offShelve();
-        }
+        Db::transaction(function () {
+            $this->status = 3;
+            $this->save();
+            foreach ($this->goods as $good) {
+                $good->offShelve();
+            }
+        });
     }
 }

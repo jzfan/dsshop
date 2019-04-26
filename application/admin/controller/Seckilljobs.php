@@ -4,9 +4,14 @@ namespace app\admin\controller;
 
 class Seckilljobs extends AdminControl
 {
+    public function getModel()
+    {
+        return model('SeckillJobs');
+    }
+
     public function index()
     {
-        $jobs = model('SeckillJobs')->with('goods')->order('id desc')->select();
+        $jobs = $this->model->with('goods')->order('id desc')->select();
         // dd($jobs[0]->toArray());
         $this->assign('jobs', $jobs);
         $this->setAdminCurItem('index');
@@ -27,7 +32,7 @@ class Seckilljobs extends AdminControl
                 'end' => 'require|date|after:' . date('Y-m-d H:i:s'),
                 'name' => 'require',
             ]);
-            $job = model('SeckillJobs')->create($data);
+            $job = $this->model->create($data);
             session('job_id', $job->id);
             session('job_name', $job->name);
         }
@@ -47,7 +52,7 @@ class Seckilljobs extends AdminControl
         $data = checkInput([
             'id' => 'require|number'
         ]);
-        model('seckillJobs')->find($data['id'])->delete();
+        $this->model->find($data['id'])->delete();
         return $this->index();
     }
 
@@ -56,8 +61,18 @@ class Seckilljobs extends AdminControl
         $data = checkInput([
             'id' => 'require|number'
         ]);
-        model('seckillJobs')->find($data['id'])->stop();
+        $this->model->find($data['id'])->stop();
         return $this->index();
+    }
+
+    public function show()
+    {
+        $data = checkInput([
+            'id' => 'require|number'
+        ]);
+        $job = $this->model->with('goods.info')->find($data['id']);
+        $this->assign('job', $job);
+        return $this->fetch('seckill/show_job');
     }
 
     protected function assignGoods()

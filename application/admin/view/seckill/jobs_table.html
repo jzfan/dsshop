@@ -63,15 +63,19 @@
 {/notempty}
 
 <script>
-$('#jobs-table tr .btn-primary').on('click', function() {
-    layer.open({
-        type: 1,
-        title: $(this).find('.group').html(),
-        area: ['600px', '360px'],
-        shadeClose: true, //点击遮罩关闭
-        content: $('#jobModal')
-    });
-    initJob($(this).data('id'))
+// $('#jobs-table tr .btn-primary').on('click', function() {
+//     layer.open({
+//         type: 1,
+//         title: $(this).find('.group').html(),
+//         area: ['600px', '360px'],
+//         shadeClose: true, //点击遮罩关闭
+//         content: $('#jobModal')
+//     });
+//     initJob($(this).data('id'))
+// });
+
+$('#jobs-table tr .btn-primary').on('click', function(e) {
+    window.location = '/admin/seckilljobs/show?id=' + $(e.target).parents('tr').data('id')
 });
 
 $('#jobs-table tr .btn-red').on('click', function(e) {
