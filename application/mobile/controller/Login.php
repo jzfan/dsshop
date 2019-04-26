@@ -100,6 +100,9 @@ class Login extends MobileMall
         if ($cache_code != $code) {
             ds_json_encode(10001, '验证码填写错误');
         }
+        $register_info['member_provinceid'] = input('param.provinceid');
+        $register_info['member_cityid'] = input('param.cityid');
+        $register_info['member_areainfo']=input('param.provincename').''.input('param.cityname');;
         $register_info['member_password'] = $password;
         $register_info['email'] = $email;
         $register_info['member_mobilebind'] = 1;
@@ -165,8 +168,9 @@ class Login extends MobileMall
 
     }
 
-    public function getarea()
+    public function get_area()
     {
+
         $pid = intval(input('param.pid'));
         $area_mod = model('area');
         $regions = $area_mod->getAreaList(array('area_parent_id' => $pid));
