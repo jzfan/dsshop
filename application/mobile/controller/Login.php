@@ -102,15 +102,15 @@ class Login extends MobileMall
         }
         $register_info['member_provinceid'] = input('param.provinceid');
         $register_info['member_cityid'] = input('param.cityid');
-        $register_info['member_areainfo']=input('param.provincename').''.input('param.cityname');;
+        $register_info['member_areainfo'] = input('param.provincename') . '' . input('param.cityname');;
         $register_info['member_password'] = $password;
         $register_info['member_mobilebind'] = 1;
         //添加奖励积分
-        if ($inviter_id!=''){
-            $is_null=model('member')->where('member_id',$inviter_id)->find();
+        if ($inviter_id != '') {
+            $is_null = model('member')->where('member_id', $inviter_id)->find();
             if (!empty($is_null)) {
                 $register_info['inviter_id'] = $inviter_id;
-            }else{
+            } else {
                 ds_json_encode(10001, '该推荐人不是我们平台会员!');
             }
         }
@@ -182,7 +182,7 @@ class Login extends MobileMall
             $result[$key]['area_name'] = htmlspecialchars($region['area_name']);
             $result[$key]['area_id'] = $region['area_id'];
         }
-        ds_json_encode(10000,'',$result);
+        ds_json_encode(10000, '', $result);
     }
 }
 
