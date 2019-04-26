@@ -271,18 +271,19 @@ class Memberpayment extends MobileMember
         if (!$result['code']) {
             $this->error($result['msg']);
         }
+
         $payment_info = $result['data'];
 
         //计算所需支付金额等支付单信息
-        $result = $logic_payment->getRealOrderInfo($pay_sn, session('member_id'));
-        if (!$result['code']) {
-            $this->error($result['msg']);
+        $result_order = $logic_payment->getOrderInfo($pay_sn, session('member_id'));
+        if (!$result_order['code']) {
+            $this->error($result_order['msg']);
         }
-        if ($result['data']['api_paystate'] || empty($result['data']['api_pay_amount'])) {
+        if ($result_order['data']['api_paystate'] || empty($result_order['data']['api_pay_amount'])) {
             $this->error('该订单不需要支付');
         }
         //第三方API支付
-        $this->_api_pay($result['data'], $payment_info);
+        $this->_api_pay($result_order['data'], $payment_info);
     }
 }
 

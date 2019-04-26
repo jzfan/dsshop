@@ -36,13 +36,13 @@
 	<i class="icon iconfont"></i>
 	<dl>
 		<dt><%=lang('logistics_company')%>：<%= express_name %></dt>
-        <dd><%=lang('waybill_number')%>：<%= shipping_code %></dd>
+    <dd><%=lang('waybill_number')%>：<%= shipping_code %></dd>
 	</dl>
 </div>
 <div class="dstouch-order-deivery-con">
 	<ul>
-	<% for (var i in deliver_info) { %>
-		<li><span><i></i></span><%= deliver_info[i].time %>&nbsp;&nbsp;<%= deliver_info[i].context %></li>
+	<% for (var i = 0;i < deliver_info.track.detail.length;i++) { %>
+		<li><span><i></i></span><%= deliver_info.track.detail[i].time %>&nbsp;&nbsp;<%= deliver_info.track.detail[i].memo %></li>
 	<% } %>
 	</ul>
 </div>

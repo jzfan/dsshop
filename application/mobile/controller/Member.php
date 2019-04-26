@@ -81,7 +81,7 @@ class Member extends MobileMember
     public function edit_information()
     {
         $data = array(
-            'member_truename' => input('param.member_truename'),
+            'member_name' => input('param.member_truename'),
             'member_sex' => input('param.member_sex'),
             'member_birthday' => strtotime(input('param.member_birthday')),
         );

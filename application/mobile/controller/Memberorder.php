@@ -218,6 +218,7 @@ class Memberorder extends MobileMember
         $condition['order_id'] = $order_id;
         $condition['buyer_id'] = $this->member_info['member_id'];
         $order_info = $order_model->getOrderInfo($condition, array('order_common', 'order_goods'));
+        //print_r($order_info);die;
         if (empty($order_info) || !in_array($order_info['order_state'], array(ORDER_STATE_SEND, ORDER_STATE_SUCCESS))) {
             ds_json_encode(10001, '订单不存在');
         }
@@ -410,27 +411,45 @@ class Memberorder extends MobileMember
     public function _get_express($express_code, $shipping_code)
     {
 
-        $url = 'http://www.kuaidi100.com/query?type=' . $express_code . '&postid=' . $shipping_code . '&id=1&valicode=&temp=' . random(4) . '&sessionid=&tmp=' . random(4);
-        $content = http_request($url);
-        $content = json_decode($content, true);
+//        $url = 'http://www.kuaidi100.com/query?type=' . $express_code . '&postid=' . $shipping_code . '&id=1&valicode=&temp=' . random(4) . '&sessionid=&tmp=' . random(4);
+//        $content = http_request($url);
+//        $content = json_decode($content, true);
+//
+//        if ($content['status'] != 200) {
+//            ds_json_encode(10001, '物流信息查询失败');
+//        }
+//        $content['data'] = array_reverse($content['data']);
+//        $output = array();
+//        if (is_array($content['data'])) {
+//            foreach ($content['data'] as $k => $v) {
+//                if ($v['time'] == '')
+//                    continue;
+//                //$output[] = $v['time'] . '&nbsp;&nbsp;' . $v['context'];
+//                $output[$k]['time'] = $v['time'];
+//                $output[$k]['context'] = $v['context'];
+//            }
+//        }
+//        if (empty($output))
+//            exit(json_encode(false));
+//        return $output;
 
-        if ($content['status'] != 200) {
-            ds_json_encode(10001, '物流信息查询失败');
-        }
-        $content['data'] = array_reverse($content['data']);
-        $output = array();
-        if (is_array($content['data'])) {
-            foreach ($content['data'] as $k => $v) {
-                if ($v['time'] == '')
-                    continue;
-                //$output[] = $v['time'] . '&nbsp;&nbsp;' . $v['context'];
-                $output[$k]['time'] = $v['time'];
-                $output[$k]['context'] = $v['context'];
+
+        $res = curl_get('http://tracequery.sto-express.cn/track.aspx?billcode=' . $shipping_code);
+        $res = iconv("GB2312", "utf-8//IGNORE", $res);
+        try {
+            $obj = simplexml_load_string(str_replace('GB2312', 'UTF-8', $res));
+            $jsonStr = json_encode($obj);
+            $arr = json_decode($jsonStr, true);
+            if (!isset($arr['track']['detail'])) {
+                $arr['status'] = 0;
+            } else {
+                $arr['status'] = 1;
+                $arr['track']['detail'] = array_reverse($arr['track']['detail']);
             }
+        } catch (\Exception $e) {
+            $arr['status'] = 0;
         }
-        if (empty($output))
-            exit(json_encode(false));
-        return $output;
+        return $arr;
     }
 
 
@@ -574,6 +593,11 @@ class Memberorder extends MobileMember
             ds_json_encode(10001, '该用户没有挂售记录', $result);
         }
     }
+
+    public  function  test(){
+        $this->_get_express('yunda','3995310750466');
+    }
+
 }
 
 ?>
