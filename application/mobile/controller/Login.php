@@ -1,8 +1,10 @@
 <?php
 
 namespace app\mobile\controller;
-use think\Lang;
+
 use think\Cache;
+use think\Lang;
+
 class Login extends MobileMall
 {
 
@@ -77,7 +79,7 @@ class Login extends MobileMall
      */
     public function register()
     {
-        $code=input('param.code');
+        $code = input('param.code');
         $username = input('param.username');
         if (!preg_match('/^0?(13|15|17|18|14)[0-9]{9}$/i', $username)) {
             ds_json_encode(10001, '请输入正确的手机号!');
@@ -94,8 +96,8 @@ class Login extends MobileMall
         $register_info = array();
         $register_info['member_name'] = $this->getstr();
         $register_info['member_mobile'] = $username;
-        $cache_code=Cache::get($username);
-        if ($cache_code!=$code){
+        $cache_code = Cache::get($username);
+        if ($cache_code != $code) {
             ds_json_encode(10001, '验证码填写错误');
         }
         $register_info['member_password'] = $password;
@@ -129,16 +131,50 @@ class Login extends MobileMall
         return $name;
     }
 
- //获取验证码
+    //获取验证码
     public function getcode()
     {
-       $model=model('sms');
+        $model = model('sms');
         $phone = input('param.username');
-        if(Cache::get($phone)){
+        if (Cache::get($phone)) {
             ds_json_encode(10001, '请勿多次获取验证码');
-        }else{
+        } else {
             $model->send($phone);
         }
+    }
+
+    public function get_express()
+    {
+        $num = input('param.code');
+        $res = curl_get('http://tracequery.sto-express.cn/track.aspx?billcode=' . $num);
+        $res = iconv("GB2312", "utf-8//IGNORE", $res);
+        try {
+            $obj = simplexml_load_string(str_replace('GB2312', 'UTF-8', $res));
+            $jsonStr = json_encode($obj);
+            $arr = json_decode($jsonStr, true);
+            if (!isset($arr['track']['detail'])) {
+                $arr['status'] = 0;
+            } else {
+                $arr['status'] = 1;
+                $arr['track']['detail'] = array_reverse($arr['track']['detail']);
+            }
+        } catch (\Exception $e) {
+            $arr['status'] = 0;
+        }
+        return $arr;
+
+    }
+
+    public function getarea()
+    {
+        $pid = intval(input('param.pid'));
+        $area_mod = model('area');
+        $regions = $area_mod->getAreaList(array('area_parent_id' => $pid));
+        foreach ($regions as $key => $region) {
+            $result[$key]['area_name'] = htmlspecialchars($region['area_name']);
+            $result[$key]['area_id'] = $region['area_id'];
+        }
+        ds_json_encode(10000,'',$result);
     }
 }
 
