@@ -107,8 +107,13 @@ class Login extends MobileMall
         $register_info['email'] = $email;
         $register_info['member_mobilebind'] = 1;
         //添加奖励积分
-        if ($inviter_id) {
-            $register_info['inviter_id'] = $inviter_id;
+        if ($inviter_id!=''){
+            $is_null=model('member')->where('member_id',$inviter_id)->find();
+            if (!empty($is_null)) {
+                $register_info['inviter_id'] = $inviter_id;
+            }else{
+                ds_json_encode(10001, '该推荐人不是我们平台会员!');
+            }
         }
         $member_info = $member_model->register($register_info);
         if (!isset($member_info['error'])) {
