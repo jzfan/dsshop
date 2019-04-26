@@ -7,7 +7,8 @@ $(function() {
     var r = getQueryString("order_id");
     $.ajax({type: "post", url: ApiUrl + "/Memberorder/search_deliver.html", data: {key: e, order_id: r}, dataType: "json", success: function(e) {
             checkLogin(e.login);
-            var r = e && e.result;
+            console.log(e.result.deliver_info)
+            var r = e.result;
             if (!r) {
                 r = {};
                 r.err = "暂无物流信息"
