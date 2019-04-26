@@ -33,6 +33,7 @@ $(function() {
 			return false;
 		}else{
 			$(".chose_city").empty();
+			$(".chose_city").append('<option value="-1">请设置城市</option>');
     		var html = "";
 			$.ajax({
 				type: "get",
@@ -72,23 +73,25 @@ $(function() {
 			        data:{username:username},
 			        success: function(res) {
 			        	console.log(res);
-//			        	if(res.code == 200){
-//			        		layer.open({content: '短信验证码发送成功，请注意查收',skin: 'msg',time: 2});
-//			        		validCode=false;
-//					        timer=setInterval(function(){
-//					            if(nums>0){
-//					                nums--;
-//					                code.text(nums+"s后重新发送");
-//					                code.addClass("getMsgOver");
-//					            }else{
-//					                clearInterval(timer);
-//					                nums=60;//重置回去
-//					                validCode=true;
-//					                code.removeClass("getMsgOver");
-//					                code.text("发送验证码");
-//					    		}
-//					        },1000);
-//			        	}
+			        	if(res.code == 10000){
+			        		layer.open({content: '短信验证码发送成功，请注意查收',skin: 'msg',time: 2});
+			        		validCode=false;
+					        timer=setInterval(function(){
+					            if(nums>0){
+					                nums--;
+					                code.text(nums+"s后重新发送");
+					                code.addClass("getMsgOver");
+					            }else{
+					                clearInterval(timer);
+					                nums=60;//重置回去
+					                validCode=true;
+					                code.removeClass("getMsgOver");
+					                code.text("发送验证码");
+					    		}
+					        },1000);
+			        	}else{
+			        		layer.open({content: res.message,skin: 'msg',time: 2});
+			        	}
 			        },
 			        error:function(e){
 			        	layer.open({content: '短信验证码发送失败，请稍候重试',skin: 'msg',time: 2});
@@ -100,17 +103,73 @@ $(function() {
 	})
     
     $("#registerbtn").click(function() {
-        if (!$(this).parent().hasClass("ok")) {
-            return false
-        }
-//      var e = $("input[name=username]").val();
-//      var r = $("input[name=pwd]").val();
-//      var a = $("input[name=password_confirm]").val();
-//      var i = $("input[name=email]").val();
-//      var inviter_id = $("input[name=inviter_id]").val();
-        var t = "wap";
-        if ($.sValid()) {
-            $.ajax({type: "post", url: ApiUrl + "/Login/register.html", data: {username: e, password: r, password_confirm: a, email: i, client: t,inviter_id:inviter_id}, dataType: "json", success: function(e) {
+    	var username = $("#username").val();
+    	var msgcode = $("#msgcode").val();
+    	var leadid = $("#leadid").val();
+    	var pwds = $("#pwds").val();
+    	var password_confirm = $("#password_confirm").val();
+    	var chose_province = $(".chose_province").val();
+    	var chose_city = $(".chose_city").val();
+    	
+    	var provincename = $(".chose_province option").not(function(){ return !this.selected }).text();
+    	var cityname = $(".cityname option").not(function(){ return !this.selected }).text();
+    	
+    	if(username == ""){
+    		layer.open({content: "请输入手机号码", skin: 'msg', time: 2});
+    		return false;
+    	}else if(username.length != 11){
+    		layer.open({content: "请输入正确的手机号码", skin: 'msg', time: 2});
+    		return false;
+    	}else if(msgcode == ""){
+    		layer.open({content: "请输入短信码", skin: 'msg', time: 2});
+    		return false;
+    	}else if(leadid == ""){
+    		layer.open({content: "请输入推荐码", skin: 'msg', time: 2});
+    		return false;
+    	}else if(pwds == ""){
+    		layer.open({content: "请输入密码", skin: 'msg', time: 2});
+    		return false;
+    	}else if(password_confirm == ""){
+    		layer.open({content: "请再次输入密码", skin: 'msg', time: 2});
+    		return false;
+    	}else if(pwds != password_confirm){
+    		layer.open({content: "两次输入的密码不一致", skin: 'msg', time: 2});
+    		return false;
+    	}else if(chose_province == -1){
+    		layer.open({content: "请设置省份", skin: 'msg', time: 2});
+    		return false;
+    	}else if(chose_city == -1){
+    		layer.open({content: "请设置城市", skin: 'msg', time: 2});
+    		return false;
+    	}else{
+    		var t = "wap";
+    		$.ajax({
+				type: "post",
+				url: ApiUrl + "/login/register.html",
+				data:{
+					code:msgcode,
+					username: username,
+					password: pwds,
+					password_confirm: password_confirm,
+					provinceid:chose_province,
+					cityid:chose_city,
+					provincename:provincename,
+					cityname:cityname,
+					client: t,
+					inviter_id:inviter_id
+				},
+				dataType: "json",
+				success: function(e){
+					console.log(e);
+					$.each(e.result,function(i,c){ 
+				 		html += '<option value="'+c.area_id+'">'+c.area_name+'</option>';
+					});
+			        $(".chose_city").append(html);
+				}
+			});
+    		
+    		
+    		$.ajax({type: "post", url: ApiUrl + "/Login/register.html", data: {username: e, password: r, password_confirm: a, email: i, client: t,inviter_id:inviter_id}, dataType: "json", success: function(e) {
                 if (e.code == 10000) {
                     if (typeof e.result.key == "undefined") {
                         return false
@@ -124,6 +183,6 @@ $(function() {
                     layer.open({content: e.message, skin: 'msg', time: 2});
                 }
             }})
-        }
+    	}
     })
 });
