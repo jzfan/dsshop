@@ -50,7 +50,6 @@ $(function() {
 			});
 		}
 	});
-	
 	//发送短信事件
 	$(".input-getCode").on("click",function(){
 		var timer="";
@@ -101,7 +100,6 @@ $(function() {
 		    }
 	    }
 	})
-    
     
     $("#registerbtn").click(function() {
     	var username = $("#username").val();
