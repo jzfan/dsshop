@@ -12,6 +12,8 @@ var e = getCookie("key");
 var address = sessionStorage.getItem("spike_address_id");
 var uname = "";
 var uphone = "";
+var pay_sn = "";
+var payment_code = "";
 $(function() {
 	//判断用户是否登录
 	if(!e){
@@ -263,7 +265,12 @@ $(function() {
                                     layer.open({ content: e.message, skin: 'msg', time: 2 });
                                 } else {
                                     //带参，跳转到收银台页面
-                                    location.href = WapSiteUrl + "/order/buy_step1.html?goods_id=" + r + "&buynum=" + t;
+                                    $("#onlineTotal").text($("#good_price").text());
+									$("#miaomi").text($("#good_miaomi").text());
+                                    $(".alt_pay").show();
+                                    pay_sn = e.result.pay_sn;
+									payment_code = e.result.payment_code;
+                                    //location.href = WapSiteUrl + "/order/buy_step1.html?goods_id=" + r + "&buynum=" + t;
 //                                  toPay(e.result.pay_sn, "memberbuy", "pay");
                                 }
                             }
@@ -371,7 +378,19 @@ $(function() {
 
 				// 页面初始化
                 initNew();
-
+                
+				//支付面板事件
+				$(".alt_pay_tip").on("click",function(){
+					$(".alt_pay").hide();
+				});
+				$(".dstouch-bottom-mask-close").on("click",function(){
+					$(".alt_pay").hide();
+				});
+				
+				$("#toPay").on("click",function(){
+					location.href = http+SiteDomain + "/?s=mobile/Memberpayment/commonPay/key/" + getCookie("key") + "/pay_sn/" + pay_sn + "/payment_code/" + payment_code;
+				});
+				
             }
         });
     }
