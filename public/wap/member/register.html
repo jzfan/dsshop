@@ -25,43 +25,66 @@
   </div>
 </header>
 <div class="dstouch-main-layout fixed-Width">
-  <div class="dstouch-single-nav mb5 register-tab">
+  <!--<div class="dstouch-single-nav mb5 register-tab">
     <ul>
       <li class="selected"><a href="javascript: void(0);"><lang data-id="general_registration"></lang></a></li>
       <li><a href="register_mobile.html"><lang data-id="mobile_registration"></lang></a></li>
     </ul>
-  </div>
+  </div>-->
   <div class="dstouch-inp-con">
     <form action="" method ="">
       <ul class="form-box">
         <li class="form-item">
           <h4><lang data-id="user_name"></lang></h4>
           <div class="input-box">
-            <input type="text" placeholder="请输入6-20个字符" class="inp" name="username" id="username" oninput="writeClear($(this));"/>
+            <input type="number" placeholder="请输入手机号码" class="inp" name="username" id="username" />
             <span class="input-del"></span></div>
+        </li>
+        <li class="form-item">
+          <h4><lang data-id="msg_code"></lang></h4>
+          <div class="input-box">
+            <input type="number" placeholder="输入短信码" class="inp" name="msgcode" id="msgcode" />
+            <span class="input-getCode">获取短信码</span></div>
         </li>
         <li class="form-item">
           <h4><lang data-id="lead_id"></lang></h4>
           <div class="input-box">
-            <input type="text" placeholder="请输入推荐码" class="inp" name="lead_id" id="lead_id" oninput="writeClear($(this));"/>
+            <input type="text" placeholder="请输入推荐码" class="inp" name="leadid" id="leadid" />
             <span class="input-del"></span></div>
         </li>
         <li class="form-item">
           <h4><lang data-id="set_the_password"></lang></h4>
           <div class="input-box">
-            <input type="password" placeholder="请输入6-20位密码" class="inp" name="pwd" id="userpwd" oninput="writeClear($(this));"/>
+            <input type="password" placeholder="请输入6-20位密码" class="inp" name="pwds" id="pwds" value=""/>
             <span class="input-del"></span></div>
         </li>
         <li class="form-item">
           <h4><lang data-id="confirm_password"></lang></h4>
           <div class="input-box">
-            <input type="password" placeholder="请再次输入密码" class="inp" name="password_confirm" id="password_confirm" oninput="writeClear($(this));"/>
+            <input type="password" placeholder="请再次输入密码" class="inp" name="password_confirm" id="password_confirm" />
+            <span class="input-del"></span></div>
+        </li>
+        <!--新增地址-->
+        <li class="form-item">
+          <h4><lang data-id="province"></lang></h4>
+          <div class="input-box">
+            <select class="selects chose_province"></select>
             <span class="input-del"></span></div>
         </li>
         <li class="form-item">
+          <h4><lang data-id="city"></lang></h4>
+          <div class="input-box">
+            <select class="selects chose_city">
+            	<option>请设置城市</option>
+            </select>
+            <span class="input-del"></span></div>
+        </li>
+        
+        
+        <li class="form-item">
           <h4><lang data-id="mailbox"></lang></h4>
           <div class="input-box">
-            <input type="email" placeholder="请输入常用邮箱地址" class="inp" name="email" id="email" oninput="writeClear($(this));"/>
+            <input type="email" placeholder="请输入常用邮箱地址" class="inp" name="email" id="email" />
             <span class="input-del"></span></div>
         </li>
       </ul>

@@ -56,7 +56,7 @@ function setInputVal(gid) {
 function submitGoodForm(e) {
     e.preventDefault()
     $.ajax({
-        url: '/admin/seckillgoods/store', 
+        url: '/admin/seckill.goods/store', 
         type: 'post',
         dataType:'json',
         data: $('#modal-form').serialize(),

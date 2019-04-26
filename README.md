@@ -5,8 +5,42 @@ admin/admin123456
 
 1. 添加数据表:
 	a. seckill_goods
+  -- ----------------------------
+  -- Table structure for ds_seckill_goods
+  -- ----------------------------
+  DROP TABLE IF EXISTS `ds_seckill_goods`;
+  CREATE TABLE `ds_seckill_goods`  (
+    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `goods_id` int(10) UNSIGNED NOT NULL COMMENT '商品自增ID(SKU)',
+    `job_id` int(10) UNSIGNED NOT NULL COMMENT '秒杀活动ID',
+    `mi` int(10) NOT NULL COMMENT '秒杀消费秒米',
+    `price` decimal(10, 2) NOT NULL COMMENT '商品价格',
+    `qty` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '商品库存',
+    `sold` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '售出数量',
+    `state` tinyint(3) UNSIGNED NULL DEFAULT 0 COMMENT '商品状态 0:下架 1:正常',
+    `limit` int(10) UNSIGNED NOT NULL DEFAULT 1 COMMENT '用户商品秒杀限额',
+    `commend` tinyint(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '商品推荐 1:是 0:否',
+    `return_rate` float(10, 0) UNSIGNED NOT NULL DEFAULT 0 COMMENT '收益率',
+    PRIMARY KEY (`id`) USING BTREE
+  ) ENGINE = InnoDB AUTO_INCREMENT = 153 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+  SET FOREIGN_KEY_CHECKS = 1;
 	b. seckill_jobs
-	c. seckill_users
+  -- ----------------------------
+  -- Table structure for ds_seckill_jobs
+  -- ----------------------------
+  DROP TABLE IF EXISTS `ds_seckill_jobs`;
+  CREATE TABLE `ds_seckill_jobs`  (
+    `id` int(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+    `start` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '开始时间',
+    `end` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '结束时间',
+    `status` tinyint(255) NOT NULL DEFAULT 0 COMMENT '0：等待开始，1：执行中，2：结束', 3:'停止'
+    PRIMARY KEY (`id`) USING BTREE
+  ) ENGINE = InnoDB AUTO_INCREMENT = 206 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+  SET FOREIGN_KEY_CHECKS = 1;
+
 	
 2.增加阅读积分配置	
 INSERT INTO `ds_config` (`id`, `code`, `value`, `remark`) VALUES (null, 'points_read', '10', '阅读文章赠送积分')	
@@ -147,7 +181,3 @@ ALTER TABLE `ds_memeber`
 ADD COLUMN `meter_second` int(11)  NOT NULL DEFAULT 0 COMMENT '秒米',
 ADD COLUMN `face_card` varchar(25)  DEFAULT NULL COMMENT '身份证正面',
 ADD COLUMN `back_card` varchar(35)  DEFAULT NULL COMMENT '身份证反面',
-## TODO
-
-1. 订单超时处理
-2. 秒杀挂售处理

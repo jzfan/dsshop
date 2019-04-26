@@ -55,7 +55,7 @@ class Seckilltask extends Controller
 				'limit' => rand(1, 5)
 			]);
 		}
-		echo 'seeded';
+		echo 'seeded' . "\n";
 		exit;
 	}
 

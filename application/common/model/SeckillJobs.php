@@ -2,9 +2,9 @@
 
 namespace app\common\model;
 
+use app\common\ModelTrait;
 use think\Db;
 use think\Model;
-use app\common\ModelTrait;
 
 class SeckillJobs extends Model
 {
@@ -28,8 +28,9 @@ class SeckillJobs extends Model
     public function isOver()
     {
         if (strtotime($this->end) < time()) {
-            $this->status = 2;
-            $this->save();
+            if ($this->status != 2) {
+                $this->setStatus(2);
+            }
             return true;
         }
         return false;
@@ -37,21 +38,25 @@ class SeckillJobs extends Model
 
     public function isWaiting()
     {
-        if (strtotime($this->start) > time() + 60) {
-        	return true;
+        if (strtotime($this->start) > time()) {
+            if ($this->status != 2) {
+                $this->setStatus(2);
+            }
+            return true;
         }
         return false;
     }
 
     public function isActive()
     {
-    	$diff = time() - strtotime($this->start);
-    	if ($diff <= 60 && $diff > 0) {
-    		$this->status = 1;
-    		$this->save();
-    		return true;
-    	}
-    	return false;
+        if (time() - strtotime($this->start) <= 60 &&
+            time() - strtotime($this->start) >= 0) {
+            if ($this->status == 0) {
+                $this->setStatus(1);
+            }
+            return true;
+        }
+        return false;
     }
 
     public function formatGoods()
@@ -65,11 +70,11 @@ class SeckillJobs extends Model
     public function pushGoods()
     {
         foreach ($this->goods as $good) {
-            $good->push($this->id);
+            $good->push();
         }
     }
 
-    public function duration($now=true)
+    public function duration($now = true)
     {
         $start = $now ? time() : strtotime($this->start);
         return strtotime($this->end) - $start;
@@ -84,5 +89,11 @@ class SeckillJobs extends Model
                 $good->offShelve();
             }
         });
+    }
+
+    protected function setStatus($n)
+    {
+        $this->status = $n;
+        return $this->save();
     }
 }

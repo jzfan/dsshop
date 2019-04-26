@@ -1,0 +1,30 @@
+<form method="post" id='search-form'>
+    <div class="ds-search-form">
+        <dl>
+            <dt>状态</dt>
+            <dd class="btn_group" style="margin-left: 10px" data-name='status'>
+                <button class="btn btn-default" data-value=0>等待中</button>
+                <button class="btn btn-blue" data-value=1>秒杀中</button>
+                <button class="btn btn-primary" data-value=2>已结束</button>
+                <button class="btn btn-black" data-value=3>已停止</button>
+            </dd>
+        </dl>
+        <dl>
+            <dt>开始时间</dt>
+            <dd class="btn_group" style="margin-left: 10px" data-name='days'>
+                <button class="btn btn-primary" data-value='week'>本周</button>
+                <button class="btn btn-blue" data-value='today'>今天</button>
+                <button class="btn btn-default" data-value='last week'>上周</button>
+                <button class="btn btn-black" data-value='last month'>上月</button>
+            </dd>
+        </dl>
+    </div>
+</form>
+
+<script>
+$('#search-form button').click(function () {
+    let name = $(this).parents('dd').data('name')
+    let value = $(this).data('value')
+    $('#search-form').attr('action', `/admin/seckill.jobs/search?${name}=${value}`).submit()
+})
+</script>
