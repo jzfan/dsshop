@@ -22,14 +22,16 @@ class Order extends AdminControl
 
         $order_sn = input('param.order_sn');
         if ($order_sn) {
-            $condition['order_sn'] = $order_sn;
+            $condition['order_sn'] = array('like', '%' . $order_sn . '%');
         }
         $is_shop = session('is_shop');
         $id = session('admin_id');
         if ($is_shop != '1') {
             $goods_id = db('goods')->where('supplier', $id)->column('goods_id');
             $where = db('ordergoods')->whereIn('goods_id', $goods_id)->column('order_id');
-            $condition = [['order_id', 'in', $where]];
+            if (!empty($where)){
+                $condition = [['order_id', 'in', $where]];
+            }
         } else {
             $goods_id = db('goods')->where('is_platform', 0)->column('goods_id');
             $where = db('ordergoods')->whereIn('goods_id', $goods_id)->column('order_id');
@@ -53,6 +55,10 @@ class Order extends AdminControl
         $if_end_time = preg_match('/^20\d{2}-\d{2}-\d{2}$/', $query_end_time);
         $start_unixtime = $if_start_time ? strtotime($query_start_time) : null;
         $end_unixtime = $if_end_time ? strtotime($query_end_time) : null;
+        if ($start_unixtime!=null&&$end_unixtime!=null&&$start_unixtime==$end_unixtime){
+            $end_unixtime=$start_unixtime+86400;
+            $condition['add_time'] = array('between', array($start_unixtime, $end_unixtime));
+        }
         if ($start_unixtime || $end_unixtime) {
             $condition['add_time'] = array('between', array($start_unixtime, $end_unixtime));
         }
@@ -491,14 +497,16 @@ class Order extends AdminControl
 
         $order_sn = input('param.order_sn');
         if ($order_sn) {
-            $condition['order_sn'] = $order_sn;
+            $condition['order_sn'] = array('like', '%' . $order_sn . '%');
         }
         $is_shop = session('is_shop');
         $id = session('admin_id');
         if ($is_shop != '1') {
             $goods_id = db('goods')->where('supplier', $id)->column('goods_id');
             $where = db('ordergoods')->whereIn('goods_id', $goods_id)->column('order_id');
-            $condition = [['order_id', 'in', $where]];
+            if (!empty($where)){
+                $condition = [['order_id', 'in', $where]];
+            }
         } else {
             $goods_id = db('goods')->where('is_platform', 0)->column('goods_id');
             $where = db('ordergoods')->whereIn('goods_id', $goods_id)->column('order_id');
@@ -522,6 +530,10 @@ class Order extends AdminControl
         $if_end_time = preg_match('/^20\d{2}-\d{2}-\d{2}$/', $query_end_time);
         $start_unixtime = $if_start_time ? strtotime($query_start_time) : null;
         $end_unixtime = $if_end_time ? strtotime($query_end_time) : null;
+        if ($start_unixtime!=null&&$end_unixtime!=null&&$start_unixtime==$end_unixtime){
+            $end_unixtime=$start_unixtime+86400;
+            $condition['add_time'] = array('between', array($start_unixtime, $end_unixtime));
+        }
         if ($start_unixtime || $end_unixtime) {
             $condition['add_time'] = array('between', array($start_unixtime, $end_unixtime));
         }
@@ -566,14 +578,16 @@ class Order extends AdminControl
 
         $order_sn = input('param.order_sn');
         if ($order_sn) {
-            $condition['order_sn'] = $order_sn;
+            $condition['order_sn'] = array('like', '%' . $order_sn . '%');
         }
         $is_shop = session('is_shop');
         $id = session('admin_id');
         if ($is_shop != '1') {
             $goods_id = db('goods')->where('supplier', $id)->column('goods_id');
             $where = db('ordergoods')->whereIn('goods_id', $goods_id)->column('order_id');
-            $condition = [['order_id', 'in', $where]];
+            if (!empty($where)){
+                $condition = [['order_id', 'in', $where]];
+            }
         } else {
             $goods_id = db('goods')->where('is_platform', 0)->column('goods_id');
             $where = db('ordergoods')->whereIn('goods_id', $goods_id)->column('order_id');
@@ -597,6 +611,10 @@ class Order extends AdminControl
         $if_end_time = preg_match('/^20\d{2}-\d{2}-\d{2}$/', $query_end_time);
         $start_unixtime = $if_start_time ? strtotime($query_start_time) : null;
         $end_unixtime = $if_end_time ? strtotime($query_end_time) : null;
+        if ($start_unixtime!=null&&$end_unixtime!=null&&$start_unixtime==$end_unixtime){
+            $end_unixtime=$start_unixtime+86400;
+            $condition['add_time'] = array('between', array($start_unixtime, $end_unixtime));
+        }
         if ($start_unixtime || $end_unixtime) {
             $condition['add_time'] = array('between', array($start_unixtime, $end_unixtime));
         }
