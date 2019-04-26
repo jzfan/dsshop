@@ -513,18 +513,15 @@ class Order extends Model
                     exception('操作失败');
                 }
 
-                $condition = array('order_id' => $order_info['order_id']);
-                $forsaleorder_list = $forsaleorder_model->getmemberforsaleorder($condition);
-                foreach ($forsaleorder_list as $item) {
-                    // 解冻商品库存
-                    $forsalegoods_model->unfreezeMemberForsaleGoods($item['goods_id'], $item['goods_number'], $item['member_id']);
-                }
+                // 更新挂售商品信息
+                $forsalegoods_model->unfreezeMemberForsaleGoods($order_info['order_id']);
 
+                $condition = array('order_id' => $order_info['order_id']);
                 // 更新挂售订单
-                $forsaleorder_model->updateForsaleOrder($condition);
+                $forsaleorder_model->updateForsaleOrder(['order_state'=>1],$condition);
 
                 // 更新分账信息
-                $forsalegbill_model->updateForsaleBill($condition);
+                $forsalegbill_model->updateForsaleBill(['bill_state'=>1],$condition);
             }
 
             $order_model->commit();

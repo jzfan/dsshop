@@ -261,6 +261,56 @@ class Payment extends Model
     }
 
 
+
+    public function getOrderInfo($pay_sn, $member_id = null)
+    {
+        //验证订单信息
+        $order_model = model('order');
+        $condition = array();
+        $condition['pay_sn'] = $pay_sn;
+        if (!empty($member_id)) {
+            $condition['buyer_id'] = $member_id;
+        }
+        $order_pay_info = $order_model->getOrderpayInfo($condition);
+        if (empty($order_pay_info)) {
+            return ds_callback(false, '该支付单不存在');
+        }
+
+        $order_pay_info['subject'] = $order_pay_info['pay_sn'];
+
+        $condition = array();
+        $condition['pay_sn'] = $pay_sn;
+        $order_list = $order_model->getNormalOrderList($condition);
+
+        //计算本次需要在线支付的订单总金额
+        $pay_amount = 0;
+        if (!empty($order_list)) {
+            foreach ($order_list as $order_info) {
+                if ($order_info['payment_code'] != 'offline' and $order_info['order_state'] > 0) {
+                    $pay_amount += floatval($order_info['order_amount']);
+                }
+                switch ($order_info['order_type']) {
+                    case 30:
+                        $order_pay_info['order_type'] = 'forsale_order';
+                        break;
+                    case 40:
+                    case 41:
+                        $order_pay_info['order_type'] = 'forsale_order';
+                        break;
+                    default:
+                        $order_pay_info['order_type'] = 'point_order';
+                        break;
+                }
+            }
+        }
+
+        $order_pay_info['api_pay_amount'] = $pay_amount;
+        $order_pay_info['order_list'] = $order_list;
+
+        return ds_callback(true, '', $order_pay_info);
+    }
+
+
     public function _updateOrder($out_trade_no,$trade_no,$order_type,$payment_code)
     {
         switch ($order_type) {
@@ -279,7 +329,7 @@ class Payment extends Model
 
     public function updateForsaleOrder($out_trade_no, $trade_no, $payment_code)
     {
-        $order_info = $this->getRealOrderInfo($out_trade_no);
+        $order_info = $this->getOrderInfo($out_trade_no);
 
         $post['payment_code'] = $payment_code;
         $post['trade_no'] = $trade_no;
@@ -303,7 +353,7 @@ class Payment extends Model
     public function updateSeckillForSale()
     {
         $order_info = $this->getRealOrderInfo(input('out_trade_no'));
-dd($order_info);
+        dd($order_info);
         // return model('order','logic')->updatePointOrder($order_info['data']['order_list'], 'system', '系统', $post);
 
         Forsalegoods::add($order_info);

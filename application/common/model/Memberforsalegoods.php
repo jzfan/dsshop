@@ -9,6 +9,7 @@
 namespace app\common\model;
 
 
+use think\Db;
 use think\Model;
 use app\common\ModelTrait;
 
@@ -59,13 +60,25 @@ class Memberforsalegoods extends Model
     }
 
 
-    public function unfreezeMemberForsaleGoods($goods_id, $goods_number, $member_id)
+    public function unfreezeMemberForsaleGoods($order_id)
     {
-        $forsalegoods = self::where('goods_id',$goods_id)->where('member_id',$member_id)->find();
-        $forsalegoods->sale_number += $goods_number;
-        $forsalegoods->left_number -= $goods_number;
-        $forsalegoods->freeze_number -= $goods_number;
-        $forsalegoods->save();
+        $forsaleorder_model = model('memberforsaleorder');
+        $condition = array('order_id' => $order_id);
+
+        $forsaleorder_list = $forsaleorder_model->getmemberforsaleorder($condition);
+        foreach ($forsaleorder_list as $forsaleorder) {
+            $update_data = [
+                'freeze_number' => Db::raw('freeze_number-' . $forsaleorder['goods_number']),
+                'left_number'   => Db::raw('left_number-' . $forsaleorder['goods_number']),
+                'sale_number'   => Db::raw('sale_number+' . $forsaleorder['goods_number']),
+            ];
+            $update_condition = [
+                'goods_id'  =>  $forsaleorder['goods_id'],
+                'member_id' =>  $forsaleorder['member_id'],
+            ];
+            self::update($update_data, $update_condition);
+
+        }
     }
 
 

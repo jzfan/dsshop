@@ -56,7 +56,11 @@ class Payment extends MobileMall {
 
     public function notify()
     {
+        $order_trade_no = input('param.order_trade_no');
+        $trade_no = input('param.trade_no');
+        $order_type = input('param.order_type');
+        $payment_code = input('param.payment_code');
         $payment_logic = model("payment",'logic');
-        return json($payment_logic->_updateOrder(1, 2, 'seckill_forsale', 4));
+        return json($payment_logic->_updateOrder($order_trade_no, $trade_no, $order_type, $payment_code));
     }
 }
