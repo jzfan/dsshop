@@ -274,7 +274,7 @@ class Memberpayment extends MobileMember
         $payment_info = $result['data'];
 
         //计算所需支付金额等支付单信息
-        $result = $logic_payment->getRealOrderInfo($pay_sn, session('member_id'));
+        $result = $logic_payment->getOrderForPay($pay_sn, session('member_id'));
         if (!$result['code']) {
             $this->error($result['msg']);
         }
