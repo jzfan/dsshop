@@ -86,7 +86,6 @@ class Login extends MobileMall
         }
         $password = input('param.password');
         $password_confirm = input('param.password_confirm');
-        $email = input('param.email');
         $client = input('param.client');
         $inviter_id = intval(input('param.inviter_id'));
         if ($password_confirm != $password) {
@@ -152,7 +151,6 @@ class Login extends MobileMall
 
     public function get_express()
     {
-        $num = input('param.code');
         $res = curl_get('http://tracequery.sto-express.cn/track.aspx?billcode=' . $num);
         $res = iconv("GB2312", "utf-8//IGNORE", $res);
         try {
