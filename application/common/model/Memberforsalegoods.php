@@ -243,6 +243,7 @@ class Memberforsalegoods extends Model
                 "sale_number"       =>  0,
                 "goods_state"       =>  1,
                 "freeze_number"     =>  0,
+                "member_phone"      =>  "0000",
                 "created_at"        =>  date('Y-m-d H:i:s',time()),
                 "updated_at"        =>  date('Y-m-d H:i:s',time()),
             );

@@ -31,6 +31,20 @@ class Forsalequeue extends AdminControl
 
         $goods_list = $memberforsalegoods_model->getMemberForsaleGoodsList($where,10,"*","sortable asc");
 
+        foreach ($goods_list as &$goods) {
+            switch ($goods['goods_state']) {
+                case 0:
+                    $goods['goods_state'] = "等待挂售";
+                    break;
+                case 1:
+                    $goods['goods_state'] = "挂售中";
+                    break;
+                case 2:
+                    $goods['goods_state'] = "挂售完成";
+                    break;
+            }
+        }
+
         $this->assign('goods_list', $goods_list);
         $this->assign('show_page', $memberforsalegoods_model->page_info->render());
 
@@ -50,6 +64,19 @@ class Forsalequeue extends AdminControl
 
         $goods_list = $memberforsalegoods_model->getMemberForsaleGoodsList($where,10,"*","sortable asc");
 
+        foreach ($goods_list as &$goods) {
+            switch ($goods['goods_state']) {
+                case 0:
+                    $goods['goods_state'] = "等待挂售";
+                    break;
+                case 1:
+                    $goods['goods_state'] = "挂售中";
+                    break;
+                case 2:
+                    $goods['goods_state'] = "挂售完成";
+                    break;
+            }
+        }
         $this->assign('goods_list', $goods_list);
         $this->assign('show_page', $memberforsalegoods_model->page_info->render());
 
