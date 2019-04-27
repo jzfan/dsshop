@@ -84,8 +84,8 @@ public function _initialize()
         $config_model = model('config');
         if(request()->isPost()) {
             $update_array = array();
-            $update_array['forsale_bill_platform'] = intval(input('post.forsale_bill_platform'));
-            $update_array['forsale_bill_member'] = intval(input('post.forsale_bill_member'));
+            $update_array['forsale_bill_platform_rate'] = intval(input('post.forsale_bill_platform_rate'));
+            $update_array['forsale_bill_member_rate'] = intval(input('post.forsale_bill_member_rate'));
             $result = $config_model->editConfig($update_array);
             if ($result === true) {
                 $this->log(lang('ds_edit') . lang('ds_operation') . lang('ds_operation_set'), 1);
