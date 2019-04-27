@@ -116,7 +116,7 @@
 				<% if (goods_list[i].sold >= goods_list[i].qty ){%>
 				<a>
 				<% }else { %>
-				<a href="product_detail.html?goods_id=<%=goods_list[i].goods_id%>">
+				<a href="product_detail.html?goods_id=<%=goods_list[i].goods_id%>&job_id=<%=job.id%>">
 				<%}%>
 				<li class="goods-item" goods_id="<%=goods_list[i].goods_id;%>">
 					<% if (goods_list[i].sold <= goods_list[i].qty) {%>

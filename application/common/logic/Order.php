@@ -33,10 +33,46 @@ class Order extends Model
             foreach ($goods_list as $goods) {
                 $data[$goods['goods_id']] = $goods['goods_num'];
             }
-            if ($if_quque) {
-                \mall\queue\QueueClient::push('cancelOrderUpdateStorage', $data);
-            } else {
-                \model('queue', 'logic')->cancelOrderUpdateStorage($data);
+
+            switch ($order_info['order_type']) {
+                case 1:
+                    if ($if_quque) {
+                        \mall\queue\QueueClient::push('cancelOrderUpdateStorage', $data);
+                    } else {
+                        \model('queue', 'logic')->cancelOrderUpdateStorage($data);
+                    }
+                    break;
+                case 20:
+                    // 第二步：回滚91商品库存
+                    $goods_list = Db::name('ordergoods')->where('order_id', $order_id)->select();
+                    foreach ($goods_list as $goods) {
+                        $forsalegoods_data = [
+                            'goods_storage' => Db::raw('goods_storage+' . $goods['goods_num']),
+                            'sale_number' => Db::raw('sale_number-' . $goods['goods_num']),
+                        ];
+                        Db::name('forsalegoods')->where('goods_id', $goods['goods_id'])->update($forsalegoods_data);
+                    }
+
+                    // 第三步：解冻挂售订单库存
+                    $forsaleorder_list = Db::name('memberforsaleorder')->where('order_id', $order_id)->select();
+                    foreach ($forsaleorder_list as $forsaleorder) {
+                        $update_data = [
+                            'freeze_number' => Db::raw('freeze_number-' . $forsaleorder['goods_number']),
+                        ];
+                        Db::name('memberforsalegoods')->where('goods_id', $forsaleorder['goods_id'])
+                            ->where('member_id',$forsaleorder['member_id'])->update($update_data);
+                    }
+                    break;
+                case 30:
+                    $goods_list = Db::name('ordergoods')->where('order_id', $order_id)->select();
+                    foreach ($goods_list as $goods) {
+                        $update_data = [
+                            'goods_storage' => Db::raw('goods_storage+' . $goods['goods_num']),
+                            'sale_number' => Db::raw('sale_number-' . $goods['goods_num']),
+                        ];
+                        Db::name('pointgoods')->where('goods_id', $goods['goods_id'])->update($update_data);
+                    }
+                    break;
             }
 
             if ($if_update_account) {
@@ -618,4 +654,6 @@ class Order extends Model
 
         return ds_callback(true, '操作成功');
     }
+
+
 }

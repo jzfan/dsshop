@@ -19,26 +19,6 @@
             <li>商品名称和商品货号查询去寻找相应结果的队列，进行调整优先级</li>
         </ul>
     </div>
-    <form method="get" name="formSearch" id="formSearch">
-        <div class="ds-search-form">
-            <dl>
-                <dt>{$Think.lang.ds_goods_name}</dt>
-                <dd><input type="text" value="{$Request.get.search_goods_name|default=''}" name="search_goods_name" id="search_goods_name" class="txt"></dd>
-            </dl>
-            <dl>
-                <dt>平台货号</dt>
-                <dd><input type="text" value="{$Request.get.search_commonid|default=''}" name="search_commonid" id="search_commonid" class="txt" /></dd>
-            </dl>
-
-            <dl>
-                <dt>会员电话</dt>
-                <dd><input type="text" value="{$Request.get.search_phone|default=''}" name="search_phone" id="search_phone" class="txt" /></dd>
-            </dl>
-
-            <a href="javascript:void(0);" id="dssubmit" class="btn " title="{$Think.lang.ds_query}">{$Think.lang.ds_query}</a>
-            <a href="{:url('Forsalequeue/index')}" class="btn btn-default" title="{$Think.lang.ds_cancel}">{$Think.lang.ds_cancel}</a>
-        </div>
-    </form>
     <form method='post' id="form_goods" action="">
         <table class="ds-default-table">
             <thead>
@@ -69,7 +49,9 @@
                     <td>{$v.sortable}</td>
                     <td>{$v.goods_state}</td>
                     <td>
-                        <a href="{:url('Forsalequeue/queue',['goods_commonid'=>$v['goods_commonid']])}" class="dsui-btn-edit">查看队列</a>
+                        <a onclick='move("{$v.id}",1)' class="dsui-btn-edit">⬆️上移</a>
+                        <a onclick='move("{$v.id}",-1)' class="dsui-btn-edit">⬇️下移</a>
+                        <a onclick='move("{$v.id}",0)' class="dsui-btn-del">置顶</a>
                     </td>
                 </tr>
                 {/foreach}
@@ -92,5 +74,14 @@
         $('#formSearch').submit();
     });
 
+    function move(forsale_id,type)
+    {
+        $.getJSON('{:url("Forsalequeue/store")}', { forsale_id: forsale_id,type: type }, function(date) {
+            layer.msg(date.msg);
+            if (date.code == 1) {
+                location.reload();
+            }
+        });
+    }
 </script>
 {include file="public/footer" /}
