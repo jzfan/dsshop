@@ -35,8 +35,9 @@
 {notempty name="goods"}
 {/notempty}
 <script>
+let index;
 $('#goods-table tr').on('click', function() {
-    layer.open({
+    index = layer.open({
         type: 1,
         title: $(this).find('.group').html(),
         area: ['600px', '360px'],

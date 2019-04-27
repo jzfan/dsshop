@@ -36,33 +36,23 @@ class Goods extends AdminControl
             'return_rate|收益率' => 'require|number|gt:0'
         ]);
         $data['mi'] = Formula::miByInput($data);
-        return Db::transaction(function () use ($data){
+        Db::transaction(function () use ($data){
             $skuGood = model('goods')->where('goods_id', $data['goods_id'])->lock(true)->find();
             if (empty($skuGood)) {
                 throw new JsonException("商品ID错误", 422);
             }
-
-            $seckillGood = $this->model->byGoodsId($data['goods_id']);
-
-            $this->checkStorage($skuGood, $seckillGood, $data['qty']);
-
-            $skuGood->save();
-            return $this->model->create($data);
-        });
-    }
-
-    protected function checkStorage($skuGood, $seckillGood, $qty)
-    {
-        if (empty($seckillGood)) {
-            if ($qty > $skuGood->goods_storage) {
+            if ($data['qty'] > $skuGood->goods_storage) {
                 throw new JsonException("商品数量不足", 422);
             }
-            return $skuGood->goods_storage -= $qty;
-        }
-        $storage = (int)$skuGood->goods_storage + (int)$seckillGood->qty;
-        if ($storage < $qty) {
-            throw new JsonException("商品数量不足", 422);
-        }
-        return $skuGood->goods_storage = $storage - $qty;
+            if ($this->model->where('goods_id', $data['goods_id'])
+                        ->where('job_id', $data['job_id'])
+                        ->count() != 0) {
+                throw new JsonException("该商品已经添加", 422);
+            }
+            $skuGood->goods_storage -= $data['qty'];
+            $skuGood->save();
+            $this->model->create($data);
+        });
+        return 'ok';
     }
 }

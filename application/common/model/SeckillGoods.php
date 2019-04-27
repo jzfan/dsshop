@@ -41,6 +41,7 @@ class SeckillGoods extends Model
 
     public function byGoodsId($id)
     {
+        exception('bug!');
         return $this->with('info')->where('goods_id', $id)->find();
     }
 
