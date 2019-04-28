@@ -50,7 +50,6 @@ $(function() {
 			});
 		}
 	});
-	
 	//发送短信事件
 	$(".input-getCode").on("click",function(){
 		var timer="";
@@ -142,8 +141,8 @@ $(function() {
     		layer.open({content: "请设置城市", skin: 'msg', time: 2});
     		return false;
     	}else{
-    		var t = "wap";
     		var html = "";
+    		var t = "wap";
     		$.ajax({
 				type: "post",
 				url: ApiUrl + "/login/register.html",
