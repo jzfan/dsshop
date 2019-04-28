@@ -21,11 +21,12 @@ class Memberorder extends MobileMember
         $order_model = model('order');
         $condition = array();
         $state_type = input('post.state_type');
-        if ($state_type == '') {
-            $condition['order_state'] = '';
-        } else {
+        $order_type= input('post.order_type');
+        if ($state_type != '') {
+
             $condition = $this->order_type_no(input('post.state_type'));
         }
+        //$condition['order_type'] = $order_type;
         $condition['buyer_id'] = $this->member_info['member_id'];
         $condition['delete_state'] = 0; #订单未被删除
         $order_sn = input('post.order_key');

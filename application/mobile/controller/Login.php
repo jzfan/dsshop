@@ -28,24 +28,21 @@ class Login extends MobileMall
         }
 
         $member_model = model('member');
-
-        $array = array();
-        $array['member_name'] = $username;
-        $array['member_password'] = md5($password);
-        $member_info = $member_model->getMemberInfo($array);
-        if (empty($member_info) && preg_match('/^0?(13|15|17|18|14)[0-9]{9}$/i', $username)) {//根据会员名没找到时查手机号
+        if (preg_match('/^0?(13|15|17|18|14)[0-9]{9}$/i', $username)) {//根据会员名没找到时查手机号
             $array = array();
             $array['member_mobile'] = $username;
             $array['member_password'] = md5($password);
             $member_info = $member_model->getMemberInfo($array);
+        }else{
+            ds_json_encode(10001, '请输入手机号登陆!');
         }
 
-        if (empty($member_info) && (strpos($username, '@') > 0)) {//按邮箱和密码查询会员
-            $array = array();
-            $array['member_email'] = $username;
-            $array['member_password'] = md5($password);
-            $member_info = $member_model->getMemberInfo($array);
-        }
+//        if (empty($member_info) && (strpos($username, '@') > 0)) {//按邮箱和密码查询会员
+//            $array = array();
+//            $array['member_email'] = $username;
+//            $array['member_password'] = md5($password);
+//            $member_info = $member_model->getMemberInfo($array);
+//        }
         if (is_array($member_info) && !empty($member_info)) {
             if ($member_info['member_state'] == 0) {
                 ds_json_encode(10001, '您的账户被禁用!请联系平台处理');

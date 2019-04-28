@@ -12,19 +12,19 @@
             <dl>
                 <dt>活动名</dt>
                 <dd>
-                    <input type="text" name='name' value="test" class="input-txt">
+                    <input type="text" name='name' value="" class="input-txt" required>
                 </dd>
             </dl>
             <dl>
                 <dt>开始时间</dt>
                 <dd>
-                    <input type="text" name='start' value="<?php echo date('Y-m-d H:i:s'); ?>" class="input-txt" id='start'>
+                    <input type="text" name='start' value="<?php echo date('Y-m-d H:i:s'); ?>" class="input-txt" id='start' required>
                 </dd>
             </dl>
             <dl>
                 <dt>结束时间</dt>
                 <dd>
-                    <input type="text" name='end' value="" class="input-txt" id='end'>
+                    <input type="text" name='end' value="" class="input-txt" id='end' required>
                     <button class="btn btn-blue" onclick='setEnd(event)'>20分钟</button>
                 </dd>
             </dl>

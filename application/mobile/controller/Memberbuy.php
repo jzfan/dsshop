@@ -176,7 +176,6 @@ class Memberbuy extends MobileMember {
         if (input('?job_id')) {
             $param['job_id'] = input('job_id');
         }
-
         //得到会员等级
         /* $member_model = model('member');
           $member_info = $member_model->getMemberInfoByID($this->member_info['member_id']);
