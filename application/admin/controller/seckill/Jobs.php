@@ -52,8 +52,11 @@ class Jobs extends AdminControl
                 session('error', $result);
                 return $this->fetch('seckill/good/add');
             }
-            $data = request()->only('start', 'end', 'name');
-            $job = $this->model->create($data);
+            $job = $this->model->create([
+                'start' => input('start'),
+                'end' => input('end'),
+                'name' => input('name'),
+            ]);
             session('job_id', $job->id);
             session('job_name', $job->name);
         }
