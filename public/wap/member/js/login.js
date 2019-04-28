@@ -66,7 +66,7 @@ $(function() {
                             if ($("#checkbox").prop("checked")) {
                                 i = 188
                             }
-                            updateCookieCart(e.result.key);
+//                          updateCookieCart(e.result.key);
                             addCookie("username", e.result.username, i);
                             addCookie("key", e.result.key, i);
                             location.href = r

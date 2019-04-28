@@ -12,7 +12,6 @@ $(function() {
     });
 
 
-
     $.ajax({
         url: ApiUrl + "/index",
         type: 'get',

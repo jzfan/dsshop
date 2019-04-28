@@ -135,6 +135,7 @@ function getFreeVoucher(e) {
         }
     })
 }
+//根据用户信息更新购物车
 function updateCookieCart(e) {
     var t = decodeURIComponent(getCookie("goods_cart"));
     if (t) {
