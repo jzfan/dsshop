@@ -603,6 +603,9 @@ class Buy extends Model
         $this->_order_data['input_voucher_list'] = $input_voucher_list;
         $this->_order_data['order_from'] = $post['order_from'] == 2 ? 2 : 1;
         $this->_order_data['order_type'] = $post['goods_type'];
+        if (isset($post['job_id'])) {
+            $this->_order_data['job_id'] = $post['job_id'];
+        }
 
     }
 
@@ -694,7 +697,7 @@ class Buy extends Model
 
         //检查秒杀商品用户限额，商品出队列
         if ($cart_list[0]['goods_type'] == 40 || $cart_list[0]['goods_type'] == 41) {
-            $this->seckillOrder($cart_list, $this->_member_info['member_id']);
+            $this->seckillOrder($cart_list[0], $this->_order_data['job_id'], $this->_member_info['member_id']);
         }
 
         //商品金额计算(分别对每个商品/优惠套装小计、每个店铺小计)
@@ -1257,16 +1260,15 @@ class Buy extends Model
         return true;
     }
 
-    private function seckillOrder($cart_list, $member_id)
+    private function seckillOrder($good, $job_id, $member_id)
     {
-        $goods_id = $cart_list[0]['goods_id'];
-        $number = $cart_list[0]['goods_num'];
-        $sg = (new SeckillGoods)->byGoodsId($goods_id);
+        $sg = (new SeckillGoods)->byJobGoodsId($job_id, $good['goods_id']);
 
         if ($sg->isMemberOverLimit($member_id)) {
             exception("秒杀商品数量超过定额");
         }
         // 记录用户秒杀商品下单数量
+        $number = $good['goods_num'];
         $sg->incrMemberLimit($number, $member_id)
             ->lockForPop($number) // redis 商品出队列
             ->sold($number); // 减少库存，增加销量
