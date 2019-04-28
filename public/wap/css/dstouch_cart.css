@@ -92,7 +92,7 @@ to { opacity: 0;  display: none;}
 .dstouch-cart-bottom .check-out.ok { background-color: #f23030;}
 .dstouch-cart-bottom .check-out a { display: block; text-align: center; font-size: 0.8rem; color: #FFF; line-height: 2rem;}
 
-.dstouch-cart-bottom.no-login { height: 5rem;}
+.dstouch-cart-bottom.no-login { height: 8rem;}
 .dstouch-cart-bottom.no-login .cart-nologin-tip { text-align: center; padding: 0.8rem; font-size: 0.6rem; line-height: 1rem; color: #f23030;}
 .dstouch-cart-bottom.no-login .cart-nologin-btn { display: block; text-align: center;}
 .dstouch-cart-bottom.no-login .cart-nologin-btn .btn { padding: 0.2rem 0.8rem;}

@@ -157,7 +157,6 @@ class Membercart extends MobileMember {
         if (!$this->_check_goods_storage($cart_info, $quantity, $this->member_info['member_id'])) {
             ds_json_encode(10001,'超出限购数或库存不足');
         }
-
         $data = array();
         $data['goods_num'] = $quantity;
         $data['goods_price'] = $cart_info['goods_price'];
@@ -167,10 +166,16 @@ class Membercart extends MobileMember {
 
         $update = $cart_model->editCart($data, $where);
         if ($update) {
+            $goods_point = isset($cart_info['goods_point']) ? $cart_info['goods_point'] : 0;
+
             $return = array();
             $return['quantity'] = $quantity;
             $return['goods_price'] = ds_price_format($cart_info['goods_price']);
             $return['total_price'] = ds_price_format($cart_info['goods_price'] * $quantity);
+            // 增加积分
+            $return['goods_point'] = ds_price_format($goods_point);
+            $return['total_point'] = ds_price_format($goods_point * $quantity);
+
             ds_json_encode(10000, '', $return);
         } else {
             ds_json_encode(10001,'修改失败');
@@ -187,7 +192,7 @@ class Membercart extends MobileMember {
 
         if ($cart_info['bl_id'] == '0') {
             //普通商品
-            $goods_info = $goods_model->getGoodsOnlineInfoAndPromotionById($cart_info['goods_id']);
+            $goods_info = $goods_model->_getGoodsOnlineInfoAndPromotionById($cart_info['goods_type'],$cart_info['goods_id']);
 
             //抢购
             $logic_buy_1->getGroupbuyInfo($goods_info, $quantity);

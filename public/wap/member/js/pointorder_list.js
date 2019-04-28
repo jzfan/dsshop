@@ -40,6 +40,7 @@ $(function() {
             data: {
                 key: e,
                 state_type: t,
+                order_type: $(".cur").attr("order_type"),
                 order_key: r
             },
             dataType: "json",

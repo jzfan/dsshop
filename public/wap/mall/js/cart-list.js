@@ -188,10 +188,12 @@ $(function() {
             _(t, "add")
         }
         function _(a, e) {
+        	console.log(a);
             var r = $(a).parents(".cart-litemw-cnt");
             var o = r.attr("cart_id");
             var i = r.find(".buy-num");
             var n = r.find(".goods-price em");
+            var f = r.find(".goods-price b");
             var c = parseInt(i.val());
             var s = 1;
             if (e == "add") {
@@ -209,6 +211,7 @@ $(function() {
                     if (t.code == 10000) {
                         i.val(s);
                         n.html("" + t.result.goods_price + "");
+                        f.html("" + t.result.total_price + "");
                         calculateTotalPrice()
                     } else {
                         layer.open({content: t.message, btn: '我知道了'});
