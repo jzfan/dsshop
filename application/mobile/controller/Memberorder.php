@@ -21,12 +21,20 @@ class Memberorder extends MobileMember
         $order_model = model('order');
         $condition = array();
         $state_type = input('post.state_type');
-        $order_type= input('post.order_type');
+        $order_type = input('post.order_type');
         if ($state_type != '') {
-
             $condition = $this->order_type_no(input('post.state_type'));
         }
-        //$condition['order_type'] = $order_type;
+        if ($order_type!=40){
+            $condition['order_type'] = $order_type;
+        }else{
+            $condition['order_type'] = ['in','40,41'];
+            if($state_type==1){
+                $condition['order_type'] = 40;
+            }else{
+                $condition['order_type'] = 41;
+            }
+        }
         $condition['buyer_id'] = $this->member_info['member_id'];
         $condition['delete_state'] = 0; #订单未被删除
         $order_sn = input('post.order_key');
@@ -307,7 +315,7 @@ class Memberorder extends MobileMember
         $order_info['if_evaluation'] = $order_model->getOrderOperateState('evaluation', $order_info);
         //显示系统自动取消订单日期
         if ($order_info['order_state'] == ORDER_STATE_NEW) {
-            $order_info['order_cancel_day'] = intval($order_info['add_time'] )+ intval((config('order_auto_cancel_day') * 24 * 3600));
+            $order_info['order_cancel_day'] = intval($order_info['add_time']) + intval((config('order_auto_cancel_day') * 24 * 3600));
         }
         //显示快递信息
         if ($order_info['shipping_code'] != '') {
@@ -593,8 +601,9 @@ class Memberorder extends MobileMember
         }
     }
 
-    public  function  test(){
-        $this->_get_express('yunda','3995310750466');
+    public function test()
+    {
+        $this->_get_express('yunda', '3995310750466');
     }
 
 }
