@@ -560,7 +560,7 @@ class Order extends Model
                 $forsalegbill_model->updateForsaleBill(['bill_state'=>1],$condition);
 
                 //待售商品订单完成
-                Hook::listen('forsale_order_finished',$order_info);
+                //Hook::listen('forsale_order_finished',$order_info);
             }
 
             $order_model->commit();
