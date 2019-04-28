@@ -38,7 +38,6 @@
 <div class="dstouch-main-layout mb-20" id="search_tip_list_container" style="display:none"></div>
 <script type="text/html" id="search_tip_list_script">
 <ul class="dstouch-default-list">
-	
 <%for(i = 0; i < list.length; i++){%>
 	<li><a href="<%=$buildUrl('keyword',list[i])%>"><%=list[i]%></a></li>
 <%}%>
@@ -61,10 +60,8 @@
 <footer id="footer"></footer>
 <script type="text/html" id="hot_list">
 <ul>
-<% if(list.length > 1){%>
-	<%for(i = 0; i < list.length; i++){%>
-		<li><a href="<%=$buildUrl('keyword',list[i])%>"><%=list[i]%></a></li>
-	<%}%>
+<%for(i = 0; i < list.length; i++){%>
+	<li><a href="<%=$buildUrl('keyword',list[i])%>"><%=list[i]%></a></li>
 <%}%>
 </ul>
 </script>

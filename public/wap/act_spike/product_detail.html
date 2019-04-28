@@ -1,0 +1,176 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-touch-fullscreen" content="yes"/>
+<meta name="format-detection" content="telephone=no"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<meta name="format-detection" content="telephone=no"/>
+<meta name="msapplication-tap-highlight" content="no"/>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1"/>
+<title></title>
+<link rel="stylesheet" type="text/css" href="../css/base.css">
+<link rel="stylesheet" type="text/css" href="../css/dstouch_common.css">
+<link rel="stylesheet" type="text/css" href="../css/dstouch_products_detail.css">
+<link rel="stylesheet" type="text/css" href="../css/page.css">
+</head>
+<body>
+
+<!--head模块  -->
+<header id="header" class="transparent">
+    <div class="header-wrap">
+        <div class="header-l"><a href="javascript:history.go(-1)"> <i class="back iconfont"></i></a></div>
+        <div class="header-r"><a id="header-nav" href="javascript:void(0);"><i class="more iconfont"></i><sup></sup></a>
+        </div>
+    </div>
+</header>
+
+<div type="text/html" id="product_detail" style="position: relative; z-index: 1;margin-bottom: 3rem;">
+    <!--商品banner模块-->
+    <div class="goods-detail-top">
+        <div class="goods-detail-pic" id="mySwipe">
+            <ul></ul>
+        </div>
+        <%if(image.length>1){%>
+        <div class="goods-detail-turn">
+            <span class="now_page">1</span>/<span class="total_page"></span>
+        </div>
+        <%}%>
+        <div class="round pd-share hides"><i></i></div>
+    </div>
+
+    <!--商品详情模块-->
+    <div class="goods-detail-cnt">
+        <!-- 商品名称-->
+        <div class="goods-detail-name">
+            <dl>
+                <dt class="good_name"><%= goods_info.goods_name %></dt>
+                <dd class="goods_advword"><%= goods_info.goods_advword %></dd>
+            </dl>
+        </div>
+        <!-- 商品价格-->
+        <div class="goods-detail-price">
+        	<dl>
+                <dt>￥<em id="good_price"><%=goods_info.goods_price %></em>+<em id="good_miaomi"><%=goods_info.goods_price %></em><langConf data-id="miaomi"></langConf></dt>
+                <dd style="text-decoration: none;">剩余：<em class="nowNum"></em></dd>
+            </dl>
+        </div>
+		
+		<!--快速选择模块-->
+		<div class="fastChose">
+			<div class="fast_nums">
+				<span class="fast_left">
+					秒杀数量
+					<b class="f_nums f_numsON" value="3">3</b>
+					<b class="f_nums" value="5">5</b>
+					<b class="f_nums" value="10">10</b>
+				</span>
+				<span class="fast_right">
+					<b class="f_numBtn f_numCut">-</b>
+					<input class="fastnum" type="number" value="3" />
+					<b class="f_numBtn f_numAdd">+</b>
+				</span>
+			</div>
+			<div class="fast_type">
+				使用方式
+				<span class="fast_types fast_typeON" value="1"><langConf data-id="good_type"></langConf></span>
+				<span class="fast_types " value="0">自用</span>
+			</div>
+		</div>
+
+		
+		<!--默认待售，自用模块-->
+		<div class="getUads">
+			<!--如果用户无地址-->
+			<div class="getUadsNo">尚未登录</div>
+			<div class="getUads_infos ">
+				<div class="adr_left">
+					<div class="u_infos"><span style="margin: 0 0.2rem;" class="uname"></span><span style="margin: 0 0.2rem;" class="uphone"></span></div>
+					<label>
+						<span class="radio"><input type="radio" class="sel_ads" name="sel_ads" checked="checked" value="1"/></span>
+						<span class="show_address"></span>
+					</label>
+				</div>
+				<div class="adr_right"><span class="other_ads">其他</span></div>
+			</div>
+		</div>
+		
+		<!--确认订单  默认显示3 -->
+		<div class="order_show">
+			<p class="order_show_tip">确认订单</p>
+			<p class="order_show_infos"><span class="oShows">秒杀数量：</span><span>共<em class="gdNums">3</em>件商品</span></p>
+			<p class="order_show_infos"><span class="oShows">使用方式：</span><span class="gdType"><%=langConf('good_type')%></p>
+			<p class="order_show_infos"><span class="oShows">需&nbsp;&nbsp;支&nbsp;&nbsp;付：</span><span>￥<em class="gdPrice">3</em>+<em class="gdMiaomi">3</em><langConf data-id="miaomi"></langConf></span></p>
+		</div>
+		
+		<!--秒米额度-->
+		<div class="order_show" style="background: #F9F9F9;">
+			<p class="order_show_infos"><span class="oShows"><langConf data-id = "miaomi"></langConf>余额：</span><span>M<em id="my_miaomi">0</em></span></p>
+		</div>
+		<!--秒杀按钮-->
+		<div class="ftBtns">
+			<div class="ftBtn_by buy-now no">立刻秒杀</div>
+		</div>
+	</div>
+</div>
+
+<style>
+/*支付面板弹出框*/
+.alt_pay{width: 100%;height: 100%;position: fixed;top: 0;left: 0;z-index: 999;background: rgba(0, 0, 0, 0.4);display: none;}
+.alt_pay .alt_pay_body{width: 100%;background: #fff;position: absolute;bottom: 0;left: 0;padding: 0.5rem 0 2rem 0;}
+.alt_pay .alt_pay_tip{position: absolute;z-index: 1;top: -1.2rem;left: 0;right: 0;text-align: center;font-size: 0.6rem;font-weight: 600;line-height: 0.9rem;color: #FFF;text-shadow: 0 0 0.5rem rgba(0,0,0,0.5);}
+.alt_pay .alt_pay_top{}
+.alt_pay .alt_pay_top .close{}
+.alt_pay .alt_pay_top .alt_pay_tops{display: block;padding: 0.5rem 0;text-align: center;font-size: 0.6rem;color: #000;line-height: 1rem;}
+.alt_pay .alt_pay_top .alt_pay_tops em{font-size: 1rem;color: #DB4453;font-weight: 600;display: inline-block;vertical-align: sub;margin: 0 0.2rem;}
+.alt_pay .payment{}
+.alt_pay .payment .pay_ment-tip{position: relative;z-index: 1;display: block;height: 1rem;margin: 0 0.5rem 1rem 0.5rem;border-bottom: solid #EEE 0.05rem;font-size: 0.6rem;color: #666;text-align: center;}
+.alt_pay .payment .pay_ment-tip .pay_title{position: relative;top: 0.6rem;background: #fff;padding: 0.2rem 0.5rem;}
+.alt_pay .payment .payments{width: 94%;margin: 0px auto;}
+.alt_pay .payment .payments .pay_ment{width: 50%;float: left;margin-bottom: 1rem;text-align: center;}
+.alt_pay .payment .payments .pays{display: inline-block;width: 5rem;height: 2rem;margin: 0 auto;text-align: center;border: 1px solid #EA5514;font-size: 0.7rem;line-height: 2rem;}
+.alt_pay .payment .payments .payson{color: #EA5514;border: 1px solid #EA5514;}
+.alt_pay .pay-btn{}
+</style>
+
+<div class="alt_pay">
+	<div class="alt_pay_body">
+		<div class="alt_pay_tip"><i class="iconfont"></i>点击此处返回</div>
+		<div class="alt_pay_top">
+			<a href="javascript:void(0);" class="dstouch-bottom-mask-close"><i></i></a>
+	        <p class="alt_pay_tops">本次交易需在线支付<em id="onlineTotal">00</em>元+<em id="miaomi">222</em>秒米</p>
+		</div>
+		<div class="payment">
+			<div class="pay_ment-tip"><span class="pay_title">支付方式</span></div>
+			<div class="payments">
+				<div class="pay_ment">
+					<div class="pays payson">
+						支付宝支付
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="pay-btn"> <a href="javascript:void(0);" id="toPay" class="btn-l">确认支付</a> </div>
+	</div>
+</div>
+
+
+<script type="text/javascript" src="../js/zepto.min.js"></script>
+<script type="text/javascript" src="../js/config.js"></script>
+<script type="text/javascript" src="../js/template.js"></script>
+<script type="text/javascript" src="../js/swipe.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript" src="../js/iscroll.js"></script>
+<script type="text/javascript" src="../js/simple-plugin.js"></script>
+<script type="text/javascript" src="../js/footer.js"></script>
+<script type="text/javascript" src="../js/fly/requestAnimationFrame.js"></script>
+<script type="text/javascript" src="../js/fly/zepto.fly.min.js"></script>
+<script type="text/javascript" src="js/product_detail.js"></script>
+<!--<script type="text/javascript" src="../js/order_payment_common.js"></script>-->
+<script type="text/javascript" src="lang/product_detail.js"></script>
+<script type="text/javascript" src="../js/lang.js"></script>
+<script type="text/javascript" src="../js/langConf.js"></script>
+</body>
+</html>
