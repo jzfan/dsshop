@@ -462,6 +462,7 @@ class Memberorder extends MobileMember
 
     public function get_type_name($type)
     {
+        $name='';
         switch ($type) {
             case 20:
                 $name = '积分订单';
