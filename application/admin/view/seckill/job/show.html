@@ -46,8 +46,11 @@
             <th class="align-center">ID</th>
             <th class="align-center">商品名</th>
             <th class="align-center">价格(元)</th>
+            <th class="align-center">代售价格(元)</th>
             <th class="align-center">秒米</th>
             <th class="align-center">库存</th>
+            <th class="align-center">排序</th>
+            <th class="align-center">限购</th>
         </tr>
     </thead>
     <tbody>
@@ -56,8 +59,11 @@
             <td>{$good.goods_id}</td>
             <td>{$good.info.goods_name}</td>
             <td>{$good.price}</td>
+            <td>{$good.forsale_price}</td>
             <td>{$good.mi}</td>
             <td>{$good.qty}</td>
+            <td>{$good.commend}</td>
+            <td>{$good.limit}</td>
         </tr>
             
         {/foreach}

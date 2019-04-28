@@ -4,3 +4,5 @@ public/install/
 runtime/
 application/database.php
 public/uploads/home/store/goods/*
+composer.json
+vendor

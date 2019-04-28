@@ -1,4 +1,7 @@
 {include file="public/header" /}
+{if condition="$Think.session.error"}
+    {$Think.session.error}
+{/if}
 <div class="page">
     <div class="fixed-bar">
         <div class="item-title">
@@ -24,7 +27,7 @@
             <dl>
                 <dt>结束时间</dt>
                 <dd>
-                    <input type="text" name='end' value="" class="input-txt" id='end'>
+                    <input type="text" name='end' value="" class="input-txt" id='end' required>
                     <button class="btn btn-blue" onclick='setEnd(event)'>20分钟</button>
                 </dd>
             </dl>
