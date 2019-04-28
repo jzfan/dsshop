@@ -70,6 +70,8 @@ class Payment extends MobileMall {
      */
     public function notify($payment_code,$show_code='')
     {
+
+        file_put_contents("notify.log",json_encode($_POST),FILE_APPEND);
         $logic_payment = model('payment', 'logic');
         $result = $logic_payment->getPaymentInfo($payment_code);
         $payment_info = $result['data'];
