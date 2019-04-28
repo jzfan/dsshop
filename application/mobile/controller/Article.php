@@ -97,6 +97,7 @@ class Article extends MobileHome
                 Db::table('ds_article')->where('article_id', $article_id)->setInc('amount', 1);//字段+1
                 $key = input('key');
                 if ($key!='') {
+                    echo 1;die;
                     $this->add_points($article_id);
                 }
                 ds_json_encode(10000, '', $article);
