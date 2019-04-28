@@ -143,6 +143,7 @@ $(function() {
     		return false;
     	}else{
     		var t = "wap";
+    		var html = "";
     		$.ajax({
 				type: "post",
 				url: ApiUrl + "/login/register.html",
