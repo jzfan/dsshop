@@ -17,7 +17,7 @@ class alipay_h5 {
                 //商户私钥，您的原始格式RSA私钥
                 'merchant_private_key' => $param['payment_config']['private_key'],
                 //异步通知地址
-                'notify_url' => str_replace('/index.php', '', HOME_SITE_URL) . '/payment/alipay_h5_notify.html',
+                'notify_url' => str_replace('/index.php', '', MOBILE_SITE_URL) . '/payment/alipay_h5_notify.html',
                 //同步跳转
                 'return_url' => str_replace('/index.php', '', MOBILE_SITE_URL) . '/payment/alipay_h5_return.html',
                 //编码格式
