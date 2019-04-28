@@ -15,7 +15,7 @@ class Article extends MobileHome
     /**
      * 文章列表
      */
-    
+
     public function article_list()
     {
         $ac_id = intval(input('param.ac_id'));

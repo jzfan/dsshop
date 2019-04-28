@@ -185,6 +185,7 @@ class Order extends AdminControl
         $order_model = model('order');
         $logic_order = model('order', 'logic');
         $if_allow = $order_model->getOrderOperateState('system_cancel', $order_info);
+        print_r($if_allow);die;
         if (!$if_allow) {
             return ds_callback(false, '无权操作');
         }

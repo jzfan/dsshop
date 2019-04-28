@@ -45,9 +45,9 @@
 </div>
 <script>
     $(document).ready(function(){
-
         $("#region").ds_region();
         $('#address_form').validate({
+
             errorLabelContainer: $('#warning'),
             invalidHandler: function(form, validator) {
                 var errors = validator.numberOfInvalids();

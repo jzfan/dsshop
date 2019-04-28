@@ -305,8 +305,10 @@ class Deliver extends AdminControl
                 $output .= '<li>' . $v['time'] . '&nbsp;&nbsp;' . $v['context'] . '</li>';
             }
         }
-        if ($output == '')
+        if ($output == ''){
             exit(json_encode(false));
+        }
+
         echo json_encode($output);
     }
 

@@ -735,13 +735,14 @@ class Order extends Model
         return $this->getOrderAndOrderGoodsList($condition, $field, $page, $order);
     }
 
-    public function getsaleorderlist($condition = array(), $pagesize = '', $arr,$fields = '*', $order = '', $limit = ''){
+    public function getsaleorderlist($condition = array(), $pagesize = '', $arr, $fields = '*', $order = '', $limit = '')
+    {
         if ($pagesize) {
-            if ($arr!=''){
-                $pdlog_list_paginate = db('order')->where($condition)->whereIn('buyer_id',$arr)->field($fields)->order($order)->paginate($pagesize, false, ['query' => request()->param()]);
+            if ($arr != '') {
+                $pdlog_list_paginate = db('order')->where($condition)->whereIn('buyer_id', $arr)->field($fields)->order($order)->paginate($pagesize, false, ['query' => request()->param()]);
                 $this->page_info = $pdlog_list_paginate;
                 return $pdlog_list_paginate->items();
-            }else{
+            } else {
                 $pdlog_list_paginate = db('order')->where($condition)->field($fields)->order($order)->paginate($pagesize, false, ['query' => request()->param()]);
                 $this->page_info = $pdlog_list_paginate;
                 return $pdlog_list_paginate->items();

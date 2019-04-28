@@ -26,7 +26,6 @@ class Order extends Model
             $order_model = model('order');
             $order_model->startTrans();
             $order_id = $order_info['order_id'];
-
             //库存销量变更
             $goods_list = $order_model->getOrdergoodsList(array('order_id' => $order_id));
             $data = array();
