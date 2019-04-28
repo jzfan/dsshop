@@ -4,6 +4,7 @@ ds_lang={
     'details':'详情',
     'evaluate':'评价',
 
+
     'home':'首页',
     'search':'搜索',
     'classification':'分类',

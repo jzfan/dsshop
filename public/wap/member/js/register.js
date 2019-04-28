@@ -160,6 +160,7 @@ $(function() {
 				},
 				dataType: "json",
 				success: function(e){
+					//处理数据
 					if (e.code == 10000) {
 	                    if (typeof e.result.key == "undefined") {
 	                        return false
