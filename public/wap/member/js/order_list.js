@@ -36,12 +36,14 @@ $(function() {
 
         var t = $("#filtrate_ul").find(".selected").find("a").attr("data-state");
         var r = $("#order_key").val();
+        
         $.ajax({
             type: "post",
             url: ApiUrl + "/Memberorder/order_list.html?page=" + curpage + "&pagesize=" + pagesize,
             data: {
                 key: e,
                 state_type: t,
+                order_type: $(".cur").attr("order_type"),
                 order_key: r
             },
             dataType: "json",

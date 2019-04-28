@@ -21,9 +21,9 @@
 	<div class="header-wrap">
 		<div class="header-l"><a href="member.html"><i class="back iconfont"></i></a></div>
 		<span class="header-tab new-header-tab">
-			<a href="order_list.html">实物订单</a>
-			<!--<a href="vr_order_list.html">虚拟订单</a>-->
-			<a href="javascript:void(0);" class="cur">积分订单</a>
+			<a href="order_list.html" order_type="20">积分订单</a>
+			<a href="vr_order_list.html" order_type="30">91购订单</a>
+			<a href="javascript:void(0);" class="cur" order_type="40">秒杀订单</a>
 		</span>
 		<!--<div class="header-title">-->
 			<!--<h1><lang data-id="record_of_exchange"></lang></h1>-->
@@ -43,19 +43,22 @@
 	</div>
 </header>
 <div class="dstouch-main-layout">
-	<!--div class="dstouch-order-search">
-      <form>
-        <span><input type="text" autocomplete="on" maxlength="50" placeholder="输入订单号进行搜索" name="order_key" id="order_key" oninput="writeClear($(this));" >
-        <span class="input-del"></span></span>
-        <input type="button" id="search_btn" value="&nbsp;">
-      </form>
-    </div-->
-
-	<div class="dstouch-order-list">
-		<ul id="order-list">
-		</ul>
-	</div>
-
+  <div class="dstouch-order-search">
+    <form>
+      <span>
+      <input type="text" autocomplete="on" maxlength="50" placeholder="输入订单号进行搜索" name="order_key" id="order_key" oninput="writeClear($(this));" >
+      </span> <span class="input-del"></span>
+      <input type="button" id="search_btn" value="&nbsp;">
+    </form>
+  </div>
+  <div id="fixed_nav" class="dstouch-single-nav">
+    <ul id="filtrate_ul" class="w33h">
+      <li class="selected"><a href="javascript:void(0);" data-state=""><lang data-id="whole"></lang></a></li>
+      <li><a href="javascript:void(0);" data-state="1">代售</a></li>
+      <li><a href="javascript:void(0);" data-state="2">自用</a></li>
+    </ul>
+  </div>
+  <div class="dstouch-order-list" id="order-list"> </div>
 </div>
 <div class="fix-block-r">
 	<a href="javascript:void(0);" class="gotop-btn gotop hide" id="goTopBtn"><i class="iconfont"></i></a>
@@ -139,14 +142,14 @@
 	<li class="loading"><div class="spinner"><i></i></div>顺序数据读取 </li>
 	<% } %>
 	<%}else {%>
-	<div class="dstouch-norecord order">
-		<div class="norecord-ico"><i class="iconfont"></i></div>
-		<dl>
-			<dt><%=lang('order')%></dt>
-			<dd><%=lang('orders')%></dd>
-		</dl>
-		<a href="<%=WapSiteUrl%>/mall/pointspro_list.html" class="btn"><%=lang('look_around')%></a>
-	</div>
+	 <div class="dstouch-norecord order">
+            <div class="norecord-ico"><i class="iconfont"></i></div>
+            <dl>
+                <dt><%=lang('order_tips_one')%></dt>
+                <dd><%=lang('order_tips_two')%></dd>
+            </dl>
+            <a href="<%=WapSiteUrl%>" class="btn"><%=lang('look_around')%></a>
+        </div>
 	<%}%>
 </script>
 

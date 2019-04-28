@@ -1,5 +1,5 @@
 ds_lang={
-    'title':'实物订单',
+    'title':'积分订单',
     'real_order':'实物订单',
     'virtual_order':'虚拟订单',
     'home':'首页',
