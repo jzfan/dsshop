@@ -25,21 +25,22 @@ class Memberorder extends MobileMember
         if ($state_type != ''&&$state_type!=1&&$state_type!=2) {
             $condition = $this->order_type_no(input('post.state_type'));
         }
-        if ($order_type!=40){
-            $condition['order_type'] = $order_type;
-        }else{
-            $condition['order_type'] = ['in','40,41'];
-            if($state_type==1){
-                $condition['order_type'] = 40;
-            }else{
-                $condition['order_type'] = 41;
-            }
-        }
         $condition['buyer_id'] = $this->member_info['member_id'];
         $condition['delete_state'] = 0; #订单未被删除
         $order_sn = input('post.order_key');
         if ($order_sn != '') {
             $condition['order_sn'] = array('like', '%' . $order_sn . '%');
+        }
+        if ($order_type!=40){
+            $condition['order_type'] = $order_type;
+        }else{
+            $condition['order_type'] = ['in','40,41'];
+            if($order_type==40&&$state_type==1){
+                $condition['order_type'] = 40;
+            }
+            if ($order_type==40&&$state_type==2){
+                $condition['order_type'] = 41;
+            }
         }
         $order_list_array = $order_model->getOrderList($condition, 5, '*', 'order_id desc,add_time desc', '', array('order_common', 'order_goods'));
         $order_group_list = $order_pay_sn_array = array();
