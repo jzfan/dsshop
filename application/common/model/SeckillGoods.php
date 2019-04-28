@@ -103,8 +103,9 @@ class SeckillGoods extends Model
     // 商品下架
     public function offShelve()
     {
-        $this->delete($this->listKey());
+        $this->redis->delete($this->listKey());
         $this->returnSku();
+        return $this;
     }
 
     // 退回单品，库存调整

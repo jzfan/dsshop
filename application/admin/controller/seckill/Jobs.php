@@ -77,9 +77,9 @@ class Jobs extends AdminControl
             'id' => 'require|number'
         ]);
         Db::transaction(function () use ($data) {
-            $job = $this->model->lock(true)->find($data['id']);
-            $job->goods()->delete();
-            $job->delete();
+            $this->model->lock(true)
+                    ->find($data['id'])
+                    ->deleteWithGoods();
         });
         return $this->index();
     }

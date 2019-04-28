@@ -42,7 +42,7 @@
             <td class="yes-onoff align-center">
                 <button class="btn btn-primary">查看</button>
                 {switch $job.status}
-                    {case 0}
+                    {case value="0|2|3"}
                     <button class="btn btn-red">删除</button>
                     {/case}
                     {case 1}

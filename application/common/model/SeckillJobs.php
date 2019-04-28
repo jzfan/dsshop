@@ -82,6 +82,15 @@ class SeckillJobs extends Model
         });
     }
 
+    public function deleteWithGoods()
+    {
+        foreach ($this->goods as $good) {
+            $good->offShelve();
+        }
+        $this->goods()->delete();
+        $this->delete();
+    }
+
     protected function setStatus($n)
     {
         $this->status = $n;
