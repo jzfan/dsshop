@@ -22,7 +22,7 @@ class Memberorder extends MobileMember
         $condition = array();
         $state_type = input('post.state_type');
         $order_type = input('post.order_type');
-        if ($state_type != '') {
+        if ($state_type != ''&&$state_type!=1&&$state_type!=2) {
             $condition = $this->order_type_no(input('post.state_type'));
         }
         if ($order_type!=40){
