@@ -170,9 +170,10 @@ body { background-color: #F9F9F9;}
 .newGoods .category-nav{top: 2rem;right: 0rem;}
 .newGoods .category-nav .category-item{margin-left: 0.3rem;}
 .home-category .category-nav .category-item .ngds{width: 6rem;height: 7.2rem;overflow: hidden;}
-.category-item .ngds .ngds_pic{width: 6rem;height: 6rem;border-radius: 4px;overflow: hidden;}
+.category-item .ngds .ngds_pic{width: 6rem;height: 6rem;border-radius: 4px;overflow: hidden;position: relative;}
+.category-item .ngds .ngds_pic span{position: absolute;bottom: 0;right: 0;background: #F68619;color: #fff;font-size: 0.5rem;padding: 1px 2px;border-radius: 4px;float: right;line-height: 0.8rem;margin-top: 0.3rem;}
 .category-item .ngds .ngds_pic img{width: 100%;}
-.category-item .ngds .ngds_price{width: 100%;height: 1.5rem;line-height: 1.5rem;}
+.category-item .ngds .ngds_price{width: 100%;height: 1.5rem;line-height: 1.5rem;text-align: center;color: #DB4453;}
 .category-item .ngds .ngds_price span{background: #F68619;color: #fff;font-size: 0.5rem;padding: 1px 2px;border-radius: 4px;float: right;line-height: 0.8rem;margin-top: 0.3rem;}
 
 

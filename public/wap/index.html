@@ -96,8 +96,8 @@
 			<% var for_list=forsalegoods_list[i]; %>
 	        <a class="category-item" href="mall/product_detail.html?goods_id=<%= for_list.goods_id %>&goods_type=<%= for_list.goods_type %>">
 	        	<div class="ngds">
-	        		<div class="ngds_pic"><img src="<%= for_list.goods_image %>" /></div>
-	        		<div class="ngds_price">￥<em class="n_price"><%= for_list.goods_price %></em><span>送<em><%= for_list.goods_miaomi %></em>秒米</span></div>
+	        		<div class="ngds_pic"><img src="<%= for_list.goods_image %>" /><span>送<em><%= for_list.goods_miaomi %></em>秒米</span></div>
+	        		<div class="ngds_price">￥<em class="n_price"><%= for_list.goods_price %></em></div>
 	        	</div>
 	        </a>
 	        <% } %>
