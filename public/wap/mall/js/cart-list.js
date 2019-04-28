@@ -277,12 +277,15 @@ function show_all_checkbox()
 function calculateTotalPrice() {
     show_all_checkbox();
     var t = parseFloat("0.00");
+    var f = parseFloat("0.00");
     $(".cart-litemw-cnt").each(function() {
         if ($(this).find('input[name="cart_id"]').prop("checked")) {
-            t += parseFloat($(this).find(".goods-price").find("em").html()) * parseInt($(this).find(".value-box").find("input").val())
+            t += parseFloat($(this).find(".goods-price").find("em").html()) * parseInt($(this).find(".value-box").find("input").val());
+            f += parseFloat($(this).find(".goods-price").find("b").html()) * parseInt($(this).find(".value-box").find("input").val());
         }
     });
     $(".total-money").find("em").html(t.toFixed(2));
+    $(".total-money").find("b").html(f.toFixed(2));
     check_button();
     return true
 }
