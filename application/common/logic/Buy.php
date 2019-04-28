@@ -241,7 +241,6 @@ class Buy extends Model
      */
     public function buyStep2($post, $member_id, $member_name, $member_email)
     {
-
         $this->_member_info['member_id'] = $member_id;
         $this->_member_info['member_name'] = $member_name;
         $this->_member_info['member_email'] = $member_email;

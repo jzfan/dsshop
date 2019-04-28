@@ -173,6 +173,9 @@ class Memberbuy extends MobileMember {
         $param['fcode'] = input('post.fcode');
         $param['order_from'] = 2;
         $logic_buy = model('buy', 'logic');
+        if (input('?job_id')) {
+            $param['job_id'] = input('job_id');
+        }
 
         //得到会员等级
         /* $member_model = model('member');

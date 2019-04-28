@@ -26,7 +26,7 @@ class SeckillJobs extends Model
     {
         if (strtotime($this->end) < time()) {
             if ($this->status != 2) {
-                $this->setStatus(2);
+                $this->stop(2);
             }
             return true;
         }
@@ -71,10 +71,10 @@ class SeckillJobs extends Model
         return strtotime($this->end) - $start;
     }
 
-    public function stop()
+    public function stop($n=3)
     {
-        Db::transaction(function () {
-            $this->status = 3;
+        Db::transaction(function () use ($n) {
+            $this->status = $n;
             $this->save();
             foreach ($this->goods as $good) {
                 $good->offShelve();
