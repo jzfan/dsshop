@@ -282,6 +282,7 @@ class Memberorder extends MobileMember
 //            $order_info['invoice'] = $order_info['extend_order_common']['invoice_info']['类型'] . $order_info['extend_order_common']['invoice_info']['抬头'] . $order_info['extend_order_common']['invoice_info']['内容'];
 //        }
 
+
         $order_info['reciver_phone'] = $order_info['extend_order_common']['reciver_info']['phone'];
         $order_info['reciver_name'] = $order_info['extend_order_common']['reciver_name'];
         $order_info['reciver_addr'] = $order_info['extend_order_common']['reciver_info']['address'];
@@ -303,7 +304,6 @@ class Memberorder extends MobileMember
         $order_info['if_deliver'] = $order_model->getOrderOperateState('deliver', $order_info);
         //显示评价
         $order_info['if_evaluation'] = $order_model->getOrderOperateState('evaluation', $order_info);
-
         //显示系统自动取消订单日期
         if ($order_info['order_state'] == ORDER_STATE_NEW) {
             $order_info['order_cancel_day'] = intval($order_info['add_time'] )+ intval((config('order_auto_cancel_day') * 24 * 3600));
