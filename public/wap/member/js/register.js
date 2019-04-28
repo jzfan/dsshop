@@ -160,29 +160,21 @@ $(function() {
 				},
 				dataType: "json",
 				success: function(e){
-					console.log(e);
-					$.each(e.result,function(i,c){ 
-				 		html += '<option value="'+c.area_id+'">'+c.area_name+'</option>';
-					});
-			        $(".chose_city").append(html);
+					if (e.code == 10000) {
+	                    if (typeof e.result.key == "undefined") {
+	                        return false
+	                    } else {
+	                        updateCookieCart(e.result.key);
+	                        addCookie("username", e.result.username);
+	                        addCookie("key", e.result.key);
+	                        location.href = WapSiteUrl + "/member/member.html"
+	                    }
+	                } else {
+	                    layer.open({content: e.message, skin: 'msg', time: 2});
+	                }
 				}
 			});
     		
-    		
-    		$.ajax({type: "post", url: ApiUrl + "/Login/register.html", data: {username: e, password: r, password_confirm: a, email: i, client: t,inviter_id:inviter_id}, dataType: "json", success: function(e) {
-                if (e.code == 10000) {
-                    if (typeof e.result.key == "undefined") {
-                        return false
-                    } else {
-                        updateCookieCart(e.result.key);
-                        addCookie("username", e.result.username);
-                        addCookie("key", e.result.key);
-                        location.href = WapSiteUrl + "/member/member.html"
-                    }
-                } else {
-                    layer.open({content: e.message, skin: 'msg', time: 2});
-                }
-            }})
     	}
     })
 });

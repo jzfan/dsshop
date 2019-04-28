@@ -37,7 +37,7 @@ ds_lang={
 
     'no_relevant_information':'没有找到任何相关信息',
     'selection_classification':'选择或搜索其它服务分类/名称',
-    're_selection':'重新选择',
+    're_selection':'回到首页',
 };
 
 document.title = ds_lang.title;
