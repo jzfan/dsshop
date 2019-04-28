@@ -90,7 +90,7 @@ class Jobs extends AdminControl
             'id' => 'require|number'
         ]);
         $job = $this->model->with('goods.info')->find($data['id']);
-        dd($job->goods);
+        // dd($job->goods);
         $this->assign('job', $job);
         return $this->fetch('seckill/job/show');
     }
