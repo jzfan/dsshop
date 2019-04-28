@@ -382,11 +382,11 @@ class AdminControl extends Controller
                         'text' => lang('ds_points'),
                         'args' => 'index,Points,member',
                     ),
-//                    'predeposit' => array(
-//                        'ico'=>'&#xe671;',
-//                        'text' => lang('ds_predeposit'),
-//                        'args' => 'pdrecharge_list,Predeposit,member',
-//                    ),
+                    'predeposit' => array(
+                        'ico'=>'&#xe671;',
+                        'text' => lang('ds_predeposit'),
+                        'args' => 'pdrecharge_list,Predeposit,member',
+                    ),
                     'meter' => array(
                         'ico' => '&#xe671;',
                         'text' => lang('ds_meter'),
