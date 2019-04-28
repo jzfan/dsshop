@@ -29,7 +29,7 @@
 					<img class="artBigPic" src="<%= frist_list[0].article_pic %>" />
 					<div class="atrInfo">
 						<p class="p1"><%= frist_list[0].article_title %></p>
-						<p class="p2"><span class="atr_icon">今日推荐</span><span class="spr">91购</span>&nbsp;&nbsp;<span class="spr"><%= frist_list[0].amount %>访问量</span></p>
+						<p class="p2"><span class="atr_icon"><%= frist_list[0].article_time %></span><span class="spr">91购</span>&nbsp;&nbsp;<span class="spr"><%= frist_list[0].amount %>访问量</span></p>
 					</div>
 				</div>
 			</div>
@@ -43,7 +43,7 @@
 			<div class="arts">
 				<div class="artL">
 					<p class="p1"><%= article_list[i].article_title %></p>
-					<p class="p2"><span class="atr_icon">今日推荐</span><span class="spr">91购</span>&nbsp;&nbsp;<span class="spr"><%= article_list[i].amount %>访问量</span></p>
+					<p class="p2"><span class="atr_icon"><%= article_list[i].article_time %></span><span class="spr">91购</span>&nbsp;&nbsp;<span class="spr"><%= article_list[i].amount %>访问量</span></p>
 				</div>
 				<div class="artR"><img src="<%= article_list[i].article_pic %>" /></div>
 			</div>
