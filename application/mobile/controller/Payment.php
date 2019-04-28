@@ -57,8 +57,8 @@ class Payment extends MobileMall {
     /**
      * 支付宝wap支付异步通知
      */
-    public function alipay_h5_notify() {
-        file_put_contents("alipay_h5_notify.log",json_encode($_POST),FILE_APPEND);
+    public function alipay_h5_notify()
+    {
         $this->notify('alipay','alipay_h5');
     }
 
@@ -68,11 +68,11 @@ class Payment extends MobileMall {
      * @param type $payment_code  共用回调方法
      * @param type $show_code  实际支付方式名称
      */
-    public function notify($payment_code,$show_code='') {
+    public function notify($payment_code,$show_code='')
+    {
         $logic_payment = model('payment', 'logic');
         $result = $logic_payment->getPaymentInfo($payment_code);
         $payment_info = $result['data'];
-
         //创建支付接口对象
         $payment_api = new $payment_info['payment_code']($payment_info);
 
@@ -85,7 +85,7 @@ class Payment extends MobileMall {
         $trade_no = $verify['trade_no']; #交易订单号
         $order_type = $verify['order_type']; #交易类型
 
-        $update_result = $logic_payment->updateOrder($out_trade_no, $trade_no, $order_type, $show_code?$show_code:$payment_code);
+        $update_result = $logic_payment->_updateOrder($out_trade_no, $trade_no, $order_type, $show_code ? $show_code : $payment_code);
         exit($update_result ? 'success' : 'fail');
     }
 }

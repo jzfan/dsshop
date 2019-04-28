@@ -79,13 +79,13 @@ class alipay {
         $result = $alipaySevice->check($arr);
         if ($result) {
             if ($arr['trade_status'] == 'TRADE_SUCCESS') {
-                $out_trade_no = explode('-', input('param.out_trade_no'));
+                $out_trade_no = explode('-', input('post.out_trade_no'));
                 $out_trade_no = $out_trade_no['1'];
                 $notify_result = array(
                     'out_trade_no' => $out_trade_no, #商户订单号
-                    'trade_no' => input('param.trade_no'), #交易凭据单号
-                    'total_fee' => input('param.total_amount'), #涉及金额
-                    'order_type' => input('param.body'),
+                    'trade_no' => input('post.trade_no'), #交易凭据单号
+                    'total_fee' => input('post.total_amount'), #涉及金额
+                    'order_type' => input('post.body'),
                     'trade_status' => '1',
                 );
             }
