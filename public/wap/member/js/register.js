@@ -79,12 +79,12 @@ $(function() {
 					            if(nums>0){
 					                nums--;
 					                code.text(nums+"s后重新发送");
-					                code.addClass("getMsgOver");
+					                code.addClass("input-getCodeOver");
 					            }else{
 					                clearInterval(timer);
 					                nums=60;//重置回去
 					                validCode=true;
-					                code.removeClass("getMsgOver");
+					                code.removeClass("input-getCodeOver");
 					                code.text("发送验证码");
 					    		}
 					        },1000);
@@ -165,7 +165,7 @@ $(function() {
 	                    if (typeof e.result.key == "undefined") {
 	                        return false
 	                    } else {
-	                        updateCookieCart(e.result.key);
+//	                        updateCookieCart(e.result.key);
 	                        addCookie("username", e.result.username);
 	                        addCookie("key", e.result.key);
 	                        location.href = WapSiteUrl + "/member/member.html"
