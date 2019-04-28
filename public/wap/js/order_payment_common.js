@@ -190,7 +190,7 @@ function goToPayment(a, e) {
     if(payment_code == "wxpay_minipro"){
         wx.miniProgram.redirectTo({url:"../pay/pay?action="+e+"&key=" + key + "&pay_sn=" + a + "&password=" + $("#paymentPassword").val() + "&rcb_pay=" + rcb_pay + "&pd_pay=" + pd_pay + "&payment_code=" + payment_code});
     }else{
-        location.href = http+SiteDomain + "/?s=mobile/Memberpayment/" + e + "/key/" + key + "/pay_sn/" + a + "/password/" + $("#paymentPassword").val() + "/rcb_pay/" + rcb_pay + "/pd_pay/" + pd_pay + "/payment_code/" + payment_code;
+        location.href = http+SiteDomain + "/?s=mobile/Memberpayment/commonpay/key/" + key + "/pay_sn/" + a + "/password/" + $("#paymentPassword").val() + "/rcb_pay/" + rcb_pay + "/pd_pay/" + pd_pay + "/payment_code/" + payment_code;
     }
     
 }
