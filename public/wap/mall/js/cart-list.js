@@ -211,7 +211,7 @@ $(function() {
                     if (t.code == 10000) {
                         i.val(s);
                         n.html("" + t.result.goods_price + "");
-                        f.html("" + t.result.total_price + "");
+                        f.html("" + t.result.goods_point + "");
                         calculateTotalPrice()
                     } else {
                         layer.open({content: t.message, btn: '我知道了'});
@@ -237,14 +237,14 @@ $(function() {
             window.location.href = WapSiteUrl + "/order/buy_step1.html?ifcart=1&cart_id=" + a
         });
         $.sValid.init({rules: {buynum: "digits"}, messages: {buynum: "请输入正确的数字"}, callback: function(t, a, e) {
-                if (t.length > 0) {
-                    var r = "";
-                    $.map(a, function(t, a) {
-                        r += "<p>" + t + "</p>"
-                    });
-                    layer.open({content: r, btn: '我知道了'});
-                }
-            }});
+            if (t.length > 0) {
+                var r = "";
+                $.map(a, function(t, a) {
+                    r += "<p>" + t + "</p>"
+                });
+                layer.open({content: r, btn: '我知道了'});
+            }
+        }});
         function m() {
             $.sValid()
         }}
@@ -284,9 +284,13 @@ function calculateTotalPrice() {
     $(".cart-litemw-cnt").each(function() {
         if ($(this).find('input[name="cart_id"]').prop("checked")) {
             t += parseFloat($(this).find(".goods-price").find("em").html()) * parseInt($(this).find(".value-box").find("input").val());
-            f += parseFloat($(this).find(".goods-price").find("b").html()) * parseInt($(this).find(".value-box").find("input").val());
+            if($(this).find(".goods-price").find("b").length != 0){
+            	f += parseFloat($(this).find(".goods-price").find("b").html()) * parseInt($(this).find(".value-box").find("input").val());
+            }
         }
     });
+    console.log(t)
+    console.log(f)
     $(".total-money").find("em").html(t.toFixed(2));
     $(".total-money").find("b").html(f.toFixed(2));
     check_button();
@@ -295,18 +299,18 @@ function calculateTotalPrice() {
 function getGoods(t, a) {
     var e = {};
     $.ajax({type: "get", url: ApiUrl + "/Goods/goods_detail.html?goods_id=" + t, dataType: "json", async: false, success: function(r) {
-            if (r.code != 10000) {
-                return false
-            }
-            var o = r.result.goods_image.split(",");
-            e.cart_id = t;
-            e.goods_id = t;
-            e.goods_name = r.result.goods_info.goods_name;
-            e.goods_price = r.result.goods_info.goods_price;
-            e.goods_num = a;
-            e.goods_image_url = o[0];
-            e.goods_sum = (parseInt(a) * parseFloat(r.result.goods_info.goods_price)).toFixed(2)
-        }});
+        if (r.code != 10000) {
+            return false
+        }
+        var o = r.result.goods_image.split(",");
+        e.cart_id = t;
+        e.goods_id = t;
+        e.goods_name = r.result.goods_info.goods_name;
+        e.goods_price = r.result.goods_info.goods_price;
+        e.goods_num = a;
+        e.goods_image_url = o[0];
+        e.goods_sum = (parseInt(a) * parseFloat(r.result.goods_info.goods_price)).toFixed(2)
+    }});
     return e
 }
 function get_footer() {
