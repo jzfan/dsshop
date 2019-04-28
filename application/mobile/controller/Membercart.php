@@ -172,6 +172,7 @@ class Membercart extends MobileMember {
             $return['quantity'] = $quantity;
             $return['goods_price'] = ds_price_format($cart_info['goods_price']);
             $return['total_price'] = ds_price_format($cart_info['goods_price'] * $quantity);
+            // 增加积分
             $return['goods_point'] = ds_price_format($goods_point);
             $return['total_point'] = ds_price_format($goods_point * $quantity);
 
