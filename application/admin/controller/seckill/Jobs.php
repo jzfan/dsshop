@@ -14,7 +14,7 @@ class Jobs extends AdminControl
 
     public function index($jobs=null)
     {
-        $jobs = $jobs ?? $this->model->has('goods', '>', 0)->order('id desc')->select();
+        $jobs = $jobs ?? $this->model->has('goods', '>', 0)->order('id desc')->paginate();
         $this->assign('jobs', $jobs);
         $this->setAdminCurItem('index');
         return $this->fetch('seckill/job/all');
@@ -23,11 +23,11 @@ class Jobs extends AdminControl
     public function search()
     {
         if (input('?status')) {
-            $jobs = $this->model->where('status', input('status'))->order('id desc')->select();
+            $jobs = $this->model->where('status', input('status'))->order('id desc')->paginate();
             return $this->index($jobs);
         }
-        if (input('?days')) {
-            $jobs = $this->model->whereTime('start', input('days'))->order('id desc')->select();
+        if (input('?start')) {
+            $jobs = $this->model->whereTime('start', '>', strtotime(input('start')))->order('id desc')->paginate();
             return $this->index($jobs);
         }
         return $this->index();
@@ -64,11 +64,26 @@ class Jobs extends AdminControl
         return $this->fetch('seckill/good/add');
     }
 
+    public function edit()
+    {
+        $job = $this->model->with('goods')->find(input('id'));
+        $this->assign('job', $job);
+        return $this->fetch('seckill/job/edit');
+    }
+
     public function goods()
     {
         $this->assignGoods();
         return $this->fetch('seckill/good/add');
+    }
 
+    public function addGoods()
+    {
+        session('job_id', input('job_id'));
+        session('job_name', input('job_name'));
+        $this->assign('selectedGoods', $this->model->find(input('job_id'))->goods()->with('info')->select());
+        $this->assignGoods();
+        return $this->fetch('seckill/good/add');
     }
 
     public function delete()
@@ -81,7 +96,7 @@ class Jobs extends AdminControl
                     ->find($data['id'])
                     ->deleteWithGoods();
         });
-        return $this->index();
+        return 'ok';
     }
 
     public function stop()

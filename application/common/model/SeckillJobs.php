@@ -19,7 +19,12 @@ class SeckillJobs extends Model
 
     public function active()
     {
-        return $this->where('status', 1)->find();
+        return $this->has('goods')->where('status', 1)->order('id desc')->find();
+    }
+
+    public function last()
+    {
+        return $this->has('goods')->where('status', 2)->order('start desc')->find();
     }
 
     public function isOver()

@@ -122,6 +122,10 @@ h6 { font-size:12px;}
 .dsui-btn-view i{font-size:12px;padding-right:2px;}
 .dsui-btn-view i:before {content: "\f06e";}
 .dsui-btn-view:hover{color:#fff;}
+.dsui-btn-stop{display:inline-block;border:none;padding:0px 5px;height:22px;line-height:22px;border-radius:3px;background-color:#363636;color:#fff;vertical-align:middle;text-align:center;cursor:pointer;font-size:12px;float:left;margin-right:5px;}
+.dsui-btn-stop i{font-size:12px;padding-right:2px;}
+.dsui-btn-stop i:before {content: "\f256";}
+.dsui-btn-stop:hover{color:#fff;}
 
 
 /* widget */
