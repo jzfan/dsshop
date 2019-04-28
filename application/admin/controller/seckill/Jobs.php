@@ -41,12 +41,18 @@ class Jobs extends AdminControl
 
     public function store()
     {
+        session('error', null);
         if (request()->isPost()) {
-            $data = checkInput([
+            $result = $this->validate(input(), [
                 'start' => 'require|date|after:' . date('Y-m-d'),
                 'end' => 'require|date|after:' . date('Y-m-d H:i:s'),
                 'name' => 'require',
             ]);
+            if(true !== $result){
+                session('error', $result);
+                return $this->fetch('seckill/good/add');
+            }
+            $data = request()->only('start', 'end', 'name');
             $job = $this->model->create($data);
             session('job_id', $job->id);
             session('job_name', $job->name);
