@@ -11,20 +11,19 @@ namespace app\common\behavior;
 
 use think\Db;
 
-class Miaomi
+class MiaomiRed
 {
 
-
-    public function orderFinished($params)
+    public function forsaleOrderFinished($order_info)
     {
         $now_time = date('Y-m-d H:i:s');
         $memberorderstatistics_model = model('Memberorderstatistics');
 
         $get_condition = [
-            'member_id' => $params['member_id'],
+            'member_id' => $order_info['member_id'],
         ];
         $get_data = [
-            'unsettled_money' => Db::raw('unsettled_money+' . $params['money']),
+            'unsettled_money' => Db::raw('unsettled_money+' . $order_info['money']),
             'update_at' => $now_time,
         ];
         $memberorderstatistics = $memberorderstatistics_model->updateOrCreateMemberOrderStatistics($get_data, $get_condition);
@@ -33,7 +32,7 @@ class Miaomi
             return FALSE;
         }
 
-        $inviter_array = model('Member')->getUserInviterIds($params['member_id']);
+        $inviter_array = model('Member')->getUserInviterIds($order_info['member_id']);
 
         // 剔除直推
         array_shift($inviter_array);

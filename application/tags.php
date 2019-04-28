@@ -25,4 +25,9 @@ return [
     'log_write'    => [],
     // 应用结束
     'app_end'      => [],
+
+    'forsale_order_finished' => [
+        'app\\common\\behavior\\MiaomiRed',
+        'app\\common\\behavior\\MiaomiGive'
+    ]
 ];

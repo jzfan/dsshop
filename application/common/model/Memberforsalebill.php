@@ -18,15 +18,17 @@ class Memberforsalebill extends Model
     {
         $insert_data = array();
         foreach ($memberforsalegoods as $value) {
-            $insert_data[] = array (
-                "order_id"  =>  $order_id,
-                "order_sn"  =>  $order_sn,
-                "member_id" => $value['member_id'],
-                "order_amount" => $order_amount,
-                "bill_percent" => 0,
-                "bill_amount" => 0,
-                "bill_state" => 0,
-            );
+            if ($value['member_id']) { //member_id为0是平台添加商品，无需分账
+                $insert_data[] = array(
+                    "order_id" => $order_id,
+                    "order_sn" => $order_sn,
+                    "member_id" => $value['member_id'],
+                    "order_amount" => $order_amount,
+                    "bill_percent" => 0,
+                    "bill_amount" => 0,
+                    "bill_state" => 0,
+                );
+            }
         }
 
         // 增加上级

@@ -823,6 +823,7 @@ class Buy extends Model
             $order['miaomi_amount'] = $miaomi_amount;
             $order['order_from'] = $order_from;
             $order['points_amount'] = $this->calculateGoodsPoint($cart_list);
+            $order['give_miaomi'] = $this->calculateGoodsMiaomi($cart_list);
             $order['order_type'] = $order_type;
 
             //如果支持方式为空时，默认为货到付款
@@ -1279,9 +1280,21 @@ class Buy extends Model
         $need_points = 0;
         foreach ($cart_list as $goods) {
             if ($goods['goods_type'] == 20) {
-                $need_points += intval($goods['goods_point']);
+                $need_points += intval($goods['goods_point']) * intval($goods['goods_num']);
             }
         }
         return $need_points;
+    }
+
+
+    private function calculateGoodsMiaomi($cart_list)
+    {
+        $give_miaomi = 0;
+        foreach ($cart_list as $goods) {
+            if ($goods['goods_type'] == 30) {
+                $give_miaomi += floatval($goods['goods_miaomi']) * intval($goods['goods_num']);
+            }
+        }
+        return $give_miaomi;
     }
 }

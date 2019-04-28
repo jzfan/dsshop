@@ -43,7 +43,7 @@ class Membercart extends MobileMember {
             $cart_a[0]['goods'][$key]['gift_list'] = isset($val['gift_list'])?$val['gift_list']:'';
             $cart_list[$key]['goods_sum'] = ds_price_format($val['goods_price'] * $val['goods_num']);
             $sum += $cart_list[$key]['goods_sum'];
-            $point += $cart_a[0]['goods'][$key]['goods_point'];
+            $point += ($cart_a[0]['goods'][$key]['goods_point'] * $val['goods_num']);
             $k++;
         }
         

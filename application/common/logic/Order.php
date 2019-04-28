@@ -2,6 +2,7 @@
 
 namespace app\common\logic;
 use app\common\model\Memberforsaleorder;
+use think\Hook;
 use think\Model;
 use think\Db;
 
@@ -557,6 +558,9 @@ class Order extends Model
 
                 // 更新分账信息
                 $forsalegbill_model->updateForsaleBill(['bill_state'=>1],$condition);
+
+                //待售商品订单完成
+                Hook::listen('forsale_order_finished',$order_info);
             }
 
             $order_model->commit();
