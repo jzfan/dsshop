@@ -84,8 +84,13 @@ public function _initialize()
         $config_model = model('config');
         if(request()->isPost()) {
             $update_array = array();
-            $update_array['forsale_bill_platform'] = intval(input('post.forsale_bill_platform'));
-            $update_array['forsale_bill_member'] = intval(input('post.forsale_bill_member'));
+            $update_array['forsale_bill_platform_rate'] = intval(input('post.forsale_bill_platform_rate'));
+            $update_array['forsale_bill_member_rate'] = intval(input('post.forsale_bill_member_rate'));
+
+            if (($update_array['forsale_bill_platform_rate'] + $update_array['forsale_bill_member_rate']) != 100) {
+                $this->error("参数错误");
+            }
+
             $result = $config_model->editConfig($update_array);
             if ($result === true) {
                 $this->log(lang('ds_edit') . lang('ds_operation') . lang('ds_operation_set'), 1);
@@ -109,6 +114,14 @@ public function _initialize()
             $update_array = array();
             $update_array['first_forsale_red_jackpot'] = input('post.first_forsale_red_jackpot');
             $update_array['last_forsale_red_jackpot'] = input('post.last_forsale_red_jackpot');
+
+            $first_forsale_red_jackpot = explode(',', $update_array['first_forsale_red_jackpot']);
+            $last_forsale_red_jackpot = explode(',', $update_array['last_forsale_red_jackpot']);
+
+            if(count($first_forsale_red_jackpot) != 5 || count($last_forsale_red_jackpot) != 5 ) {
+                $this->error("参数错误");
+            }
+
             $result = $config_model->editConfig($update_array);
             if ($result === true) {
                 $this->log(lang('ds_edit') . lang('ds_operation') . lang('ds_operation_set'), 1);

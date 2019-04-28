@@ -52,8 +52,12 @@ class Test extends Controller
 
 	public function goods()
 	{
-		$job = \app\common\model\SeckillJobs::find(204);
-		print_r($job->goods[0]->toArray());
+		$good = \app\common\model\SeckillGoods::find(170);
+		$job = $good->job;
+		$job->save([
+		        'status' => 0
+		    ]);
+		print_r($good->job->toArray());
 		exit;
 	}
 

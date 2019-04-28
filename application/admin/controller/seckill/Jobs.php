@@ -2,6 +2,7 @@
 
 namespace app\admin\controller\seckill;
 
+use think\Db;
 use app\admin\controller\AdminControl;
 
 class Jobs extends AdminControl
@@ -13,7 +14,7 @@ class Jobs extends AdminControl
 
     public function index($jobs=null)
     {
-        $jobs = $jobs ?? $this->model->with('goods')->order('id desc')->select();
+        $jobs = $jobs ?? $this->model->has('goods', '>', 0)->order('id desc')->select();
         $this->assign('jobs', $jobs);
         $this->setAdminCurItem('index');
         return $this->fetch('seckill/job/all');
@@ -66,7 +67,7 @@ class Jobs extends AdminControl
         $data = checkInput([
             'id' => 'require|number'
         ]);
-        Db::transaction(function () {
+        Db::transaction(function () use ($data) {
             $job = $this->model->lock(true)->find($data['id']);
             $job->goods()->delete();
             $job->delete();
@@ -89,7 +90,7 @@ class Jobs extends AdminControl
             'id' => 'require|number'
         ]);
         $job = $this->model->with('goods.info')->find($data['id']);
-        dd($job->goods);
+        // dd($job->goods);
         $this->assign('job', $job);
         return $this->fetch('seckill/job/show');
     }

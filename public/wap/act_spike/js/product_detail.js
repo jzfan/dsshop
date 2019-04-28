@@ -1,5 +1,6 @@
 var goods_id = getQueryString("goods_id");
 var fromTo = getQueryString("fromTo");
+var job_id = getQueryString("job_id");
 var pintuangroup_share_id = getQueryString("pintuangroup_share_id");
 var map_list = [];
 var map_index_id = "";
@@ -153,6 +154,7 @@ $(function() {
             data: {
                 goods_id: r,
                 key: e,
+                job_id:job_id,
                 pintuangroup_share_id: pintuangroup_share_id
             },
             dataType: "json",
@@ -253,7 +255,7 @@ $(function() {
                         o.voucher = '';
                         o.is_goodsfcode = 1;
                         o.shop_to = 0;
-
+						o.job_id = job_id;
                         $.ajax({
                             type: "post",
                             url: ApiUrl + "/Memberbuy/buy_step2.html",

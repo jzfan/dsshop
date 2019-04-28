@@ -35,13 +35,7 @@ class SeckillJobs extends Model
 
     public function isWaiting()
     {
-        if (strtotime($this->start) > time()) {
-            if ($this->status != 2) {
-                $this->setStatus(2);
-            }
-            return true;
-        }
-        return false;
+        return strtotime($this->start) > time();
     }
 
     public function isActive()

@@ -18,23 +18,70 @@ class Forsalequeue extends AdminControl
         $where['goods_state'] = 1;
         $search_goods_name = trim(input('param.search_goods_name'));
         if ($search_goods_name != '') {
-            $memberforsalegoods = $memberforsalegoods_model->getMemberForsaleGoodsInfoByGoodsName($search_goods_name);
-            if (!is_null($memberforsalegoods)) {
-                $where['goods_commonid'] = $memberforsalegoods->goods_commonid;
-            }
+            $where['goods_commonid'] = ['like',"%{$search_goods_name}%"];
         }
         $search_commonid = intval(input('param.search_commonid'));
         if ($search_commonid > 0) {
             $where['goods_commonid'] = $search_commonid;
         }
+        $search_phone = input('param.search_phone');
+        if ($search_phone > 0) {
+            $where['member_phone'] = $search_phone;
+        }
 
         $goods_list = $memberforsalegoods_model->getMemberForsaleGoodsList($where,10,"*","sortable asc");
+
+        foreach ($goods_list as &$goods) {
+            switch ($goods['goods_state']) {
+                case 0:
+                    $goods['goods_state'] = "等待挂售";
+                    break;
+                case 1:
+                    $goods['goods_state'] = "挂售中";
+                    break;
+                case 2:
+                    $goods['goods_state'] = "挂售完成";
+                    break;
+            }
+        }
 
         $this->assign('goods_list', $goods_list);
         $this->assign('show_page', $memberforsalegoods_model->page_info->render());
 
         $this->assign('search', $where);
         $this->setAdminCurItem('index');
+        return $this->fetch();
+    }
+
+    public function queue()
+    {
+        $memberforsalegoods_model = model('memberforsalegoods');
+        $where['goods_state'] = 1;
+        $search_commonid = intval(input('param.goods_commonid'));
+        if ($search_commonid > 0) {
+            $where['goods_commonid'] = $search_commonid;
+        }
+
+        $goods_list = $memberforsalegoods_model->getMemberForsaleGoodsList($where,10,"*","sortable asc");
+
+        foreach ($goods_list as &$goods) {
+            switch ($goods['goods_state']) {
+                case 0:
+                    $goods['goods_state'] = "等待挂售";
+                    break;
+                case 1:
+                    $goods['goods_state'] = "挂售中";
+                    break;
+                case 2:
+                    $goods['goods_state'] = "挂售完成";
+                    break;
+            }
+        }
+        $this->assign('goods_list', $goods_list);
+        $this->assign('show_page', $memberforsalegoods_model->page_info->render());
+
+        $this->assign('search', $where);
+        $this->setAdminCurItem('queue');
         return $this->fetch();
     }
 

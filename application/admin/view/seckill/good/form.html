@@ -1,4 +1,5 @@
 <div class="page" id='modal-page' style="display: none;">
+    {:session('job_id')}
     <form method="post" id="modal-form">
         <input type="hidden" value="" name='goods_id' id='goods-id-input'>
         <input type="hidden" value="{:session('job_id')}" name='job_id'>
@@ -68,7 +69,8 @@ function submitGoodForm(e) {
         dataType:'json',
         data: $('#modal-form').serialize(),
         success: function(res) {
-            window.location.reload()
+            layer.close(index)
+            layer.msg('添加商品成功')          
         },
         error: function (err) {
             console.log(err.responseText)

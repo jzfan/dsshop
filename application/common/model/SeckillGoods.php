@@ -39,9 +39,9 @@ class SeckillGoods extends Model
         });
     }
 
-    public function byGoodsId($id)
+    public function byJobGoodsId($job_id, $goods_id)
     {
-        return $this->with('info')->where('goods_id', $id)->find();
+        return $this->with('info')->where('job_id', $job_id)->where('goods_id', $goods_id)->find();
     }
 
     public function checkLimit($log, $num)
