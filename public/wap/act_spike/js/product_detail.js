@@ -154,6 +154,7 @@ $(function() {
             data: {
                 goods_id: r,
                 key: e,
+                job_id:job_id,
                 pintuangroup_share_id: pintuangroup_share_id
             },
             dataType: "json",
