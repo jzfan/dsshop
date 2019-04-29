@@ -14,7 +14,7 @@ class Jobs extends AdminControl
 
     public function index($jobs=null)
     {
-        $jobs = $jobs ?? $this->model->has('goods', '>', 0)->order('id desc')->paginate();
+        $jobs = $jobs ?? $this->model->has('goods', '>', 0)->order('id desc')->paginate(10);
         $this->assign('jobs', $jobs);
         $this->setAdminCurItem('index');
         return $this->fetch('seckill/job/all');
@@ -23,11 +23,15 @@ class Jobs extends AdminControl
     public function search()
     {
         if (input('?status')) {
-            $jobs = $this->model->where('status', input('status'))->order('id desc')->paginate();
+            $jobs = $this->model->has('goods', '>', 0)->where('status', input('status'))->order('id desc')->paginate(10,false,[
+                'query' => array('status' => $_GET['status']),
+            ]);
             return $this->index($jobs);
         }
         if (input('?start')) {
-            $jobs = $this->model->whereTime('start', '>', strtotime(input('start')))->order('id desc')->paginate();
+            $jobs = $this->model->has('goods', '>', 0)->whereTime('start', '>', strtotime(input('start')))->order('id desc')->paginate(10,false,[
+                'query' => array('start' => $_GET['start']),
+            ]);
             return $this->index($jobs);
         }
         return $this->index();
@@ -35,22 +39,22 @@ class Jobs extends AdminControl
 
     public function form()
     {
+        session('error', null);
         $this->assign('goods', model('SeckillGoods')->with('info')->order('id desc')->select());
         return $this->fetch('seckill/job/form');
     }
 
     public function store()
     {
-        session('error', null);
         if (request()->isPost()) {
             $result = $this->validate(input(), [
-                'start' => 'require|date|after:' . date('Y-m-d'),
-                'end' => 'require|date|after:' . date('Y-m-d H:i:s'),
-                'name' => 'require',
+                'start|开始时间' => 'require|date|after:' . date('Y-m-d H:i:s'),
+                'end|结束时间' => 'require|date|after:' . date('Y-m-d H:i:s'),
+                'name|名称' => 'require',
             ]);
             if(true !== $result){
                 session('error', $result);
-                return $this->fetch('seckill/good/add');
+                return $this->fetch('seckill/job/form');
             }
             $job = $this->model->create([
                 'start' => input('start'),

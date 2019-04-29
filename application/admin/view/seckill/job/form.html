@@ -38,7 +38,14 @@
     </form>
 </div>
 {include file='public/datetimepick_js'/}
+{if condition='$Think.session.error'}
+<span id='error-span' style="display: none">{:session('error')}</span>
+{/if}
 <script>
+let error = $('#error-span').html()
+if (error) {
+    layer.msg(error, {shade: 0.3})
+}
 $('#start').datetimepicker(option);
 $('#end').datetimepicker(option);
 

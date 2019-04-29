@@ -1,5 +1,4 @@
 <div class="page" id='modal-page' style="display: none;">
-    {:session('job_id')}
     <form method="post" id="modal-form">
         <input type="hidden" value="" name='goods_id' id='goods-id-input'>
         <input type="hidden" value="{:session('job_id')}" name='job_id'>
@@ -12,15 +11,15 @@
                     </td>
                 </tr>
                 <tr class="noborder" style="background: rgb(255, 255, 255);">
-                    <td class="required w120" aria-required="true"><label>秒杀价格(元):</label></td>
+                    <td class="required w120" aria-required="true"><label>代售价格(元):</label></td>
                     <td class="vatop rowform">
-                        <input type="number" class="w300 text" id='price-input' name='price' value="0" min:0>
+                        <input type="number" class="w300 text" id='goods-price-input' name='goods_price' value="" min:0>
                     </td>
                 </tr>
                 <tr class="noborder" style="background: rgb(255, 255, 255);">
-                    <td class="required w120" aria-required="true"><label>代售价格(元):</label></td>
+                    <td class="required w120" aria-required="true"><label>秒杀价格(元):</label></td>
                     <td class="vatop rowform">
-                        <input type="number" class="w300 text" id='forsale-price-input' name='forsale_price' value="0" min:0>
+                        <input type="number" class="w300 text" id='price-input' name='price' value="0" min:0>
                     </td>
                 </tr>
                 <tr class="noborder" style="background: rgb(255, 255, 255);">
@@ -58,9 +57,9 @@ function setInputVal(gid) {
     $('#goods-id-input').val(gid)
     $.get(`/mobile/api.seckillgoods?goods_id=${gid}`, function(res) {
         if (res != '') {
-            $('#number-input').val(res.qty)
+            // $('#number-input').val(res.qty)
             $('#price-input').val(res.price)
-            $('#forsale-price-input').val(res.forsale_price)
+            $('#goods-price-input').val(res.goods_price)
             $('#return_rate-input').val(res.return_rate)
             $('#commend-input').val(res.commend)
             $('#limit-input').val(res.limit)
@@ -71,9 +70,9 @@ function setInputVal(gid) {
 function submitGoodForm(e) {
     e.preventDefault()
     $.ajax({
-        url: '/admin/seckill.goods/store', 
+        url: '/admin/seckill.goods/store',
         type: 'post',
-        dataType:'json',
+        dataType: 'json',
         data: $('#modal-form').serialize(),
         success: function(res) {
             layer.close(index)
@@ -107,12 +106,11 @@ function submitGoodForm(e) {
                         ${res.commend}
                     </td>
                 </tr>
-                `)         
+                `)
         },
-        error: function (err) {
-            console.log(err.responseText)
+        error: function(err) {
             let json = JSON.parse(err.responseText)
-            parent.layer.msg(json.error, {shade: 0.3})
+            parent.layer.msg(json.error, { shade: 0.3 })
         }
     })
     return false

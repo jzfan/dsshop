@@ -352,14 +352,83 @@ class Payment extends Model
     // 1. 更新forsale
     // 2. 更新forsale_member
     // 3. 更新日志
-    public function updateSeckillForSale($out_trade_no)
+    public function updateSeckillForSale($out_trade_no,$trade_no,$payment_code)
     {
         $order_info = $this->getRealOrderInfo($out_trade_no);
         dd($order_info);
+        $this->orderPayed($out_trade_no,$trade_no,$payment_code);
         // return model('order','logic')->updatePointOrder($order_info['data']['order_list'], 'system', '系统', $post);
 
-        Forsalegoods::add($order_info);
-        Memberforsalegoods::add($order_info);
+        // Forsalegoods::add($order_info);
+        // Memberforsalegoods::add($order_info);
+    }
+
+
+    public function orderPayed($out_trade_no,$trade_no,$payment_code)
+    {
+        $order_model = model('order');
+        $forsalegoods_model = model('memberforsalegoods');
+
+        try {
+            $order_model->startTrans();
+
+            $data = array();
+            $data['api_paystate'] = 1;
+
+            $update = $order_model->editOrderpay($data, array('pay_sn' => $order_list[0]['pay_sn']));
+            if (!$update) {
+                exception('更新支付单状态失败');
+            }
+
+            foreach ($order_list as $order_info) {
+
+                if ($order_info['order_state'] != ORDER_STATE_NEW) {
+                    continue;
+                }
+
+                // 更新订单状态
+                $update_order = array();
+                $update_order['order_state'] = ORDER_STATE_PAY;
+                $update_order['payment_time'] = (isset($post['payment_time']) ? strtotime($post['payment_time']) : TIMESTAMP);
+                $update_order['payment_code'] = $post['payment_code'];
+                $update = $order_model->editOrder($update_order, array(
+                    'pay_sn' => $order_info['pay_sn'], 'order_state' => ORDER_STATE_NEW
+                ));
+                if (!$update) {
+                    exception('操作失败');
+                }
+
+                // 更新挂售商品信息
+                $forsalegoods_model->unfreezeMemberForsaleGoods($order_info['order_id']);
+
+                $condition = array('order_id' => $order_info['order_id']);
+                // 更新挂售订单
+                $forsaleorder_model->updateForsaleOrder(['order_state'=>1],$condition);
+            }
+            $order_model->commit();
+        } catch (Exception $e) {
+            $order_model->rollback();
+            return ds_callback(false, $e->getMessage());
+        }
+
+        foreach ($order_list as $order_info) {
+            if ($order_info['order_state'] != ORDER_STATE_NEW) {
+                continue;
+            }
+            $order_id = $order_info['order_id'];
+
+
+            //添加订单日志
+            $data = array();
+            $data['order_id'] = $order_id;
+            $data['log_role'] = $role;
+            $data['log_user'] = $user;
+            $data['log_msg'] = '收到了货款 ( 支付平台交易号 : ' . $post['trade_no'] . ' )';
+            $data['log_orderstate'] = ORDER_STATE_PAY;
+            $order_model->addOrderlog($data);
+        }
+
+        return ds_callback(true, '操作成功');
     }
 
 

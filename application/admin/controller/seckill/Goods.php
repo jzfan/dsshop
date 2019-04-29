@@ -31,13 +31,13 @@ class Goods extends AdminControl
             'job_id' => 'require|number|gt:0',
             'qty|数量' => 'require|number|gt:0',
             'price|秒杀价格' => 'require|number|gt:0',
-            'forsale_price|代售价格' => 'require|number|gt:0',
+            'goods_price|代售价格' => 'require|number|gt:0',
             'commend' => 'require|number',
             'return_rate|收益率' => 'require|number|gt:0'
         ]);
         $data['mi'] = Formula::miByInput($data);
-        if $data['mi'] <= 0 {
-            throw new Exception("秒米计算结果小于0", 422);
+        if ($data['mi'] <= 0) {
+            throw new JsonException("秒米计算结果小于0", 422);
         }
         $good = Db::transaction(function () use ($data){
             $skuGood = model('goods')->where('goods_id', $data['goods_id'])->lock(true)->find();
