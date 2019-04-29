@@ -35,5 +35,6 @@ $lang['admin_points_stage_rebate'] = '推荐返利';
 $lang['admin_points_stage_pointorder'] = '礼品兑换';
 $lang['admin_points_stage_app'] = '积分兑换';
 $lang['admin_points_stage_signin'] = '签到';
+$lang['admin_points_stage_read'] = '阅读';
 $lang['admin_points_stage_inviter'] = '推荐注册';
 $lang['admin_points_addtime'] = '添加时间';
