@@ -1,0 +1,225 @@
+DROP TABLE IF EXISTS `ds_pointgoods`;
+CREATE TABLE `ds_pointgoods` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+  `goods_id` int(10) NOT NULL DEFAULT '0' COMMENT '商品ID',
+  `goods_commonid` int(10) NOT NULL DEFAULT '0' COMMENT '商品公共表ID',
+  `goods_type` tinyint(4) NOT NULL DEFAULT '20' COMMENT '商品类型',
+  `goods_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '商品价格',
+  `goods_point` int(10) NOT NULL DEFAULT '0' COMMENT '销售所需积分',
+  `goods_storage` int(10) NOT NULL DEFAULT '0' COMMENT '商品库存',
+  `sale_number` int(10) NOT NULL DEFAULT '0' COMMENT '商品销售数量',
+  `goods_state` tinyint(1) NOT NULL DEFAULT '1' COMMENT '商品上下架',
+  `created_at` datetime DEFAULT NULL COMMENT '添加时间',
+  `updated_at` datetime DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`),
+  KEY `goods_id` (`goods_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 COMMENT='积分商品表';
+
+
+DROP TABLE IF EXISTS `ds_memberorderstatistics`;
+CREATE TABLE `ds_memberorderstatistics` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `member_id` int(11) NOT NULL DEFAULT '0' COMMENT '用户ID',
+  `total_money` decimal(20,2) NOT NULL DEFAULT '0.00' COMMENT '消费总金额',
+  `last_thirty_money` decimal(20,2) NOT NULL DEFAULT '0.00' COMMENT '最近30天消费金额',
+  `settled_money` decimal(20,2) NOT NULL DEFAULT '0.00' COMMENT '已结算秒米金额',
+  `unsettled_money` decimal(20,2) NOT NULL DEFAULT '0.00' COMMENT '未结算秒米金额',
+  `updated_at` datetime DEFAULT NULL COMMENT '更新时间',
+  `created_at` datetime DEFAULT NULL COMMENT '添加时间',
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=572 DEFAULT CHARSET=utf8 COMMENT='会员消费统计表';
+
+
+DROP TABLE IF EXISTS `ds_forsalegoods`;
+CREATE TABLE `ds_forsalegoods` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `goods_id` int(11) NOT NULL DEFAULT '0' COMMENT '商品ID',
+  `goods_commonid` int(11) NOT NULL DEFAULT '0' COMMENT '商品公共表ID',
+  `goods_name` varchar(255) NOT NULL DEFAULT '' COMMENT '商品名称',
+  `goods_type` tinyint(4) NOT NULL DEFAULT '30' COMMENT '商品类型',
+  `goods_storage` int(10) NOT NULL DEFAULT '0' COMMENT '商品库存',
+  `goods_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '商品91购价格',
+  `goods_seckprice` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '商品秒杀价格',
+  `goods_miaomi` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '商品赠送秒米',
+  `profit_rate` decimal(6,2) NOT NULL DEFAULT '0.00' COMMENT '收益比例',
+  `service_fee` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '手续费',
+  `sale_number` int(10) NOT NULL DEFAULT '0' COMMENT '商品销量',
+  `goods_state` tinyint(2) NOT NULL DEFAULT '1' COMMENT '商品状态',
+  `created_at` datetime DEFAULT NULL COMMENT '添加时间',
+  `updated_at` datetime DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`),
+  KEY `goods_id` (`goods_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COMMENT='91购商品表';
+
+
+
+DROP TABLE IF EXISTS `ds_memberforsalebill`;
+CREATE TABLE `ds_memberforsalebill` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `order_id` int(10) NOT NULL DEFAULT '0' COMMENT '订单ID',
+  `order_sn` varchar(50) NOT NULL DEFAULT '' COMMENT '订单号',
+  `member_id` int(10) NOT NULL DEFAULT '0' COMMENT '会员ID',
+  `order_amount` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '订单金额',
+  `bill_percent` decimal(6,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '分账所占订单比例',
+  `bill_amount` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '分账金额',
+  `bill_state` tinyint(2) NOT NULL DEFAULT '0' COMMENT '分账状态',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `member_id` (`member_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COMMENT='会员挂售分账表';
+
+
+
+DROP TABLE IF EXISTS `ds_memberforsalegoods`;
+CREATE TABLE `ds_memberforsalegoods` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `member_id` int(10) NOT NULL DEFAULT '0' COMMENT '会员ID',
+  `member_phone` varchar(25) NOT NULL DEFAULT '' COMMENT '会员电话',
+  `goods_id` int(10) NOT NULL DEFAULT '0' COMMENT '商品ID',
+  `goods_commonid` int(10) NOT NULL DEFAULT '0' COMMENT '商品公共表ID',
+  `goods_name` varchar(255) NOT NULL DEFAULT '' COMMENT '商品名称',
+  `goods_type` tinyint(4) NOT NULL DEFAULT '30' COMMENT '商品类型',
+  `goods_number` int(10) NOT NULL DEFAULT '0' COMMENT '商品数量',
+  `sale_number` int(10) NOT NULL DEFAULT '0' COMMENT '已销售数量',
+  `left_number` int(10) NOT NULL DEFAULT '0' COMMENT '剩余数量',
+  `freeze_number` int(10) NOT NULL COMMENT '占位库存数量',
+  `goods_state` tinyint(4) NOT NULL DEFAULT '0' COMMENT '商品状态：0 等待挂售；1 挂售中；2 挂售完成',
+  `sortable` int(11) NOT NULL DEFAULT '1' COMMENT '销售优先级',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `goods_id` (`goods_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='会员挂售列表';
+
+
+
+DROP TABLE IF EXISTS `ds_memberforsaleorder`;
+CREATE TABLE `ds_memberforsaleorder` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL COMMENT '订单ID',
+  `order_sn` varchar(50) NOT NULL COMMENT '订单号',
+  `order_state` tinyint(2) NOT NULL DEFAULT '0' COMMENT '订单状态',
+  `buyer_id` int(11) NOT NULL COMMENT '购买人ID',
+  `goods_id` int(11) NOT NULL COMMENT '商品ID',
+  `goods_number` int(11) NOT NULL COMMENT '购买商品数量',
+  `goods_price` decimal(10,2) NOT NULL COMMENT '商品价格',
+  `goods_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '商品总价',
+  `service_fee` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '手续费',
+  `member_id` int(11) NOT NULL COMMENT '挂售人ID',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `order_id` (`order_id`) USING BTREE,
+  KEY `member_id` (`member_id`) USING BTREE,
+  KEY `order_sn` (`order_sn`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='用户挂售订单表';
+
+
+ALTER TABLE `ds_shop`.`ds_order`
+ADD COLUMN `points_amount` decimal(10, 2) NOT NULL DEFAULT 0 COMMENT '积分支付金额' AFTER `pd_amount`,
+ADD COLUMN `miaomi_amount` decimal(10, 2) NOT NULL DEFAULT 0 COMMENT '秒米支付金额' AFTER `points_amount`,
+ADD COLUMN `give_miaomi` decimal(10, 2) NOT NULL DEFAULT 0 COMMENT '91购赠送秒米' AFTER `miaomi_amount`;
+
+
+ALTER TABLE `ds_cart`
+ADD COLUMN `goods_type`  tinyint(4) NOT NULL DEFAULT 1 COMMENT '商品类型：1 普通商品；20 积分商品；30 91购商品' AFTER `buyer_id`;
+
+
+INSERT INTO `ds_config` (`id`, `code`, `value`, `remark`) VALUES (null, 'points_read', '10', '阅读文章赠送积分');
+INSERT INTO `ds_config` (`id`, `code`, `value`, `remark`) VALUES (null, 'forsale_bill_platform_rate', '10', '平台分账比例');
+INSERT INTO `ds_config` (`id`, `code`, `value`, `remark`) VALUES (null, 'forsale_bill_member_rate', '10', '客户分账比例');
+INSERT INTO `ds_config` (`id`, `code`, `value`, `remark`) VALUES (null, 'first_forsale_red_jackpot', '10', '前五位红包池');
+INSERT INTO `ds_config` (`id`, `code`, `value`, `remark`) VALUES (null, 'last_forsale_red_jackpot', '10', '后五位红包池');
+INSERT INTO `ds_config` (`id`, `code`, `value`, `remark`) VALUES (null, 'forsale_order_auto_cancel_time', '10', '91购订单自动取消');
+INSERT INTO `ds_config` (`id`, `code`, `value`, `remark`) VALUES (null, 'point_order_auto_cancel_time', '10', '积分商城自动取消');
+INSERT INTO `ds_config` (`id`, `code`, `value`, `remark`) VALUES (null, 'secondkill_order_auto_forsale', '10', '秒杀订单自动挂售');
+
+
+ALTER TABLE `ds_ordergoods`
+MODIFY COLUMN `goods_type` tinyint(4) NOT NULL DEFAULT 1 COMMENT '1默认2抢购商品3限时折扣商品4组合套装5赠品6拼团7会员等级折扣 20 积分商品；30 91购商品；' AFTER `buyer_id`;
+
+
+#-----------------------
+#海波
+
+ALTER TABLE `ds_admin`
+ADD COLUMN `is_shop`  tinyint(4) NOT NULL DEFAULT 1 COMMENT '1为管理员2位商户';
+
+
+ALTER TABLE `ds_goods`
+ADD COLUMN `supplier`  int(11) NOT NULL DEFAULT 0 COMMENT '供应商id',
+ADD COLUMN `is_platform`  tinyint(1) NOT NULL DEFAULT 0 COMMENT '0为平台商品1为供应商商品';
+
+
+DROP TABLE IF EXISTS `ds_hostconfig`;
+CREATE TABLE `ds_hostconfig`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `key` varchar(255) NOT NULL  COMMENT '配置项key值',
+  `value` varchar(255) NOT NULL COMMENT '配置项value值',
+  `host` varchar(50) NOT NULL  COMMENT '配置的域名',
+  PRIMARY KEY (`id`),
+) ENGINE = InnoDB CHARACTER SET = utf8  COMMENT = '商户配置项';
+
+
+ALTER TABLE `ds_member`
+ADD COLUMN `meter_second` int(11)  NOT NULL DEFAULT 0 COMMENT '秒米',
+ADD COLUMN `face_card` varchar(25)  DEFAULT NULL COMMENT '身份证正面',
+ADD COLUMN `back_card` varchar(35)  DEFAULT NULL COMMENT '身份证反面';
+
+
+
+DROP TABLE IF EXISTS `ds_meterlog`;
+CREATE TABLE `ds_meterlog` (
+  `lg_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '预存款变更日志自增ID',
+  `lg_member_id` int(11) NOT NULL COMMENT '会员ID',
+  `lg_member_name` varchar(50) NOT NULL COMMENT '会员名称',
+  `lg_admin_name` varchar(50) DEFAULT NULL COMMENT '管理员名称',
+  `lg_type` varchar(15) NOT NULL DEFAULT '' COMMENT 'order_pay下单支付预存款,order_freeze下单冻结预存款,order_cancel取消订单解冻预存款,order_comb_pay下单支付被冻结的预存款,recharge充值,cash_apply申请提现冻结预存款,cash_pay提现成功,cash_del取消提现申请，解冻预存款,refund退款',
+  `lg_av_amount` int(11) NOT NULL DEFAULT '0' COMMENT '秒米更新数',
+  `lg_addtime` int(11) NOT NULL COMMENT '变更添加时间',
+  `lg_desc` varchar(150) DEFAULT NULL COMMENT '变更描述',
+  `lg_freeze_amount` decimal(10,0) DEFAULT '0' COMMENT '冻结秒米',
+  `lg_meter` int(11) NOT NULL COMMENT '变更前秒米数量',
+  `lg_meter_after` int(11) NOT NULL DEFAULT '0' COMMENT '变更后秒米数',
+  PRIMARY KEY (`lg_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='秒米变更日志表';
+
+
+-- -------------------
+-- 范新虎
+
+
+DROP TABLE IF EXISTS `ds_seckill_goods`;
+CREATE TABLE `ds_seckill_goods` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `goods_id` int(10) unsigned NOT NULL COMMENT '商品自增ID(SKU)',
+  `job_id` int(10) unsigned NOT NULL COMMENT '秒杀活动ID',
+  `mi` int(10) NOT NULL COMMENT '秒杀消费秒米',
+  `price` decimal(10,2) NOT NULL COMMENT '商品价格',
+  `qty` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '商品库存',
+  `sold` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '售出数量',
+  `state` tinyint(3) unsigned DEFAULT '0' COMMENT '商品状态 0:下架 1:正常',
+  `limit` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '用户商品秒杀限额',
+  `commend` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '商品推荐 1:是 0:否',
+  `return_rate` float(10,0) unsigned NOT NULL DEFAULT '0' COMMENT '收益率',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=148 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+
+
+DROP TABLE IF EXISTS `ds_seckill_jobs`;
+CREATE TABLE `ds_seckill_jobs` (
+  `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `start` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '开始时间',
+  `end` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '结束时间',
+  `status` tinyint(255) NOT NULL DEFAULT '0' COMMENT '0：等待开始，1：执行中，2：结束',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=203 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+
+
+ALTER TABLE `ds_shop`.`ds_ordergoods`
+ADD COLUMN `mi` int(11) NOT NULL DEFAULT 0 COMMENT '商品所需秒米' AFTER `goods_price`;
+
+
