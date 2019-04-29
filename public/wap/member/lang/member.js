@@ -1,5 +1,5 @@
 ds_lang={
-    'title':'我的资产',
+    'title':'个人中心',
     'home':'首页',
     'search':'搜索',
     'classification':'分类',

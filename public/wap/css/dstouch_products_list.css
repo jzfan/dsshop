@@ -16,8 +16,8 @@
 /* 商品列表筛选条 */
 .goods-search-list-nav { display: block; width: 100%; height: 1.95rem; background:rgba(255,255,255,0.95); border-bottom: solid 0.05rem #EEE; position:fixed; z-index: 2; top: 2rem; left: 0; right: 0;}
 .goods-search-list-nav ul { font-size: 0; display: block; width: 85%; float: left; }
-.goods-search-list-nav ul li { vertical-align: top; display: inline-block; width: 30%;}
-.goods-search-list-nav ul li:first-child { width: 40%;}
+.goods-search-list-nav ul li { vertical-align: top; display: inline-block; width: 50%;}
+/*.goods-search-list-nav ul li:first-child { width: 40%;}*/
 .goods-search-list-nav ul li a { font-size: 0.65rem; color: #888; line-height: 1.95rem; text-align: center; display: block; height: 1.95rem;}
 .goods-search-list-nav ul li a.current { color: #f23030;}
 .goods-search-list-nav ul li a i { font-size: 0px; line-height: 0; vertical-align: middle; display: inline-block; width: 0px; height: 0px; margin-left: 0.2rem; border-width: 0.2rem; border-color: #AAA transparent transparent transparent; border-style:solid dashed dashed dashed;}

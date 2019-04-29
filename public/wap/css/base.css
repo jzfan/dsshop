@@ -11,17 +11,17 @@ html { font-size : 20px; }
 
 /*Note3*/
 @media only screen and (min-width: 360px) {
-html { font-size: 22px !important; }
+html { font-size: 20px !important; }
 }
 
 /*iPhone6*/
 @media only screen and (min-width: 376px) {
-html { font-size: 23px !important; }
+html { font-size: 22px !important; }
 }
 
 /*iPhone6 plus*/
 @media only screen and (min-width: 414px) {
-html { font-size: 25px !important; }
+html { font-size: 23px !important; }
 }
 
 /*big Resolution*/

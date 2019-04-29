@@ -24,6 +24,12 @@ class Test extends Controller
 				'seckillPrice' => 486,
 				'returnRate' => 0.087
 			],
+			[
+				'name' => '荣耀9',
+				'marketPrice' => 998,
+				'seckillPrice' => 99.8,
+				'returnRate' => 0.08
+			],
 		];
 
 		$this->cal($data);
@@ -60,11 +66,9 @@ class Test extends Controller
 
 	public function job()
 	{
-		$job = \app\common\model\SeckillJobs::find(232);
-		var_dump($job->end);
-		var_dump(strtotime($job->end));
-		var_dump(time());
-		dd(strtotime($job->end) < time());
+		$job = \app\common\model\SeckillJobs::find(276);
+		$goods = $job->formatGoods();
+		dd($goods);
 	}
 
 }

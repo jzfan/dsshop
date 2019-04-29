@@ -18,7 +18,7 @@
             <dl>
                 <dt>开始时间</dt>
                 <dd>
-                    <input type="text" name='start' value="<?php echo date('Y-m-d H:i:s'); ?>" class="input-txt" id='start' required>
+                    <input type="text" name='start' value="<?php echo date('Y-m-d H:00:00', strtotime('next hour')); ?>" class="input-txt" id='start' required>
                 </dd>
             </dl>
             <dl>

@@ -151,7 +151,7 @@
 								count += parseInt(order_goods[k].goods_num);
 						%>
 						<div class="goods-block">
-						<a href="<%=WapSiteUrl%>/member/order_detail.html?order_id=<%=orderlist[j].order_id%>">
+						<a href="<%=WapSiteUrl%>/member/order_detail.html?order_id=<%=orderlist[j].order_id%>&order_type=<%=orderlist[j].order_type%>">
 							<div class="goods-pic">
 								<img src="<%=order_goods[k].goods_image_url%>"/>
 							</div>

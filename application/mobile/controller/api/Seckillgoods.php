@@ -12,7 +12,7 @@ class Seckillgoods extends BaseController
 	public function index()
 	{
 		if ($id = input('goods_id')) {
-			return $this->model->where('goods_id', $id)->find();
+			return $this->model->where('goods_id', $id)->order('id desc')->find();
 		}
 	}
 

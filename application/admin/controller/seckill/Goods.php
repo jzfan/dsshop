@@ -36,7 +36,10 @@ class Goods extends AdminControl
             'return_rate|收益率' => 'require|number|gt:0'
         ]);
         $data['mi'] = Formula::miByInput($data);
-        Db::transaction(function () use ($data){
+        if $data['mi'] <= 0 {
+            throw new Exception("秒米计算结果小于0", 422);
+        }
+        $good = Db::transaction(function () use ($data){
             $skuGood = model('goods')->where('goods_id', $data['goods_id'])->lock(true)->find();
             if (empty($skuGood)) {
                 throw new JsonException("商品ID错误", 422);
@@ -51,8 +54,8 @@ class Goods extends AdminControl
             }
             $skuGood->goods_storage -= $data['qty'];
             $skuGood->save();
-            $this->model->create($data);
+            return $this->model->create($data);
         });
-        return 'ok';
+        return json($this->model->with('info')->find($good->id));
     }
 }

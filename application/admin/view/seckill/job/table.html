@@ -39,16 +39,22 @@
                 ][$job->status];
                 ?>
             </td>
-            <td class="yes-onoff align-center">
-                <button class="btn btn-primary">查看</button>
+            <td class="align-center">
+                <a href="#" class="dsui-btn-view"><i class="fa"></i>查看</a>
                 {switch $job.status}
+                    {case 0}
+                <a href="#" class="dsui-btn-edit"><i class="fa"></i>编辑</a>
+                    {/case}
+
                     {case value="0|2|3"}
-                    <button class="btn btn-red">删除</button>
+                <a href="#" class="dsui-btn-del"><i class="fa"></i>删除</a>
                     {/case}
+
                     {case 1}
-                    <button class="btn btn-black">停止</button>
+                <a href="#" class="dsui-btn-stop"><i class="fa"></i>停止</a>
+
                     {/case}
-                {/switch}
+                    {/switch}
             </td>
         </tr>
         {/foreach}
@@ -60,21 +66,32 @@
     </tbody>
 </table>
 {notempty name="jobs"}
+{$jobs->render()}
 {/notempty}
 
 <script>
 
-$('#jobs-table tr .btn-primary').on('click', function(e) {
+$('#jobs-table tr .dsui-btn-view').on('click', function(e) {
     window.location = '/admin/seckill.jobs/show?id=' + $(e.target).parents('tr').data('id')
 });
 
-$('#jobs-table tr .btn-red').on('click', function(e) {
+$('#jobs-table tr .dsui-btn-edit').on('click', function(e) {
+    window.location = '/admin/seckill.jobs/edit?id=' + $(e.target).parents('tr').data('id')
+});
+
+$('#jobs-table tr .dsui-btn-del').on('click', function(e) {
     if (confirm('确定删除？')) {
-        window.location = '/admin/seckill.jobs/delete?id=' + $(e.target).parents('tr').data('id')
+        let tr = $(e.target).parents('tr')
+        $.post('/admin/seckill.jobs/delete?id=' + tr.data('id'), function (res) {
+            if (res === 'ok') {
+                layer.msg('删除成功', {shade: 0.3})
+                tr.hide('slow')
+            }
+        })
     }
 });
 
-$('#jobs-table tr .btn-black').on('click', function(e) {
+$('#jobs-table tr .dsui-btn-stop').on('click', function(e) {
     if (confirm('确定停止？')) {
         window.location = '/admin/seckill.jobs/stop?id=' + $(e.target).parents('tr').data('id')
     }

@@ -9,14 +9,14 @@ class Formula
 {
 	private $payClientRate;
 	private $feeRate;
-	private $marketPrice;
+	private $price;
 	private $seckillPrice;
 	private $returnRate;
 
-	public function __construct($marketPrice, $seckillPrice, $returnRate)
+	public function __construct($price, $seckillPrice, $returnRate)
 	{
 		$this->config();
-		$this->marketPrice = $marketPrice;
+		$this->price = $price;
 		$this->seckillPrice = $seckillPrice;
 		$this->returnRate = $returnRate;
 	}
@@ -30,7 +30,7 @@ class Formula
 
 	public function payClient()
 	{
-		return $this->payClientRate * $this->marketPrice;
+		return $this->payClientRate * $this->price;
 	}
 
 	public function fee()
@@ -45,8 +45,8 @@ class Formula
 
 	public static function miByInput($input)
 	{
-		$marketPrice = Goods::where('goods_id', $input['goods_id'])->find()->goods_marketprice;
-		$fo = new self($marketPrice, $input['price'], $input['return_rate']/100);
+		$price = Goods::where('goods_id', $input['goods_id'])->find()->goods_price;
+		$fo = new self($price, $input['price'], $input['return_rate']/100);
 		return $fo->mi();
 	}
 

@@ -11,18 +11,21 @@
         </dl>
         <dl>
             <dt>开始时间</dt>
-            <dd class="btn_group" style="margin-left: 10px" data-name='days'>
-                <button class="btn btn-primary" data-value='week'>本周</button>
-                <button class="btn btn-blue" data-value='today'>今天</button>
-                <button class="btn btn-default" data-value='last week'>上周</button>
-                <button class="btn btn-black" data-value='last month'>上月</button>
+            <dd>
+                <input type="text" id='datetimepicker'>
             </dd>
         </dl>
     </div>
 </form>
 
+{include file='public/datetimepick_js'/}
 <script>
-$('#search-form button').click(function () {
+option.onClose = function (dt) {
+    $('#search-form').attr('action', `/admin/seckill.jobs/search?start=${dt}`).submit()
+}
+$('#datetimepicker').datetimepicker(option);
+
+$('#search-form .btn_group button').click(function () {
     let name = $(this).parents('dd').data('name')
     let value = $(this).data('value')
     $('#search-form').attr('action', `/admin/seckill.jobs/search?${name}=${value}`).submit()

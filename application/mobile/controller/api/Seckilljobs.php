@@ -9,10 +9,9 @@ class Seckilljobs extends BaseController
 		return model('SeckillJobs');
 	}
 
-	public function active()
+	public function show()
 	{
-		$job = $this->model->active();
-
+		$job = $this->model->active() ?? $this->model->last();
 		if ($job) {
 			$goods = $job->formatGoods();
 			return json(compact('job', 'goods'));

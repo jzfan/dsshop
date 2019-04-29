@@ -408,9 +408,10 @@ class AopClient {
      * @return 提交表单HTML文本
      */
 	protected function buildRequestForm($para_temp) {
-		
+
 		$sHtml = "<form id='alipaysubmit' name='alipaysubmit' action='".$this->gatewayUrl."?charset=".trim($this->postCharset)."' method='POST'>";
-		while (list ($key, $val) = each ($para_temp)) {
+//		while (list ($key, $val) = each ($para_temp)) {
+		foreach ($para_temp as $key => $val) {
 			if (false === $this->checkEmpty($val)) {
 				//$val = $this->characet($val, $this->postCharset);
 				$val = str_replace("'","&apos;",$val);

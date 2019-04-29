@@ -24,6 +24,12 @@
                     </td>
                 </tr>
                 <tr class="noborder" style="background: rgb(255, 255, 255);">
+                    <td class="required w120" aria-required="true"><label>限额</label></td>
+                    <td class="vatop rowform">
+                        <input type="number" class="w300 text" id='limit-input' name='limit' value="1" min:1>
+                    </td>
+                </tr>
+                <tr class="noborder" style="background: rgb(255, 255, 255);">
                     <td class="required w120" aria-required="true"><label>收益率(%):</label></td>
                     <td class="vatop rowform">
                         <input type="number" class="w300 text" id='mi-input' name='return_rate' value="0" min:0>
@@ -57,6 +63,7 @@ function setInputVal(gid) {
             $('#forsale-price-input').val(res.forsale_price)
             $('#return_rate-input').val(res.return_rate)
             $('#commend-input').val(res.commend)
+            $('#limit-input').val(res.limit)
         }
     })
 }
@@ -70,7 +77,37 @@ function submitGoodForm(e) {
         data: $('#modal-form').serialize(),
         success: function(res) {
             layer.close(index)
-            layer.msg('添加商品成功')          
+            layer.msg('添加商品成功')
+            console.log(res)
+            $('#selected-table').show()
+                .find('tbody').append(`
+                <tr>
+                    <td>
+                    ${res.goods_id}
+                    </td>
+                    <td>
+                    ${res.info.goods_name}
+                    </td>
+                    <td class="align-center nowarp">
+                    ${res.forsale_price}
+                    </td>
+                    <td class="align-center nowarp">
+                    ${res.price}
+                    </td>
+                    <td class="align-center nowarp">
+                    ${res.mi}
+                    </td>
+                    <td class="align-center">
+                        ${res.limit}
+                    </td>
+                    <td class="align-center">
+                        ${res.qty}
+                    </td>
+                    <td class="align-center">
+                        ${res.commend}
+                    </td>
+                </tr>
+                `)         
         },
         error: function (err) {
             console.log(err.responseText)

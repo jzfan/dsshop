@@ -1,0 +1,51 @@
+<table class="ds-default-table" id='selected-table'
+{empty name="selectedGoods"}
+style="display: none"
+{/empty}
+>
+    <thead>
+        <tr class="thead">
+            <th class="align-center">ID</th>
+            <th class="align-center">商品名</th>
+            <th class="align-center">市场价</th>
+            <th class="align-center">秒杀价</th>
+            <th class="align-center">秒米</th>
+            <th class="align-center">限额</th>
+            <th class="align-center">库存</th>
+            <th class="align-center">排序</th>
+        </tr>
+    </thead>
+    <tbody id="treet1">
+        {notempty name="selectedGoods"}
+        {foreach $selectedGoods as $selected}
+        <tr>
+            <td>
+            {$selected.goods_id}
+            </td>
+            <td>
+            {$selected.info.goods_name}
+            </td>
+            <td class="align-center nowarp">
+            {$selected.forsale_price}
+            </td>
+            <td class="align-center nowarp">
+            {$selected.price}
+            </td>
+            <td class="align-center nowarp">
+            {$selected.mi}
+            </td>
+            <td class="align-center">
+            {$selected.limit}
+            </td>
+            <td class="align-center">
+            {$selected.qty}
+            </td>
+            <td class="align-center">
+            {$selected.commend}
+            </td>
+        </tr>
+        {/foreach}
+        {/notempty}
+    </tbody>
+</table>
+
